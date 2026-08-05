@@ -1,147 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV One 1.0 — Portal Pista Verde</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Poppins', sans-serif; background-color: #0b110b; color: #ffffff; }
-    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-weight: 600; font-size: 14px; color: #9ca3af; }
-    .sidebar-link:hover, .sidebar-link.active { background-color: #142814; color: #00ae35; }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background-color: #111e11; border: 1px solid #1c3b1c; font-size: 12px; font-weight: 600; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ae35; }
-    .tab-pill { padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; background-color: #111811; border: 1px solid #1c2b1c; color: #889988; }
-    .tab-pill.active { background-color: #1c3b1c; border-color: #00ae35; color: #ffffff; }
-    .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; margin-left: 6px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PV ONE 1.0 — Portal Pista Verde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="flex min-h-screen">
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
 
-  <!-- Sidebar Lateral -->
-  <aside class="w-64 border-r border-green-950/40 flex flex-col justify-between p-4 bg-[#070b07]">
-    <div>
-      <div class="flex items-center gap-3 p-3 mb-6">
-        <div class="w-10 h-10 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-xl">PV</div>
-        <div>
-          <h1 class="font-black text-lg leading-none tracking-tight">PV ONE</h1>
-          <span class="text-[10px] font-bold tracking-widest text-green-700">PORTAL PISTA VERDE</span>
+    <!-- Topbar -->
+    <header class="border-b border-gray-800 bg-gray-900/50 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+            <h1 class="font-bold text-lg tracking-wide text-white">PV ONE <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">v1.0</span></h1>
         </div>
-      </div>
-      <nav class="space-y-1">
-        <a href="#" class="sidebar-link rounded-xl">Painel</a>
-        <a href="#" class="sidebar-link active rounded-xl">Redação — Agências</a>
-        <a href="#" class="sidebar-link rounded-xl">Redação — Clientes</a>
-        <a href="#" class="sidebar-link rounded-xl">Redes Sociais</a>
-        <a href="#" class="sidebar-link rounded-xl">Cadastros</a>
-        <a href="#" class="sidebar-link rounded-xl">Comercial</a>
-        <a href="#" class="sidebar-link rounded-xl">Financeiro</a>
-        <a href="#" class="sidebar-link rounded-xl">Pilotos</a>
-        <a href="#" class="sidebar-link rounded-xl">Solicitações</a>
-        <a href="#" class="sidebar-link rounded-xl">Auditoria SEO</a>
-        <a href="#" class="sidebar-link rounded-xl">Integrações</a>
-      </nav>
-    </div>
-  </aside>
-
-  <!-- Conteúdo Principal -->
-  <main class="flex-1 p-8 overflow-y-auto">
-    <header class="flex justify-between items-start mb-6">
-      <div>
-        <span class="text-xs font-bold text-green-500 tracking-widest uppercase">Redação — Agências</span>
-        <h2 class="text-3xl font-black mt-1">Releases Inteligentes</h2>
-        <p class="text-sm text-gray-400 mt-1">Gmail, adaptação editorial e publicação no Wix em uma única matéria.</p>
-      </div>
-      <div class="flex gap-3">
-        <span class="status-badge"><span class="status-dot"></span> IA conectado</span>
-        <span class="status-badge"><span class="status-dot"></span> Wix Backend ativo</span>
-        <span class="status-badge"><span class="status-dot"></span> Gmail conectado</span>
-        <span class="status-badge"><span class="status-dot"></span> Google conectado</span>
-      </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-xs text-gray-400">Status API: <span class="text-emerald-400 font-medium">Conectado</span></span>
+        </div>
     </header>
 
-    <!-- Tabs de Status -->
-    <div class="flex gap-2 mb-6">
-      <button class="tab-pill active">Fila ativa <span class="count-badge">1</span></button>
-      <button class="tab-pill">Conferência <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
-      <button class="tab-pill">Prontas <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
-      <button class="tab-pill">Arquivo <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
-      <button class="tab-pill">Lixeira <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
-    </div>
+    <!-- Main Layout -->
+    <main class="flex-1 flex overflow-hidden">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 border-r border-gray-800 bg-gray-900/30 p-4 flex flex-col justify-between">
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-400 font-medium text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span>Redação & Matérias</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800/50 hover:text-gray-200 transition text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    <span>Fila de Publicação</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:bg-gray-800/50 hover:text-gray-200 transition text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Configurações Wix</span>
+                </a>
+            </nav>
+            <div class="text-xs text-gray-600 px-3">
+                Pista Verde © 2026
+            </div>
+        </aside>
 
-    <!-- Campo de Pesquisa -->
-    <div class="mb-6">
-      <input type="text" placeholder="Pesquisar título ou piloto..." class="w-full bg-[#111811] border border-green-950/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-green-600 text-gray-200">
-    </div>
+        <!-- Content Area -->
+        <div class="flex-1 flex flex-col p-8 overflow-y-auto">
+            <div class="max-w-4xl w-full mx-auto space-y-6">
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Editor de Conteúdo</h2>
+                        <p class="text-sm text-gray-400">Crie ou edite a matéria antes de enviar para o Wix</p>
+                    </div>
+                    <button id="btnSend" onclick="sendToWix()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-5 py-2.5 rounded-lg shadow-lg shadow-emerald-900/20 transition flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        <span>Enviar para o Wix</span>
+                    </button>
+                </div>
 
-    <!-- Card da Matéria em Produção -->
-    <div class="bg-[#0f170f] border border-green-900/40 rounded-2xl p-6 mb-6">
-      <div class="flex justify-between items-center mb-2">
-        <span class="text-xs font-bold text-green-500 uppercase">Em produção</span>
-        <span class="text-xs text-gray-500">Hoje</span>
-      </div>
-      <h3 id="materia-titulo" class="text-xl font-bold mb-1">Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado</h3>
-      <p class="text-sm text-gray-400">Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro.</p>
-    </div>
+                <div class="space-y-4 bg-gray-900/40 p-6 rounded-xl border border-gray-800">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Título da Matéria</label>
+                        <input type="text" id="postTitle" value="Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition">
+                    </div>
 
-    <!-- Prévias e Botão de Envio -->
-    <div class="bg-[#0b140b] border border-green-900/30 rounded-2xl p-6">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h4 class="text-xs font-bold text-green-500 tracking-wider uppercase">PRÉVIA FIEL DO TEMPLATE PISTA VERDE (HERO VISUAL & H1/H2 OCULTOS)</h4>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">URL da Imagem de Capa</label>
+                        <input type="text" id="postCover" value="https://static.wixstatic.com/media/74713a_example.jpg" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Conteúdo da Matéria</label>
+                        <textarea id="postContent" rows="10" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition">Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...</textarea>
+                    </div>
+                </div>
+
+                <!-- Painel de Retorno da API -->
+                <div id="logArea" class="hidden bg-gray-900 border border-gray-800 rounded-xl p-4">
+                    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Resposta do Servidor</h3>
+                    <pre id="logContent" class="text-xs text-emerald-400 font-mono overflow-x-auto whitespace-pre-wrap"></pre>
+                </div>
+
+            </div>
         </div>
-        <button id="btn-enviar-wix" onclick="enviarParaOWix()" class="bg-[#00ae35] hover:bg-green-600 text-black font-extrabold px-6 py-3 rounded-xl transition-all shadow-lg shadow-green-950">
-          Enviar para o Wix
-        </button>
-      </div>
 
-      <div class="rounded-xl overflow-hidden border border-green-950/60 max-w-2xl mx-auto">
-        <img id="materia-imagem" src="https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg" alt="Copa Brasil de Kart" class="w-full object-cover">
-      </div>
-    </div>
-  </main>
+    </main>
 
-  <!-- Script da Integração Front-End -->
-  <script>
-    async function enviarParaOWix() {
-      const btn = document.getElementById('btn-enviar-wix');
-      const titulo = document.getElementById('materia-titulo').innerText;
-      const imagemUrl = document.getElementById('materia-imagem').src;
+    <script>
+        async function sendToWix() {
+            const btn = document.getElementById('btnSend');
+            const logArea = document.getElementById('logArea');
+            const logContent = document.getElementById('logContent');
 
-      btn.disabled = true;
-      btn.innerText = "Enviando ao Servidor...";
-      btn.style.opacity = "0.7";
+            const title = document.getElementById('postTitle').value;
+            const coverImage = document.getElementById('postCover').value;
+            const content = document.getElementById('postContent').value;
 
-      try {
-        const response = await fetch('/api/wix', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: titulo,
-            richContent: "<p>Após duas semanas de competição intensa, a 27ª edição da Copa Brasil de Kart da CBA chegou ao fim em Imperatriz registrando sete campeões e marcas históricas na pista.</p>",
-            coverImage: imagemUrl
-          })
-        });
+            btn.disabled = true;
+            btn.innerText = 'Enviando ao Servidor...';
+            logArea.classList.add('hidden');
 
-        const result = await response.json();
+            try {
+                const response = await fetch('/api/wix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, content, coverImage })
+                });
 
-        if (response.ok && result.success) {
-          alert("✅ Matéria enviada com sucesso para o Wix!");
-        } else {
-          console.error("Retorno de Erro do Wix:", result);
-          const detalhe = JSON.stringify(result.wixError || result.wixResponseBody || result.error || result);
-          alert("Aviso no envio ao Wix: " + detalhe);
+                const result = await response.json();
+                
+                logArea.classList.remove('hidden');
+                
+                if (response.ok) {
+                    logContent.className = "text-xs text-emerald-400 font-mono overflow-x-auto whitespace-pre-wrap";
+                    logContent.innerText = "SUCESSO: " + JSON.stringify(result, null, 2);
+                    alert("✅ Enviado para o Wix com sucesso!");
+                } else {
+                    logContent.className = "text-xs text-red-400 font-mono overflow-x-auto whitespace-pre-wrap";
+                    logContent.innerText = "ERRO DA API: " + JSON.stringify(result, null, 2);
+                    alert("⚠️ O Wix recusou. O erro detalhado foi impresso na tela no quadro cinza.");
+                }
+            } catch (err) {
+                logArea.classList.remove('hidden');
+                logContent.className = "text-xs text-red-400 font-mono overflow-x-auto whitespace-pre-wrap";
+                logContent.innerText = "ERRO NA REQUISIÇÃO: " + err.message;
+                alert("❌ Falha na conexão com a Vercel.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Enviar para o Wix';
+            }
         }
-      } catch (err) {
-        console.error("Falha de Conexão:", err);
-        alert("Erro de conexão ao servidor: " + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Enviar para o Wix";
-        btn.style.opacity = "1";
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
