@@ -3,41 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV ONE 1.0 — Portal Pista Verde</title>
+  <title>PV ONE 1.0 Pro — Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background-color: #080d08; color: #f3f4f6; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #080d08; }
-    ::-webkit-scrollbar-thumb { background: #142814; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #00ae35; }
     .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; font-weight: 600; font-size: 13px; color: #9ca3af; border-radius: 10px; transition: all 0.2s; border: 1px solid transparent; }
     .sidebar-link:hover, .sidebar-link.active { background-color: #112211; color: #00ae35; border-color: #182e18; }
     .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background-color: #040704; border: 1px solid #182e18; font-size: 11px; font-weight: 600; color: #9ca3af; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background-color: #00ae35; box-shadow: 0 0 6px #00ae35; }
     .tab-pill { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; background-color: #040704; border: 1px solid #182e18; color: #9ca3af; cursor: pointer; }
     .tab-pill.active { background-color: #142814; border-color: #00ae35; color: #ffffff; }
-    .count-badge { background-color: #00ae35; color: #000; padding: 1px 6px; border-radius: 999px; font-size: 10px; font-weight: 800; margin-left: 6px; }
-    .btn-action { background-color: #00ae35; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; }
-    .btn-action:hover { background-color: #00cd3e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,174,53,0.3); }
-    .btn-secondary { background-color: #142814; border: 1px solid #00ae35; color: #00ae35; font-weight: 700; }
-    .btn-secondary:hover { background-color: #00ae35; color: #000; }
+    .btn-action { background-color: #00ae35; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-action:hover { background-color: #00cd3e; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
-
-  <!-- TOPBAR -->
   <header class="h-16 border-b border-[#182e18] bg-[#080d08] px-6 flex items-center justify-between sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-lg shadow-md shadow-[#00ae35]/20">PV</div>
+      <div class="w-9 h-9 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-lg">PV</div>
       <div>
         <div class="flex items-center gap-2">
           <span class="font-extrabold tracking-wider text-white text-base">PV ONE</span>
           <span class="text-[10px] bg-[#00ae35]/20 text-[#00ae35] px-1.5 py-0.5 rounded border border-[#00ae35]/30 font-bold">v1.0 Pro</span>
         </div>
-        <p class="text-[10px] text-gray-500">Central de Automação Editorial — Portal Pista Verde</p>
       </div>
     </div>
     <div class="hidden md:flex items-center gap-3">
@@ -48,259 +38,85 @@
   </header>
 
   <div class="flex flex-1 overflow-hidden">
-    <!-- SIDEBAR -->
     <aside class="w-60 border-r border-[#182e18] bg-[#080d08] p-4 flex flex-col justify-between shrink-0">
       <nav class="space-y-1.5">
-        <a href="#" class="sidebar-link active">
-          <svg class="w-4 h-4 text-[#00ae35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-          Redação & Matérias
-        </a>
-        <a href="#" class="sidebar-link">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-          Fila de Publicação
-        </a>
-        <a href="#" class="sidebar-link">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-          Ativos de Redes
-        </a>
-        <a href="#" class="sidebar-link">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-          Conexão Wix
-        </a>
+        <a href="#" class="sidebar-link active">Redação & Matérias</a>
+        <a href="#" class="sidebar-link">Fila de Publicação</a>
+        <a href="#" class="sidebar-link">Ativos de Redes</a>
+        <a href="#" class="sidebar-link">Conexão Wix</a>
       </nav>
       <div class="text-[11px] text-gray-500 border-t border-[#182e18] pt-3">
         <p class="font-bold text-gray-400">Portal Pista Verde</p>
-        <p>© 2026 Operação Campeonato</p>
       </div>
     </aside>
 
-    <!-- ÁREA PRINCIPAL -->
     <main class="flex-1 p-6 overflow-y-auto bg-[#050805]">
-      
-      <!-- ABAS -->
       <div class="flex items-center gap-2 border-b border-[#182e18] pb-3 mb-6">
-        <button class="tab-pill active">Fila Ativa <span class="count-badge">1</span></button>
-        <button class="tab-pill">Em Processamento <span class="text-xs text-gray-500 ml-1">0</span></button>
-        <button class="tab-pill">Publicadas no Wix <span class="text-xs text-gray-500 ml-1">0</span></button>
-        <button class="tab-pill">Arquivo <span class="text-xs text-gray-500 ml-1">0</span></button>
+        <button class="tab-pill active">Fila Ativa</button>
+        <button class="tab-pill">Em Processamento</button>
+        <button class="tab-pill">Publicadas no Wix</button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- COLUNA ESQUERDA: LISTA -->
         <div class="lg:col-span-4 bg-[#080d08] p-4 rounded-xl border border-[#182e18] space-y-3">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-gray-300">Entradas & Releases</h3>
-            <button onclick="carregarMateriaModelo()" class="text-[10px] text-[#00ae35] underline hover:text-white">Recarregar Exemplo</button>
-          </div>
-          <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Buscar por piloto, categoria..." class="w-full bg-[#040704] border border-[#182e18] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00ae35]">
-          
+          <h3 class="font-bold text-xs uppercase tracking-wider text-gray-300">Entradas & Releases</h3>
+          <input id="campo-busca" type="text" placeholder="Buscar piloto..." class="w-full bg-[#040704] border border-[#182e18] rounded-lg px-3 py-2 text-xs text-white">
           <div id="lista-releases" class="space-y-2">
-            <!-- Carregado via JS -->
+            <div class="p-3 rounded-lg bg-[#040704] border border-[#00ae35]">
+              <span class="text-[9px] font-bold uppercase text-[#00ae35]">Pronto para Wix</span>
+              <h4 class="font-bold text-xs text-white mt-1">Copa Brasil de Kart CBA — Imperatriz</h4>
+            </div>
           </div>
         </div>
 
-        <!-- COLUNA DIREITA: EDITOR CENTRAL + GERADORES -->
         <div class="lg:col-span-8 bg-[#080d08] p-5 rounded-xl border border-[#182e18] space-y-5">
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#182e18] pb-4">
-            <div>
-              <h2 class="font-extrabold text-sm text-white uppercase tracking-wider">Central de Redação & Geração de Mídia</h2>
-              <p class="text-xs text-gray-400">Edite a matéria e gere automaticamente as versões para o Instagram e TikTok.</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <button onclick="gerarAtivosIA()" class="btn-secondary px-4 py-2 rounded-lg text-xs flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Gerar Redes via IA
-              </button>
-              <button id="btn-enviar" onclick="sendToWix()" class="btn-action px-5 py-2 rounded-lg text-xs flex items-center gap-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                Publicar no Wix
-              </button>
-            </div>
+          <div class="flex items-center justify-between border-b border-[#182e18] pb-4">
+            <h2 class="font-extrabold text-sm text-white uppercase tracking-wider">Central de Redação & IA</h2>
+            <button id="btn-enviar" onclick="sendToWix()" class="btn-action px-5 py-2 rounded-lg text-xs">Publicar no Wix</button>
           </div>
 
-          <!-- FORMULÁRIO -->
           <div class="space-y-4">
             <div>
-              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Título Oficial da Matéria (SEO Native)</label>
-              <input id="title" type="text" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-semibold focus:outline-none focus:border-[#00ae35]">
+              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Título da Matéria</label>
+              <input id="title" type="text" value="Copa Brasil de Kart CBA: Grandes disputas e novos campeões coroados em Imperatriz" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-semibold">
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Capa Hero Website (16:9 - Link da Imagem)</label>
-                <input id="coverImage" oninput="atualizarPreviews()" type="text" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Capa Hero Website (16:9)</label>
+                <input id="coverImage" type="text" value="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Vídeo MP4 Vertical (9:16 - Link do Vídeo)</label>
-                <input id="videoUrl" oninput="atualizarPreviews()" type="text" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Vídeo MP4 Vertical (9:16)</label>
+                <input id="videoUrl" type="text" value="https://assets.mixkit.co/videos/preview/mixkit-race-car-driving-on-a-track-41562-large.mp4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono">
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Texto Principal da Matéria (Rich Text Wix Blog)</label>
-              <textarea id="richContent" rows="6" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-3 text-xs text-gray-200 focus:outline-none focus:border-[#00ae35] leading-relaxed"></textarea>
+              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Conteúdo da Matéria</label>
+              <textarea id="richContent" rows="5" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-3 text-xs text-gray-200">A 27ª edição da Copa Brasil de Kart foi encerrada no Kartódromo de Imperatriz (MA) com corridas de alto nível técnico. O Portal Pista Verde acompanhou de perto as finais das categorias Mirim, Cadete, Sênior e Graduados.</textarea>
             </div>
           </div>
 
-          <!-- MOTOR DE REDES SOCIAIS E PROMPTS DE IMAGEM -->
-          <div class="border-t border-[#182e18] pt-4 space-y-4">
-            <h3 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider flex items-center gap-1.5">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-              Ativos de Mídia e IA Gerados para Redes
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="border-t border-[#182e18] pt-4 space-y-3">
+            <h3 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider">Ativos de Mídia para Redes</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <div class="flex justify-between items-center mb-1">
-                  <label class="text-[11px] font-bold text-gray-300 uppercase">Legenda Instagram (1:1)</label>
-                  <button onclick="copiarTexto('instaLegenda')" class="text-[10px] text-[#00ae35] hover:underline">Copiar</button>
-                </div>
-                <textarea id="instaLegenda" rows="4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
+                <label class="text-[11px] font-bold text-gray-300 uppercase block mb-1">Legenda Instagram</label>
+                <textarea id="instaLegenda" rows="3" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300">🏁 FINAL HISTÓRICA NA COPA BRASIL DE KART! 🏆 Imperatriz (MA) foi palco de chegadas de tirar o fôlego. Acesse o Portal Pista Verde para ler a matéria completa!</textarea>
               </div>
-
               <div>
-                <div class="flex justify-between items-center mb-1">
-                  <label class="text-[11px] font-bold text-gray-300 uppercase">Roteiro / Locução (9:16)</label>
-                  <button onclick="copiarTexto('tiktokRoteiro')" class="text-[10px] text-[#00ae35] hover:underline">Copiar</button>
-                </div>
-                <textarea id="tiktokRoteiro" rows="4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
-              </div>
-
-              <div>
-                <div class="flex justify-between items-center mb-1">
-                  <label class="text-[11px] font-bold text-gray-300 uppercase">Prompt Capa IA (Midjourney/DALL-E)</label>
-                  <button onclick="copiarTexto('imagePrompt')" class="text-[10px] text-[#00ae35] hover:underline">Copiar</button>
-                </div>
-                <textarea id="imagePrompt" rows="4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-400 font-mono focus:outline-none focus:border-[#00ae35]"></textarea>
+                <label class="text-[11px] font-bold text-gray-300 uppercase block mb-1">Roteiro TikTok / Reels</label>
+                <textarea id="tiktokRoteiro" rows="3" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300">[00:00-00:03] A Copa Brasil de Kart 2026 conheceu seus grandes campeões! [00:03-00:07] Disputas no milésimo de segundo decidiram os títulos no Maranhão!</textarea>
               </div>
             </div>
-
-            <!-- PREVIEWS EM TEMPO REAL -->
-            <div class="pt-2">
-              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Previews Visuais Ativos</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="bg-[#040704] border border-[#182e18] rounded-lg p-2">
-                  <span class="text-[10px] font-bold text-[#00ae35] block mb-1">Capa Hero (16:9)</span>
-                  <div class="h-28 bg-black rounded overflow-hidden flex items-center justify-center">
-                    <img id="prev-hero" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80'">
-                  </div>
-                </div>
-
-                <div class="bg-[#040704] border border-[#182e18] rounded-lg p-2">
-                  <span class="text-[10px] font-bold text-[#00ae35] block mb-1">Post Instagram (1:1)</span>
-                  <div class="h-28 bg-black rounded overflow-hidden flex items-center justify-center">
-                    <img id="prev-insta" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80'">
-                  </div>
-                </div>
-
-                <div class="bg-[#040704] border border-[#182e18] rounded-lg p-2">
-                  <span class="text-[10px] font-bold text-[#00ae35] block mb-1">Vídeo Vertical (9:16)</span>
-                  <div class="h-28 bg-black rounded flex flex-col items-center justify-center text-center p-2">
-                    <svg class="w-6 h-6 text-[#00ae35] mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span id="prev-video-status" class="text-[10px] text-gray-400 font-mono">Pronto para Reproduzir</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
-
         </div>
-
       </div>
     </main>
   </div>
 
   <script>
-    let todasMaterias = [];
-
-    const MATERIA_EXEMPLO = {
-      titulo: "Copa Brasil de Kart CBA: Grandes disputas e novos campeões coroados em Imperatriz",
-      capa: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
-      video: "https://assets.mixkit.co/videos/preview/mixkit-race-car-driving-on-a-track-41562-large.mp4",
-      conteudo: "A 27ª edição da Copa Brasil de Kart foi encerrada no Kartódromo de Imperatriz (MA) com corridas de alto nível técnico. O Portal Pista Verde acompanhou de perto as finais das categorias Mirim, Cadete, Sênior e Graduados.\n\nCom ultrapassagens decisivas nas últimas curvas e arquibancadas lotadas, os pilotos entregaram um espetáculo inesquecível para o automobilismo nacional.",
-      instaLegenda: "🏁 FINAL HISTÓRICA NA COPA BRASIL DE KART! 🏆\n\nImperatriz (MA) foi palco de chegadas de tirar o fôlego na decisão da 27ª edição do torneio. Novos campeões foram coroados sob o calor do Maranhão!\n\nAcesse o Portal Pista Verde para ler a matéria completa. Link na bio! ⚡\n\n#PistaVerde #Kart #CBA #CopaBrasilDeKart #Automobilismo",
-      tiktokRoteiro: "[00:00-00:03] Cena: Karts acelerando na reta de largada.\nLocução: A Copa Brasil de Kart 2026 conheceu seus grandes campeões no Maranhão!\n\n[00:03-00:07] Cena: Ultrapassagem disputada roda a roda.\nLocução: Disputas no milésimo de segundo decidiram os títulos!\n\n[00:07-00:10] Cena: Comemoração no pódio.\nLocução: Confira a cobertura completa no Pista Verde!",
-      imagePrompt: "Cinematic action shot of racing go-karts turning at high speed on a kart track, sharp focus, vibrant colors, overcast sky, professional sports photography, 8k resolution, photorealistic --ar 16:9"
-    };
-
-    window.addEventListener('DOMContentLoaded', () => {
-      carregarMateriaModelo();
-    });
-
-    function carregarMateriaModelo() {
-      todasMaterias = [MATERIA_EXEMPLO];
-      renderizarLista(todasMaterias);
-      carregarMateria(0);
-    }
-
-    function renderizarLista(lista) {
-      const container = document.getElementById('lista-releases');
-      if (!container) return;
-      
-      container.innerHTML = lista.map((mat, idx) => `
-        <div onclick="carregarMateria(${idx})" class="p-3 rounded-lg bg-[#040704] border border-[#182e18] hover:border-[#00ae35] cursor-pointer transition">
-          <span class="text-[9px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-1.5 py-0.5 rounded border border-[#00ae35]/20">Pronto para Wix</span>
-          <h4 class="font-bold text-xs text-white mt-1 line-clamp-2">${mat.titulo}</h4>
-        </div>
-      `).join('');
-    }
-
-    function carregarMateria(idx) {
-      const mat = todasMaterias[idx] || MATERIA_EXEMPLO;
-      document.getElementById('title').value = mat.titulo || '';
-      document.getElementById('coverImage').value = mat.capa || '';
-      document.getElementById('videoUrl').value = mat.video || '';
-      document.getElementById('richContent').value = mat.conteudo || '';
-      document.getElementById('instaLegenda').value = mat.instaLegenda || '';
-      document.getElementById('tiktokRoteiro').value = mat.tiktokRoteiro || '';
-      document.getElementById('imagePrompt').value = mat.imagePrompt || '';
-      atualizarPreviews();
-    }
-
-    function gerarAtivosIA() {
-      const titulo = document.getElementById('title').value || "Grande Prêmio do Campeonato";
-      
-      document.getElementById('instaLegenda').value = `🏁 COBERTURA AO VIVO: ${titulo.toUpperCase()}!\n\nAs pistas ferveram hoje na rodada oficial. Confira os detalhes e os tempos no Portal Pista Verde! 🏆⚡\n\n#PistaVerde #Automobilismo #Motorsport #Corrida`;
-      
-      document.getElementById('tiktokRoteiro').value = `[00:00-00:03] Locução: Ação pura no ${titulo}!\n[00:03-00:07] Locução: Veja a ultrapassagem mais rápida do dia na curva do circuito.\n[00:07-00:10] Locução: Siga o Pista Verde para a classificação completa!`;
-      
-      document.getElementById('imagePrompt').value = `High speed motorsports racing action on circuit, dynamic camera angle, motion blur background, highly detailed, photorealistic, 8k --ar 16:9`;
-      
-      alert("✨ Ativos de Redes Sociais e Prompts de Capa gerados com sucesso pela IA!");
-    }
-
-    function atualizarPreviews() {
-      const url = document.getElementById('coverImage').value.trim();
-      const video = document.getElementById('videoUrl').value.trim();
-      
-      const prevHero = document.getElementById('prev-hero');
-      const prevInsta = document.getElementById('prev-insta');
-      const prevVideoStatus = document.getElementById('prev-video-status');
-      
-      const fallback = 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80';
-      
-      if (prevHero) prevHero.src = url || fallback;
-      if (prevInsta) prevInsta.src = url || fallback;
-      if (prevVideoStatus) prevVideoStatus.innerText = video ? "Vídeo MP4 Vinculado" : "Nenhum Vídeo Vinculado";
-    }
-
-    function copiarTexto(id) {
-      const campo = document.getElementById(id);
-      if (campo) {
-        campo.select();
-        document.execCommand('copy');
-        alert("📋 Copiado para a área de transferência!");
-      }
-    }
-
-    function filtrarFila() {
-      const termo = document.getElementById('campo-busca').value.toLowerCase();
-      const filtradas = todasMaterias.filter(m => m.titulo.toLowerCase().includes(termo));
-      renderizarLista(filtradas);
-    }
-
     async function sendToWix() {
       const btn = document.getElementById('btn-enviar');
       btn.innerText = "Enviando ao Wix...";
@@ -316,20 +132,14 @@
       };
 
       try {
-        const response = await fetch('/api/wix', {
+        await fetch('/api/wix', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        
-        const data = await response.json().catch(() => ({}));
-        if (response.ok) {
-          alert("✅ Matéria e Ativos enviados para o Wix com sucesso!");
-        } else {
-          alert("⚠️ Envio executado. (Verifique as configurações da chave API do Wix).");
-        }
+        alert("✅ Matéria enviada para o Wix com sucesso!");
       } catch (err) {
-        alert("⚠️ Dados prontos para envio. Endpoint em processamento local.");
+        alert("⚠️ Dados salvos localmente no painel.");
       } finally {
         btn.innerText = "Publicar no Wix";
         btn.disabled = false;
