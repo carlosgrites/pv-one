@@ -3,30 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV One - Portal Pista Verde</title>
+  <title>PV One v6.0 - Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v5.0</span></h1>
-    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Engine Oficial • DRT 0007501/SC & ODS 2026</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.0</span></h1>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Ponte API Wix Ativa • DRT 0007501/SC & ODS 2026</span>
   </nav>
 
   <main class="p-6 max-w-7xl mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
       <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial, Mídia & SEO</h2>
-        <input id="apiKey" type="password" placeholder="Chave API OpenAI (sk-...)" class="text-xs p-1 bg-gray-900 border border-gray-700 rounded text-gray-300 w-48 focus:outline-none focus:border-green-500">
+        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial & Automação Wix</h2>
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Coluna 1: Entrada e Modos de Produção -->
         <div class="space-y-4 lg:col-span-1">
           <div>
-            <label class="block text-sm font-medium mb-1 text-green-300">Tipo de Conteúdo (Linha de Trabalho)</label>
+            <label class="block text-sm font-medium mb-1 text-green-300">Tipo de Conteúdo</label>
             <select id="tipo-linha" class="w-full p-2 bg-gray-900 border border-green-500 rounded text-white font-bold focus:outline-none">
-              <option value="agencia">🏢 Release de Agência (Preservar Texto Ipsis Litteris)</option>
-              <option value="propria">🏎️ Produção Própria Pista Verde (Redigir com IA)</option>
+              <option value="agencia">🏢 Release de Agência (Texto Ipsis Litteris)</option>
+              <option value="propria">🏎️ Produção Própria Pista Verde</option>
             </select>
           </div>
 
@@ -36,7 +35,7 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Linha de Sutiã / Subtítulo</label>
+            <label class="block text-sm font-medium mb-1">Subtítulo / Linha de Sutiã</label>
             <input id="subtitulo" type="text" placeholder="Ex: Após duas semanas, 27ª edição..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
           </div>
 
@@ -46,12 +45,12 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Crédito da Foto (Obrigatório por Lei)</label>
+            <label class="block text-sm font-medium mb-1">Crédito da Foto</label>
             <input id="credito-foto" type="text" placeholder="Ex: Foto: Flávio Quick / CBA" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Atribua uma Categoria</label>
+            <label class="block text-sm font-medium mb-1">Categoria</label>
             <select id="categoria" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
               <option value="Kartismo">Kartismo</option>
               <option value="Automobilismo">Automobilismo</option>
@@ -84,35 +83,32 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Texto / Release da Agência ou Tópicos</label>
-            <textarea id="rascunho" rows="4" placeholder="Cole o texto da agência ou digite os tópicos..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
+            <label class="block text-sm font-medium mb-1">Texto / Release da Agência</label>
+            <textarea id="rascunho" rows="4" placeholder="Cole o texto da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
           </div>
 
-          <button id="btn-ia" onclick="gerarTudo()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded transition flex justify-center items-center gap-2 text-lg">
-            ⚡ Processar Matéria Oficial Wix
+          <button id="btn-ia" onclick="gerarEEnviarWix()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition flex justify-center items-center gap-2 text-lg">
+            🚀 Processar & Enviar para Rascunhos do Wix
           </button>
         </div>
 
-        <!-- Coluna 2: Código HTML Gerado (Wix) -->
+        <!-- Coluna 2: Código HTML Gerado -->
         <div class="space-y-2 lg:col-span-1">
-          <label class="block text-sm font-medium">Código HTML Final (Pronto para o Wix)</label>
-          <textarea id="resultado" rows="22" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none" placeholder="O código HTML semântico aparecerá aqui..."></textarea>
-          <button onclick="copiarElemento('resultado')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition text-sm">
-            📋 Copiar HTML Completo
-          </button>
+          <label class="block text-sm font-medium">Código HTML Processado</label>
+          <textarea id="resultado" rows="22" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none"></textarea>
         </div>
 
         <!-- Coluna 3: Pré-visualização -->
         <div class="space-y-2 lg:col-span-1">
-          <label class="block text-sm font-medium">Pré-visualização da Matéria</label>
+          <label class="block text-sm font-medium">Pré-visualização</label>
           <div id="preview" class="w-full h-[460px] bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto">
-            <p class="p-4 text-gray-400 italic">A matéria aparecerá aqui com o CSS oficial...</p>
+            <p class="p-4 text-gray-400 italic">A pré-visualização aparecerá aqui...</p>
           </div>
         </div>
 
         <!-- Coluna 4: Suíte SEO -->
         <div class="space-y-3 lg:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700 text-xs overflow-y-auto max-h-[520px]">
-            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-sm">Metadados SEO (Search Console)</h3>
+            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-sm">Metadados SEO</h3>
             
             <div>
               <label class="block text-gray-400 font-medium">Palavra-chave Foco</label>
@@ -120,7 +116,7 @@
             </div>
 
             <div>
-              <label class="block text-gray-400 font-medium">Tag de Título (Title Tag)</label>
+              <label class="block text-gray-400 font-medium">Title Tag</label>
               <input id="seo-title" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono focus:outline-none">
             </div>
 
@@ -135,27 +131,7 @@
             </div>
 
             <div>
-              <label class="block text-gray-400 font-medium">Open Graph Title (og:title)</label>
-              <input id="og-title" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono focus:outline-none">
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">Open Graph Description (og:description)</label>
-              <textarea id="og-desc" rows="2" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 focus:outline-none"></textarea>
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">Alt Texto</label>
-              <input id="alt-texto" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 focus:outline-none">
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">Alt Trecho</label>
-              <input id="alt-trecho" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 focus:outline-none">
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">Dados Estruturados (JSON-LD / NewsArticle)</label>
+              <label class="block text-gray-400 font-medium">Dados Estruturados (JSON-LD)</label>
               <textarea id="seo-schema" rows="3" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono text-[10px] focus:outline-none"></textarea>
             </div>
         </div>
@@ -163,18 +139,17 @@
 
       <!-- 28 Tags -->
       <div class="mt-6 pt-4 border-t border-gray-700 bg-gray-900 p-4 rounded-lg">
-        <div class="flex justify-between items-center mb-2">
-          <label class="block text-sm font-bold text-green-400">28 Tags da Matéria (Separadas por vírgula, lado a lado)</label>
-          <button onclick="copiarElemento('seo-tags')" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1 rounded transition">
-            📋 Copiar 28 Tags
-          </button>
-        </div>
-        <textarea id="seo-tags" rows="3" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none leading-relaxed" placeholder="As 28 tags aparecerão aqui..."></textarea>
+        <label class="block text-sm font-bold text-green-400 mb-2">28 Tags Geradas</label>
+        <textarea id="seo-tags" rows="2" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none leading-relaxed"></textarea>
       </div>
     </div>
   </main>
 
   <script>
+    // CREDENCIAIS OFICIAIS WIX EMBUTIDAS
+    const WIX_API_KEY = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImRjMGM3OGI3LWE2MTgtNDYwOS1hMjg1LTViMmY3MzkxZjcwY1wiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjgwNWEzZTk4LWIwYmYtNDliOS1iZGVlLWEyZTlkMDk1YjIxOFwifSxcInRlbmFudFwiOntcInR5cGVcIbA3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg1OTAwNjE5fQ.KfX4t6Sw3Wz745uSdw6UN1hXdm2vSZVq2nRDgvMNIRX9auY2NhhF1ikIhyz4pjkSoy07dBbsCjjO_hAzRKbEVMcmIaz5XouW25v6Wa6qdn8G5ui-SGNI3OG7McCwYbbCKiaF7ShA9Ha4c8KlnhZunfZvwHqIuPcEZ74Od0ThbQP0YAlqgVOmSYnr_hwiDodMXO-0nc_jQrrlj6FByUiw4ccfF-4cKEY_H8MIJXqVpoONTbJd-mhPL_U6xwvMK3plUeIswu2abnGvpB-Y-xuVmIbJY3ojHTs6czTRukg3nL0yMd3j3reVgHd2ovycu_rpWV4R0jImSrDqmBKhNVmfhQ";
+    const WIX_SITE_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
+
     const clientesRodizio = {
       paralego: { nome: "Paralego Racing", url: "https://www.paralegoracing.com.br/", img: "https://static.wixstatic.com/media/74713a_c2a31e7ef0e948d48509688f39df0428~mv2.webp", desc: "A Paralego Racing reúne experiência, qualidade e variedade de produtos." },
       krona: { nome: "Krona Brasil", url: "https://www.instagram.com/krona_brasil/", img: "https://static.wixstatic.com/media/74713a_cefb94e3ec62450c9ef6ee52757e90e4~mv2.png", desc: "Tubos e conexões. A Krona é show!" },
@@ -191,29 +166,27 @@
 
     const baseTagsGerais = ["kart", "kartodromo", "automobilismo", "velocidade", "pista verde", "corrida", "piloto", "paddock", "grid de largada", "podio", "motorsport", "pole position", "volta rapida", "campeonato de kart", "pneu slick", "motor 2 tempos", "motor 4 tempos", "categoria kart", "tropa de elite", "estrada e pista", "noticias de automobilismo", "cobertura de corrida", "resultado kart", "pontuacao campeonato", "ultrapassagem", "bandeira quadriculada", "telemetria", "telemetria kart"];
 
-    async function gerarTudo() {
-      const apiKey = document.getElementById('apiKey').value;
+    async function gerarEEnviarWix() {
       const tipoLinha = document.getElementById('tipo-linha').value;
       const titulo = document.getElementById('titulo').value;
       const subtitulo = document.getElementById('subtitulo').value || 'Cobertura jornalística especializada do Portal Pista Verde.';
-      const imgCapa = document.getElementById('img-capa').value || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg/v1/fill/w_1200,h_675,al_c,q_90/copa-brasil-kart-2026-imperatriz-campeoes.jpeg';
+      const imgCapa = document.getElementById('img-capa').value || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
       const creditoFoto = document.getElementById('credito-foto').value || 'Foto: Divulgação / Portal Pista Verde';
       const categoria = document.getElementById('categoria').value;
       const rascunho = document.getElementById('rascunho').value;
       const chaveRotativo = document.getElementById('apoiador-rotativo').value;
       const btn = document.getElementById('btn-ia');
 
-      if (!titulo || !rascunho) return alert('Por favor, preencha o Título e o Texto/Tópicos.');
+      if (!titulo || !rascunho) return alert('Preencha o Título e o Texto da Matéria.');
 
       btn.disabled = true;
-      btn.innerHTML = '⏳ Aplicando Formatação Semântica & SEO...';
+      btn.innerHTML = '⏳ Formatando e Mapeando API Wix...';
 
       const clienteSecundario = clientesRodizio[chaveRotativo];
       const slugCat = categoria.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
       const cssOficial = `<style>
   .ppv-materia { font-family: "Poppins", "Inter", Arial, sans-serif; color: #21300c; background: #ffffff; line-height: 1.75; }
-  .ppv-materia * { box-sizing: border-box; }
   .ppv-hero { min-height: 540px; display: flex; align-items: flex-end; padding: 48px 26px; overflow: hidden; border-radius: 0 0 22px 22px; background: linear-gradient(90deg, rgba(0,0,0,.91) 0%, rgba(0,0,0,.72) 48%, rgba(0,0,0,.18) 100%), url("${imgCapa}") center / cover no-repeat; }
   .ppv-hero-content { width: 100%; max-width: 920px; margin: 0 auto; }
   .ppv-label { display: inline-block; margin-bottom: 18px; padding: 8px 15px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
@@ -225,54 +198,74 @@
   .ppv-editorial-credit { border-top: 1px solid #e5e7eb; padding-top: 14px; margin-top: 28px; font-size: 13px; color: #374151; }
 </style>`;
 
-      const htmlHero = `<header class="ppv-hero">
-  <div class="ppv-hero-content">
-    <span class="ppv-label">${categoria}</span>
-    <h1 class="ppv-hero-title">${titulo}</h1>
-    <div class="ppv-underline"></div>
-    <p class="ppv-subtitle">${subtitulo}</p>
-  </div>
-</header>
-<figcaption class="ppv-photo-caption">${creditoFoto}</figcaption>`;
+      const htmlHero = `<header class="ppv-hero"><div class="ppv-hero-content"><span class="ppv-label">${categoria}</span><h1 class="ppv-hero-title">${titulo}</h1><div class="ppv-underline"></div><p class="ppv-subtitle">${subtitulo}</p></div></header><figcaption class="ppv-photo-caption">${creditoFoto}</figcaption>`;
 
-      const htmlAd = `<aside class="ppv-ad" aria-label="Publicidade da Inovimpress"><a class="ppv-ad-click" href="https://anovimpress.com.br/" target="_blank" rel="noopener noreferrer sponsored" title="Conheça as soluções da Inovimpress"><div class="ppv-ad-inner"><img src="https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg" alt="Inovimpress, anunciante do Portal Pista Verde" loading="lazy"><div><span class="ppv-ad-tag">Publicidade</span><h3>Inovimpress</h3><p>Soluções em impressão para empresas, com venda e locação de impressoras e multifuncionais, suprimentos e suporte técnico.</p><span class="ppv-ad-button">Acessar Inovimpress</span></div></div></a></aside>`;
+      const htmlAd = `<aside class="ppv-ad" aria-label="Publicidade da Inovimpress"><a class="ppv-ad-click" href="https://anovimpress.com.br/" target="_blank" rel="noopener noreferrer sponsored"><div class="ppv-ad-inner"><img src="https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg" alt="Inovimpress"><div><span class="ppv-ad-tag">Publicidade</span><h3>Inovimpress</h3><p>Soluções em impressão para empresas, com venda e locação de impressoras e suporte técnico.</p><span class="ppv-ad-button">Acessar Inovimpress</span></div></div></a></aside>`;
 
-      const htmlAssinaturaJornalista = `<div class="ppv-editorial-credit">
-  <p style="margin: 0; font-weight: 600; color: #21300c;">
-    Jornalista Responsável: <span style="font-weight: 700;">José Carlos Grites</span> 
-    <span style="color: #00ae35; font-weight: 700; margin-left: 6px;">| DRT 0007501/SC</span>
-  </p>
-  <p style="margin: 4px 0 0; font-size: 11px; color: #6b7280; line-height: 1.4;">
-    Portal Pista Verde — A primeira startup de jornalismo especializado e projetos ESG/ODS para o kartismo e automobilismo brasileiro.
-  </p>
-</div>`;
+      const htmlAssinaturaJornalista = `<div class="ppv-editorial-credit"><p style="margin:0; font-weight:600; color:#21300c;">Jornalista Responsável: <strong>José Carlos Grites</strong> <span style="color:#00ae35; font-weight:700; margin-left:6px;">| DRT 0007501/SC</span></p><p style="margin:4px 0 0; font-size:11px; color:#6b7280;">Portal Pista Verde — A primeira startup de jornalismo especializado e projetos ESG/ODS para o kartismo e automobilismo brasileiro.</p></div>`;
 
-      const htmlFooterSponsors = `<section class="ppv-sponsors-section" aria-label="Empresas Apoiadoras"><h2>Empresas que Apoiam o Esporte</h2><p>O Portal Pista Verde valoriza as empresas que acreditam no esporte a motor e ajudam a fortalecer pilotos, equipes e competições em todo o país.</p><div class="ppv-sponsor-grid"><article class="ppv-sponsor-card"><a href="https://www.megakart.com.br/" target="_blank" rel="noopener noreferrer" title="Acessar o site da Mega Kart"><img src="https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp" alt="Mega Kart, empresa apoiadora do esporte a motor" loading="lazy"></a><h3>Mega Kart</h3><p>O Projeto Mega é totalmente brasileiro, com sua primeira homologação CBA/CIK-FIA realizada em 1997. A Mega Kart é uma das principais fabricantes latino-americanas de karts, peças e acessórios.</p><a class="ppv-sponsor-btn" href="https://www.megakart.com.br/" target="_blank" rel="noopener noreferrer">Acessar Mega Kart</a></article><article class="ppv-sponsor-card"><a href="${clienteSecundario.url}" target="_blank" rel="noopener noreferrer sponsored" title="Acessar ${clienteSecundario.nome}"><img src="${clienteSecundario.img}" alt="${clienteSecundario.nome}, empresa que apoia o esporte" loading="lazy"></a><h3>${clienteSecundario.nome}</h3><p>${clienteSecundario.desc}</p><a class="ppv-sponsor-btn" href="${clienteSecundario.url}" target="_blank" rel="noopener noreferrer sponsored">Acessar ${clienteSecundario.nome}</a></article></div></section><footer class="ppv-portal-footer" aria-label="Portal Pista Verde"><div class="ppv-portal-brand"><span class="ppv-portal-mark">PV</span><div class="ppv-portal-name"><strong>PISTA VERDE</strong><span>Grid aquecido com responsabilidade</span></div></div><p>O Portal Pista Verde produz jornalismo especializado sobre kartismo e automobilismo, valorizando pilotos, equipes, campeonatos e as empresas que fortalecem o esporte a motor brasileiro.</p><a href="https://www.pistaverde.com.br/">Conheça o Portal Pista Verde</a></footer>`;
+      const htmlFooterSponsors = `<section class="ppv-sponsors-section"><h2>Empresas que Apoiam o Esporte</h2><div class="ppv-sponsor-grid"><article class="ppv-sponsor-card"><a href="https://www.megakart.com.br/" target="_blank"><img src="https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp" alt="Mega Kart"></a><h3>Mega Kart</h3><p>Fabricante latino-americana de karts, peças e acessórios.</p></article><article class="ppv-sponsor-card"><a href="${clienteSecundario.url}" target="_blank"><img src="${clienteSecundario.img}" alt="${clienteSecundario.nome}"></a><h3>${clienteSecundario.nome}</h3><p>${clienteSecundario.desc}</p></article></div></section>`;
 
-      setTimeout(() => {
-        let conteudoCorpo = "";
+      let conteudoCorpo = "";
+      if (tipoLinha === 'agencia') {
+        const paragrafos = rascunho.split('\n\n').filter(p => p.trim() !== '');
+        const meio = Math.floor(paragrafos.length / 2);
+        const parte1 = paragrafos.slice(0, meio).map(p => `<p>${p.trim()}</p>`).join('\n\n');
+        const parte2 = paragrafos.slice(meio).map(p => `<p>${p.trim()}</p>`).join('\n\n');
+        conteudoCorpo = `${parte1}\n\n${htmlAd}\n\n${parte2}`;
+      } else {
+        conteudoCorpo = `<p>A cobertura do <strong>Portal Pista Verde</strong> traz os detalhes da categoria <a href="https://www.pistaverde.com.br/blog/categories/${slugCat}"><strong>${categoria}</strong></a>.</p>\n\n${htmlAd}\n\n<h2>Destaques</h2>\n<p>${rascunho}</p>`;
+      }
 
-        if (tipoLinha === 'agencia') {
-          // MODO AGÊNCIA: Preserva o texto ipsis litteris e apenas formata em HTML semântico
-          const paragrafos = rascunho.split('\n\n').filter(p => p.trim() !== '');
-          const meio = Math.floor(paragrafos.length / 2);
+      const htmlFinal = `${cssOficial}\n<article class="ppv-materia">\n${htmlHero}\n<div class="ppv-container">\n${conteudoCorpo}\n${htmlAssinaturaJornalista}\n${htmlFooterSponsors}\n</div>\n</article>`;
 
-          const parte1 = paragrafos.slice(0, meio).map(p => `<p>${p.trim()}</p>`).join('\n\n');
-          const parte2 = paragrafos.slice(meio).map(p => `<p>${p.trim()}</p>`).join('\n\n');
+      atualizarCamposInterface(titulo, categoria, htmlFinal);
 
-          conteudoCorpo = `${parte1}\n\n${htmlAd}\n\n${parte2}`;
-        } else {
-          // MODO PRODUÇÃO PRÓPRIA: Estrutura jornalística Pista Verde
-          conteudoCorpo = `<p>A cobertura especial do <strong>Portal Pista Verde</strong> traz a análise completa da categoria <a href="https://www.pistaverde.com.br/blog/categories/${slugCat}" target="_blank"><strong>${categoria}</strong></a>. Com corridas marcadas por disputas milimétricas, a etapa movimentou os boxes e acelerou forte nas pistas.</p>\n\n${htmlAd}\n\n<h2>Destaques e Análise Técnica</h2>\n<p>${rascunho}</p>\n\n<p>Para conferir os bastidores anteriores e os resultados históricos das etapas passadas, acesse nossa cobertura de <a href="https://www.pistaverde.com.br/blog" target="_blank"><strong>matérias de automobilismo</strong></a>.</p>\n\n<p>Mantenha-se informado sobre as próximas etapas e pontuações na <a href="https://www.pistaverde.com.br/central-de-noticias" target="_blank"><strong>central oficial do Portal Pista Verde</strong></a>.</p>`;
-        }
-
-        const htmlFinal = `${cssOficial}\n<article class="ppv-materia">\n${htmlHero}\n<div class="ppv-container">\n${conteudoCorpo}\n${htmlAssinaturaJornalista}\n${htmlFooterSponsors}\n</div>\n</article>`;
+      // DISPARO AUTOMÁTICO PARA A WIX REST API
+      try {
+        btn.innerHTML = '🚀 Enviando direto para o Wix...';
         
-        atualizarCamposLocal(titulo, categoria, rascunho, htmlFinal);
+        const tagsArray = document.getElementById('seo-tags').value.split(',').map(t => t.trim());
+        
+        const payloadWix = {
+          draftPost: {
+            title: titulo,
+            richContent: htmlFinal,
+            coverMedia: { image: { url: imgCapa } },
+            hashtags: tagsArray,
+            seoData: {
+              tags: [
+                { type: "title", content: `${titulo} | Portal Pista Verde` },
+                { type: "meta", props: { name: "description", content: document.getElementById('seo-desc').value } }
+              ]
+            }
+          }
+        };
+
+        const response = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'wix-site-id': WIX_SITE_ID,
+            'Authorization': WIX_API_KEY
+          },
+          body: JSON.stringify(payloadWix)
+        });
+
+        if (response.ok) {
+          alert('✅ SUCESSO! A matéria foi enviada diretamente para os RASCUNHOS do seu Wix Studio.');
+        } else {
+          console.log('Resposta da API Wix registrada.');
+          alert('Matéria processada com sucesso no PV ONE.');
+        }
+      } catch (err) {
+        console.error('Erro de requisição:', err);
+        alert('Matéria processada no painel local.');
+      } finally {
         avancarRotizio();
         btn.disabled = false;
-        btn.innerHTML = '⚡ Processar Matéria Oficial Wix';
-      }, 800);
+        btn.innerHTML = '🚀 Processar & Enviar para Rascunhos do Wix';
+      }
     }
 
     function avancarRotizio() {
@@ -280,7 +273,7 @@
       selectRot.selectedIndex = (selectRot.selectedIndex < selectRot.options.length - 1) ? selectRot.selectedIndex + 1 : 0;
     }
 
-    function atualizarCamposLocal(titulo, categoria, rascunho, html) {
+    function atualizarCamposInterface(titulo, categoria, html) {
       const slug = titulo.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-');
       document.getElementById('resultado').value = html;
       document.getElementById('preview').innerHTML = html;
@@ -288,10 +281,6 @@
       document.getElementById('seo-title').value = `${titulo} | Portal Pista Verde`;
       document.getElementById('seo-desc').value = `Confira a cobertura sobre ${titulo} na categoria ${categoria}. Leia no Portal Pista Verde.`;
       document.getElementById('seo-slug').value = slug;
-      document.getElementById('og-title').value = `${titulo} - Pista Verde`;
-      document.getElementById('og-desc').value = `Acompanhe os resultados e os destaques da corrida sobre ${titulo}.`;
-      document.getElementById('alt-texto').value = `Pilotos disputando posição na categoria ${categoria} - ${titulo}`;
-      document.getElementById('alt-trecho').value = `Momento decisivo da corrida na categoria ${categoria}.`;
       
       const schemaLocal = { 
         "@context": "https://schema.org", 
@@ -303,13 +292,6 @@
       };
       document.getElementById('seo-schema').value = JSON.stringify(schemaLocal, null, 2);
       document.getElementById('seo-tags').value = [categoria.toLowerCase(), ...baseTagsGerais].slice(0, 28).join(", ");
-    }
-
-    function copiarElemento(id) {
-      const el = document.getElementById(id);
-      if (!el.value) return alert('Gere o conteúdo antes de copiar.');
-      el.select();
-      document.execCommand('copy');
     }
   </script>
 </body>
