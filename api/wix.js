@@ -19,16 +19,16 @@ export default async function handler(req, res) {
     const WIX_SITE_ID = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
     const WIX_API_KEY = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjlhOTE0ODU3LTdmNTEtNGQ0OC04OWU1LWNlYjg2NjBkZWZjM1wiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjk2YjFlYTQxLWE2MDctNDAxYy1hYTlmLTU5YjRjYjJiYzE4NVwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg1OTUwMDgxfQ.NQJFLCjOo7ptCdDkeEoz7mUKBVzIOEkyf3TZLaRkcPsgclygwGw39jfyrBZNQPfK5iyYeUxZL94bu8vNzwL8HIsORKEz5TDRjITVovjRSGxZJjTML9X3mTJft6E9S_RmN955jmlQaN_RtnQcQzcmkugPsYu3xkBBkmo0M_4KE2hnMv9I7c9AYakXGb020iLkS5rYYuyw8hHslLCRpY9SBTL5xX3Ba2bqcHyNWwJSv0UrtPnRhnDYjQjCsl0eDAMFBuZblM9usmwwUI5nGQscVQfgv_QKBuAnsQVYgI41pm7BvaAlkGZbn5rw3ZskAkP6YW6og2FD1wIRWpZt_2Fthg";
 
+    // Payload ajustado sem dependência de memberId fixo
     const payload = {
       draftPost: {
-        title: title,
-        memberId: "dc0c78b7-a618-4609-a285-5b2f7391f70c",
-        coverMedia: {
+        title: title || "Sem Título",
+        excerpt: "Matéria processada pelo PV ONE para o Portal Pista Verde.",
+        coverMedia: coverImage ? {
           image: {
             url: coverImage
           }
-        },
-        excerpt: "Matéria processada pelo PV ONE para o Portal Pista Verde.",
+        } : undefined,
         richContent: {
           nodes: [
             {
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
                   width: { size: "FULL_WIDTH" },
                   alignment: "CENTER"
                 },
-                html: richContent
+                html: richContent || "<p></p>"
               }
             }
           ]
