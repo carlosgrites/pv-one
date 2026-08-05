@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV One v6.2 - Portal Pista Verde</title>
+  <title>PV One v6.4 - Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.2</span></h1>
-    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Ponte API Wix, Módulo Mídia & Redes • DRT 0007501/SC</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.4</span></h1>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Layout Editorial Pista Verde • DRT 0007501/SC</span>
   </nav>
 
   <main class="p-6 max-w-[1600px] mx-auto space-y-6">
@@ -31,12 +31,12 @@
 
           <div>
             <label class="block text-xs font-medium mb-1">Título da Matéria</label>
-            <input id="titulo" type="text" placeholder="Ex: Final da Copa Brasil de Kart" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="titulo" type="text" placeholder="Ex: Nicolas Souza completa 22 treinos..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">Subtítulo / Linha de Sutiã</label>
-            <input id="subtitulo" type="text" placeholder="Ex: Após duas semanas, 27ª edição..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="subtitulo" type="text" placeholder="Ex: Piloto saiu do Rio de Janeiro..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
@@ -51,7 +51,7 @@
 
           <div>
             <label class="block text-xs font-medium mb-1">Crédito da Foto</label>
-            <input id="credito-foto" type="text" placeholder="Ex: Foto: Flávio Quick / CBA" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="credito-foto" type="text" placeholder="Ex: Foto: Acervo da família" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
@@ -88,8 +88,8 @@
           </div>
 
           <div>
-            <label class="block text-xs font-medium mb-1">Texto / Release da Agência</label>
-            <textarea id="rascunho" rows="4" placeholder="Cole o texto da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
+            <label class="block text-xs font-medium mb-1">Texto / Release Completo</label>
+            <textarea id="rascunho" rows="5" placeholder="Cole a matéria inteira aqui..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
           </div>
 
           <div class="space-y-2 pt-2">
@@ -201,65 +201,67 @@
 
     const baseTagsGerais = ["kart", "kartodromo", "automobilismo", "velocidade", "pistaverde", "corrida", "piloto", "paddock", "grid", "podio", "motorsport", "poleposition", "voltarapida", "campeonatodekart", "pneuslick", "motor2tempos", "motor4tempos", "categoriakart", "tropadeelite", "estradaepista", "noticiasautomobilismo", "coberturadecorrida", "resultadokart", "pontuacaocampeonato", "ultrapassagem", "bandeiraquadriculada", "telemetria", "telemetriakart"];
 
-    function processarFotosMateria(textoBase, urlsFotos, creditoPadrao, htmlAd) {
+    function processarTextoEImagens(textoBase, urlsFotos, creditoPadrao, htmlAd) {
       let paragrafos = textoBase.split('\n\n').filter(p => p.trim() !== '');
       const meio = Math.floor(paragrafos.length / 2);
-      
+
       let listaFotos = [];
       if (urlsFotos && urlsFotos.trim() !== "") {
         listaFotos = urlsFotos.split('\n').map(u => u.trim()).filter(u => u !== "");
       }
 
-      let fotosCorpo = [];
-      let fotosCarrossel = [];
-
-      if (listaFotos.length <= 4) {
-        fotosCorpo = listaFotos;
-      } else {
-        fotosCorpo = listaFotos.slice(0, 4);
-        fotosCarrossel = listaFotos.slice(4);
-      }
+      let fotosCorpo = listaFotos.length <= 4 ? listaFotos : listaFotos.slice(0, 4);
+      let fotosCarrossel = listaFotos.length > 4 ? listaFotos.slice(4) : [];
 
       let resultadoHTML = "";
       let fotoIndex = 0;
 
       paragrafos.forEach((p, index) => {
-        resultadoHTML += `<p>${p.trim()}</p>\n\n`;
+        let textoParagrafo = p.trim();
+
+        if (textoParagrafo.startsWith('"') || textoParagrafo.startsWith('“')) {
+          resultadoHTML += `<blockquote style="border-left: 4px solid #00ae35; padding: 12px 18px; margin: 24px 0; background: #f8fafc; font-style: italic; color: #1e293b; font-size: 15px; border-radius: 0 8px 8px 0;">${textoParagrafo}</blockquote>\n\n`;
+        } else if (textoParagrafo.startsWith('##') || textoParagrafo.startsWith('###')) {
+          let tituloSecao = textoParagrafo.replace(/#/g, '').trim();
+          resultadoHTML += `<h2 style="color: #21300c; font-size: 22px; font-weight: 800; margin-top: 32px; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">${tituloSecao}</h2>\n\n`;
+        } else {
+          resultadoHTML += `<p style="margin-bottom: 18px; color: #334155; font-size: 16px; line-height: 1.8;">${textoParagrafo}</p>\n\n`;
+        }
 
         if (index === meio - 1) {
           resultadoHTML += `${htmlAd}\n\n`;
         }
 
         if ((index + 1) % 2 === 0 && fotoIndex < fotosCorpo.length) {
-          resultadoHTML += `<figure class="ppv-inline-photo" style="margin:20px 0;">
-            <img src="${fotosCorpo[fotoIndex]}" alt="Imagem da matéria" style="width:100%; border-radius:8px;">
-            <figcaption class="ppv-photo-caption" style="font-size:11px; color:#6b7280; font-style:italic; margin-top:6px; text-align:right;">${creditoPadrao}</figcaption>
+          resultadoHTML += `<figure style="margin:28px 0;">
+            <img src="${fotosCorpo[fotoIndex]}" alt="Imagem da matéria" style="width:100%; max-height: 500px; object-fit: cover; border-radius:10px;">
+            <figcaption style="font-size:11px; color:#64748b; font-style:italic; margin-top:8px; text-align:right;">${creditoPadrao}</figcaption>
           </figure>\n\n`;
           fotoIndex++;
         }
       });
 
       while (fotoIndex < fotosCorpo.length) {
-        resultadoHTML += `<figure class="ppv-inline-photo" style="margin:20px 0;">
-          <img src="${fotosCorpo[fotoIndex]}" alt="Imagem da matéria" style="width:100%; border-radius:8px;">
-          <figcaption class="ppv-photo-caption" style="font-size:11px; color:#6b7280; font-style:italic; margin-top:6px; text-align:right;">${creditoPadrao}</figcaption>
+        resultadoHTML += `<figure style="margin:28px 0;">
+          <img src="${fotosCorpo[fotoIndex]}" alt="Imagem da matéria" style="width:100%; max-height: 500px; object-fit: cover; border-radius:10px;">
+          <figcaption style="font-size:11px; color:#64748b; font-style:italic; margin-top:8px; text-align:right;">${creditoPadrao}</figcaption>
         </figure>\n\n`;
         fotoIndex++;
       }
 
       if (fotosCarrossel.length > 0) {
-        let htmlCarrossel = `<section class="ppv-carousel-section" style="margin-top:32px; border-top:2px solid #00ae35; padding-top:16px;">
-          <h3 style="color:#21300c; font-weight:800; text-transform:uppercase; font-size:16px; margin-bottom:12px;">Galeria de Fotos da Cobertura</h3>
-          <div class="ppv-carousel-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">`;
+        let htmlCarrossel = `<section style="margin-top:40px; border-top:2px solid #00ae35; padding-top:20px;">
+          <h3 style="color:#21300c; font-weight:800; text-transform:uppercase; font-size:16px; margin-bottom:14px;">Galeria de Fotos da Cobertura</h3>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">`;
 
         fotosCarrossel.forEach(url => {
-          htmlCarrossel += `<div class="ppv-carousel-item">
+          htmlCarrossel += `<div>
             <img src="${url}" alt="Galeria Pista Verde" style="width:100%; height:140px; object-fit:cover; border-radius:6px;">
           </div>`;
         });
 
         htmlCarrossel += `</div>
-          <figcaption class="ppv-photo-caption" style="font-size:11px; color:#6b7280; font-style:italic; margin-top:8px; text-align:right;">${creditoPadrao}</figcaption>
+          <figcaption style="font-size:11px; color:#64748b; font-style:italic; margin-top:8px; text-align:right;">${creditoPadrao}</figcaption>
         </section>\n\n`;
 
         resultadoHTML += htmlCarrossel;
@@ -298,20 +300,24 @@
 </style>`;
 
       const htmlHero = `<header class="ppv-hero"><div class="ppv-hero-content"><span class="ppv-label">${categoria}</span><h1 class="ppv-hero-title">${titulo}</h1><div class="ppv-underline"></div><p class="ppv-subtitle">${subtitulo}</p></div></header><figcaption class="ppv-photo-caption">${creditoFoto}</figcaption>`;
-      const htmlAd = `<aside class="ppv-ad" aria-label="Publicidade da Inovimpress"><a class="ppv-ad-click" href="https://anovimpress.com.br/" target="_blank" rel="noopener noreferrer sponsored"><div class="ppv-ad-inner"><img src="https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg" alt="Inovimpress"><div><span class="ppv-ad-tag">Publicidade</span><h3>Inovimpress</h3><p>Soluções em impressão para empresas, com venda e locação de impressoras e suporte técnico.</p><span class="ppv-ad-button">Acessar Inovimpress</span></div></div></a></aside>`;
+      const htmlAd = `<aside class="ppv-ad" aria-label="Publicidade da Inovimpress" style="margin: 32px 0;"><a class="ppv-ad-click" href="https://anovimpress.com.br/" target="_blank" rel="noopener noreferrer sponsored"><div class="ppv-ad-inner" style="background:#f1f5f9; padding:20px; border-radius:12px; border:1px solid #cbd5e1;"><img src="https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg" alt="Inovimpress" style="max-width:180px; margin-bottom:12px;"><div><span style="font-size:10px; background:#00ae35; color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; text-transform:uppercase;">Publicidade</span><h3 style="margin:6px 0; color:#0f172a; font-size:16px; font-weight:700;">Inovimpress</h3><p style="font-size:13px; color:#475569; margin:0 0 10px;">Soluções em impressão para empresas, com venda e locação de impressoras e suporte técnico.</p><span style="display:inline-block; font-size:12px; font-weight:700; color:#00ae35;">Acessar Inovimpress →</span></div></div></a></aside>`;
       const htmlAssinaturaJornalista = `<div class="ppv-editorial-credit"><p style="margin:0; font-weight:600; color:#21300c;">Jornalista Responsável: <strong>José Carlos Grites</strong> <span style="color:#00ae35; font-weight:700; margin-left:6px;">| DRT 0007501/SC</span></p><p style="margin:4px 0 0; font-size:11px; color:#6b7280;">Portal Pista Verde — A primeira startup de jornalismo especializado e projetos ESG/ODS para o kartismo e automobilismo brasileiro.</p></div>`;
-      const htmlFooterSponsors = `<section class="ppv-sponsors-section"><h2>Empresas que Apoiam o Esporte</h2><div class="ppv-sponsor-grid"><article class="ppv-sponsor-card"><a href="https://www.megakart.com.br/" target="_blank"><img src="https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp" alt="Mega Kart"></a><h3>Mega Kart</h3><p>Fabricante latino-americana de karts, peças e acessórios.</p></article><article class="ppv-sponsor-card"><a href="${clienteSecundario.url}" target="_blank"><img src="${clienteSecundario.img}" alt="${clienteSecundario.nome}"></a><h3>${clienteSecundario.nome}</h3><p>${clienteSecundario.desc}</p></article></div></section>`;
+      
+      // Rodapé Institucional e Patrocinadores
+      const htmlFooterSponsors = `<section style="margin-top:40px; background:#f8fafc; padding:24px; border-radius:12px;"><h2 style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:16px; text-transform:uppercase;">Empresas que Apoiam o Esporte</h2><div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;"><article style="background:#fff; padding:16px; border-radius:8px; border:1px solid #e2e8f0;"><a href="https://www.megakart.com.br/" target="_blank"><img src="https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp" alt="Mega Kart" style="height:40px; object-fit:contain; margin-bottom:8px;"></a><h3 style="font-size:14px; font-weight:700; color:#0f172a; margin:0;">Mega Kart</h3><p style="font-size:12px; color:#64748b; margin:4px 0 0;">Fabricante latino-americana de karts, peças e acessórios.</p></article><article style="background:#fff; padding:16px; border-radius:8px; border:1px solid #e2e8f0;"><a href="${clienteSecundario.url}" target="_blank"><img src="${clienteSecundario.img}" alt="${clienteSecundario.nome}" style="height:40px; object-fit:contain; margin-bottom:8px;"></a><h3 style="font-size:14px; font-weight:700; color:#0f172a; margin:0;">${clienteSecundario.nome}</h3><p style="font-size:12px; color:#64748b; margin:4px 0 0;">${clienteSecundario.desc}</p></article></div></section>`;
 
-      let conteudoCorpo = processarFotosMateria(rascunho, fotosExtras, creditoFoto, htmlAd);
+      const htmlCaixaInstitucional = `<section style="margin-top:24px; background:#111827; padding:24px; border-radius:12px; color:#ffffff;"><div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;"><div style="background:#00ae35; color:#fff; font-weight:900; padding:6px 10px; border-radius:6px; font-size:14px;">PV</div><div><h3 style="font-size:18px; font-weight:800; margin:0; text-transform:uppercase; color:#ffffff;">PISTA VERDE</h3><p style="font-size:11px; color:#9ca3af; margin:0; text-transform:uppercase; letter-spacing:.05em;">Grid Aquecido com Responsabilidade</p></div></div><p style="font-size:13px; color:#d1d5db; line-height:1.6; margin:0 0 16px;">O Portal Pista Verde produz jornalismo especializado sobre kartismo e automobilismo, valorizando pilotos, equipes, campeonatos e as empresas que fortalecem o esporte a motor brasileiro.</p><a href="https://www.pistaverde.com.br" target="_blank" style="display:inline-block; background:#00ae35; color:#ffffff; font-weight:700; font-size:12px; padding:10px 18px; border-radius:6px; text-decoration:none;">CONHEÇA O PORTAL PISTA VERDE</a></section>`;
+
+      let conteudoCorpo = processarTextoEImagens(rascunho, fotosExtras, creditoFoto, htmlAd);
 
       if (tipoLinha === 'propria') {
-        conteudoCorpo = `<p>A cobertura do <strong>Portal Pista Verde</strong> traz os detalhes da categoria <a href="https://www.pistaverde.com.br/blog/categories/${slugCat}"><strong>${categoria}</strong></a>.</p>\n\n` + conteudoCorpo;
+        conteudoCorpo = `<p style="font-size:17px; font-weight:600; color:#00ae35; margin-bottom:20px;">A cobertura do <strong>Portal Pista Verde</strong> traz os detalhes da categoria <a href="https://www.pistaverde.com.br/blog/categories/${slugCat}" style="color:#00ae35; text-decoration:underline;"><strong>${categoria}</strong></a>.</p>\n\n` + conteudoCorpo;
       }
 
-      const htmlFinal = `${cssOficial}\n<article class="ppv-materia">\n${htmlHero}\n<div class="ppv-container">\n${conteudoCorpo}\n${htmlAssinaturaJornalista}\n${htmlFooterSponsors}\n</div>\n</article>`;
+      const htmlFinal = `${cssOficial}\n<article class="ppv-materia">\n${htmlHero}\n<div class="ppv-container">\n${conteudoCorpo}\n${htmlAssinaturaJornalista}\n${htmlFooterSponsors}\n${htmlCaixaInstitucional}\n</div>\n</article>`;
 
       atualizarCamposInterface(titulo, subtitulo, categoria, htmlFinal, rascunho);
-      alert('SUCESSO: Matéria processada no painel local. Revise o resultado antes de enviar para o Wix.');
+      alert('SUCESSO: Matéria processada no layout unificado. Revise a prévia na tela.');
     }
 
     async function dispararParaWix() {
@@ -356,10 +362,10 @@
         });
 
         if (response.ok) {
-          alert('SUCESSO: Matéria enviada diretamente para a pasta de RASCUNHOS do Wix Studio.');
+          alert('SUCESSO: Matéria enviada para os RASCUNHOS do Wix Studio sem blocos picotados.');
           avancarRotizio();
         } else {
-          alert('Aviso: Erro na resposta da API Wix. Verifique as permissões da chave.');
+          alert('Aviso: Erro na resposta da API Wix. Verifique as permissões.');
         }
       } catch (err) {
         alert('Erro na conexão com a API do Wix.');
