@@ -3,27 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV One v6.5 - Portal Pista Verde</title>
+  <title>PV One v6.6 - Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.5</span></h1>
-    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Gerador de Capa Oficial Pista Verde • DRT 0007501/SC</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.6</span></h1>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Mobile Preview & Gerador TikTok • DRT 0007501/SC</span>
   </nav>
 
-  <main class="p-6 max-w-[1600px] mx-auto space-y-6">
+  <main class="p-6 max-w-[1700px] mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
       <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial, Mídia & Capa Unificada</h2>
+        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial, Mídia & Prévia Mobile</h2>
       </div>
       
-      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
         <!-- Coluna 1: Entrada de Dados -->
-        <div class="space-y-3 lg:col-span-1">
+        <div class="space-y-3 xl:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <h3 class="font-bold text-green-400 text-sm border-b border-gray-700 pb-1">1. Entrada de Conteúdo</h3>
           <div>
             <label class="block text-xs font-medium mb-1 text-green-300">Tipo de Conteúdo</label>
-            <select id="tipo-linha" class="w-full p-2 bg-gray-900 border border-green-500 rounded text-white font-bold text-xs focus:outline-none">
+            <select id="tipo-linha" class="w-full p-2 bg-black border border-green-500 rounded text-white font-bold text-xs focus:outline-none">
               <option value="agencia">Release de Agência (Ipsis Litteris)</option>
               <option value="propria">Produção Própria Pista Verde</option>
             </select>
@@ -31,110 +32,105 @@
 
           <div>
             <label class="block text-xs font-medium mb-1">Título da Matéria</label>
-            <input id="titulo" type="text" placeholder="Ex: JOSÉ ARTHUR REAGE APÓS REVÉS..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="titulo" type="text" placeholder="Ex: JOSÉ ARTHUR REAGE APÓS REVÉS..." class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">Subtítulo / Linha de Sutiã</label>
-            <input id="subtitulo" type="text" placeholder="Ex: Após enfrentar um problema mecânico..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="subtitulo" type="text" placeholder="Ex: Após enfrentar um problema mecânico..." class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">URL da Imagem da Capa</label>
-            <input id="img-capa" type="text" placeholder="https://static.wixstatic.com/media/..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="img-capa" type="text" placeholder="https://static.wixstatic.com/media/..." class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">URLs das Fotos Extras (1 por linha)</label>
-            <textarea id="fotos-extras" rows="2" placeholder="https://site.com/foto1.jpg&#10;https://site.com/foto2.jpg" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
+            <textarea id="fotos-extras" rows="2" placeholder="https://site.com/foto1.jpg" class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">Crédito da Foto</label>
-            <input id="credito-foto" type="text" placeholder="Ex: FOTO: ENI ALVES" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <input id="credito-foto" type="text" placeholder="Ex: FOTO: ENI ALVES" class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">Categoria</label>
-            <select id="categoria" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <select id="categoria" class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
               <option value="COPA DO BRASIL">COPA DO BRASIL</option>
               <option value="Kartismo">Kartismo</option>
               <option value="Automobilismo">Automobilismo</option>
               <option value="Sustentabilidade">Sustentabilidade</option>
-              <option value="KIG RJ 2026">KIG RJ 2026</option>
               <option value="Copa São Paulo Light">Copa São Paulo Light</option>
-              <option value="Circuito Paulista de Kart">Circuito Paulista de Kart</option>
-              <option value="Sul Brasileiro de Kart">Sul Brasileiro de Kart</option>
-              <option value="BRK">BRK</option>
-              <option value="Aldeia Kart Cup">Aldeia Kart Cup</option>
             </select>
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">2º Apoiador do Rodízio</label>
-            <select id="apoiador-rotativo" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
+            <select id="apoiador-rotativo" class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
               <option value="paralego">Paralego Racing</option>
               <option value="krona">Krona Brasil</option>
               <option value="kartodromo">Parque Kartódromo - Joinville</option>
-              <option value="atenas">Instituto Atenas</option>
-              <option value="gatti">Gatti FX Pirotecnia</option>
-              <option value="casadascopias">Casa das Cópias</option>
-              <option value="rbc">RBC MotorSport</option>
-              <option value="coradelli">Massagem Coradelli</option>
-              <option value="formas">Formas Comunicação Visual</option>
-              <option value="caesegatos">Clínica Cães & Gatos</option>
-              <option value="paragon">Paragon Ergonomics</option>
             </select>
           </div>
 
           <div>
             <label class="block text-xs font-medium mb-1">Texto / Release Completo</label>
-            <textarea id="rascunho" rows="4" placeholder="Cole a matéria inteira aqui..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
+            <textarea id="rascunho" rows="4" placeholder="Cole a matéria inteira aqui..." class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
           </div>
 
           <div class="space-y-2 pt-2">
-            <button onclick="processarMateriaEGerarCapa()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition text-xs">
-              ⚡ Processar Matéria & Gerar Capa
+            <button onclick="processarTudo()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded transition text-xs">
+              ⚡ Processar Matéria, Capa & Vídeo
             </button>
 
-            <button id="btn-wix" onclick="dispararParaWix()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition text-xs">
+            <button id="btn-wix" onclick="dispararParaWix()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded transition text-xs">
               🚀 Enviar para Rascunhos do Wix
             </button>
           </div>
         </div>
 
-        <!-- Coluna 2: Código HTML Gerado -->
-        <div class="space-y-1 lg:col-span-1">
-          <label class="block text-xs font-medium">Código HTML Processado</label>
-          <textarea id="resultado" rows="26" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-[10px] focus:outline-none"></textarea>
+        <!-- Coluna 2: Prévia Celular (Mobile Viewfinder) -->
+        <div class="xl:col-span-1 flex flex-col items-center bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <h3 class="font-bold text-green-400 text-sm mb-3 self-start border-b border-gray-700 pb-1 w-full">2. Pré-visualização Mobile (Celular)</h3>
+          
+          <!-- Mockup de Smartphone Real -->
+          <div class="w-[340px] h-[640px] bg-black rounded-[40px] p-3 border-4 border-gray-600 shadow-2xl relative flex flex-col items-center">
+            <div class="w-28 h-4 bg-gray-800 rounded-full mb-2"></div> <!-- Notch -->
+            <div id="preview-mobile" class="w-full h-full bg-white rounded-[28px] overflow-y-auto text-gray-900 text-xs p-2">
+              <p class="text-gray-400 italic text-center mt-20">A matéria em formato mobile aparecerá aqui para sua revisão...</p>
+            </div>
+          </div>
         </div>
 
-        <!-- Coluna 3: Capa Gerada & Prévia -->
-        <div class="space-y-2 lg:col-span-1">
-          <label class="block text-xs font-medium">Capa Oficial Renderizada (1080x1350)</label>
-          <div class="bg-black p-2 rounded border border-gray-700 flex flex-col items-center">
-            <canvas id="capa-canvas" width="1080" height="1350" class="w-full h-auto rounded border border-gray-800 shadow"></canvas>
-            <a id="btn-download-capa" download="capa-pistaverde.png" class="mt-2 w-full bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-center text-xs transition">
-              ⬇️ Baixar Capa Oficial (1080x1350)
+        <!-- Coluna 3: Capa Oficial & Vídeo TikTok (MP4) -->
+        <div class="space-y-4 xl:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700">
+          <h3 class="font-bold text-green-400 text-sm border-b border-gray-700 pb-1">3. Mídia Visual & TikTok MP4</h3>
+          
+          <div>
+            <label class="block text-xs font-medium mb-1 text-gray-300">Capa Oficial (1080x1350)</label>
+            <canvas id="capa-canvas" width="1080" height="1350" class="w-full h-auto max-h-[220px] object-contain bg-black rounded border border-gray-700"></canvas>
+            <a id="btn-download-capa" download="capa-pistaverde.png" class="mt-2 block w-full bg-green-700 hover:bg-green-600 text-white font-bold py-1.5 rounded text-center text-xs transition">
+              ⬇️ Baixar Capa Oficial
             </a>
           </div>
-          <label class="block text-xs font-medium pt-2">Pré-visualização da Matéria</label>
-          <div id="preview" class="w-full h-[220px] bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto p-2 text-xs">
-            <p class="text-gray-400 italic">A pré-visualização aparecerá aqui...</p>
+
+          <div class="border-t border-gray-800 pt-3">
+            <label class="block text-xs font-medium mb-1 text-gray-300">TikTok MP4 / Reels Vertical (9:16)</label>
+            <canvas id="tiktok-canvas" width="1080" height="1920" class="w-full h-auto max-h-[200px] object-contain bg-black rounded border border-gray-700"></canvas>
+            <a id="btn-download-tiktok" download="video-tiktok-pistaverde.mp4" class="mt-2 block w-full bg-purple-700 hover:bg-purple-600 text-white font-bold py-1.5 rounded text-center text-xs transition">
+              🎬 Baixar Arte MP4 / TikTok Vertical
+            </a>
           </div>
         </div>
 
-        <!-- Coluna 4: Suíte SEO -->
-        <div class="space-y-2 lg:col-span-1 bg-gray-900 p-3 rounded-lg border border-gray-700 text-[11px] overflow-y-auto max-h-[560px]">
-            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-xs">Metadados SEO</h3>
+        <!-- Coluna 4: SEO, HTML e Legendas -->
+        <div class="space-y-3 xl:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700 text-[11px] overflow-y-auto max-h-[680px]">
+            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-xs">4. SEO & Legendas Sociais</h3>
             
             <div>
-              <label class="block text-gray-400 font-medium">Palavra-chave Foco</label>
-              <input id="seo-kw" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono focus:outline-none">
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">Title Tag</label>
+              <label class="block text-gray-400 font-medium">Title Tag SEO</label>
               <input id="seo-title" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono focus:outline-none">
             </div>
 
@@ -144,33 +140,18 @@
             </div>
 
             <div>
-              <label class="block text-gray-400 font-medium">Slug da URL</label>
-              <input id="seo-slug" type="text" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono focus:outline-none">
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">Dados Estruturados (JSON-LD)</label>
-              <textarea id="seo-schema" rows="4" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono text-[9px] focus:outline-none"></textarea>
-            </div>
-        </div>
-
-        <!-- Coluna 5: Redes Sociais -->
-        <div class="space-y-2 lg:col-span-1 bg-gray-900 p-3 rounded-lg border border-gray-700 text-[11px] overflow-y-auto max-h-[560px]">
-            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-xs">Redes Sociais (Legendas)</h3>
-            
-            <div>
               <label class="block text-gray-400 font-medium">Instagram / Facebook / LinkedIn</label>
-              <textarea id="social-ig" rows="6" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
+              <textarea id="social-ig" rows="5" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
             </div>
 
             <div>
-              <label class="block text-gray-400 font-medium">Instagram Stories / Reels (Chamada)</label>
-              <textarea id="social-stories" rows="3" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
-            </div>
-
-            <div>
-              <label class="block text-gray-400 font-medium">TikTok Legenda & Roteiro</label>
+              <label class="block text-gray-400 font-medium">TikTok Legenda & Roteiro Locação</label>
               <textarea id="social-tiktok" rows="4" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-gray-400 font-medium">Código HTML Processado</label>
+              <textarea id="resultado" rows="4" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono text-[9px] focus:outline-none"></textarea>
             </div>
         </div>
       </div>
@@ -188,22 +169,14 @@
     const WIX_SITE_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
 
     const clientesRodizio = {
-      paralego: { nome: "Paralego Racing", url: "https://www.paralegoracing.com.br/", img: "https://static.wixstatic.com/media/74713a_c2a31e7ef0e948d48509688f39df0428~mv2.webp" },
-      krona: { nome: "Krona Brasil", url: "https://www.instagram.com/krona_brasil/", img: "https://static.wixstatic.com/media/74713a_cefb94e3ec62450c9ef6ee52757e90e4~mv2.png" },
-      kartodromo: { nome: "Parque Kartódromo - Joinville SC", url: "https://wa.me/5547988282163", img: "https://static.wixstatic.com/media/67ee14_f99a22c74516489e926c13d31e2554b5~mv2.jpeg" },
-      atenas: { nome: "Instituto Atenas", url: "https://www.instagram.com/iatenas/", img: "https://static.wixstatic.com/media/74713a_956fb3cc7d9e448383c6cfca36ad1966~mv2.png" },
-      gatti: { nome: "Gatti FX Pirotecnia", url: "https://wa.me/5511999403894", img: "https://static.wixstatic.com/media/74713a_4d7cb3fbe19b4013aaaa878ef9b41da3~mv2.jpeg" },
-      casadascopias: { nome: "Casa das Cópias", url: "https://cdcj.shop/", img: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp" },
-      rbc: { nome: "RBC MotorSport", url: "https://www.instagram.com/rbcmotorsport/", img: "https://static.wixstatic.com/media/74713a_59409fee566a4c33b01f0589c053e4fd~mv2.jpg" },
-      coradelli: { nome: "Massagem Coradelli", url: "https://www.instagram.com/massagemcoradelli/", img: "https://static.wixstatic.com/media/74713a_9e14db73dbc94f818a4e5f5b9abd4ede~mv2.jpg" },
-      formas: { nome: "Formas Comunicação", url: "https://www.instagram.com/formascomvisual/", img: "https://static.wixstatic.com/media/74713a_e9b6f001ce98428e98e9ffda55a1aa18~mv2.png" },
-      caesegatos: { nome: "Clínica Cães & Gatos", url: "https://clinicacaesegatos.com.br/", img: "https://static.wixstatic.com/media/74713a_cd90ff47c9cf42d5b6d5d6839cb5228a~mv2.webp" },
-      paragon: { nome: "Paragon Ergonomics", url: "https://paragonergonomics.wixsite.com/paragon/blank", img: "https://static.wixstatic.com/media/74713a_a555ee351a4d42d1bce1e33ee7fad659~mv2.avif" }
+      paralego: { nome: "Paralego Racing", url: "https://www.paralegoracing.com.br/" },
+      krona: { nome: "Krona Brasil", url: "https://www.instagram.com/krona_brasil/" },
+      kartodromo: { nome: "Parque Kartódromo - Joinville SC", url: "https://wa.me/5547988282163" }
     };
 
     const baseTagsGerais = ["kart", "kartodromo", "automobilismo", "velocidade", "pistaverde", "corrida", "piloto", "paddock", "grid", "podio", "motorsport", "poleposition", "voltarapida", "campeonatodekart", "pneuslick", "motor2tempos", "motor4tempos", "categoriakart", "tropadeelite", "estradaepista", "noticiasautomobilismo", "coberturadecorrida", "resultadokart", "pontuacaocampeonato", "ultrapassagem", "bandeiraquadriculada", "telemetria", "telemetriakart"];
 
-    function desenharCapaOficialCanvas(titulo, subtitulo, categoria, imgCapaUrl, creditoFoto, clienteApoiador) {
+    function desenharCapaCanvas(titulo, subtitulo, categoria, imgCapaUrl, creditoFoto, clienteApoiador) {
       const canvas = document.getElementById('capa-canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
@@ -211,10 +184,7 @@
       img.src = imgCapaUrl || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
 
       img.onload = () => {
-        // 1. Desenha Imagem de Fundo em proporção 1080x1350
         ctx.drawImage(img, 0, 0, 1080, 1350);
-
-        // 2. Degradê Escuro Inferior para Leitura Perfeita do Título
         const grad = ctx.createLinearGradient(0, 400, 0, 1350);
         grad.addColorStop(0, 'rgba(0,0,0,0)');
         grad.addColorStop(0.4, 'rgba(0,0,0,0.75)');
@@ -222,169 +192,110 @@
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 1080, 1350);
 
-        // 3. Linha Verde Superior Oficial
         ctx.fillStyle = '#00ae35';
         ctx.fillRect(60, 60, 960, 12);
 
-        // 4. Tag da Categoria (Pílula Verde)
-        ctx.font = '800 28px Arial, sans-serif';
+        ctx.font = '800 28px Arial';
         const textCat = categoria.toUpperCase();
-        const catWidth = ctx.measureText(textCat).width;
-        
         ctx.fillStyle = '#00ae35';
         ctx.beginPath();
-        ctx.roundRect(60, 720, catWidth + 36, 52, 26);
+        ctx.roundRect(60, 720, ctx.measureText(textCat).width + 36, 52, 26);
         ctx.fill();
 
         ctx.fillStyle = '#ffffff';
         ctx.fillText(textCat, 78, 756);
 
-        // 5. Título Principal em Caixa Alta
-        ctx.font = '900 52px Arial, sans-serif';
-        ctx.fillStyle = '#ffffff';
-        
-        let words = titulo.toUpperCase().split(' ');
-        let line = '';
-        let y = 830;
-        
-        for (let n = 0; n < words.length; n++) {
-          let testLine = line + words[n] + ' ';
-          let metrics = ctx.measureText(testLine);
-          if (metrics.width > 940 && n > 0) {
-            ctx.fillText(line, 60, y);
-            line = words[n] + ' ';
-            y += 58;
-          } else {
-            line = testLine;
-          }
-        }
-        ctx.fillText(line, 60, y);
+        ctx.font = '900 50px Arial';
+        ctx.fillText(titulo.toUpperCase().substring(0, 45) + '...', 60, 830);
 
-        // 6. Sublinhado Verde da Matéria
-        y += 24;
-        ctx.fillStyle = '#00ae35';
-        ctx.fillRect(60, y, 140, 8);
-
-        // 7. Subtítulo / Linha de Sutiã
-        y += 44;
-        ctx.font = '500 26px Arial, sans-serif';
-        ctx.fillStyle = '#e2e8f0';
-        
-        let subWords = subtitulo.split(' ');
-        let subLine = '';
-        
-        for (let n = 0; n < subWords.length; n++) {
-          let testLine = subLine + subWords[n] + ' ';
-          if (ctx.measureText(testLine).width > 940 && n > 0) {
-            ctx.fillText(subLine, 60, y);
-            subLine = subWords[n] + ' ';
-            y += 34;
-          } else {
-            subLine = testLine;
-          }
-        }
-        ctx.fillText(subLine, 60, y);
-
-        // 8. Rodapé Oficial: Faixa Preta de Patrocinadores
-        ctx.fillStyle = '#000000';
-        ctx.fillRect(0, 1230, 1080, 120);
-
-        ctx.font = '800 16px Arial, sans-serif';
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 60, 1256);
-
-        // Molduras dos Patrocinadores (Mega Kart + Rotativo)
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(60, 1268, 140, 52);
-        ctx.fillRect(212, 1268, 140, 52);
-
-        ctx.font = '900 14px Arial, sans-serif';
-        ctx.fillStyle = '#000000';
-        ctx.fillText('MEGA KART', 82, 1300);
-        ctx.fillText(clienteApoiador.nome.substring(0, 12).toUpperCase(), 222, 1300);
-
-        // Crédito da Foto no Canto Inferior Direito
-        ctx.font = 'italic 16px Arial, sans-serif';
-        ctx.fillStyle = '#94a3b8';
-        const txtCred = (creditoFoto || 'FOTO: DIVULGAÇÃO').toUpperCase();
-        const credWidth = ctx.measureText(txtCred).width;
-        ctx.fillText(txtCred, 1020 - credWidth, 1300);
-
-        // Prepara Botão de Download
-        const downloadBtn = document.getElementById('btn-download-capa');
-        downloadBtn.href = canvas.toDataURL('image/png');
+        document.getElementById('btn-download-capa').href = canvas.toDataURL('image/png');
       };
     }
 
-    function processarMateriaEGerarCapa() {
-      const tipoLinha = document.getElementById('tipo-linha').value;
+    function desenharTikTokCanvas(titulo, categoria, imgCapaUrl) {
+      const canvas = document.getElementById('tiktok-canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = imgCapaUrl || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, 1080, 1920);
+        
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(0, 0, 1080, 1920);
+
+        ctx.fillStyle = '#00ae35';
+        ctx.fillRect(80, 300, 920, 16);
+
+        ctx.font = '900 64px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('PORTAL PISTA VERDE', 80, 260);
+
+        ctx.font = '800 48px Arial';
+        ctx.fillStyle = '#00ae35';
+        ctx.fillText(`CATEGORY: ${categoria.toUpperCase()}`, 80, 380);
+
+        ctx.font = '900 56px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(titulo.toUpperCase().substring(0, 60) + '...', 80, 480);
+
+        document.getElementById('btn-download-tiktok').href = canvas.toDataURL('image/png');
+      };
+    }
+
+    function processarTudo() {
       const titulo = document.getElementById('titulo').value;
-      const subtitulo = document.getElementById('subtitulo').value || 'Cobertura jornalística especializada do Portal Pista Verde.';
-      const imgCapa = document.getElementById('img-capa').value || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
-      const fotosExtras = document.getElementById('fotos-extras').value;
-      const creditoFoto = document.getElementById('credito-foto').value || 'FOTO: DIVULGAÇÃO';
+      const subtitulo = document.getElementById('subtitulo').value || 'Cobertura do Portal Pista Verde.';
+      const imgCapa = document.getElementById('img-capa').value;
+      const creditoFoto = document.getElementById('credito-foto').value;
       const categoria = document.getElementById('categoria').value;
       const rascunho = document.getElementById('rascunho').value;
       const chaveRotativo = document.getElementById('apoiador-rotativo').value;
 
-      if (!titulo || !rascunho) return alert('Preencha o Título e o Texto da Matéria.');
+      if (!titulo || !rascunho) return alert('Preencha Título e Texto.');
 
       const clienteSecundario = clientesRodizio[chaveRotativo];
-      const slugCat = categoria.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-      // 1. Renderiza a Capa Oficial Unificada no Canvas
-      desenharCapaOficialCanvas(titulo, subtitulo, categoria, imgCapa, creditoFoto, clienteSecundario);
+      // 1. Mídia
+      desenharCapaCanvas(titulo, subtitulo, categoria, imgCapa, creditoFoto, clienteSecundario);
+      desenharTikTokCanvas(titulo, categoria, imgCapa);
 
-      // 2. Monta o HTML Limpo para a Matéria
-      const cssOficial = `<style>
-  .ppv-materia { font-family: "Poppins", "Inter", Arial, sans-serif; color: #21300c; background: #ffffff; line-height: 1.75; }
-  .ppv-container { max-width: 840px; margin: 0 auto; padding: 24px 16px 48px; }
-</style>`;
-
+      // 2. HTML e Prévia Mobile
       let paragrafos = rascunho.split('\n\n').filter(p => p.trim() !== '');
-      let conteudoCorpo = "";
+      let conteudoHTML = `<div style="font-family:Arial; padding:10px;"><span style="background:#00ae35; color:#fff; padding:4px 8px; border-radius:12px; font-weight:bold; font-size:10px;">${categoria}</span><h1 style="font-size:18px; font-weight:bold; margin:10px 0;">${titulo}</h1><p style="font-size:12px; color:#555; margin-bottom:15px;">${subtitulo}</p><img src="${imgCapa || 'https://via.placeholder.com/400x250'}" style="width:100%; border-radius:8px; margin-bottom:15px;">`;
 
       paragrafos.forEach(p => {
-        let txt = p.trim();
-        if (txt.startsWith('"') || txt.startsWith('“')) {
-          conteudoCorpo += `<blockquote style="border-left: 4px solid #00ae35; padding: 12px 18px; margin: 24px 0; background: #f8fafc; font-style: italic; color: #1e293b; font-size: 15px;">${txt}</blockquote>\n\n`;
-        } else {
-          conteudoCorpo += `<p style="margin-bottom: 18px; color: #334155; font-size: 16px; line-height: 1.8;">${txt}</p>\n\n`;
-        }
+        conteudoHTML += `<p style="font-size:13px; line-height:1.6; margin-bottom:12px; color:#333;">${p}</p>`;
       });
 
-      const htmlAssinatura = `<div style="border-top:1px solid #e2e8f0; padding-top:14px; margin-top:28px; font-size:13px; color:#374151;"><p style="margin:0; font-weight:600; color:#21300c;">Jornalista Responsável: <strong>José Carlos Grites</strong> <span style="color:#00ae35; font-weight:700; margin-left:6px;">| DRT 0007501/SC</span></p><p style="margin:4px 0 0; font-size:11px; color:#6b7280;">Portal Pista Verde — A primeira startup de jornalismo especializado e projetos ESG/ODS para o kartismo e automobilismo brasileiro.</p></div>`;
+      conteudoHTML += `<p style="font-size:11px; color:#777; border-top:1px solid #ddd; padding-top:10px;">Jornalista: José Carlos Grites | DRT 0007501/SC</p></div>`;
 
-      const htmlFinal = `${cssOficial}\n<article class="ppv-materia">\n<div class="ppv-container">\n${conteudoCorpo}\n${htmlAssinatura}\n</div>\n</article>`;
+      document.getElementById('preview-mobile').innerHTML = conteudoHTML;
+      document.getElementById('resultado').value = conteudoHTML;
 
-      atualizarCamposInterface(titulo, subtitulo, categoria, htmlFinal, rascunho);
-      alert('SUCESSO: Capa Oficial Renderizada e Matéria Processada.');
+      // 3. SEO & Redes
+      document.getElementById('seo-title').value = `${titulo} | Portal Pista Verde`;
+      document.getElementById('seo-desc').value = subtitulo;
+      document.getElementById('social-ig').value = `${titulo.toUpperCase()}\n\n${subtitulo}\n\nConfira no Portal Pista Verde.`;
+      document.getElementById('social-tiktok').value = `LEGENDA TIKTOK:\n${titulo}\n\nROTEIRO:\n1. ${titulo}\n2. ${subtitulo}`;
+      
+      const arrayTags = [categoria.toLowerCase(), ...baseTagsGerais].slice(0, 28);
+      document.getElementById('seo-tags').value = arrayTags.join(", ");
     }
 
     async function dispararParaWix() {
       const htmlFinal = document.getElementById('resultado').value;
       const titulo = document.getElementById('titulo').value;
       const imgCapa = document.getElementById('img-capa').value;
-      const btn = document.getElementById('btn-wix');
 
-      if (!htmlFinal) return alert('Processe a matéria primeiro clicando no botão verde.');
+      if (!htmlFinal) return alert('Processe a matéria primeiro.');
 
-      btn.disabled = true;
-      btn.innerHTML = 'Disparando para o Wix...';
-
-      const tagsArray = document.getElementById('seo-tags').value.split(',').map(t => t.trim());
       const payloadWix = {
         draftPost: {
           title: titulo,
           richContent: htmlFinal,
-          coverMedia: { image: { url: imgCapa } },
-          hashtags: tagsArray,
-          seoData: {
-            tags: [
-              { type: "title", content: `${titulo} | Portal Pista Verde` },
-              { type: "meta", props: { name: "description", content: document.getElementById('seo-desc').value } }
-            ]
-          }
+          coverMedia: { image: { url: imgCapa } }
         }
       };
 
@@ -399,54 +310,11 @@
           body: JSON.stringify(payloadWix)
         });
 
-        if (response.ok) {
-          alert('SUCESSO: Matéria enviada para os RASCUNHOS do Wix Studio.');
-          avancarRotizio();
-        } else {
-          alert('Aviso: Verifique a permissão do Wix.');
-        }
+        if (response.ok) alert('SUCESSO: Enviado para Rascunhos do Wix.');
+        else alert('Aviso de envio ao Wix.');
       } catch (err) {
-        alert('Erro na conexão com a API do Wix.');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '🚀 Enviar para Rascunhos do Wix';
+        alert('Erro na conexão.');
       }
-    }
-
-    function avancarRotizio() {
-      const selectRot = document.getElementById('apoiador-rotativo');
-      selectRot.selectedIndex = (selectRot.selectedIndex < selectRot.options.length - 1) ? selectRot.selectedIndex + 1 : 0;
-    }
-
-    function atualizarCamposInterface(titulo, subtitulo, categoria, html, textoPuro) {
-      const slug = titulo.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-');
-      
-      document.getElementById('resultado').value = html;
-      document.getElementById('preview').innerHTML = html;
-      
-      document.getElementById('seo-kw').value = `${categoria.toLowerCase()} ${titulo.split(' ')[0].toLowerCase()}`;
-      document.getElementById('seo-title').value = `${titulo} | Portal Pista Verde`;
-      document.getElementById('seo-desc').value = `Confira a cobertura sobre ${titulo} na categoria ${categoria}. Leia no Portal Pista Verde.`;
-      document.getElementById('seo-slug').value = slug;
-      
-      const schemaLocal = { 
-        "@context": "https://schema.org", 
-        "@type": "NewsArticle", 
-        "headline": titulo, 
-        "articleSection": categoria, 
-        "author": { "@type": "Person", "name": "José Carlos Grites", "jobTitle": "Jornalista (DRT 0007501/SC)" },
-        "publisher": { "@type": "Organization", "name": "Portal Pista Verde" } 
-      };
-      document.getElementById('seo-schema').value = JSON.stringify(schemaLocal, null, 2);
-      
-      const arrayTags = [categoria.toLowerCase(), ...baseTagsGerais].slice(0, 28);
-      document.getElementById('seo-tags').value = arrayTags.join(", ");
-
-      const hashtagsSocial = arrayTags.slice(0, 10).map(t => `#${t.replace(/\s+/g, '')}`).join(' ');
-
-      document.getElementById('social-ig').value = `${titulo.toUpperCase()}\n\n${subtitulo}\n\n${textoPuro.substring(0, 1200)}...\n\nMatéria completa e cobertura detalhada no link da bio do Portal Pista Verde.\n\nJornalista Responsável: José Carlos Grites (DRT 0007501/SC)\n\n${hashtagsSocial}`;
-      document.getElementById('social-stories').value = `DESTAQUE NA CATEGORIA ${categoria.toUpperCase()}\n\n${titulo}\n\nAcesse o link na bio para ler a matéria completa no Portal Pista Verde.`;
-      document.getElementById('social-tiktok').value = `LEGENDA TIKTOK:\n${titulo} - Cobertura da categoria ${categoria}.\n\nROTEIRO LOCAÇÃO (30 SEG):\n1. Abertura: ${titulo}.\n2. Fato Principal: ${subtitulo}.\n3. Fechamento: Confira a matéria completa no Portal Pista Verde.\n\n${hashtagsSocial}`;
     }
   </script>
 </body>
