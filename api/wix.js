@@ -20,16 +20,7 @@ export default async function handler(req, res) {
   const WIX_ACCOUNT_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
 
   try {
-    const { title, content } = req.body;
-
-    // Payload simplificado com os únicos campos aceitos no Schema padrão do Wix
-    const payload = {
-      dataCollectionId: "Blog/Posts",
-      item: {
-        title: title || "Sem Título",
-        excerpt: content ? String(content).substring(0, 100) : ""
-      }
-    };
+    const { title, content, coverImage } = req.body;
 
     const response = await fetch('https://www.wixapis.com/wix-data/v1/items', {
       method: 'POST',
@@ -39,7 +30,13 @@ export default async function handler(req, res) {
         'wix-site-id': WIX_SITE_ID,
         'wix-account-id': WIX_ACCOUNT_ID
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        dataCollectionId: "blog/posts",
+        item: {
+          title: title || "Sem Título",
+          excerpt: content ? String(content).substring(0, 150) : ""
+        }
+      })
     });
 
     const data = await response.json();
