@@ -21,7 +21,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- TOPBAR -->
   <header class="h-16 border-b border-[#182e18] bg-[#0b110b] px-6 flex items-center justify-between sticky top-0 z-50">
     <div class="flex items-center gap-3">
       <div class="w-8 h-8 rounded-lg bg-[#00ae35] flex items-center justify-center font-black text-black text-lg">PV</div>
@@ -35,7 +34,6 @@
   </header>
 
   <div class="flex flex-1">
-    <!-- SIDEBAR -->
     <aside class="w-64 border-r border-[#182e18] bg-[#0b110b] p-4 flex flex-col justify-between">
       <nav class="space-y-1">
         <a href="#" class="sidebar-link active">
@@ -56,10 +54,7 @@
       </div>
     </aside>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 p-8 overflow-y-auto">
-      
-      <!-- ABAS DA FILA -->
       <div class="flex items-center gap-3 border-b border-[#182e18] pb-4 mb-6">
         <button onclick="mudarAba('fila', this)" class="tab-pill active">Fila ativa <span class="count-badge" id="count-fila">1</span></button>
         <button onclick="mudarAba('conferencia', this)" class="tab-pill">Conferência <span class="text-xs text-gray-600 ml-1" id="count-conf">0</span></button>
@@ -68,40 +63,32 @@
         <button onclick="mudarAba('lixeira', this)" class="tab-pill">Lixeira <span class="text-xs text-gray-600 ml-1" id="count-lixeira">0</span></button>
       </div>
 
-      <!-- PAINEL DIVIDIDO -->
       <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        
-        <!-- ESQUERDA: LISTA DE MATÉRIAS NA FILA -->
         <div class="xl:col-span-4 bg-[#0e170e] p-4 rounded-2xl border border-[#182e18] space-y-4">
           <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Pesquisar título ou piloto..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#00ae35]">
-          
-          <div id="lista-releases" class="space-y-3">
-            <p class="text-xs text-gray-400 p-2">Carregando matérias da fila...</p>
-          </div>
+          <div id="lista-releases" class="space-y-3"></div>
         </div>
 
-        <!-- DIREITA: PRÉVIA FIEL E EDITOR COMPLETO COM MEDIAS -->
         <div class="xl:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-6">
           <div class="flex justify-between items-center border-b border-[#182e18] pb-3">
             <h3 class="font-extrabold text-sm text-[#00ae35] uppercase tracking-wider">Prévia Fiel do Template Pista Verde (Hero Visual, Mídias & Redes)</h3>
             <button id="btn-enviar" onclick="sendToWix()" class="bg-[#00ae35] hover:bg-[#00942d] text-black font-extrabold px-6 py-2.5 rounded-xl text-sm transition shadow-lg shadow-[#00ae35]/20">Enviar para o Wix</button>
           </div>
 
-          <!-- FORMULÁRIO DE EDIÇÃO -->
           <div class="space-y-4">
             <div>
               <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Título da Matéria (H1 Oculto SEO)</label>
-              <input id="title" type="text" value="" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35]">
+              <input id="title" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35]">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase mb-1">URL da Imagem de Capa (Hero)</label>
-                <input id="coverImage" oninput="atualizarPreviews()" type="text" value="" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+                <input id="coverImage" oninput="atualizarPreviews()" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vídeo MP4 (TikTok / Reels)</label>
-                <input id="videoUrl" type="text" value="" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+                <input id="videoUrl" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
               </div>
             </div>
 
@@ -111,12 +98,9 @@
             </div>
           </div>
 
-          <!-- SEÇÃO DE PREVIEWS DE MÍDIA E REDES SOCIAIS -->
           <div class="border-t border-[#182e18] pt-6 space-y-4">
             <h4 class="font-bold text-xs text-[#00ae35] uppercase tracking-wider">Previews Visuais & Ativos de Redes Sociais</h4>
-            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <!-- CAPA HERO WEBSITE -->
               <div class="preview-card">
                 <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Capa Hero Site (16:9)</span>
                 <div class="media-box h-32 overflow-hidden relative">
@@ -124,7 +108,6 @@
                 </div>
               </div>
 
-              <!-- CAPA INSTAGRAM POST -->
               <div class="preview-card">
                 <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Post Instagram (1:1)</span>
                 <div class="media-box h-32 overflow-hidden relative">
@@ -132,7 +115,6 @@
                 </div>
               </div>
 
-              <!-- VÍDEO VERTICAL TIKTOK / REELS -->
               <div class="preview-card">
                 <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Vídeo TikTok / Reels (9:16 MP4)</span>
                 <div class="media-box h-32 bg-[#000] flex flex-col items-center justify-center p-2 text-center">
@@ -142,9 +124,7 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </main>
   </div>
@@ -158,28 +138,38 @@
 
     async function carregarFilaDeReleases() {
       const listaContainer = document.getElementById('lista-releases');
-      listaContainer.innerHTML = '<p class="text-xs text-gray-400 p-2">Carregando matérias da fila...</p>';
-
       try {
         const response = await fetch('/api/releases');
         if (!response.ok) throw new Error("Erro na API");
-        
         todasMaterias = await response.json();
+        if(!todasMaterias || todasMaterias.length === 0) throw new Error("Vazio");
         renderizarLista(todasMaterias);
-        atualizarContadores(todasMaterias);
-        if(todasMaterias.length > 0) carregarMateria(0);
+        carregarMateria(0);
       } catch (err) {
         carregarMateriaModelo();
       }
     }
 
+    function carregarMateriaModelo() {
+      const container = document.getElementById('lista-releases');
+      container.innerHTML = `
+        <div onclick="carregarDadosModelo()" class="p-4 rounded-xl bg-[#142414] border border-[#00ae35] cursor-pointer transition">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/20">Pronto para Envio</span>
+          <h4 class="font-bold text-sm text-white mt-2 line-clamp-2">Copa Brasil de Kart da CBA chega ao fim em Imperatriz</h4>
+          <p class="text-xs text-gray-400 mt-1 line-clamp-2">Após duas semanas, 27ª edição terminou com grandes corridas...</p>
+        </div>`;
+      carregarDadosModelo();
+    }
+
+    function carregarDadosModelo() {
+      document.getElementById('title').value = "Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado";
+      document.getElementById('coverImage').value = "https://static.wixstatic.com/media/74713a_example.jpg";
+      document.getElementById('richContent').value = "Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...";
+      atualizarPreviews();
+    }
+
     function renderizarLista(lista) {
       const container = document.getElementById('lista-releases');
-      if (!lista || lista.length === 0) {
-        container.innerHTML = '<p class="text-xs text-gray-500 p-2">Nenhuma matéria pendente nesta aba.</p>';
-        return;
-      }
-
       container.innerHTML = lista.map((mat, idx) => `
         <div onclick="carregarMateria(${idx})" class="p-4 rounded-xl bg-[#142414] border border-[#182e18] hover:border-[#00ae35] cursor-pointer transition mb-2">
           <span class="text-[10px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/20">${mat.status || 'Pendente'}</span>
@@ -199,24 +189,6 @@
       atualizarPreviews();
     }
 
-    function carregarMateriaModelo() {
-      const container = document.getElementById('lista-releases');
-      container.innerHTML = `
-        <div onclick="carregarMateriaModelo()" class="p-4 rounded-xl bg-[#142414] border border-[#00ae35] cursor-pointer transition">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/20">Pronto para Envio</span>
-          <h4 class="font-bold text-sm text-white mt-2 line-clamp-2">Copa Brasil de Kart da CBA chega ao fim em Imperatriz</h4>
-          <p class="text-xs text-gray-400 mt-1 line-clamp-2">Após duas semanas, 27ª edição terminou com grandes corridas...</p>
-        </div>`;
-      document.getElementById('title').value = "Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado";
-      document.getElementById('coverImage').value = "https://static.wixstatic.com/media/74713a_example.jpg";
-      document.getElementById('richContent').value = "Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...";
-      atualizarPreviews();
-    }
-
-    function atualizarContadores(lista) {
-      document.getElementById('count-fila').innerText = lista.length || 1;
-    }
-
     function atualizarPreviews() {
       const url = document.getElementById('coverImage').value;
       const prevHero = document.getElementById('prev-hero');
@@ -228,8 +200,6 @@
     function mudarAba(aba, el) {
       document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
-      const filtradas = todasMaterias.filter(m => (m.status || 'fila') === aba);
-      renderizarLista(filtradas);
     }
 
     function filtrarFila() {
