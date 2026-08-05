@@ -1,7 +1,157 @@
-<script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PV ONE 1.0 — Portal Pista Verde</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: #0b110b; color: #ffffff; }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-weight: 600; font-size: 14px; color: #9ca3af; border-radius: 12px; transition: all 0.2s; }
+    .sidebar-link:hover, .sidebar-link.active { background-color: #142814; color: #00ae35; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background-color: #111811; border: 1px solid #1c3b1c; font-size: 12px; font-weight: 600; color: #9ca3af; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ae35; }
+    .tab-pill { padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; background-color: #111811; border: 1px solid #1c3b1c; color: #9ca3af; transition: all 0.2s; cursor: pointer; }
+    .tab-pill.active { background-color: #1c3b1c; border-color: #00ae35; color: #ffffff; }
+    .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; margin-left: 6px; }
+    .preview-card { background: #060a06; border: 1px solid #182e18; border-radius: 16px; padding: 16px; }
+    .media-box { background: #000000; border: 1px dashed #1c3b1c; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOPBAR -->
+  <header class="h-16 border-b border-[#182e18] bg-[#0b110b] px-6 flex items-center justify-between sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-[#00ae35] flex items-center justify-center font-black text-black text-lg">PV</div>
+      <span class="font-extrabold tracking-wider text-white text-lg">PV ONE <span class="text-xs bg-[#00ae35]/20 text-[#00ae35] px-2 py-0.5 rounded border border-[#00ae35]/30 ml-1">v1.0</span></span>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="status-badge"><span class="status-dot"></span> Gmail conectado</div>
+      <div class="status-badge"><span class="status-dot"></span> Google conectado</div>
+      <div class="status-badge"><span class="status-dot"></span> Status API: <span class="text-[#00ae35] ml-1">Conectado</span></div>
+    </div>
+  </header>
+
+  <div class="flex flex-1">
+    <!-- SIDEBAR -->
+    <aside class="w-64 border-r border-[#182e18] bg-[#0b110b] p-4 flex flex-col justify-between">
+      <nav class="space-y-1">
+        <a href="#" class="sidebar-link active">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+          Redação & Matérias
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+          Fila de Publicação
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+          Configurações Wix
+        </a>
+      </nav>
+      <div class="text-xs text-gray-600 px-4 py-2 border-t border-[#182e18]">
+        Pista Verde © 2026
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      
+      <!-- ABAS DA FILA -->
+      <div class="flex items-center gap-3 border-b border-[#182e18] pb-4 mb-6">
+        <button onclick="mudarAba('fila', this)" class="tab-pill active">Fila ativa <span class="count-badge" id="count-fila">1</span></button>
+        <button onclick="mudarAba('conferencia', this)" class="tab-pill">Conferência <span class="text-xs text-gray-600 ml-1" id="count-conf">0</span></button>
+        <button onclick="mudarAba('prontas', this)" class="tab-pill">Prontas <span class="text-xs text-gray-600 ml-1" id="count-prontas">0</span></button>
+        <button onclick="mudarAba('arquivo', this)" class="tab-pill">Arquivo <span class="text-xs text-gray-600 ml-1" id="count-arquivo">0</span></button>
+        <button onclick="mudarAba('lixeira', this)" class="tab-pill">Lixeira <span class="text-xs text-gray-600 ml-1" id="count-lixeira">0</span></button>
+      </div>
+
+      <!-- PAINEL DIVIDIDO -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        
+        <!-- ESQUERDA: LISTA DE MATÉRIAS NA FILA -->
+        <div class="xl:col-span-4 bg-[#0e170e] p-4 rounded-2xl border border-[#182e18] space-y-4">
+          <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Pesquisar título ou piloto..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#00ae35]">
+          
+          <div id="lista-releases" class="space-y-3">
+            <p class="text-xs text-gray-400 p-2">Carregando matérias da fila...</p>
+          </div>
+        </div>
+
+        <!-- DIREITA: PRÉVIA FIEL E EDITOR COMPLETO COM MEDIAS -->
+        <div class="xl:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-6">
+          <div class="flex justify-between items-center border-b border-[#182e18] pb-3">
+            <h3 class="font-extrabold text-sm text-[#00ae35] uppercase tracking-wider">Prévia Fiel do Template Pista Verde (Hero Visual, Mídias & Redes)</h3>
+            <button id="btn-enviar" onclick="sendToWix()" class="bg-[#00ae35] hover:bg-[#00942d] text-black font-extrabold px-6 py-2.5 rounded-xl text-sm transition shadow-lg shadow-[#00ae35]/20">Enviar para o Wix</button>
+          </div>
+
+          <!-- FORMULÁRIO DE EDIÇÃO -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Título da Matéria (H1 Oculto SEO)</label>
+              <input id="title" type="text" value="" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35]">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">URL da Imagem de Capa (Hero)</label>
+                <input id="coverImage" oninput="atualizarPreviews()" type="text" value="" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vídeo MP4 (TikTok / Reels)</label>
+                <input id="videoUrl" type="text" value="" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Conteúdo da Matéria (Rich Text)</label>
+              <textarea id="richContent" rows="8" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-4 text-sm text-gray-200 focus:outline-none focus:border-[#00ae35]"></textarea>
+            </div>
+          </div>
+
+          <!-- SEÇÃO DE PREVIEWS DE MÍDIA E REDES SOCIAIS -->
+          <div class="border-t border-[#182e18] pt-6 space-y-4">
+            <h4 class="font-bold text-xs text-[#00ae35] uppercase tracking-wider">Previews Visuais & Ativos de Redes Sociais</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- CAPA HERO WEBSITE -->
+              <div class="preview-card">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Capa Hero Site (16:9)</span>
+                <div class="media-box h-32 overflow-hidden relative">
+                  <img id="prev-hero" src="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x225/111/00ae35?text=Capa+Pista+Verde'">
+                </div>
+              </div>
+
+              <!-- CAPA INSTAGRAM POST -->
+              <div class="preview-card">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Post Instagram (1:1)</span>
+                <div class="media-box h-32 overflow-hidden relative">
+                  <img id="prev-insta" src="" class="w-full h-full object-cover border border-[#00ae35]/40" onerror="this.src='https://via.placeholder.com/300x300/111/00ae35?text=Instagram'">
+                </div>
+              </div>
+
+              <!-- VÍDEO VERTICAL TIKTOK / REELS -->
+              <div class="preview-card">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Vídeo TikTok / Reels (9:16 MP4)</span>
+                <div class="media-box h-32 bg-[#000] flex flex-col items-center justify-center p-2 text-center">
+                  <svg class="w-8 h-8 text-[#00ae35] mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span class="text-[10px] text-gray-400 font-mono">Pronto para download MP4</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
     let todasMaterias = [];
 
-    // Busca automática dos releases processados assim que abre o site
     window.addEventListener('DOMContentLoaded', () => {
       carregarFilaDeReleases();
     });
@@ -17,14 +167,9 @@
         todasMaterias = await response.json();
         renderizarLista(todasMaterias);
         atualizarContadores(todasMaterias);
+        if(todasMaterias.length > 0) carregarMateria(0);
       } catch (err) {
-        // Se a API não responder, mantém a matéria modelo como fallback
-        listaContainer.innerHTML = `
-          <div onclick="carregarMateriaModelo()" class="p-4 rounded-xl bg-[#142414] border border-[#00ae35] cursor-pointer transition">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/20">Pronto para Envio</span>
-            <h4 class="font-bold text-sm text-white mt-2 line-clamp-2">Copa Brasil de Kart da CBA chega ao fim em Imperatriz</h4>
-            <p class="text-xs text-gray-400 mt-1 line-clamp-2">Após duas semanas, 27ª edição terminou com grandes corridas...</p>
-          </div>`;
+        carregarMateriaModelo();
       }
     }
 
@@ -55,6 +200,13 @@
     }
 
     function carregarMateriaModelo() {
+      const container = document.getElementById('lista-releases');
+      container.innerHTML = `
+        <div onclick="carregarMateriaModelo()" class="p-4 rounded-xl bg-[#142414] border border-[#00ae35] cursor-pointer transition">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/20">Pronto para Envio</span>
+          <h4 class="font-bold text-sm text-white mt-2 line-clamp-2">Copa Brasil de Kart da CBA chega ao fim em Imperatriz</h4>
+          <p class="text-xs text-gray-400 mt-1 line-clamp-2">Após duas semanas, 27ª edição terminou com grandes corridas...</p>
+        </div>`;
       document.getElementById('title').value = "Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado";
       document.getElementById('coverImage').value = "https://static.wixstatic.com/media/74713a_example.jpg";
       document.getElementById('richContent').value = "Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...";
@@ -62,7 +214,7 @@
     }
 
     function atualizarContadores(lista) {
-      document.getElementById('count-fila').innerText = lista.length || 0;
+      document.getElementById('count-fila').innerText = lista.length || 1;
     }
 
     function atualizarPreviews() {
@@ -122,3 +274,5 @@
       }
     }
   </script>
+</body>
+</html>
