@@ -1,4 +1,16 @@
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Método não permitido' });
   }
@@ -22,6 +34,7 @@ export default async function handler(req, res) {
         dataCollectionId: "Blog/Posts",
         item: {
           title: title,
+          excerpt: content ? content.substring(0, 200) : "",
           plainContent: content,
           coverImage: coverImage
         }
@@ -31,14 +44,15 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ 
-        message: 'Erro retornado pelo Wix', 
-        details: data 
+      return res.status(response.status).json({
+        success: false,
+        message: 'Erro no servidor do Wix',
+        details: data
       });
     }
 
     return res.status(200).json({ success: true, data });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 }
