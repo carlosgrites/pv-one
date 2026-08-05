@@ -8,13 +8,16 @@
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v1.3</span></h1>
-    <span class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Preview Ativo</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v1.4</span></h1>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">OpenAI Integration</span>
   </nav>
 
   <main class="p-6 max-w-6xl mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
-      <h2 class="text-2xl font-bold mb-4 border-b border-gray-700 pb-2 text-green-400">Módulo 1: Redação & Editorial</h2>
+      <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
+        <h2 class="text-2xl font-bold text-green-400">Módulo 1: Redação & Editorial</h2>
+        <input id="apiKey" type="password" placeholder="Chave API OpenAI (sk-...)" class="text-xs p-1 bg-gray-900 border border-gray-700 rounded text-gray-300 w-48 focus:outline-none focus:border-green-500">
+      </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Coluna 1: Entrada -->
@@ -25,13 +28,23 @@
           </div>
 
           <div>
+            <label class="block text-sm font-medium mb-1">Categoria</label>
+            <select id="categoria" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+              <option value="Kartismo">Kartismo</option>
+              <option value="Automobilismo Nacional">Automobilismo Nacional</option>
+              <option value="Fórmula 1 / Internacional">Fórmula 1 / Internacional</option>
+              <option value="Track Day & Coberturas">Track Day & Coberturas</option>
+            </select>
+          </div>
+
+          <div>
             <label class="block text-sm font-medium mb-1">Tópicos / Rascunho Bruto</label>
-            <textarea id="rascunho" rows="8" placeholder="Digite aqui os fatos da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
+            <textarea id="rascunho" rows="5" placeholder="Digite os fatos principais da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
           </div>
 
           <div class="space-y-2">
-            <button onclick="gerarIA()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition">
-              🤖 Expandir com IA
+            <button id="btn-ia" onclick="gerarIA()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition flex justify-center items-center gap-2">
+              🤖 Redigir Matéria com IA
             </button>
             <button onclick="copiarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition">
               📋 Copiar HTML Wix
@@ -42,14 +55,14 @@
         <!-- Coluna 2: Código HTML Gerado -->
         <div class="space-y-2">
           <label class="block text-sm font-medium">Código HTML (Wix)</label>
-          <textarea id="resultado" rows="14" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none" placeholder="O código HTML aparecerá aqui..."></textarea>
+          <textarea id="resultado" rows="16" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none" placeholder="O código HTML gerado pela IA aparecerá aqui..."></textarea>
         </div>
 
         <!-- Coluna 3: Pré-visualização Visual -->
         <div class="space-y-2">
           <label class="block text-sm font-medium">Pré-visualização da Matéria</label>
-          <div id="preview" class="w-full h-[320px] p-4 bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto space-y-3 text-sm">
-            <p class="text-gray-400 italic">A visualização formatada aparecerá aqui...</p>
+          <div id="preview" class="w-full h-[370px] p-4 bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto space-y-3 text-sm">
+            <p class="text-gray-400 italic">A matéria formatada aparecerá aqui...</p>
           </div>
         </div>
       </div>
@@ -57,23 +70,75 @@
   </main>
 
   <script>
-    function gerarIA() {
-      const titulo = document.getElementById('titulo').value || 'Destaques do Automobilismo';
-      const rascunho = document.getElementById('rascunho').value || 'Cobertura dos últimos acontecimentos nas pistas.';
-      
-      const textoHTML = `<h1>${titulo}</h1>\n\n<p>A emoção tomou conta das pistas durante os últimos acontecimentos do setor. Em uma disputa acirrada, os competidores demonstraram alto nível técnico a cada curva.</p>\n\n<p><strong>Destaques da etapa:</strong></p>\n<p>${rascunho}</p>\n\n<p><strong>Portal Pista Verde - A velocidade em primeiro lugar.</strong></p>`;
-      
-      document.getElementById('resultado').value = textoHTML;
+    async function gerarIA() {
+      const apiKey = document.getElementById('apiKey').value;
+      const titulo = document.getElementById('titulo').value;
+      const categoria = document.getElementById('categoria').value;
+      const rascunho = document.getElementById('rascunho').value;
+      const btn = document.getElementById('btn-ia');
 
-      // Renderiza a pré-visualização formatada
-      const previewArea = document.getElementById('preview');
-      previewArea.innerHTML = `
-        <h1 class="text-xl font-bold text-green-700 border-b pb-1 mb-2">${titulo}</h1>
-        <p class="text-gray-700">A emoção tomou conta das pistas durante os últimos acontecimentos do setor. Em uma disputa acirrada, os competidores demonstraram alto nível técnico a cada curva.</p>
-        <p class="font-semibold text-gray-800">Destaques da etapa:</p>
-        <p class="bg-gray-100 p-2 rounded border-l-4 border-green-500 text-gray-700">${rascunho}</p>
-        <p class="text-xs text-green-800 font-bold mt-4">Portal Pista Verde - A velocidade em primeiro lugar.</p>
-      `;
+      if (!titulo || !rascunho) {
+        alert('Por favor, preencha o Título e os Tópicos.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Gerando matéria...';
+
+      // Se não houver API Key, usa o gerador local avançado
+      if (!apiKey) {
+        setTimeout(() => {
+          const htmlLocal = `<h1>${titulo}</h1>\n\n<p>A cobertura jornalística do <strong>Portal Pista Verde</strong> traz os principais destaques da categoria <em>${categoria}</em>. Em uma jornada de disputas acirradas e muita adrenalina, os pilotos entregaram tudo nas pistas.</p>\n\n<h2>Destaques e Resultados</h2>\n<p>${rascunho}</p>\n\n<p>Acompanhe nosso portal para mais atualizações sobre o automobilismo em tempo real.</p>\n\n<p><strong>Portal Pista Verde - A velocidade em primeiro lugar.</strong></p>`;
+          
+          atualizarSaida(titulo, htmlLocal);
+          btn.disabled = false;
+          btn.innerHTML = '🤖 Redigir Matéria com IA';
+        }, 1000);
+        return;
+      }
+
+      // Chamada oficial da API da OpenAI
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              {
+                role: 'system',
+                content: 'Você é um jornalista especializado em automobilismo do Portal Pista Verde. Escreva matérias completas, engajantes e com bom SEO. Retorne SEMPRE o texto formatado em tags HTML básicas (<h1>, <h2>, <p>, <strong>, <em>) prontas para colar no Wix Blog.'
+              },
+              {
+                role: 'user',
+                content: `Categoria: ${categoria}\nTítulo: ${titulo}\nFatos/Tópicos: ${rascunho}`
+              }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        
+        if (data.choices && data.choices[0]) {
+          const htmlIA = data.choices[0].message.content;
+          atualizarSaida(titulo, htmlIA);
+        } else {
+          alert('Erro na API da OpenAI. Verifique sua chave.');
+        }
+      } catch (err) {
+        alert('Erro ao conectar com a IA: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🤖 Redigir Matéria com IA';
+      }
+    }
+
+    function atualizarSaida(titulo, html) {
+      document.getElementById('resultado').value = html;
+      document.getElementById('preview').innerHTML = html;
     }
 
     function copiarTexto() {
