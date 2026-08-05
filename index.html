@@ -8,74 +8,80 @@
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v1.2</span></h1>
-    <span class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Assistente IA Ativo</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v1.3</span></h1>
+    <span class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Preview Ativo</span>
   </nav>
 
-  <main class="p-6 max-w-5xl mx-auto space-y-6">
+  <main class="p-6 max-w-6xl mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
       <h2 class="text-2xl font-bold mb-4 border-b border-gray-700 pb-2 text-green-400">Módulo 1: Redação & Editorial</h2>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Coluna de Entrada / Edição -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Coluna 1: Entrada -->
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">Título da Matéria (SEO Nativo)</label>
-            <input id="titulo" type="text" placeholder="Ex: GP de Kart - Etapa Final em Joinville" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-medium mb-1">Título da Matéria</label>
+            <input id="titulo" type="text" placeholder="Ex: GP de Kart - Etapa Final" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Ideia Central / Tópicos Brutos</label>
-            <textarea id="rascunho" rows="6" placeholder="Digite apenas os fatos principais. Ex: Piloto Silva venceu na última volta, tempo firme, 30 participantes..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
+            <label class="block text-sm font-medium mb-1">Tópicos / Rascunho Bruto</label>
+            <textarea id="rascunho" rows="8" placeholder="Digite aqui os fatos da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
           </div>
 
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="gerarBasico()" class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 rounded transition">
-              ⚙️ Formatar Rascunho
-            </button>
-            <button onclick="gerarIA()" class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition">
+          <div class="space-y-2">
+            <button onclick="gerarIA()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition">
               🤖 Expandir com IA
+            </button>
+            <button onclick="copiarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition">
+              📋 Copiar HTML Wix
             </button>
           </div>
         </div>
 
-        <!-- Coluna de Saída -->
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Resultado HTML (Wix Blog)</label>
-            <textarea id="resultado" rows="11" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-sm focus:outline-none" placeholder="O texto gerado aparecerá aqui..."></textarea>
-          </div>
+        <!-- Coluna 2: Código HTML Gerado -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium">Código HTML (Wix)</label>
+          <textarea id="resultado" rows="14" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none" placeholder="O código HTML aparecerá aqui..."></textarea>
+        </div>
 
-          <button onclick="copiarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition">
-            📋 Copiar Conteúdo
-          </button>
+        <!-- Coluna 3: Pré-visualização Visual -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium">Pré-visualização da Matéria</label>
+          <div id="preview" class="w-full h-[320px] p-4 bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto space-y-3 text-sm">
+            <p class="text-gray-400 italic">A visualização formatada aparecerá aqui...</p>
+          </div>
         </div>
       </div>
     </div>
   </main>
 
   <script>
-    function gerarBasico() {
-      const titulo = document.getElementById('titulo').value || 'Sem Título';
-      const rascunho = document.getElementById('rascunho').value || 'Sem conteúdo inserido.';
-      const paragrafos = rascunho.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p}</p>`).join('\n');
-      document.getElementById('resultado').value = `<h1>${titulo}</h1>\n\n${paragrafos}\n\n<p><strong>Portal Pista Verde - Cobertura Oficial</strong></p>`;
-    }
-
     function gerarIA() {
       const titulo = document.getElementById('titulo').value || 'Destaques do Automobilismo';
-      const rascunho = document.getElementById('rascunho').value || 'Cobertura completa dos últimos acontecimentos nas pistas.';
+      const rascunho = document.getElementById('rascunho').value || 'Cobertura dos últimos acontecimentos nas pistas.';
       
-      const textoExpandido = `<h1>${titulo}</h1>\n\n<p>A emoção tomou conta das pistas durante os últimos acontecimentos do setor. Em uma disputa acirrada, os competidores demonstraram alto nível técnico e determinação a cada curva.</p>\n\n<p><strong>Principais pontos da etapa:</strong></p>\n<p>${rascunho}</p>\n\n<p>Acompanhe no Portal Pista Verde todas as atualizações, bastidores e classificações em tempo real.</p>\n\n<p><strong>Portal Pista Verde - A velocidade em primeiro lugar.</strong></p>`;
+      const textoHTML = `<h1>${titulo}</h1>\n\n<p>A emoção tomou conta das pistas durante os últimos acontecimentos do setor. Em uma disputa acirrada, os competidores demonstraram alto nível técnico a cada curva.</p>\n\n<p><strong>Destaques da etapa:</strong></p>\n<p>${rascunho}</p>\n\n<p><strong>Portal Pista Verde - A velocidade em primeiro lugar.</strong></p>`;
       
-      document.getElementById('resultado').value = textoExpandido;
+      document.getElementById('resultado').value = textoHTML;
+
+      // Renderiza a pré-visualização formatada
+      const previewArea = document.getElementById('preview');
+      previewArea.innerHTML = `
+        <h1 class="text-xl font-bold text-green-700 border-b pb-1 mb-2">${titulo}</h1>
+        <p class="text-gray-700">A emoção tomou conta das pistas durante os últimos acontecimentos do setor. Em uma disputa acirrada, os competidores demonstraram alto nível técnico a cada curva.</p>
+        <p class="font-semibold text-gray-800">Destaques da etapa:</p>
+        <p class="bg-gray-100 p-2 rounded border-l-4 border-green-500 text-gray-700">${rascunho}</p>
+        <p class="text-xs text-green-800 font-bold mt-4">Portal Pista Verde - A velocidade em primeiro lugar.</p>
+      `;
     }
 
     function copiarTexto() {
       const resultado = document.getElementById('resultado');
+      if (!resultado.value) return alert('Gere o conteúdo antes de copiar.');
       resultado.select();
       document.execCommand('copy');
-      alert('Conteúdo copiado com sucesso!');
+      alert('Código HTML copiado para a área de transferência!');
     }
   </script>
 </body>
