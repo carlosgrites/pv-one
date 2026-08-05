@@ -8,20 +8,20 @@
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v1.5</span></h1>
-    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Categorias Atualizadas</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v1.6</span></h1>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Redação & SEO Ativos</span>
   </nav>
 
-  <main class="p-6 max-w-6xl mx-auto space-y-6">
+  <main class="p-6 max-w-7xl mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
       <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-        <h2 class="text-2xl font-bold text-green-400">Módulo 1: Redação & Editorial</h2>
+        <h2 class="text-2xl font-bold text-green-400">Módulo 1: Redação & Editorial + SEO</h2>
         <input id="apiKey" type="password" placeholder="Chave API OpenAI (sk-...)" class="text-xs p-1 bg-gray-900 border border-gray-700 rounded text-gray-300 w-48 focus:outline-none focus:border-green-500">
       </div>
       
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Coluna 1: Entrada -->
-        <div class="space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Coluna 1: Entrada & Config -->
+        <div class="space-y-4 lg:col-span-1">
           <div>
             <label class="block text-sm font-medium mb-1">Título da Matéria</label>
             <input id="titulo" type="text" placeholder="Ex: Final da Etapa de Kart" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
@@ -48,35 +48,57 @@
             <textarea id="rascunho" rows="5" placeholder="Digite os fatos principais da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
           </div>
 
-          <div class="space-y-2">
-            <button id="btn-ia" onclick="gerarIA()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded transition flex justify-center items-center gap-2">
-              🤖 Redigir Matéria com IA
-            </button>
-            <button onclick="copiarTexto()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition">
-              📋 Copiar HTML Wix
-            </button>
-          </div>
+          <button id="btn-ia" onclick="gerarIA_SEO()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded transition flex justify-center items-center gap-2 text-lg">
+            ⚡ Gerar Matéria & SEO Real
+          </button>
         </div>
 
-        <!-- Coluna 2: Código HTML Gerado -->
-        <div class="space-y-2">
-          <label class="block text-sm font-medium">Código HTML (Wix)</label>
-          <textarea id="resultado" rows="16" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none" placeholder="O código HTML gerado pela IA aparecerá aqui..."></textarea>
+        <!-- Coluna 2: Código HTML Gerado (Wix) -->
+        <div class="space-y-2 lg:col-span-1">
+          <label class="block text-sm font-medium">Código HTML (Wix Blog)</label>
+          <textarea id="resultado" rows="18" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none" placeholder="O código HTML gerado pela IA aparecerá aqui..."></textarea>
+          <button onclick="copiarElemento('resultado')" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded transition text-sm">
+            📋 Copiar HTML
+          </button>
         </div>
 
         <!-- Coluna 3: Pré-visualização Visual -->
-        <div class="space-y-2">
-          <label class="block text-sm font-medium">Pré-visualização da Matéria</label>
+        <div class="space-y-2 lg:col-span-1">
+          <label class="block text-sm font-medium">Pré-visualização</label>
           <div id="preview" class="w-full h-[370px] p-4 bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto space-y-3 text-sm">
             <p class="text-gray-400 italic">A matéria formatada aparecerá aqui...</p>
           </div>
         </div>
+
+        <!-- Coluna 4: SEO Automatizado -->
+        <div class="space-y-4 lg:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700">
+            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1">Metadados SEO</h3>
+            
+            <div>
+              <label class="block text-xs font-medium text-gray-400 mb-1">Slug da URL (Limpo)</label>
+              <input id="seo-slug" type="text" readonly class="w-full p-1.5 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none">
+              <button onclick="copiarElemento('seo-slug')" class="mt-1 text-xs text-blue-400 hover:text-blue-300">Copiar Slug</button>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-400 mb-1">Meta Description (Max 160 char)</label>
+              <textarea id="seo-desc" rows="3" readonly class="w-full p-1.5 bg-black border border-gray-700 rounded text-green-300 text-xs focus:outline-none"></textarea>
+              <button onclick="copiarElemento('seo-desc')" class="mt-1 text-xs text-blue-400 hover:text-blue-300">Copiar Desc</button>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-gray-400 mb-1">Tags Sugeridas</label>
+              <textarea id="seo-tags" rows="3" readonly class="w-full p-1.5 bg-black border border-gray-700 rounded text-green-300 text-xs focus:outline-none"></textarea>
+              <button onclick="copiarElemento('seo-tags')" class="mt-1 text-xs text-blue-400 hover:text-blue-300">Copiar Tags</button>
+            </div>
+        </div>
+
       </div>
     </div>
   </main>
 
   <script>
-    async function gerarIA() {
+    async function gerarIA_SEO() {
       const apiKey = document.getElementById('apiKey').value;
       const titulo = document.getElementById('titulo').value;
       const categoria = document.getElementById('categoria').value;
@@ -89,19 +111,21 @@
       }
 
       btn.disabled = true;
-      btn.innerHTML = '⏳ Gerando matéria...';
+      btn.innerHTML = '⏳ Gerando matéria e SEO...';
 
+      // Gerador Local (Sem API Key)
       if (!apiKey) {
         setTimeout(() => {
           const htmlLocal = `<h1>${titulo}</h1>\n\n<p>A cobertura jornalística do <strong>Portal Pista Verde</strong> traz os principais destaques da categoria <em>${categoria}</em>. Em uma jornada de disputas acirradas e muita adrenalina, os pilotos entregaram tudo nas pistas.</p>\n\n<h2>Destaques e Resultados</h2>\n<p>${rascunho}</p>\n\n<p>Acompanhe nosso portal para mais atualizações sobre o automobilismo em tempo real.</p>\n\n<p><strong>Portal Pista Verde - A velocidade em primeiro lugar.</strong></p>`;
           
-          atualizarSaida(titulo, htmlLocal);
+          atualizarSaida_SEO(titulo, htmlLocal, null);
           btn.disabled = false;
-          btn.innerHTML = '🤖 Redigir Matéria com IA';
-        }, 800);
+          btn.innerHTML = '⚡ Gerar Matéria & SEO Real';
+        }, 1200);
         return;
       }
 
+      // Chamada oficial da API da OpenAI com Prompt Duplo (Texto + SEO JSON)
       try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
@@ -114,7 +138,7 @@
             messages: [
               {
                 role: 'system',
-                content: 'Você é um jornalista especializado em automobilismo do Portal Pista Verde. Escreva matérias completas, engajantes e com bom SEO. Retorne SEMPRE o texto formatado em tags HTML básicas (<h1>, <h2>, <p>, <strong>, <em>) prontas para colar no Wix Blog.'
+                content: 'Você é um jornalista de automobilismo e especialista em SEO do Portal Pista Verde. Retorne SEMPRE sua resposta em formato JSON estrito, sem textos fora do objeto, contendo 4 campos: "html" (matéria completa em tags HTML básicas prontas para o Wix), "slug" (URL limpa e otimizada), "description" (meta description de max 155 caracteres) e "tags" (string de tags separadas por vírgula baseadas na categoria e texto).'
               },
               {
                 role: 'user',
@@ -127,8 +151,13 @@
         const data = await response.json();
         
         if (data.choices && data.choices[0]) {
-          const htmlIA = data.choices[0].message.content;
-          atualizarSaida(titulo, htmlIA);
+          try {
+            const respostaJSON = JSON.parse(data.choices[0].message.content);
+            atualizarSaida_SEO(titulo, respostaJSON.html, respostaJSON);
+          } catch(e) {
+            alert('Erro ao processar JSON da IA. Tente novamente.');
+            console.error('JSON Error:', e, data.choices[0].message.content);
+          }
         } else {
           alert('Erro na API da OpenAI. Verifique sua chave.');
         }
@@ -136,21 +165,35 @@
         alert('Erro ao conectar com a IA: ' + err.message);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '🤖 Redigir Matéria com IA';
+        btn.innerHTML = '⚡ Gerar Matéria & SEO Real';
       }
     }
 
-    function atualizarSaida(titulo, html) {
+    function atualizarSaida_SEO(titulo, html, seoData) {
+      // 1. Matéria e Preview
       document.getElementById('resultado').value = html;
       document.getElementById('preview').innerHTML = html;
+
+      // 2. SEO Data (Real da IA ou Fallback Local)
+      if (seoData) {
+        document.getElementById('seo-slug').value = seoData.slug;
+        document.getElementById('seo-desc').value = seoData.description;
+        document.getElementById('seo-tags').value = seoData.tags;
+      } else {
+        // Fallback local se não tiver API Key
+        document.getElementById('seo-slug').value = titulo.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+        document.getElementById('seo-desc').value = `Confira os detalhes sobre ${titulo} na categoria ${document.getElementById('categoria').value}. Cobertura completa no Portal Pista Verde.`;
+        document.getElementById('seo-tags').value = `${document.getElementById('categoria').value}, automobilismo, pista verde, notícias kart`;
+      }
     }
 
-    function copiarTexto() {
-      const resultado = document.getElementById('resultado');
-      if (!resultado.value) return alert('Gere o conteúdo antes de copiar.');
-      resultado.select();
+    function copiarElemento(id) {
+      const elemento = document.getElementById(id);
+      if (!elemento.value) return alert('Gere o conteúdo antes de copiar.');
+      elemento.select();
       document.execCommand('copy');
-      alert('Código HTML copiado para a área de transferência!');
+      // Pequeno feedback visual no console ou tag
+      console.log('Copiado:', id);
     }
   </script>
 </body>
