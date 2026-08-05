@@ -12,9 +12,11 @@
     .sidebar-link:hover, .sidebar-link.active { background-color: #142814; color: #00ae35; }
     .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background-color: #111811; border: 1px solid #1c3b1c; font-size: 12px; font-weight: 600; color: #9ca3af; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ae35; }
-    .tab-pill { padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; background-color: #111811; border: 1px solid #1c3b1c; color: #9ca3af; transition: all 0.2s; }
+    .tab-pill { padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; background-color: #111811; border: 1px solid #1c3b1c; color: #9ca3af; transition: all 0.2s; cursor: pointer; }
     .tab-pill.active { background-color: #1c3b1c; border-color: #00ae35; color: #ffffff; }
     .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; margin-left: 6px; }
+    .preview-card { background: #060a06; border: 1px solid #182e18; border-radius: 16px; padding: 16px; }
+    .media-box { background: #000000; border: 1px dashed #1c3b1c; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -82,30 +84,69 @@
           </div>
         </div>
 
-        <!-- DIREITA: PRÉVIA FIEL COM CAPA HERO VISUAL + H1/H2 OCULTOS PARA SEO -->
-        <div class="xl:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-4">
+        <!-- DIREITA: PRÉVIA FIEL E EDITOR COMPLETO COM MEDIAS -->
+        <div class="xl:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-6">
           <div class="flex justify-between items-center border-b border-[#182e18] pb-3">
-            <h3 class="font-extrabold text-sm text-[#00ae35] uppercase tracking-wider">Prévia Fiel do Template Pista Verde (Hero Visual & H1/H2 Ocultos)</h3>
+            <h3 class="font-extrabold text-sm text-[#00ae35] uppercase tracking-wider">Prévia Fiel do Template Pista Verde (Hero Visual, Mídias & Redes)</h3>
             <button id="btn-enviar" onclick="sendToWix()" class="bg-[#00ae35] hover:bg-[#00942d] text-black font-extrabold px-6 py-2.5 rounded-xl text-sm transition shadow-lg shadow-[#00ae35]/20">Enviar para o Wix</button>
           </div>
 
-          <!-- CONTAINER DO FORMULÁRIO -->
+          <!-- FORMULÁRIO DE EDIÇÃO -->
           <div class="space-y-4">
             <div>
-              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Título da Matéria</label>
+              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Título da Matéria (H1 Oculto SEO)</label>
               <input id="title" type="text" value="Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35]">
             </div>
 
-            <div>
-              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">URL da Imagem de Capa</label>
-              <input id="coverImage" type="text" value="https://static.wixstatic.com/media/74713a_example.jpg" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">URL da Imagem de Capa (Hero)</label>
+                <input id="coverImage" oninput="atualizarPreviews()" type="text" value="https://static.wixstatic.com/media/74713a_example.jpg" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vídeo MP4 (TikTok / Reels)</label>
+                <input id="videoUrl" type="text" value="https://static.wixstatic.com/video/example.mp4" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-sm text-white font-mono focus:outline-none focus:border-[#00ae35]">
+              </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Conteúdo da Matéria</label>
-              <textarea id="richContent" rows="10" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-4 text-sm text-gray-200 focus:outline-none focus:border-[#00ae35]">Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...</textarea>
+              <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Conteúdo da Matéria (Rich Text)</label>
+              <textarea id="richContent" rows="8" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-4 text-sm text-gray-200 focus:outline-none focus:border-[#00ae35]">Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...</textarea>
             </div>
           </div>
+
+          <!-- SEÇÃO DE PREVIEWS DE MÍDIA E REDES SOCIAIS -->
+          <div class="border-t border-[#182e18] pt-6 space-y-4">
+            <h4 class="font-bold text-xs text-[#00ae35] uppercase tracking-wider">Previews Visuais & Ativos de Redes Sociais</h4>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- CAPA HERO WEBSITE -->
+              <div class="preview-card">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Capa Hero Site (16:9)</span>
+                <div class="media-box h-32 overflow-hidden relative">
+                  <img id="prev-hero" src="https://static.wixstatic.com/media/74713a_example.jpg" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x225/111/00ae35?text=Capa+Pista+Verde'">
+                </div>
+              </div>
+
+              <!-- CAPA INSTAGRAM POST -->
+              <div class="preview-card">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Post Instagram (1:1)</span>
+                <div class="media-box h-32 overflow-hidden relative">
+                  <img id="prev-insta" src="https://static.wixstatic.com/media/74713a_example.jpg" class="w-full h-full object-cover border border-[#00ae35]/40" onerror="this.src='https://via.placeholder.com/300x300/111/00ae35?text=Instagram'">
+                </div>
+              </div>
+
+              <!-- VÍDEO VERTICAL TIKTOK / REELS -->
+              <div class="preview-card">
+                <span class="text-[10px] font-bold text-gray-400 uppercase block mb-2">Vídeo TikTok / Reels (9:16 MP4)</span>
+                <div class="media-box h-32 bg-[#000] flex flex-col items-center justify-center p-2 text-center">
+                  <svg class="w-8 h-8 text-[#00ae35] mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span class="text-[10px] text-gray-400 font-mono">Pronto para download MP4</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -113,35 +154,32 @@
   </div>
 
   <script>
-    async function sendToWix() {
-      const btn = document.getElementById('btn-enviar');
-      btn.innerText = "Enviando ao Servidor...";
-      btn.disabled = true;
-
-      const title = document.getElementById('title').value;
-      const coverImage = document.getElementById('coverImage').value;
-      const richContent = document.getElementById('richContent').value;
-
-      try {
-        const response = await fetch('/api/wix', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, coverImage, richContent })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          alert("✅ Enviado para o Wix com sucesso!");
-        } else {
-          alert("❌ Erro ao enviar: " + (data.error || JSON.stringify(data)));
-        }
-      } catch (err) {
-        alert("❌ Falha na conexão com a Vercel.");
-      } finally {
-        btn.innerText = "Enviar para o Wix";
-        btn.disabled = false;
+    const materiasMock = [
+      {
+        titulo: "Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado",
+        capa: "https://static.wixstatic.com/media/74713a_example.jpg",
+        video: "https://static.wixstatic.com/video/example.mp4",
+        conteudo: "Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro...",
+        status: "fila"
       }
+    ];
+
+    function carregarMateria(idx) {
+      const mat = materiasMock[idx];
+      if(!mat) return;
+      document.getElementById('title').value = mat.titulo;
+      document.getElementById('coverImage').value = mat.capa;
+      document.getElementById('videoUrl').value = mat.video || '';
+      document.getElementById('richContent').value = mat.conteudo;
+      atualizarPreviews();
+    }
+
+    function atualizarPreviews() {
+      const url = document.getElementById('coverImage').value;
+      const prevHero = document.getElementById('prev-hero');
+      const prevInsta = document.getElementById('prev-insta');
+      if(prevHero) prevHero.src = url;
+      if(prevInsta) prevInsta.src = url;
     }
 
     function mudarAba(aba, el) {
@@ -149,8 +187,54 @@
       el.classList.add('active');
     }
 
-    function filtrarFila() {}
-    function carregarMateria(idx) {}
+    function filtrarFila() {
+      const term = document.getElementById('campo-busca').value.toLowerCase();
+      const lista = document.getElementById('lista-releases');
+      const cards = lista.getElementsByTagName('div');
+      for (let card of cards) {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(term) ? 'block' : 'none';
+      }
+    }
+
+    async function sendToWix() {
+      const btn = document.getElementById('btn-enviar');
+      btn.innerText = "Enviando ao Servidor...";
+      btn.disabled = true;
+
+      const title = document.getElementById('title').value;
+      const coverImage = document.getElementById('coverImage').value;
+      const videoUrl = document.getElementById('videoUrl').value;
+      const contentText = document.getElementById('richContent').value;
+
+      const payload = {
+        title: title,
+        coverImage: coverImage,
+        videoUrl: videoUrl,
+        content: contentText
+      };
+
+      try {
+        const response = await fetch('/api/wix', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok && (data.success || data.id)) {
+          alert("✅ Enviado para o Wix com sucesso!");
+        } else {
+          alert("❌ Erro no envio: " + (data.message || data.error || JSON.stringify(data)));
+        }
+      } catch (err) {
+        alert("❌ Erro de conexão com o endpoint da Vercel (/api/wix).");
+      } finally {
+        btn.innerText = "Enviar para o Wix";
+        btn.disabled = false;
+      }
+    }
   </script>
 </body>
 </html>
