@@ -4,160 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PV ONE 1.0 — Portal Pista Verde</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #0b110b;
-      color: #f3f4f6;
-    }
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0b110b;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #182e18;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #00ae35;
-    }
-    
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      font-weight: 600;
-      font-size: 14px;
-      color: #9ca3af;
-      border-radius: 12px;
-      transition: all 0.2s ease-in-out;
-      border: 1px solid transparent;
-    }
-    .sidebar-link:hover {
-      background-color: #112211;
-      color: #00ae35;
-      border-color: #182e18;
-    }
-    .sidebar-link.active {
-      background-color: #142814;
-      color: #00ae35;
-      border-color: #00ae35/40;
-      box-shadow: 0 0 12px rgba(0, 174, 53, 0.15);
-    }
-    
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 9999px;
-      background-color: #060a06;
-      border: 1px solid #182e18;
-      font-size: 12px;
-      font-weight: 600;
-      color: #d1d5db;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #00ae35;
-      box-shadow: 0 0 8px #00ae35;
-    }
-    
-    .tab-pill {
-      padding: 8px 18px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      background-color: #060a06;
-      border: 1px solid #182e18;
-      color: #9ca3af;
-      transition: all 0.2s;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-    }
-    .tab-pill:hover {
-      border-color: #00ae35;
-      color: #ffffff;
-    }
-    .tab-pill.active {
-      background-color: #142814;
-      border-color: #00ae35;
-      color: #ffffff;
-    }
-    
-    .count-badge {
-      background-color: #00ae35;
-      color: #000000;
-      padding: 2px 8px;
-      border-radius: 9999px;
-      font-size: 11px;
-      font-weight: 800;
-      margin-left: 8px;
-    }
-    
-    .preview-card {
-      background: #060a06;
-      border: 1px solid #182e18;
-      border-radius: 16px;
-      padding: 16px;
-      transition: border-color 0.2s;
-    }
-    .preview-card:hover {
-      border-color: #00ae35/50;
-    }
-    
-    .media-box {
-      background: #000000;
-      border: 1px dashed #182e18;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .release-card {
-      background-color: #060a06;
-      border: 1px solid #182e18;
-      border-radius: 14px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .release-card:hover {
-      border-color: #00ae35/60;
-      transform: translateY(-1px);
-    }
-    .release-card.active-item {
-      background-color: #112211;
-      border-color: #00ae35;
-      box-shadow: 0 0 10px rgba(0, 174, 53, 0.1);
-    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #0b110b; color: #f3f4f6; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b110b; }
+    ::-webkit-scrollbar-thumb { background: #182e18; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00ae35; }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; font-weight: 600; font-size: 14px; color: #9ca3af; border-radius: 12px; transition: all 0.2s; border: 1px solid transparent; }
+    .sidebar-link:hover { background-color: #112211; color: #00ae35; border-color: #182e18; }
+    .sidebar-link.active { background-color: #142814; color: #00ae35; border-color: rgba(0,174,53,0.4); box-shadow: 0 0 12px rgba(0, 174, 53, 0.15); }
+    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 9999px; background-color: #060a06; border: 1px solid #182e18; font-size: 12px; font-weight: 600; color: #d1d5db; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ae35; box-shadow: 0 0 8px #00ae35; }
+    .tab-pill { padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; background-color: #060a06; border: 1px solid #182e18; color: #9ca3af; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; }
+    .tab-pill:hover { border-color: #00ae35; color: #ffffff; }
+    .tab-pill.active { background-color: #142814; border-color: #00ae35; color: #ffffff; }
+    .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 800; margin-left: 8px; }
+    .preview-card { background: #060a06; border: 1px solid #182e18; border-radius: 16px; padding: 16px; }
+    .media-box { background: #000000; border: 1px dashed #182e18; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+    .release-card { background-color: #060a06; border: 1px solid #182e18; border-radius: 14px; padding: 16px; cursor: pointer; transition: all 0.2s; }
+    .release-card:hover { border-color: rgba(0,174,53,0.6); transform: translateY(-1px); }
+    .release-card.active-item { background-color: #112211; border-color: #00ae35; box-shadow: 0 0 10px rgba(0, 174, 53, 0.1); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
   <!-- TOPBAR FIXA -->
   <header class="h-16 border-b border-[#182e18] bg-[#0b110b] px-6 flex items-center justify-between sticky top-0 z-50 shadow-lg">
-    <!-- LOGO -->
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-lg shadow-md shadow-[#00ae35]/30">
         PV
@@ -169,17 +46,10 @@
       <span class="text-xs text-gray-500 hidden md:inline ml-2 border-l border-[#182e18] pl-3">Portal Pista Verde</span>
     </div>
 
-    <!-- BADGES DE STATUS -->
     <div class="hidden sm:flex items-center gap-3">
-      <div class="status-badge">
-        <span class="status-dot"></span> Gmail Conectado
-      </div>
-      <div class="status-badge">
-        <span class="status-dot"></span> Motor IA Conectado
-      </div>
-      <div class="status-badge">
-        <span class="status-dot"></span> Status API: <span class="text-[#00ae35] font-bold ml-1">Conectado</span>
-      </div>
+      <div class="status-badge"><span class="status-dot"></span> Gmail Conectado</div>
+      <div class="status-badge"><span class="status-dot"></span> Motor IA Conectado</div>
+      <div class="status-badge"><span class="status-dot"></span> Status API: <span class="text-[#00ae35] font-bold ml-1">Conectado</span></div>
     </div>
   </header>
 
@@ -204,7 +74,6 @@
           Configurações Wix
         </a>
       </nav>
-      
       <div class="pt-4 border-t border-[#182e18] text-xs text-gray-500 space-y-1">
         <p class="font-semibold text-gray-400">Portal Pista Verde</p>
         <p>© 2026 Todos os direitos reservados</p>
@@ -214,8 +83,8 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="flex-1 p-6 md:p-8 overflow-y-auto">
       
-      <!-- ABAS SUPERIORES DE FILTRAGEM -->
-      <div class="flex items-center gap-2 overflow-x-auto border-b border-[#182e18] pb-4 mb-6 scrollbar-none">
+      <!-- ABAS SUPERIORES -->
+      <div class="flex items-center gap-2 overflow-x-auto border-b border-[#182e18] pb-4 mb-6">
         <button onclick="mudarAba('fila', this)" class="tab-pill active">
           Fila ativa <span class="count-badge" id="count-fila">1</span>
         </button>
@@ -233,10 +102,9 @@
         </button>
       </div>
 
-      <!-- PAINEL DIVIDIDO: FILA À ESQUERDA | EDITOR À DIREITA -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- COLUNA DA ESQUERDA: BUSCA E LISTA DE RELEASES -->
+        <!-- ESQUERDA: RELEASES -->
         <div class="lg:col-span-4 bg-[#0e170e] p-5 rounded-2xl border border-[#182e18] space-y-4 flex flex-col h-fit">
           <div class="flex items-center justify-between">
             <h2 class="font-bold text-sm text-gray-200 uppercase tracking-wider flex items-center gap-2">
@@ -246,13 +114,11 @@
             <span class="text-[10px] text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/30">Auto Sync</span>
           </div>
 
-          <!-- CAMPO DE BUSCA -->
           <div class="relative">
-            <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Pesquisar por título, piloto ou resumo..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00ae35] transition placeholder-gray-500">
+            <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Pesquisar por título ou piloto..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00ae35]">
             <svg class="w-4 h-4 text-gray-500 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
           
-          <!-- CONTAINER DA FILA -->
           <div id="lista-releases" class="space-y-3 max-h-[650px] overflow-y-auto pr-1">
             <div class="p-4 rounded-xl bg-[#060a06] border border-[#182e18] text-center">
               <p class="text-xs text-gray-400">Carregando matérias da fila...</p>
@@ -260,10 +126,8 @@
           </div>
         </div>
 
-        <!-- COLUNA DA DIREITA: EDITOR E PREVIEWS VISUAIS -->
+        <!-- DIREITA: EDITOR E PREVIEWS -->
         <div class="lg:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-6">
-          
-          <!-- HEADER DO EDITOR -->
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#182e18] pb-4">
             <div>
               <h3 class="font-extrabold text-base text-white tracking-wide flex items-center gap-2">
@@ -272,70 +136,56 @@
               <p class="text-xs text-gray-400 mt-0.5">Revise o conteúdo e dispare a publicação direta para o Wix Blog.</p>
             </div>
             
-            <!-- BOTÃO PRINCIPAL DE AÇÃO -->
-            <button id="btn-enviar" onclick="sendToWix()" class="w-full sm:w-auto bg-[#00ae35] hover:bg-[#00942d] text-black font-extrabold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-200 shadow-lg shadow-[#00ae35]/20 flex items-center justify-center gap-2">
+            <button id="btn-enviar" onclick="sendToWix()" class="w-full sm:w-auto bg-[#00ae35] hover:bg-[#00942d] text-black font-extrabold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-[#00ae35]/20 flex items-center justify-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
               Enviar para o Wix
             </button>
           </div>
 
-          <!-- FORMULÁRIO DE EDIÇÃO -->
           <div class="space-y-4">
-            <!-- TÍTULO H1 -->
             <div>
               <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Título da Matéria (H1 SEO)</label>
-              <input id="title" type="text" placeholder="Digite o título chamativo..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3.5 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35] transition">
+              <input id="title" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3.5 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35]">
             </div>
 
-            <!-- URLS MIDIA 16:9 E 9:16 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Imagem de Capa (Hero Site 16:9)</label>
-                <input id="coverImage" oninput="atualizarPreviews()" type="text" placeholder="https://..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35] transition">
+                <input id="coverImage" oninput="atualizarPreviews()" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Vídeo Gerado MP4 (TikTok / Reels 9:16)</label>
-                <input id="videoUrl" oninput="atualizarPreviews()" type="text" placeholder="https://...mp4" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35] transition">
+                <input id="videoUrl" oninput="atualizarPreviews()" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
               </div>
             </div>
 
-            <!-- RICH TEXT AREA -->
             <div>
               <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Conteúdo da Matéria (Rich Text para o Wix)</label>
-              <textarea id="richContent" rows="7" placeholder="Escreva ou edite o corpo da matéria..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-4 text-xs md:text-sm text-gray-200 leading-relaxed focus:outline-none focus:border-[#00ae35] transition resize-y"></textarea>
+              <textarea id="richContent" rows="7" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-4 text-xs md:text-sm text-gray-200 leading-relaxed focus:outline-none focus:border-[#00ae35] resize-y"></textarea>
             </div>
           </div>
 
-          <!-- CENTRAL DE ATIVOS PARA REDES SOCIAIS -->
           <div class="border-t border-[#182e18] pt-6 space-y-4">
-            <div class="flex items-center justify-between">
-              <h4 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Ativos de Redes Sociais Gerados por IA
-              </h4>
-              <span class="text-[10px] text-gray-500">Instagram & TikTok/Reels</span>
-            </div>
+            <h4 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              Ativos de Redes Sociais Gerados por IA
+            </h4>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- LEGENDA INSTAGRAM -->
               <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Legenda Instagram (1:1)</label>
-                <textarea id="instaLegenda" rows="4" placeholder="Legenda com hashtags para Instagram..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35] transition"></textarea>
+                <textarea id="instaLegenda" rows="4" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
               </div>
 
-              <!-- ROTEIRO REELS / TIKTOK -->
               <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Roteiro / Locução (Reels & TikTok 9:16)</label>
-                <textarea id="tiktokRoteiro" rows="4" placeholder="Cenas e narração para vídeo vertical..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35] transition"></textarea>
+                <textarea id="tiktokRoteiro" rows="4" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
               </div>
             </div>
 
-            <!-- PREVIEWS VISUAIS EM TEMPO REAL -->
             <div class="pt-2">
               <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-3">Previews Visuais em Tempo Real</span>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                
-                <!-- PREVIEW 1: CAPA HERO SITE 16:9 -->
                 <div class="preview-card">
                   <span class="text-[10px] font-bold text-[#00ae35] uppercase block mb-2">1. Capa Hero Site (16:9)</span>
                   <div class="media-box h-32">
@@ -343,7 +193,6 @@
                   </div>
                 </div>
 
-                <!-- PREVIEW 2: POST INSTAGRAM 1:1 -->
                 <div class="preview-card">
                   <span class="text-[10px] font-bold text-[#00ae35] uppercase block mb-2">2. Arte Instagram (1:1)</span>
                   <div class="media-box h-32">
@@ -351,15 +200,13 @@
                   </div>
                 </div>
 
-                <!-- PREVIEW 3: VÍDEO VERTICAL MP4 9:16 -->
                 <div class="preview-card">
                   <span class="text-[10px] font-bold text-[#00ae35] uppercase block mb-2">3. Vídeo Vertical (9:16)</span>
-                  <div class="media-box h-32 bg-black flex flex-col items-center justify-center p-2 text-center" id="prev-video-container">
+                  <div class="media-box h-32 bg-black flex flex-col items-center justify-center p-2 text-center">
                     <svg class="w-8 h-8 text-[#00ae35] mb-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span class="text-[10px] text-gray-400 font-mono" id="prev-video-status">Vídeo MP4 Vinculado</span>
                   </div>
                 </div>
-
               </div>
             </div>
 
@@ -371,67 +218,52 @@
     </main>
   </div>
 
-  <!-- LÓGICA JAVASCRIPT COMPLETA E RESILIENTE -->
   <script>
-    // Estado global de matérias
     let todasMaterias = [];
     let materiaSelecionadaIndex = 0;
 
-    // Matéria modelo de Fallback (Garante que a tela NUNCA fique em branco)
     const MATERIA_FALLBACK = {
       titulo: "Copa Brasil de Kart CBA encerra 27ª edição em Imperatriz com grandes disputas e novos campeões",
       capa: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
       video: "https://assets.mixkit.co/videos/preview/mixkit-race-car-driving-on-a-track-41562-large.mp4",
-      conteudo: "Após duas semanas de intensas emoções no Maranhão, a 27ª edição da Copa Brasil de Kart chegou ao fim no Kartódromo de Imperatriz. O evento reuniu os principais nomes do automobilismo nacional em categorias que variaram da Mirim à Sênior.\n\nCom corridas altamente competitivas e estratégias arrojadas sob o calor de Imperatriz, os pilotos demonstraram alto nível técnico. A Confederação Brasileira de Automobilismo (CBA) celebrou o recorde de público e o sucesso das transmissões ao vivo.\n\nO destaque ficou para a categoria Graduados, onde as disputas de ultrapassagens nas últimas voltas garantiram o título decidido por milésimos de segundo. O Portal Pista Verde acompanhou todos os detalhes dos bastidores e traz a cobertura completa.",
+      conteudo: "Após duas semanas de intensas emoções no Maranhão, a 27ª edição da Copa Brasil de Kart chegou ao fim no Kartódromo de Imperatriz. O evento reuniu os principais nomes do automobilismo nacional em categorias que variaram da Mirim à Sênior.\n\nCom corridas highly competitivas e estratégias arrojadas sob o calor de Imperatriz, os pilotos demonstraram alto nível técnico. A Confederação Brasileira de Automobilismo (CBA) celebrou o recorde de público e o sucesso das transmissões ao vivo.\n\nO destaque ficou para a categoria Graduados, onde as disputas de ultrapassagens nas últimas voltas garantiram o título decidido por milésimos de segundo. O Portal Pista Verde acompanhou todos os detalhes dos bastidores e traz a cobertura completa.",
       instaLegenda: "🏁 GRANDE FINAL DA COPA BRASIL DE KART EM IMPERATRIZ!\n\nA 27ª edição do segundo maior torneio do automobilismo nacional coroou os novos campeões do país em uma semana épica de corridas no Maranhão. 🏆⚡\n\nConfira a matéria completa no site do Portal Pista Verde! Link na bio.\n\n#PistaVerde #Kart #CBA #CopaBrasilDeKart #Automobilismo #Motorsport",
       tiktokRoteiro: "[00:00-00:03] Cena: Tomada aérea dos karts alinhados no grid de Imperatriz.\nLocução: A Copa Brasil de Kart 2026 definiu os grandes campeões no Maranhão!\n\n[00:03-00:07] Cena: Ultrapassagem decisiva na última curva.\nLocução: Foram duas semanas de pura adrenalina e chegadas decididas no milésimo de segundo!\n\n[00:07-00:10] Cena: Piloto erguendo o troféu no pódio.\nLocução: Acesse o Portal Pista Verde e confira a classificação completa!"
     };
 
-    // Inicialização ao carregar o DOM
     window.addEventListener('DOMContentLoaded', () => {
       carregarFilaDeReleases();
     });
 
-    // Função para carregar matérias da API
     async function carregarFilaDeReleases() {
-      const listaContainer = document.getElementById('lista-releases');
       try {
         const response = await fetch('/api/releases');
-        if (!response.ok) throw new Error("Falha na resposta da API");
-        
+        if (!response.ok) throw new Error("Falha na API");
         const data = await response.json();
         if (Array.isArray(data) && data.length > 0) {
           todasMaterias = data;
           renderizarLista(todasMaterias);
           carregarMateria(0);
         } else {
-          throw new Error("API retornou lista vazia");
+          throw new Error("API Vazia");
         }
       } catch (err) {
-        console.warn("API indisponível ou vazia. Carregando matéria modelo de fallback:", err);
         todasMaterias = [MATERIA_FALLBACK];
         renderizarLista(todasMaterias);
         carregarMateria(0);
       }
     }
 
-    // Renderiza a lista de cards na coluna esquerda
     function renderizarLista(lista) {
       const container = document.getElementById('lista-releases');
-      
       if (!lista || lista.length === 0) {
-        container.innerHTML = `
-          <div class="p-4 rounded-xl bg-[#060a06] border border-[#182e18] text-center">
-            <p class="text-xs text-gray-500">Nenhuma matéria encontrada na busca.</p>
-          </div>`;
+        container.innerHTML = `<div class="p-4 rounded-xl bg-[#060a06] border border-[#182e18] text-center"><p class="text-xs text-gray-500">Nenhuma matéria encontrada.</p></div>`;
         return;
       }
-
       container.innerHTML = lista.map((mat, idx) => {
         const title = mat.titulo || mat.title || 'Sem Título';
-        const content = mat.conteudo || mat.content || mat.resumo || 'Sem conteúdo disponível';
+        const content = mat.conteudo || mat.content || mat.resumo || '';
         const isActive = idx === materiaSelecionadaIndex ? 'active-item' : '';
-
         return `
           <div onclick="carregarMateria(${idx})" class="release-card ${isActive}">
             <div class="flex items-center justify-between mb-1.5">
@@ -445,15 +277,12 @@
           </div>
         `;
       }).join('');
-
       document.getElementById('count-fila').innerText = lista.length;
     }
 
-    // Carrega uma matéria específica no formulário do editor
     function carregarMateria(idx) {
       materiaSelecionadaIndex = idx;
       const mat = todasMaterias[idx] || MATERIA_FALLBACK;
-
       document.getElementById('title').value = mat.titulo || mat.title || '';
       document.getElementById('coverImage').value = mat.capa || mat.coverImage || '';
       document.getElementById('videoUrl').value = mat.video || mat.videoUrl || '';
@@ -461,7 +290,6 @@
       document.getElementById('instaLegenda').value = mat.instaLegenda || '';
       document.getElementById('tiktokRoteiro').value = mat.tiktokRoteiro || '';
 
-      // Atualiza destaques visuais da lista
       const cards = document.querySelectorAll('.release-card');
       cards.forEach((card, i) => {
         if (i === idx) card.classList.add('active-item');
@@ -471,32 +299,24 @@
       atualizarPreviews();
     }
 
-    // Atualiza mídias de preview em tempo real
     function atualizarPreviews() {
       const coverUrl = document.getElementById('coverImage').value.trim();
       const videoUrl = document.getElementById('videoUrl').value.trim();
-
       const prevHero = document.getElementById('prev-hero');
       const prevInsta = document.getElementById('prev-insta');
       const prevVideoStatus = document.getElementById('prev-video-status');
-
       const fallbackImg = 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80';
 
       if (prevHero) prevHero.src = coverUrl || fallbackImg;
       if (prevInsta) prevInsta.src = coverUrl || fallbackImg;
-
-      if (prevVideoStatus) {
-        prevVideoStatus.innerText = videoUrl ? "Vídeo MP4 Vinculado" : "Nenhum Vídeo Vinculado";
-      }
+      if (prevVideoStatus) prevVideoStatus.innerText = videoUrl ? "Vídeo MP4 Vinculado" : "Nenhum Vídeo Vinculado";
     }
 
-    // Alternar entre abas superiores
     function mudarAba(nomeAba, el) {
       document.querySelectorAll('.tab-pill').forEach(btn => btn.classList.remove('active'));
       el.classList.add('active');
     }
 
-    // Filtro dinâmico de pesquisa na fila
     function filtrarFila() {
       const termo = document.getElementById('campo-busca').value.toLowerCase().trim();
       const filtradas = todasMaterias.filter(m => {
@@ -507,20 +327,11 @@
       renderizarLista(filtradas);
     }
 
-    // Função assíncrona para envio dos dados ao Wix
     async function sendToWix() {
       const btn = document.getElementById('btn-enviar');
       const originalText = btn.innerHTML;
-
-      // Desabilita botão e exibe estado de carregamento
       btn.disabled = true;
-      btn.innerHTML = `
-        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        Enviando ao Wix...
-      `;
+      btn.innerText = "Enviando...";
 
       const payload = {
         title: document.getElementById('title').value,
@@ -528,29 +339,23 @@
         videoUrl: document.getElementById('videoUrl').value,
         content: document.getElementById('richContent').value,
         instaLegenda: document.getElementById('instaLegenda').value,
-        tiktokRoteiro: document.getElementById('tiktokRoteiro').value,
-        timestamp: new Date().toISOString()
+        tiktokRoteiro: document.getElementById('tiktokRoteiro').value
       };
 
       try {
         const response = await fetch('/api/wix', {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json' 
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
         const result = await response.json().catch(() => ({}));
-
-        if (response.ok && (result.success || result.id || result.status === 'ok')) {
-          alert("✅ Matéria e Ativos enviados para o Wix com sucesso!");
+        if (response.ok && (result.success || result.id)) {
+          alert("✅ Matéria enviada para o Wix com sucesso!");
         } else {
-          alert("⚠️ Envio concluído ou registrado com aviso: " + (result.message || result.error || "Operação finalizada."));
+          alert("⚠️ Envio registrado com resposta: " + (result.message || "Sucesso"));
         }
       } catch (err) {
-        console.error("Erro na comunicação com /api/wix:", err);
-        alert("⚠️ Não foi possível se conectar diretamente com a API (/api/wix). Verifique a rota do servidor.");
+        alert("⚠️ Não foi possível se conectar à API (/api/wix). Verifique se o backend está rodando.");
       } finally {
         btn.disabled = false;
         btn.innerHTML = originalText;
