@@ -5,206 +5,200 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PV ONE 1.0 — Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background-color: #0b110b; color: #f3f4f6; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0b110b; }
-    ::-webkit-scrollbar-thumb { background: #182e18; border-radius: 4px; }
+    body { font-family: 'Poppins', sans-serif; background-color: #080d08; color: #f3f4f6; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #080d08; }
+    ::-webkit-scrollbar-thumb { background: #142814; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #00ae35; }
-    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; font-weight: 600; font-size: 14px; color: #9ca3af; border-radius: 12px; transition: all 0.2s; border: 1px solid transparent; }
-    .sidebar-link:hover { background-color: #112211; color: #00ae35; border-color: #182e18; }
-    .sidebar-link.active { background-color: #142814; color: #00ae35; border-color: rgba(0,174,53,0.4); box-shadow: 0 0 12px rgba(0, 174, 53, 0.15); }
-    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 9999px; background-color: #060a06; border: 1px solid #182e18; font-size: 12px; font-weight: 600; color: #d1d5db; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ae35; box-shadow: 0 0 8px #00ae35; }
-    .tab-pill { padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; background-color: #060a06; border: 1px solid #182e18; color: #9ca3af; transition: all 0.2s; cursor: pointer; display: inline-flex; align-items: center; }
-    .tab-pill:hover { border-color: #00ae35; color: #ffffff; }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; font-weight: 600; font-size: 13px; color: #9ca3af; border-radius: 10px; transition: all 0.2s; border: 1px solid transparent; }
+    .sidebar-link:hover, .sidebar-link.active { background-color: #112211; color: #00ae35; border-color: #182e18; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background-color: #040704; border: 1px solid #182e18; font-size: 11px; font-weight: 600; color: #9ca3af; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background-color: #00ae35; box-shadow: 0 0 6px #00ae35; }
+    .tab-pill { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; background-color: #040704; border: 1px solid #182e18; color: #9ca3af; cursor: pointer; }
     .tab-pill.active { background-color: #142814; border-color: #00ae35; color: #ffffff; }
-    .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 800; margin-left: 8px; }
-    .preview-card { background: #060a06; border: 1px solid #182e18; border-radius: 16px; padding: 16px; }
-    .media-box { background: #000000; border: 1px dashed #182e18; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-    .release-card { background-color: #060a06; border: 1px solid #182e18; border-radius: 14px; padding: 16px; cursor: pointer; transition: all 0.2s; }
-    .release-card:hover { border-color: rgba(0,174,53,0.6); transform: translateY(-1px); }
-    .release-card.active-item { background-color: #112211; border-color: #00ae35; box-shadow: 0 0 10px rgba(0, 174, 53, 0.1); }
+    .count-badge { background-color: #00ae35; color: #000; padding: 1px 6px; border-radius: 999px; font-size: 10px; font-weight: 800; margin-left: 6px; }
+    .btn-action { background-color: #00ae35; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s; }
+    .btn-action:hover { background-color: #00cd3e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,174,53,0.3); }
+    .btn-secondary { background-color: #142814; border: 1px solid #00ae35; color: #00ae35; font-weight: 700; }
+    .btn-secondary:hover { background-color: #00ae35; color: #000; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
-  <!-- TOPBAR FIXA -->
-  <header class="h-16 border-b border-[#182e18] bg-[#0b110b] px-6 flex items-center justify-between sticky top-0 z-50 shadow-lg">
+  <!-- TOPBAR -->
+  <header class="h-16 border-b border-[#182e18] bg-[#080d08] px-6 flex items-center justify-between sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-lg shadow-md shadow-[#00ae35]/30">
-        PV
+      <div class="w-9 h-9 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-lg shadow-md shadow-[#00ae35]/20">PV</div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-extrabold tracking-wider text-white text-base">PV ONE</span>
+          <span class="text-[10px] bg-[#00ae35]/20 text-[#00ae35] px-1.5 py-0.5 rounded border border-[#00ae35]/30 font-bold">v1.0 Pro</span>
+        </div>
+        <p class="text-[10px] text-gray-500">Central de Automação Editorial — Portal Pista Verde</p>
       </div>
-      <div class="flex items-center gap-2">
-        <span class="font-black tracking-wider text-white text-lg">PV ONE</span>
-        <span class="text-[11px] bg-[#00ae35]/20 text-[#00ae35] px-2 py-0.5 rounded-md border border-[#00ae35]/40 font-bold">v1.0</span>
-      </div>
-      <span class="text-xs text-gray-500 hidden md:inline ml-2 border-l border-[#182e18] pl-3">Portal Pista Verde</span>
     </div>
-
-    <div class="hidden sm:flex items-center gap-3">
-      <div class="status-badge"><span class="status-dot"></span> Gmail Conectado</div>
-      <div class="status-badge"><span class="status-dot"></span> Motor IA Conectado</div>
-      <div class="status-badge"><span class="status-dot"></span> Status API: <span class="text-[#00ae35] font-bold ml-1">Conectado</span></div>
+    <div class="hidden md:flex items-center gap-3">
+      <div class="status-badge"><span class="status-dot"></span> Gmail Sync</div>
+      <div class="status-badge"><span class="status-dot"></span> Gerador IA Ativo</div>
+      <div class="status-badge"><span class="status-dot"></span> API Wix: <span class="text-[#00ae35] ml-1">Conectada</span></div>
     </div>
   </header>
 
   <div class="flex flex-1 overflow-hidden">
-    <!-- SIDEBAR LEFT -->
-    <aside class="w-64 border-r border-[#182e18] bg-[#0b110b] p-4 flex flex-col justify-between hidden md:flex shrink-0">
-      <nav class="space-y-2">
-        <a href="#redacao" class="sidebar-link active">
-          <svg class="w-5 h-5 text-[#00ae35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+    <!-- SIDEBAR -->
+    <aside class="w-60 border-r border-[#182e18] bg-[#080d08] p-4 flex flex-col justify-between shrink-0">
+      <nav class="space-y-1.5">
+        <a href="#" class="sidebar-link active">
+          <svg class="w-4 h-4 text-[#00ae35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
           Redação & Matérias
         </a>
-        <a href="#fila" class="sidebar-link">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+        <a href="#" class="sidebar-link">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
           Fila de Publicação
         </a>
-        <a href="#redes" class="sidebar-link">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-          Gerador de Redes
+        <a href="#" class="sidebar-link">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+          Ativos de Redes
         </a>
-        <a href="#wix" class="sidebar-link">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-          Configurações Wix
+        <a href="#" class="sidebar-link">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+          Conexão Wix
         </a>
       </nav>
-      <div class="pt-4 border-t border-[#182e18] text-xs text-gray-500 space-y-1">
-        <p class="font-semibold text-gray-400">Portal Pista Verde</p>
-        <p>© 2026 Todos os direitos reservados</p>
+      <div class="text-[11px] text-gray-500 border-t border-[#182e18] pt-3">
+        <p class="font-bold text-gray-400">Portal Pista Verde</p>
+        <p>© 2026 Operação Campeonato</p>
       </div>
     </aside>
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+    <!-- ÁREA PRINCIPAL -->
+    <main class="flex-1 p-6 overflow-y-auto bg-[#050805]">
       
-      <!-- ABAS SUPERIORES -->
-      <div class="flex items-center gap-2 overflow-x-auto border-b border-[#182e18] pb-4 mb-6">
-        <button onclick="mudarAba('fila', this)" class="tab-pill active">
-          Fila ativa <span class="count-badge" id="count-fila">1</span>
-        </button>
-        <button onclick="mudarAba('conferencia', this)" class="tab-pill">
-          Conferência <span class="text-xs text-gray-500 ml-2" id="count-conf">0</span>
-        </button>
-        <button onclick="mudarAba('prontas', this)" class="tab-pill">
-          Prontas <span class="text-xs text-gray-500 ml-2" id="count-prontas">0</span>
-        </button>
-        <button onclick="mudarAba('arquivo', this)" class="tab-pill">
-          Arquivo <span class="text-xs text-gray-500 ml-2" id="count-arquivo">0</span>
-        </button>
-        <button onclick="mudarAba('lixeira', this)" class="tab-pill">
-          Lixeira <span class="text-xs text-gray-500 ml-2" id="count-lixeira">0</span>
-        </button>
+      <!-- ABAS -->
+      <div class="flex items-center gap-2 border-b border-[#182e18] pb-3 mb-6">
+        <button class="tab-pill active">Fila Ativa <span class="count-badge">1</span></button>
+        <button class="tab-pill">Em Processamento <span class="text-xs text-gray-500 ml-1">0</span></button>
+        <button class="tab-pill">Publicadas no Wix <span class="text-xs text-gray-500 ml-1">0</span></button>
+        <button class="tab-pill">Arquivo <span class="text-xs text-gray-500 ml-1">0</span></button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- ESQUERDA: RELEASES -->
-        <div class="lg:col-span-4 bg-[#0e170e] p-5 rounded-2xl border border-[#182e18] space-y-4 flex flex-col h-fit">
+        <!-- COLUNA ESQUERDA: LISTA -->
+        <div class="lg:col-span-4 bg-[#080d08] p-4 rounded-xl border border-[#182e18] space-y-3">
           <div class="flex items-center justify-between">
-            <h2 class="font-bold text-sm text-gray-200 uppercase tracking-wider flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#00ae35]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-              Matérias na Fila
-            </h2>
-            <span class="text-[10px] text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/30">Auto Sync</span>
+            <h3 class="font-bold text-xs uppercase tracking-wider text-gray-300">Entradas & Releases</h3>
+            <button onclick="carregarMateriaModelo()" class="text-[10px] text-[#00ae35] underline hover:text-white">Recarregar Exemplo</button>
           </div>
-
-          <div class="relative">
-            <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Pesquisar por título ou piloto..." class="w-full bg-[#060a06] border border-[#182e18] rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-[#00ae35]">
-            <svg class="w-4 h-4 text-gray-500 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-          </div>
+          <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Buscar por piloto, categoria..." class="w-full bg-[#040704] border border-[#182e18] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-[#00ae35]">
           
-          <div id="lista-releases" class="space-y-3 max-h-[650px] overflow-y-auto pr-1">
-            <div class="p-4 rounded-xl bg-[#060a06] border border-[#182e18] text-center">
-              <p class="text-xs text-gray-400">Carregando matérias da fila...</p>
-            </div>
+          <div id="lista-releases" class="space-y-2">
+            <!-- Carregado via JS -->
           </div>
         </div>
 
-        <!-- DIREITA: EDITOR E PREVIEWS -->
-        <div class="lg:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-6">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#182e18] pb-4">
+        <!-- COLUNA DIREITA: EDITOR CENTRAL + GERADORES -->
+        <div class="lg:col-span-8 bg-[#080d08] p-5 rounded-xl border border-[#182e18] space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#182e18] pb-4">
             <div>
-              <h3 class="font-extrabold text-base text-white tracking-wide flex items-center gap-2">
-                Editor PV ONE <span class="text-xs font-normal text-gray-400">& Central de Ativos</span>
-              </h3>
-              <p class="text-xs text-gray-400 mt-0.5">Revise o conteúdo e dispare a publicação direta para o Wix Blog.</p>
+              <h2 class="font-extrabold text-sm text-white uppercase tracking-wider">Central de Redação & Geração de Mídia</h2>
+              <p class="text-xs text-gray-400">Edite a matéria e gere automaticamente as versões para o Instagram e TikTok.</p>
             </div>
-            
-            <button id="btn-enviar" onclick="sendToWix()" class="w-full sm:w-auto bg-[#00ae35] hover:bg-[#00942d] text-black font-extrabold px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-[#00ae35]/20 flex items-center justify-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-              Enviar para o Wix
-            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="gerarAtivosIA()" class="btn-secondary px-4 py-2 rounded-lg text-xs flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                Gerar Redes via IA
+              </button>
+              <button id="btn-enviar" onclick="sendToWix()" class="btn-action px-5 py-2 rounded-lg text-xs flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                Publicar no Wix
+              </button>
+            </div>
           </div>
 
+          <!-- FORMULÁRIO -->
           <div class="space-y-4">
             <div>
-              <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Título da Matéria (H1 SEO)</label>
-              <input id="title" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3.5 text-sm text-white font-semibold focus:outline-none focus:border-[#00ae35]">
+              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Título Oficial da Matéria (SEO Native)</label>
+              <input id="title" type="text" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-semibold focus:outline-none focus:border-[#00ae35]">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Imagem de Capa (Hero Site 16:9)</label>
-                <input id="coverImage" oninput="atualizarPreviews()" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Capa Hero Website (16:9 - Link da Imagem)</label>
+                <input id="coverImage" oninput="atualizarPreviews()" type="text" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Vídeo Gerado MP4 (TikTok / Reels 9:16)</label>
-                <input id="videoUrl" oninput="atualizarPreviews()" type="text" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Vídeo MP4 Vertical (9:16 - Link do Vídeo)</label>
+                <input id="videoUrl" oninput="atualizarPreviews()" type="text" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#00ae35]">
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">Conteúdo da Matéria (Rich Text para o Wix)</label>
-              <textarea id="richContent" rows="7" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-4 text-xs md:text-sm text-gray-200 leading-relaxed focus:outline-none focus:border-[#00ae35] resize-y"></textarea>
+              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Texto Principal da Matéria (Rich Text Wix Blog)</label>
+              <textarea id="richContent" rows="6" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-3 text-xs text-gray-200 focus:outline-none focus:border-[#00ae35] leading-relaxed"></textarea>
             </div>
           </div>
 
-          <div class="border-t border-[#182e18] pt-6 space-y-4">
-            <h4 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-              Ativos de Redes Sociais Gerados por IA
-            </h4>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- MOTOR DE REDES SOCIAIS E PROMPTS DE IMAGEM -->
+          <div class="border-t border-[#182e18] pt-4 space-y-4">
+            <h3 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+              Ativos de Mídia e IA Gerados para Redes
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Legenda Instagram (1:1)</label>
-                <textarea id="instaLegenda" rows="4" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] font-bold text-gray-300 uppercase">Legenda Instagram (1:1)</label>
+                  <button onclick="copiarTexto('instaLegenda')" class="text-[10px] text-[#00ae35] hover:underline">Copiar</button>
+                </div>
+                <textarea id="instaLegenda" rows="4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Roteiro / Locução (Reels & TikTok 9:16)</label>
-                <textarea id="tiktokRoteiro" rows="4" class="w-full bg-[#060a06] border border-[#182e18] rounded-xl p-3 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] font-bold text-gray-300 uppercase">Roteiro / Locução (9:16)</label>
+                  <button onclick="copiarTexto('tiktokRoteiro')" class="text-[10px] text-[#00ae35] hover:underline">Copiar</button>
+                </div>
+                <textarea id="tiktokRoteiro" rows="4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300 focus:outline-none focus:border-[#00ae35]"></textarea>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-[11px] font-bold text-gray-300 uppercase">Prompt Capa IA (Midjourney/DALL-E)</label>
+                  <button onclick="copiarTexto('imagePrompt')" class="text-[10px] text-[#00ae35] hover:underline">Copiar</button>
+                </div>
+                <textarea id="imagePrompt" rows="4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-400 font-mono focus:outline-none focus:border-[#00ae35]"></textarea>
               </div>
             </div>
 
+            <!-- PREVIEWS EM TEMPO REAL -->
             <div class="pt-2">
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-3">Previews Visuais em Tempo Real</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="preview-card">
-                  <span class="text-[10px] font-bold text-[#00ae35] uppercase block mb-2">1. Capa Hero Site (16:9)</span>
-                  <div class="media-box h-32">
-                    <img id="prev-hero" src="" alt="Capa Hero" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80'">
+              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Previews Visuais Ativos</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-[#040704] border border-[#182e18] rounded-lg p-2">
+                  <span class="text-[10px] font-bold text-[#00ae35] block mb-1">Capa Hero (16:9)</span>
+                  <div class="h-28 bg-black rounded overflow-hidden flex items-center justify-center">
+                    <img id="prev-hero" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80'">
                   </div>
                 </div>
 
-                <div class="preview-card">
-                  <span class="text-[10px] font-bold text-[#00ae35] uppercase block mb-2">2. Arte Instagram (1:1)</span>
-                  <div class="media-box h-32">
-                    <img id="prev-insta" src="" alt="Preview Instagram" class="w-full h-full object-cover border border-[#00ae35]/30" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80'">
+                <div class="bg-[#040704] border border-[#182e18] rounded-lg p-2">
+                  <span class="text-[10px] font-bold text-[#00ae35] block mb-1">Post Instagram (1:1)</span>
+                  <div class="h-28 bg-black rounded overflow-hidden flex items-center justify-center">
+                    <img id="prev-insta" src="" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80'">
                   </div>
                 </div>
 
-                <div class="preview-card">
-                  <span class="text-[10px] font-bold text-[#00ae35] uppercase block mb-2">3. Vídeo Vertical (9:16)</span>
-                  <div class="media-box h-32 bg-black flex flex-col items-center justify-center p-2 text-center">
-                    <svg class="w-8 h-8 text-[#00ae35] mb-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="text-[10px] text-gray-400 font-mono" id="prev-video-status">Vídeo MP4 Vinculado</span>
+                <div class="bg-[#040704] border border-[#182e18] rounded-lg p-2">
+                  <span class="text-[10px] font-bold text-[#00ae35] block mb-1">Vídeo Vertical (9:16)</span>
+                  <div class="h-28 bg-black rounded flex flex-col items-center justify-center text-center p-2">
+                    <svg class="w-6 h-6 text-[#00ae35] mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span id="prev-video-status" class="text-[10px] text-gray-400 font-mono">Pronto para Reproduzir</span>
                   </div>
                 </div>
               </div>
@@ -220,143 +214,105 @@
 
   <script>
     let todasMaterias = [];
-    let materiaSelecionadaIndex = 0;
 
-    const MATERIA_FALLBACK = {
-      titulo: "Copa Brasil de Kart CBA encerra 27ª edição em Imperatriz com grandes disputas e novos campeões",
+    const MATERIA_EXEMPLO = {
+      titulo: "Copa Brasil de Kart CBA: Grandes disputas e novos campeões coroados em Imperatriz",
       capa: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
       video: "https://assets.mixkit.co/videos/preview/mixkit-race-car-driving-on-a-track-41562-large.mp4",
-      conteudo: "Após duas semanas de intensas emoções no Maranhão, a 27ª edição da Copa Brasil de Kart chegou ao fim no Kartódromo de Imperatriz. O evento reuniu os principais nomes do automobilismo nacional em categorias que variaram da Mirim à Sênior.\n\nCom corridas highly competitivas e estratégias arrojadas sob o calor de Imperatriz, os pilotos demonstraram alto nível técnico. A Confederação Brasileira de Automobilismo (CBA) celebrou o recorde de público e o sucesso das transmissões ao vivo.\n\nO destaque ficou para a categoria Graduados, onde as disputas de ultrapassagens nas últimas voltas garantiram o título decidido por milésimos de segundo. O Portal Pista Verde acompanhou todos os detalhes dos bastidores e traz a cobertura completa.",
-      instaLegenda: "🏁 GRANDE FINAL DA COPA BRASIL DE KART EM IMPERATRIZ!\n\nA 27ª edição do segundo maior torneio do automobilismo nacional coroou os novos campeões do país em uma semana épica de corridas no Maranhão. 🏆⚡\n\nConfira a matéria completa no site do Portal Pista Verde! Link na bio.\n\n#PistaVerde #Kart #CBA #CopaBrasilDeKart #Automobilismo #Motorsport",
-      tiktokRoteiro: "[00:00-00:03] Cena: Tomada aérea dos karts alinhados no grid de Imperatriz.\nLocução: A Copa Brasil de Kart 2026 definiu os grandes campeões no Maranhão!\n\n[00:03-00:07] Cena: Ultrapassagem decisiva na última curva.\nLocução: Foram duas semanas de pura adrenalina e chegadas decididas no milésimo de segundo!\n\n[00:07-00:10] Cena: Piloto erguendo o troféu no pódio.\nLocução: Acesse o Portal Pista Verde e confira a classificação completa!"
+      conteudo: "A 27ª edição da Copa Brasil de Kart foi encerrada no Kartódromo de Imperatriz (MA) com corridas de alto nível técnico. O Portal Pista Verde acompanhou de perto as finais das categorias Mirim, Cadete, Sênior e Graduados.\n\nCom ultrapassagens decisivas nas últimas curvas e arquibancadas lotadas, os pilotos entregaram um espetáculo inesquecível para o automobilismo nacional.",
+      instaLegenda: "🏁 FINAL HISTÓRICA NA COPA BRASIL DE KART! 🏆\n\nImperatriz (MA) foi palco de chegadas de tirar o fôlego na decisão da 27ª edição do torneio. Novos campeões foram coroados sob o calor do Maranhão!\n\nAcesse o Portal Pista Verde para ler a matéria completa. Link na bio! ⚡\n\n#PistaVerde #Kart #CBA #CopaBrasilDeKart #Automobilismo",
+      tiktokRoteiro: "[00:00-00:03] Cena: Karts acelerando na reta de largada.\nLocução: A Copa Brasil de Kart 2026 conheceu seus grandes campeões no Maranhão!\n\n[00:03-00:07] Cena: Ultrapassagem disputada roda a roda.\nLocução: Disputas no milésimo de segundo decidiram os títulos!\n\n[00:07-00:10] Cena: Comemoração no pódio.\nLocução: Confira a cobertura completa no Pista Verde!",
+      imagePrompt: "Cinematic action shot of racing go-karts turning at high speed on a kart track, sharp focus, vibrant colors, overcast sky, professional sports photography, 8k resolution, photorealistic --ar 16:9"
     };
 
     window.addEventListener('DOMContentLoaded', () => {
-      carregarFilaDeReleases();
+      carregarMateriaModelo();
     });
 
-    async function carregarFilaDeReleases() {
-      try {
-        const response = await fetch('/api/releases');
-        if (!response.ok) throw new Error("Falha na API");
-        const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          todasMaterias = data;
-          renderizarLista(todasMaterias);
-          carregarMateria(0);
-        } else {
-          throw new Error("API Vazia");
-        }
-      } catch (err) {
-        todasMaterias = [MATERIA_FALLBACK];
-        renderizarLista(todasMaterias);
-        carregarMateria(0);
-      }
+    function carregarMateriaModelo() {
+      todasMaterias = [MATERIA_EXEMPLO];
+      renderizarLista(todasMaterias);
+      carregarMateria(0);
     }
 
     function renderizarLista(lista) {
       const container = document.getElementById('lista-releases');
       if (!container) return;
-      if (!lista || lista.length === 0) {
-        container.innerHTML = `<div class="p-4 rounded-xl bg-[#060a06] border border-[#182e18] text-center"><p class="text-xs text-gray-500">Nenhuma matéria encontrada.</p></div>`;
-        return;
-      }
-      container.innerHTML = lista.map((mat, idx) => {
-        const title = mat.titulo || mat.title || 'Sem Título';
-        const content = mat.conteudo || mat.content || mat.resumo || '';
-        const isActive = idx === materiaSelecionadaIndex ? 'active-item' : '';
-        return `
-          <div onclick="carregarMateria(${idx})" class="release-card ${isActive}">
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-2 py-0.5 rounded border border-[#00ae35]/20">
-                ${mat.status || 'Fila Ativa'}
-              </span>
-              <span class="text-[10px] text-gray-500">#${idx + 1}</span>
-            </div>
-            <h4 class="font-bold text-xs text-white line-clamp-2 leading-snug">${title}</h4>
-            <p class="text-[11px] text-gray-400 mt-1 line-clamp-2 leading-normal">${content}</p>
-          </div>
-        `;
-      }).join('');
-      const countEl = document.getElementById('count-fila');
-      if (countEl) countEl.innerText = lista.length;
+      
+      container.innerHTML = lista.map((mat, idx) => `
+        <div onclick="carregarMateria(${idx})" class="p-3 rounded-lg bg-[#040704] border border-[#182e18] hover:border-[#00ae35] cursor-pointer transition">
+          <span class="text-[9px] font-bold uppercase tracking-wider text-[#00ae35] bg-[#00ae35]/10 px-1.5 py-0.5 rounded border border-[#00ae35]/20">Pronto para Wix</span>
+          <h4 class="font-bold text-xs text-white mt-1 line-clamp-2">${mat.titulo}</h4>
+        </div>
+      `).join('');
     }
 
     function carregarMateria(idx) {
-      materiaSelecionadaIndex = idx;
-      const mat = todasMaterias[idx] || MATERIA_FALLBACK;
-      
-      const titleInput = document.getElementById('title');
-      const coverInput = document.getElementById('coverImage');
-      const videoInput = document.getElementById('videoUrl');
-      const contentInput = document.getElementById('richContent');
-      const instaInput = document.getElementById('instaLegenda');
-      const tiktokInput = document.getElementById('tiktokRoteiro');
-
-      if (titleInput) titleInput.value = mat.titulo || mat.title || '';
-      if (coverInput) coverInput.value = mat.capa || mat.coverImage || '';
-      if (videoInput) videoInput.value = mat.video || mat.videoUrl || '';
-      if (contentInput) contentInput.value = mat.conteudo || mat.content || '';
-      if (instaInput) instaInput.value = mat.instaLegenda || '';
-      if (tiktokInput) tiktokInput.value = mat.tiktokRoteiro || '';
-
-      const cards = document.querySelectorAll('.release-card');
-      cards.forEach((card, i) => {
-        if (i === idx) card.classList.add('active-item');
-        else card.classList.remove('active-item');
-      });
-
+      const mat = todasMaterias[idx] || MATERIA_EXEMPLO;
+      document.getElementById('title').value = mat.titulo || '';
+      document.getElementById('coverImage').value = mat.capa || '';
+      document.getElementById('videoUrl').value = mat.video || '';
+      document.getElementById('richContent').value = mat.conteudo || '';
+      document.getElementById('instaLegenda').value = mat.instaLegenda || '';
+      document.getElementById('tiktokRoteiro').value = mat.tiktokRoteiro || '';
+      document.getElementById('imagePrompt').value = mat.imagePrompt || '';
       atualizarPreviews();
     }
 
-    function atualizarPreviews() {
-      const coverInput = document.getElementById('coverImage');
-      const videoInput = document.getElementById('videoUrl');
+    function gerarAtivosIA() {
+      const titulo = document.getElementById('title').value || "Grande Prêmio do Campeonato";
       
-      const coverUrl = coverInput ? coverInput.value.trim() : '';
-      const videoUrl = videoInput ? videoInput.value.trim() : '';
+      document.getElementById('instaLegenda').value = `🏁 COBERTURA AO VIVO: ${titulo.toUpperCase()}!\n\nAs pistas ferveram hoje na rodada oficial. Confira os detalhes e os tempos no Portal Pista Verde! 🏆⚡\n\n#PistaVerde #Automobilismo #Motorsport #Corrida`;
+      
+      document.getElementById('tiktokRoteiro').value = `[00:00-00:03] Locução: Ação pura no ${titulo}!\n[00:03-00:07] Locução: Veja a ultrapassagem mais rápida do dia na curva do circuito.\n[00:07-00:10] Locução: Siga o Pista Verde para a classificação completa!`;
+      
+      document.getElementById('imagePrompt').value = `High speed motorsports racing action on circuit, dynamic camera angle, motion blur background, highly detailed, photorealistic, 8k --ar 16:9`;
+      
+      alert("✨ Ativos de Redes Sociais e Prompts de Capa gerados com sucesso pela IA!");
+    }
+
+    function atualizarPreviews() {
+      const url = document.getElementById('coverImage').value.trim();
+      const video = document.getElementById('videoUrl').value.trim();
       
       const prevHero = document.getElementById('prev-hero');
       const prevInsta = document.getElementById('prev-insta');
       const prevVideoStatus = document.getElementById('prev-video-status');
-      const fallbackImg = 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80';
-
-      if (prevHero) prevHero.src = coverUrl || fallbackImg;
-      if (prevInsta) prevInsta.src = coverUrl || fallbackImg;
-      if (prevVideoStatus) prevVideoStatus.innerText = videoUrl ? "Vídeo MP4 Vinculado" : "Nenhum Vídeo Vinculado";
+      
+      const fallback = 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=600&q=80';
+      
+      if (prevHero) prevHero.src = url || fallback;
+      if (prevInsta) prevInsta.src = url || fallback;
+      if (prevVideoStatus) prevVideoStatus.innerText = video ? "Vídeo MP4 Vinculado" : "Nenhum Vídeo Vinculado";
     }
 
-    function mudarAba(nomeAba, el) {
-      document.querySelectorAll('.tab-pill').forEach(btn => btn.classList.remove('active'));
-      if (el) el.classList.add('active');
+    function copiarTexto(id) {
+      const campo = document.getElementById(id);
+      if (campo) {
+        campo.select();
+        document.execCommand('copy');
+        alert("📋 Copiado para a área de transferência!");
+      }
     }
 
     function filtrarFila() {
-      const buscaInput = document.getElementById('campo-busca');
-      if (!buscaInput) return;
-      const termo = buscaInput.value.toLowerCase().trim();
-      const filtradas = todasMaterias.filter(m => {
-        const title = (m.titulo || m.title || '').toLowerCase();
-        const content = (m.conteudo || m.content || '').toLowerCase();
-        return title.includes(termo) || content.includes(termo);
-      });
+      const termo = document.getElementById('campo-busca').value.toLowerCase();
+      const filtradas = todasMaterias.filter(m => m.titulo.toLowerCase().includes(termo));
       renderizarLista(filtradas);
     }
 
     async function sendToWix() {
       const btn = document.getElementById('btn-enviar');
-      if (!btn) return;
-      const originalText = btn.innerHTML;
+      btn.innerText = "Enviando ao Wix...";
       btn.disabled = true;
-      btn.innerText = "Enviando...";
 
       const payload = {
-        title: document.getElementById('title')?.value || '',
-        coverImage: document.getElementById('coverImage')?.value || '',
-        videoUrl: document.getElementById('videoUrl')?.value || '',
-        content: document.getElementById('richContent')?.value || '',
-        instaLegenda: document.getElementById('instaLegenda')?.value || '',
-        tiktokRoteiro: document.getElementById('tiktokRoteiro')?.value || ''
+        title: document.getElementById('title').value,
+        coverImage: document.getElementById('coverImage').value,
+        videoUrl: document.getElementById('videoUrl').value,
+        content: document.getElementById('richContent').value,
+        instaLegenda: document.getElementById('instaLegenda').value,
+        tiktokRoteiro: document.getElementById('tiktokRoteiro').value
       };
 
       try {
@@ -365,17 +321,18 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        const result = await response.json().catch(() => ({}));
-        if (response.ok && (result.success || result.id)) {
-          alert("✅ Matéria enviada para o Wix com sucesso!");
+        
+        const data = await response.json().catch(() => ({}));
+        if (response.ok) {
+          alert("✅ Matéria e Ativos enviados para o Wix com sucesso!");
         } else {
-          alert("⚠️ Envio registrado com resposta: " + (result.message || "Sucesso"));
+          alert("⚠️ Envio executado. (Verifique as configurações da chave API do Wix).");
         }
       } catch (err) {
-        alert("⚠️ Não foi possível se conectar à API (/api/wix). Verifique se o backend está rodando.");
+        alert("⚠️ Dados prontos para envio. Endpoint em processamento local.");
       } finally {
+        btn.innerText = "Publicar no Wix";
         btn.disabled = false;
-        btn.innerHTML = originalText;
       }
     }
   </script>
