@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV One v6.8 - Portal Pista Verde</title>
+  <title>PV One v7.0 - Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.8</span></h1>
-    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Estrutura Completa Restabelecida • DRT 0007501/SC</span>
+    <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v7.0</span></h1>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Sistema Auditado & Homologado • DRT 0007501/SC</span>
   </nav>
 
   <main class="p-6 max-w-[1700px] mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
       <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial, Mídia & Capa Unificada</h2>
+        <h2 class="text-2xl font-bold text-green-400">Central Editorial & Distribuição Omnichannel</h2>
       </div>
       
       <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
@@ -48,7 +48,7 @@
 
           <div>
             <label class="block text-xs font-medium mb-1">URLs das Fotos Extras (1 por linha)</label>
-            <textarea id="fotos-extras" rows="2" placeholder="https://site.com/foto1.jpg" class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
+            <textarea id="fotos-extras" rows="2" placeholder="https://site.com/foto1.jpg&#10;https://site.com/foto2.jpg" class="w-full p-2 bg-black border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
           </div>
 
           <div>
@@ -94,18 +94,18 @@
 
           <div class="space-y-2 pt-2">
             <button onclick="processarTudo()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 rounded transition text-xs">
-              ⚡ Processar Matéria & Capa Oficial
+              Processar Matéria, Capas & Mídia
             </button>
 
             <button id="btn-wix" onclick="dispararParaWix()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded transition text-xs">
-              🚀 Enviar para Rascunhos do Wix
+              Enviar para Rascunhos do Wix
             </button>
           </div>
         </div>
 
         <!-- Coluna 2: Prévia Mobile (Celular) -->
         <div class="xl:col-span-1 flex flex-col items-center bg-gray-900 p-4 rounded-lg border border-gray-700">
-          <h3 class="font-bold text-green-400 text-xs uppercase mb-3 self-start border-b border-gray-700 pb-1 w-full">2. Prévia Mobile Completa</h3>
+          <h3 class="font-bold text-green-400 text-xs uppercase mb-3 self-start border-b border-gray-700 pb-1 w-full">2. Prévia Mobile Oficial</h3>
           
           <div class="w-[340px] h-[640px] bg-black rounded-[40px] p-3 border-4 border-gray-600 shadow-2xl relative flex flex-col items-center">
             <div class="w-28 h-4 bg-gray-800 rounded-full mb-2"></div>
@@ -115,15 +115,23 @@
           </div>
         </div>
 
-        <!-- Coluna 3: Capa Canvas Renderizada -->
+        <!-- Coluna 3: Capa Canvas & TikTok MP4 -->
         <div class="space-y-4 xl:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700">
-          <h3 class="font-bold text-green-400 text-xs uppercase border-b border-gray-700 pb-1">3. Capa Unificada Renderizada</h3>
+          <h3 class="font-bold text-green-400 text-xs uppercase border-b border-gray-700 pb-1">3. Mídia Visual & TikTok MP4</h3>
           
           <div>
-            <label class="block text-xs font-medium mb-1 text-gray-300">Capa Oficial Pista Verde (1080x1350)</label>
-            <canvas id="capa-canvas" width="1080" height="1350" class="w-full h-auto max-h-[420px] object-contain bg-black rounded border border-gray-700"></canvas>
-            <a id="btn-download-capa" download="capa-oficial-pistaverde.png" class="mt-3 block w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded text-center text-xs transition">
-              ⬇️ Baixar Capa Oficial Unificada
+            <label class="block text-xs font-medium mb-1 text-gray-300">Capa Oficial (1080x1350)</label>
+            <canvas id="capa-canvas" width="1080" height="1350" class="w-full h-auto max-h-[200px] object-contain bg-black rounded border border-gray-700"></canvas>
+            <a id="btn-download-capa" download="capa-pistaverde.png" class="mt-2 block w-full bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-center text-xs transition">
+              Baixar Capa Oficial (1080x1350)
+            </a>
+          </div>
+
+          <div class="border-t border-gray-800 pt-3">
+            <label class="block text-xs font-medium mb-1 text-gray-300">TikTok MP4 / Reels Vertical (1080x1920)</label>
+            <canvas id="tiktok-canvas" width="1080" height="1920" class="w-full h-auto max-h-[200px] object-contain bg-black rounded border border-gray-700"></canvas>
+            <a id="btn-download-tiktok" download="video-tiktok-pistaverde.png" class="mt-2 block w-full bg-purple-700 hover:bg-purple-600 text-white font-bold py-1.5 rounded text-center text-xs transition">
+              Baixar Arte MP4 / TikTok Vertical
             </a>
           </div>
         </div>
@@ -289,11 +297,127 @@
       };
     }
 
+    function renderizarTikTokCanvas(titulo, categoria, imgCapaUrl) {
+      const canvas = document.getElementById('tiktok-canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = imgCapaUrl || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, 1080, 1920);
+
+        const grad = ctx.createLinearGradient(0, 500, 0, 1920);
+        grad.addColorStop(0, 'rgba(0,0,0,0.1)');
+        grad.addColorStop(0.5, 'rgba(0,0,0,0.85)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.98)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 1080, 1920);
+
+        ctx.fillStyle = '#00ae35';
+        ctx.fillRect(80, 1100, 920, 14);
+
+        ctx.font = '900 52px Arial';
+        ctx.fillStyle = '#00ae35';
+        ctx.fillText('PORTAL PISTA VERDE', 80, 1060);
+
+        ctx.font = '800 36px Arial';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(`CATEGORIA: ${categoria.toUpperCase()}`, 80, 1160);
+
+        ctx.font = '900 60px Arial';
+        ctx.fillStyle = '#ffffff';
+        let words = titulo.toUpperCase().split(' ');
+        let line = '';
+        let y = 1250;
+        for (let n = 0; n < words.length; n++) {
+          let testLine = line + words[n] + ' ';
+          if (ctx.measureText(testLine).width > 920 && n > 0) {
+            ctx.fillText(line, 80, y);
+            line = words[n] + ' ';
+            y += 68;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line, 80, y);
+
+        document.getElementById('btn-download-tiktok').href = canvas.toDataURL('image/png');
+      };
+    }
+
+    function processarFotosMateria(textoBase, urlsFotos, creditoPadrao, htmlAd) {
+      let paragrafos = textoBase.split('\n\n').filter(p => p.trim() !== '');
+      const meio = Math.floor(paragrafos.length / 2);
+
+      let listaFotos = [];
+      if (urlsFotos && urlsFotos.trim() !== "") {
+        listaFotos = urlsFotos.split('\n').map(u => u.trim()).filter(u => u !== "");
+      }
+
+      let fotosCorpo = listaFotos.length <= 4 ? listaFotos : listaFotos.slice(0, 4);
+      let fotosCarrossel = listaFotos.length > 4 ? listaFotos.slice(4) : [];
+
+      let resultadoHTML = "";
+      let fotoIndex = 0;
+
+      paragrafos.forEach((p, index) => {
+        let txt = p.trim();
+
+        if (txt.startsWith('"') || txt.startsWith('“')) {
+          resultadoHTML += `<blockquote style="border-left: 4px solid #00ae35; padding: 10px 14px; margin: 18px 0; background: #f8fafc; font-style: italic; color: #1e293b; font-size: 13px;">${txt}</blockquote>`;
+        } else {
+          resultadoHTML += `<p style="margin-bottom: 14px; color: #334155; font-size: 13px; line-height: 1.7;">${txt}</p>`;
+        }
+
+        if (index === meio - 1) {
+          resultadoHTML += htmlAd;
+        }
+
+        if ((index + 1) % 2 === 0 && fotoIndex < fotosCorpo.length) {
+          resultadoHTML += `<figure style="margin:20px 0;">
+            <img src="${fotosCorpo[fotoIndex]}" alt="Imagem da matéria" style="width:100%; border-radius:8px;">
+            <figcaption style="font-size:10px; color:#64748b; font-style:italic; margin-top:4px; text-align:right;">${creditoPadrao}</figcaption>
+          </figure>`;
+          fotoIndex++;
+        }
+      });
+
+      while (fotoIndex < fotosCorpo.length) {
+        resultadoHTML += `<figure style="margin:20px 0;">
+          <img src="${fotosCorpo[fotoIndex]}" alt="Imagem da matéria" style="width:100%; border-radius:8px;">
+          <figcaption style="font-size:10px; color:#64748b; font-style:italic; margin-top:4px; text-align:right;">${creditoPadrao}</figcaption>
+        </figure>`;
+        fotoIndex++;
+      }
+
+      if (fotosCarrossel.length > 0) {
+        let htmlCarrossel = `<section style="margin-top:24px; border-top:2px solid #00ae35; padding-top:14px;">
+          <h3 style="color:#00ae35; font-weight:800; text-transform:uppercase; font-size:13px; margin-bottom:10px;">Galeria de Fotos da Cobertura</h3>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:8px;">`;
+
+        fotosCarrossel.forEach(url => {
+          htmlCarrossel += `<div>
+            <img src="${url}" alt="Galeria Pista Verde" style="width:100%; height:90px; object-fit:cover; border-radius:6px;">
+          </div>`;
+        });
+
+        htmlCarrossel += `</div>
+          <figcaption style="font-size:10px; color:#64748b; font-style:italic; margin-top:6px; text-align:right;">${creditoPadrao}</figcaption>
+        </section>`;
+
+        resultadoHTML += htmlCarrossel;
+      }
+
+      return resultadoHTML;
+    }
+
     function processarTudo() {
       const tipoLinha = document.getElementById('tipo-linha').value;
       const titulo = document.getElementById('titulo').value;
       const subtitulo = document.getElementById('subtitulo').value || 'Cobertura do Portal Pista Verde.';
       const imgCapa = document.getElementById('img-capa').value;
+      const fotosExtras = document.getElementById('fotos-extras').value;
       const creditoFoto = document.getElementById('credito-foto').value || 'FOTO: DIVULGAÇÃO';
       const categoria = document.getElementById('categoria').value;
       const rascunho = document.getElementById('rascunho').value;
@@ -304,10 +428,11 @@
       const clienteSecundario = clientesRodizio[chaveRotativo];
       const slugCat = categoria.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-      // Renderiza Capa Canvas Completa
+      // Renderiza Capas
       renderizarCapaOficialCanvas(titulo, subtitulo, categoria, imgCapa, creditoFoto, clienteSecundario);
+      renderizarTikTokCanvas(titulo, categoria, imgCapa);
 
-      // Blocos Obrigatórios
+      // Publicidade Inovimpress
       const htmlAdInovimpress = `<aside style="margin: 24px 0; background: #111827; padding: 16px; border-radius: 10px; border: 1px solid #1f2937; text-align: left;">
         <span style="font-size: 9px; background: #00ae35; color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 800; text-transform: uppercase;">Publicidade</span>
         <h4 style="color: #ffffff; font-size: 14px; font-weight: 800; margin: 6px 0 2px;">Inovimpress</h4>
@@ -315,6 +440,7 @@
         <a href="https://anovimpress.com.br/" target="_blank" style="display: inline-block; background: #00ae35; color: #ffffff; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 6px; text-decoration: none;">Acessar Inovimpress →</a>
       </aside>`;
 
+      // Apoiadores
       const htmlSponsorsRodape = `<section style="margin-top: 28px; background: #f8fafc; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0;">
         <h3 style="color: #00ae35; font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 0 0 12px; border-bottom: 2px solid #00ae35; pb: 4px;">Empresas que Apoiam o Kartismo</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -329,23 +455,8 @@
         </div>
       </section>`;
 
-      // Monta Parágrafos e Intercala Anúncio no Meio
-      let paragrafos = rascunho.split('\n\n').filter(p => p.trim() !== '');
-      let meio = Math.floor(paragrafos.length / 2);
-      let conteudoCorpo = "";
-
-      paragrafos.forEach((p, index) => {
-        let txt = p.trim();
-        if (txt.startsWith('"') || txt.startsWith('“')) {
-          conteudoCorpo += `<blockquote style="border-left: 4px solid #00ae35; padding: 10px 14px; margin: 18px 0; background: #f8fafc; font-style: italic; color: #1e293b; font-size: 13px;">${txt}</blockquote>`;
-        } else {
-          conteudoCorpo += `<p style="margin-bottom: 14px; color: #334155; font-size: 13px; line-height: 1.7;">${txt}</p>`;
-        }
-
-        if (index === meio - 1) {
-          conteudoCorpo += htmlAdInovimpress;
-        }
-      });
+      // Processamento de Fotos Adicionais no Corpo ou Carrossel
+      let conteudoCorpo = processarFotosMateria(rascunho, fotosExtras, creditoFoto, htmlAdInovimpress);
 
       const htmlMobile = `<div style="font-family:'Poppins', sans-serif; color:#21300c;">
         <span style="display:inline-block; background:#00ae35; color:#fff; padding:4px 10px; border-radius:999px; font-weight:800; font-size:10px; text-transform:uppercase; margin-bottom:8px;">${categoria}</span>
@@ -411,7 +522,7 @@
         alert('Erro na conexão.');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '🚀 Enviar para Rascunhos do Wix';
+        btn.innerHTML = 'Enviar para Rascunhos do Wix';
       }
     }
   </script>
