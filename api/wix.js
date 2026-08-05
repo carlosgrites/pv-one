@@ -22,6 +22,13 @@ export default async function handler(req, res) {
   try {
     const { title, content, coverImage } = req.body;
 
+    // Estrutura exata aceita pelo Wix Data sem dar erro 400
+    const itemData = {
+      title: title || "Sem Título",
+      excerpt: content ? content.substring(0, 150) : "",
+      coverImage: coverImage || ""
+    };
+
     const response = await fetch('https://www.wixapis.com/wix-data/v1/items', {
       method: 'POST',
       headers: {
@@ -32,12 +39,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         dataCollectionId: "Blog/Posts",
-        item: {
-          title: title,
-          excerpt: content ? content.substring(0, 200) : "",
-          plainContent: content,
-          coverImage: coverImage
-        }
+        item: itemData
       })
     });
 
