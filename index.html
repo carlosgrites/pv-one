@@ -8,353 +8,140 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #0b110b; color: #ffffff; }
-    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-weight: 600; font-size: 14px; color: #9ca3af; border-radius: 8px; transition: all 0.2s; cursor: pointer; }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-weight: 600; font-size: 14px; color: #9ca3af; }
     .sidebar-link:hover, .sidebar-link.active { background-color: #142814; color: #00ae35; }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background-color: #111e11; border: 1px solid #1a381a; font-size: 12px; font-weight: 600; color: #e2e8f0; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background-color: #111e11; border: 1px solid #1c3b1c; font-size: 12px; font-weight: 600; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #00ae35; }
-    .tab-pill { padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; background-color: #111811; border: 1px solid #1c2e1c; color: #9ca3af; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .tab-pill { padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; background-color: #111811; border: 1px solid #1c2b1c; color: #889988; }
     .tab-pill.active { background-color: #1c3b1c; border-color: #00ae35; color: #ffffff; }
-    .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+    .count-badge { background-color: #00ae35; color: #000000; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; margin-left: 6px; }
   </style>
 </head>
 <body class="flex min-h-screen">
 
-  <!-- MENU LATERAL DA ESQUERDA -->
-  <aside class="w-64 bg-[#070d07] border-r border-[#152815] p-4 flex flex-col justify-between shrink-0">
-    <div class="space-y-6">
-      <div class="flex items-center gap-3 px-2 py-3">
-        <div class="w-10 h-10 bg-[#00ae35] rounded-xl flex items-center justify-center font-black text-black text-xl">PV</div>
+  <!-- Sidebar Lateral -->
+  <aside class="w-64 border-r border-green-950/40 flex flex-col justify-between p-4 bg-[#070b07]">
+    <div>
+      <div class="flex items-center gap-3 p-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-xl">PV</div>
         <div>
-          <h1 class="font-black text-white text-lg leading-none">PV ONE</h1>
-          <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Portal Pista Verde</span>
+          <h1 class="font-black text-lg leading-none tracking-tight">PV ONE</h1>
+          <span class="text-[10px] font-bold tracking-widest text-green-700">PORTAL PISTA VERDE</span>
         </div>
       </div>
-
-      <nav class="space-y-1" id="nav-menu">
-        <a onclick="ativarMenu(this)" class="sidebar-link">Painel</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link active">Redação — Agências</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Redação — Clientes</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Redes Sociais</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Cadastros</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Comercial</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Financeiro</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Pilotos</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Solicitações</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Auditoria SEO</a>
-        <a onclick="ativarMenu(this)" class="sidebar-link">Integrações</a>
+      <nav class="space-y-1">
+        <a href="#" class="sidebar-link rounded-xl">Painel</a>
+        <a href="#" class="sidebar-link active rounded-xl">Redação — Agências</a>
+        <a href="#" class="sidebar-link rounded-xl">Redação — Clientes</a>
+        <a href="#" class="sidebar-link rounded-xl">Redes Sociais</a>
+        <a href="#" class="sidebar-link rounded-xl">Cadastros</a>
+        <a href="#" class="sidebar-link rounded-xl">Comercial</a>
+        <a href="#" class="sidebar-link rounded-xl">Financeiro</a>
+        <a href="#" class="sidebar-link rounded-xl">Pilotos</a>
+        <a href="#" class="sidebar-link rounded-xl">Solicitações</a>
+        <a href="#" class="sidebar-link rounded-xl">Auditoria SEO</a>
+        <a href="#" class="sidebar-link rounded-xl">Integrações</a>
       </nav>
-    </div>
-
-    <div class="px-2 text-xs text-gray-600 border-t border-[#152815] pt-4">
-      DRT 0007501/SC • v11.2
     </div>
   </aside>
 
-  <!-- ÁREA PRINCIPAL DA APLICAÇÃO -->
-  <main class="flex-1 p-6 overflow-y-auto space-y-6">
-    
-    <!-- BANNER DE CABEÇALHO -->
-    <div class="bg-gradient-to-r from-[#112411] to-[#0a140a] p-6 rounded-2xl border border-[#1b381b] flex justify-between items-center">
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 p-8 overflow-y-auto">
+    <header class="flex justify-between items-start mb-6">
       <div>
-        <span class="text-xs font-black text-[#00ae35] uppercase tracking-wider">Redação — Agências</span>
-        <h2 class="text-3xl font-black text-white mt-1">Releases recebidos</h2>
-        <p class="text-xs text-gray-400 mt-1">Gmail, adaptação editorial, conferência e rascunho no Wix em uma única matéria.</p>
+        <span class="text-xs font-bold text-green-500 tracking-widest uppercase">Redação — Agências</span>
+        <h2 class="text-3xl font-black mt-1">Releases Inteligentes</h2>
+        <p class="text-sm text-gray-400 mt-1">Gmail, adaptação editorial e publicação no Wix em uma única matéria.</p>
       </div>
+      <div class="flex gap-3">
+        <span class="status-badge"><span class="status-dot"></span> IA conectado</span>
+        <span class="status-badge"><span class="status-dot"></span> Wix Backend ativo</span>
+        <span class="status-badge"><span class="status-dot"></span> Gmail conectado</span>
+        <span class="status-badge"><span class="status-dot"></span> Google conectado</span>
+      </div>
+    </header>
 
-      <div class="flex items-center gap-3">
-        <button onclick="atualizarGmail()" class="bg-white text-black font-extrabold px-5 py-2.5 rounded-xl text-xs hover:bg-gray-200 transition">
-          🔄 Atualizar Gmail
+    <!-- Tabs de Status -->
+    <div class="flex gap-2 mb-6">
+      <button class="tab-pill active">Fila ativa <span class="count-badge">1</span></button>
+      <button class="tab-pill">Conferência <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
+      <button class="tab-pill">Prontas <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
+      <button class="tab-pill">Arquivo <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
+      <button class="tab-pill">Lixeira <span class="count-badge" style="background-color:#334433; color:#aaa;">0</span></button>
+    </div>
+
+    <!-- Campo de Pesquisa -->
+    <div class="mb-6">
+      <input type="text" placeholder="Pesquisar título ou piloto..." class="w-full bg-[#111811] border border-green-950/60 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-green-600 text-gray-200">
+    </div>
+
+    <!-- Card da Matéria em Produção -->
+    <div class="bg-[#0f170f] border border-green-900/40 rounded-2xl p-6 mb-6">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold text-green-500 uppercase">Em produção</span>
+        <span class="text-xs text-gray-500">Hoje</span>
+      </div>
+      <h3 id="materia-titulo" class="text-xl font-bold mb-1">Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado</h3>
+      <p class="text-sm text-gray-400">Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro.</p>
+    </div>
+
+    <!-- Prévias e Botão de Envio -->
+    <div class="bg-[#0b140b] border border-green-900/30 rounded-2xl p-6">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h4 class="text-xs font-bold text-green-500 tracking-wider uppercase">PRÉVIA FIEL DO TEMPLATE PISTA VERDE (HERO VISUAL & H1/H2 OCULTOS)</h4>
+        </div>
+        <button id="btn-enviar-wix" onclick="enviarParaOWix()" class="bg-[#00ae35] hover:bg-green-600 text-black font-extrabold px-6 py-3 rounded-xl transition-all shadow-lg shadow-green-950">
+          Enviar para o Wix
         </button>
-        <button onclick="abrirModalNovaMateria()" class="bg-[#00ae35] text-black font-extrabold px-5 py-2.5 rounded-xl text-xs hover:bg-green-400 transition">
-          + Nova matéria
-        </button>
-      </div>
-    </div>
-
-    <!-- BARRA DE STATUS DAS CONEXÕES -->
-    <div class="flex flex-wrap items-center gap-3">
-      <div class="status-badge"><span class="status-dot"></span> IA conectado</div>
-      <div class="status-badge"><span class="status-dot"></span> Wix Backend ativo</div>
-      <div class="status-badge"><span class="status-dot"></span> Gmail conectado</div>
-      <div class="status-badge"><span class="status-dot"></span> Google conectado</div>
-    </div>
-
-    <!-- ABAS DA FILA -->
-    <div class="flex items-center gap-3 border-b border-[#152815] pb-4">
-      <button onclick="mudarAba('fila', this)" class="tab-pill active">Fila ativa <span class="count-badge" id="count-fila">1</span></button>
-      <button onclick="mudarAba('conferencia', this)" class="tab-pill">Conferência <span class="text-xs text-gray-600" id="count-conf">0</span></button>
-      <button onclick="mudarAba('prontas', this)" class="tab-pill">Prontas <span class="text-xs text-gray-600" id="count-prontas">0</span></button>
-      <button onclick="mudarAba('arquivo', this)" class="tab-pill">Arquivo <span class="text-xs text-gray-600">0</span></button>
-      <button onclick="mudarAba('lixeira', this)" class="tab-pill">Lixeira <span class="text-xs text-gray-600">0</span></button>
-    </div>
-
-    <!-- PAINEL DIVIDIDO -->
-    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-      
-      <!-- ESQUERDA: LISTA DE MATÉRIAS NA FILA -->
-      <div class="xl:col-span-4 bg-[#0e170e] p-4 rounded-2xl border border-[#182e18] space-y-4">
-        <input id="campo-busca" oninput="filtrarFila()" type="text" placeholder="Pesquisar título ou piloto..." class="w-full bg-[#060a06] border border-[#1c351c] p-3 rounded-xl text-xs text-white focus:outline-none focus:border-[#00ae35]">
-
-        <div id="lista-releases" class="space-y-3">
-          <!-- Renderizado via JS -->
-        </div>
       </div>
 
-      <!-- DIREITA: PRÉVIA FIEL COM CAPA HERO VISUAL + H1/H2 OCULTOS PARA SEO -->
-      <div class="xl:col-span-8 bg-[#0e170e] p-6 rounded-2xl border border-[#182e18] space-y-4">
-        <div class="flex justify-between items-center border-b border-[#182e18] pb-3">
-          <h3 class="font-extrabold text-sm text-[#00ae35] uppercase">Prévia Fiel do Template Pista Verde (Hero Visual & H1/H2 Ocultos)</h3>
-          <button id="btn-disparar" onclick="enviarParaWixDirect()" class="bg-[#00ae35] text-black font-extrabold px-6 py-2.5 rounded-xl text-xs hover:bg-green-400 transition shadow-lg">
-            🚀 Enviar Rascunho para o Wix Studio
-          </button>
-        </div>
-
-        <div id="painel-leitura" class="bg-white text-gray-900 rounded-xl overflow-y-auto h-[680px] shadow-inner text-sm">
-          <!-- Renderizado via JS -->
-        </div>
+      <div class="rounded-xl overflow-hidden border border-green-950/60 max-w-2xl mx-auto">
+        <img id="materia-imagem" src="https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg" alt="Copa Brasil de Kart" class="w-full object-cover">
       </div>
-
     </div>
   </main>
 
-  <!-- MODAL DE NOVA MATÉRIA MANUAL -->
-  <div id="modal-nova" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-50 p-4">
-    <div class="bg-[#0e170e] border border-[#182e18] p-6 rounded-2xl max-w-2xl w-full space-y-4">
-      <div class="flex justify-between items-center border-b border-[#182e18] pb-2">
-        <h3 class="font-extrabold text-green-400 text-sm uppercase">Criar Nova Matéria Manual</h3>
-        <button onclick="fecharModalNovaMateria()" class="text-gray-400 hover:text-white text-lg font-bold">&times;</button>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-gray-300 font-semibold mb-1">Título H1 da Matéria</label>
-          <input id="new-titulo" type="text" class="w-full bg-[#060a06] border border-[#1c351c] p-2 rounded text-white focus:outline-none focus:border-green-500">
-        </div>
-        <div>
-          <label class="block text-gray-300 font-semibold mb-1">Subtítulo / Linha de Sutiã (H2)</label>
-          <input id="new-subtitulo" type="text" class="w-full bg-[#060a06] border border-[#1c351c] p-2 rounded text-white focus:outline-none focus:border-green-500">
-        </div>
-        <div>
-          <label class="block text-gray-300 font-semibold mb-1">URL da Imagem da Capa (1200x675)</label>
-          <input id="new-capa" type="text" class="w-full bg-[#060a06] border border-[#1c351c] p-2 rounded text-white focus:outline-none focus:border-green-500">
-        </div>
-        <div>
-          <label class="block text-gray-300 font-semibold mb-1">Texto Completo</label>
-          <textarea id="new-texto" rows="5" class="w-full bg-[#060a06] border border-[#1c351c] p-2 rounded text-white focus:outline-none focus:border-green-500"></textarea>
-        </div>
-      </div>
-
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="fecharModalNovaMateria()" class="px-4 py-2 bg-gray-800 text-white rounded text-xs">Cancelar</button>
-        <button onclick="salvarNovaMateria()" class="px-4 py-2 bg-[#00ae35] text-black font-extrabold rounded text-xs">Salvar na Fila</button>
-      </div>
-    </div>
-  </div>
-
+  <!-- Script da Integração Front-End -->
   <script>
-    let materiasFila = [
-      {
-        titulo: "Copa Brasil de Kart da CBA chega ao fim em Imperatriz com sete campeões e recorde igualado",
-        subtitulo: "Após duas semanas, 27ª edição terminou com grandes corridas e a histórica 11ª conquista de André Nicastro.",
-        selo: "Copa Brasil de Kart",
-        categoria: "Copa do Brasil de Kart",
-        capa: "https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg",
-        texto: "A Copa Brasil de Kart encerrou neste sábado sua 27ª edição em clima de festa. Organizada pela Confederação Brasileira de Automobilismo (CBA), a competição foi disputada no Kartódromo Internacional de Imperatriz, em Imperatriz (MA).\n\nAs finais do Grupo 2 consagraram sete novos vencedores, que se juntaram aos nove campeões definidos na semana anterior nas categorias do Grupo 1. Ao todo, 16 pilotos terminaram a edição de 2026 com títulos nacionais.",
-        credito: "Fábio Oliveira / Radical Motors",
-        status: "fila"
-      }
-    ];
+    async function enviarParaOWix() {
+      const btn = document.getElementById('btn-enviar-wix');
+      const titulo = document.getElementById('materia-titulo').innerText;
+      const imagemUrl = document.getElementById('materia-imagem').src;
 
-    let materiaSelecionadaIndex = 0;
-    let abaAtual = "fila";
-
-    function ativarMenu(el) {
-      document.querySelectorAll('#nav-menu .sidebar-link').forEach(a => a.classList.remove('active'));
-      el.classList.add('active');
-    }
-
-    function mudarAba(aba, el) {
-      abaAtual = aba;
-      document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
-      renderizarFila();
-    }
-
-    function renderizarFila() {
-      const conteiner = document.getElementById('lista-releases');
-      conteiner.innerHTML = "";
-
-      const filtradas = materiasFila.filter(m => m.status === abaAtual);
-
-      if (filtradas.length === 0) {
-        conteiner.innerHTML = `<p class="text-xs text-gray-500 italic p-4 text-center">Nenhuma matéria nesta aba.</p>`;
-        document.getElementById('painel-leitura').innerHTML = `<p class="text-gray-400 italic text-center mt-60 text-sm">Nenhuma matéria selecionada.</p>`;
-        return;
-      }
-
-      filtradas.forEach((m, idx) => {
-        const isSelected = idx === materiaSelecionadaIndex;
-        conteiner.innerHTML += `
-          <div onclick="selecionarMateria(${idx})" class="p-4 rounded-xl cursor-pointer transition border ${isSelected ? 'bg-[#142614] border-[#00ae35]' : 'bg-[#0a120a] border-[#182e18] hover:border-gray-700'}">
-            <div class="flex justify-between items-center text-[10px] text-gray-400 mb-1">
-              <span class="text-[#00ae35] font-bold">Em produção</span>
-              <span>Hoje</span>
-            </div>
-            <h3 class="font-bold text-xs text-white leading-snug">${m.titulo}</h3>
-            <p class="text-[10px] text-gray-400 mt-1 line-clamp-2">${m.subtitulo}</p>
-          </div>
-        `;
-      });
-
-      selecionarMateria(0);
-    }
-
-    function selecionarMateria(index) {
-      materiaSelecionadaIndex = index;
-      const filtradas = materiasFila.filter(m => m.status === abaAtual);
-      const m = filtradas[index];
-
-      if (!m) return;
-
-      const htmlTemplate = `
-        <div style="font-family:'Poppins', sans-serif; color:#21300c; background:#ffffff;">
-          <div style="display:none !important; visibility:hidden; width:0; height:0; overflow:hidden;" aria-hidden="true">
-            <h1>${m.titulo}</h1>
-            <h2>${m.subtitulo}</h2>
-          </div>
-
-          <header style="min-height: 480px; display: flex; align-items: flex-end; padding: 40px 24px; overflow: hidden; border-radius: 0 0 22px 22px; background: linear-gradient(90deg, rgba(0,0,0,.91) 0%, rgba(0,0,0,.72) 48%, rgba(0,0,0,.18) 100%), url('${m.capa}') center / cover no-repeat;">
-            <div style="width: 100%; max-width: 920px; margin: 0 auto;">
-              <span style="display: inline-block; margin-bottom: 16px; padding: 6px 14px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 12px; font-weight: 800; text-transform: uppercase;">${m.selo}</span>
-              <div style="max-width: 900px; margin: 0 0 14px; color: #ffffff; font-size: 36px; font-weight: 900; line-height: 1.1; text-transform: uppercase;">${m.titulo}</div>
-              <div style="width: 90px; height: 5px; margin: 0 0 16px; border-radius: 999px; background: #00ae35;"></div>
-              <p style="max-width: 820px; margin: 0; color: #f3f3f3; font-size: 17px; font-weight: 500; line-height: 1.45;">${m.subtitulo}</p>
-            </div>
-          </header>
-
-          <div style="padding:30px 24px;">
-            <div style="margin: 0 0 28px; padding: 18px 20px; border-top: 5px solid #00ae35; border-radius: 14px; background: #f7f9f6; font-size: 13px;">
-              <p style="margin: 4px 0;"><strong>Evento:</strong> ${m.selo}</p>
-              <p style="margin: 4px 0;"><strong>Categoria:</strong> ${m.categoria}</p>
-              <p style="margin: 4px 0;"><strong>Fotos:</strong> ${m.credito}</p>
-            </div>
-
-            <div style="font-size:16px; line-height:1.8; color:#263618;">
-              ${m.texto.replace(/\n\n/g, '</p><p style="margin-bottom:20px;">')}
-            </div>
-
-            <div style="margin-top:34px; padding: 20px; border: 1px solid #e3eadf; border-radius: 16px; background: #f7f9f6;">
-              <h3 style="margin-top: 0; color: #21300c; font-size: 20px; font-weight: 900;">Empresas que apoiam o kartismo</h3>
-              <p style="font-size: 13px; color: #475569; margin-bottom: 14px;">O Portal Pista Verde valoriza as empresas que acreditam no esporte.</p>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-                <article style="padding: 14px; border-left: 5px solid #00ae35; border-radius: 12px; background: #ffffff;">
-                  <strong style="display:block; font-size:14px; color:#21300c;">Mega Kart</strong>
-                  <span style="font-size:11px; color:#64748b;">Fabricante de karts e peças.</span>
-                </article>
-                <article style="padding: 14px; border-left: 5px solid #00ae35; border-radius: 12px; background: #ffffff;">
-                  <strong style="display:block; font-size:14px; color:#21300c;">Paralego Racing</strong>
-                  <span style="font-size:11px; color:#64748b;">Produtos e peças de competição.</span>
-                </article>
-              </div>
-            </div>
-
-            <div style="border-top:1px solid #dfe7dc; padding-top:16px; margin-top:30px; font-size:12px; color:#4d5b43;">
-              <p style="margin:0; font-weight:bold; color:#00ae35;">Jornalista Responsável: José Carlos Grites (DRT 0007501/SC)</p>
-              <p style="margin:2px 0 0;">Portal Pista Verde</p>
-            </div>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('painel-leitura').innerHTML = htmlTemplate;
-    }
-
-    function filtrarFila() {
-      const q = document.getElementById('campo-busca').value.toLowerCase();
-      const filtradas = materiasFila.filter(m => m.status === abaAtual && (m.titulo.toLowerCase().includes(q) || m.texto.toLowerCase().includes(q)));
-      
-      const conteiner = document.getElementById('lista-releases');
-      conteiner.innerHTML = "";
-
-      filtradas.forEach((m, idx) => {
-        conteiner.innerHTML += `
-          <div onclick="selecionarMateria(${idx})" class="p-4 rounded-xl cursor-pointer transition border bg-[#0a120a] border-[#182e18] hover:border-gray-700">
-            <h3 class="font-bold text-xs text-white leading-snug">${m.titulo}</h3>
-            <p class="text-[10px] text-gray-400 mt-1 line-clamp-2">${m.subtitulo}</p>
-          </div>
-        `;
-      });
-    }
-
-    function atualizarGmail() { alert('Buscando novos e-mails da caixa de entrada...'); }
-    function abrirModalNovaMateria() { document.getElementById('modal-nova').classList.remove('hidden'); }
-    function fecharModalNovaMateria() { document.getElementById('modal-nova').classList.add('hidden'); }
-
-    function salvarNovaMateria() {
-      const t = document.getElementById('new-titulo').value;
-      const s = document.getElementById('new-subtitulo').value;
-      const c = document.getElementById('new-capa').value;
-      const x = document.getElementById('new-texto').value;
-
-      if (!t || !x) return alert('Preencha pelo menos Título e Texto.');
-
-      materiasFila.unshift({
-        titulo: t,
-        subtitulo: s || 'Cobertura Portal Pista Verde.',
-        selo: 'Pista Verde',
-        categoria: 'Kartismo',
-        capa: c || 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg',
-        texto: x,
-        credito: 'Fábio Oliveira / Radical Motors',
-        status: 'fila'
-      });
-
-      fecharModalNovaMateria();
-      renderizarFila();
-    }
-
-    async function enviarParaWixDirect() {
-      const filtradas = materiasFila.filter(m => m.status === abaAtual);
-      const m = filtradas[materiaSelecionadaIndex];
-
-      if (!m) return alert('Selecione uma matéria primeiro.');
-
-      const btn = document.getElementById('btn-disparar');
       btn.disabled = true;
-      btn.innerHTML = 'Enviando ao Servidor...';
+      btn.innerText = "Enviando ao Servidor...";
+      btn.style.opacity = "0.7";
 
       try {
         const response = await fetch('/api/wix', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            title: m.titulo,
-            richContent: document.getElementById('painel-leitura').innerHTML,
-            coverImage: m.capa
+            title: titulo,
+            richContent: "<p>Após duas semanas de competição intensa, a 27ª edição da Copa Brasil de Kart da CBA chegou ao fim em Imperatriz registrando sete campeões e marcas históricas na pista.</p>",
+            coverImage: imagemUrl
           })
         });
 
-        const resData = await response.json();
+        const result = await response.json();
 
-        if (response.ok && resData.success) {
-          m.status = "prontas";
-          document.getElementById('count-prontas').innerText = materiasFila.filter(item => item.status === 'prontas').length;
-          document.getElementById('count-fila').innerText = materiasFila.filter(item => item.status === 'fila').length;
-          alert('SUCESSO: Matéria enviada com segurança ao Wix Studio!');
-          renderizarFila();
+        if (response.ok && result.success) {
+          alert("✅ Matéria enviada com sucesso para o Wix!");
         } else {
-          console.error('Erro Wix:', resData);
-          alert('Aviso no envio ao Wix. Verifique as credenciais da API.');
+          console.error("Retorno de Erro do Wix:", result);
+          const detalhe = JSON.stringify(result.wixError || result.wixResponseBody || result.error || result);
+          alert("Aviso no envio ao Wix: " + detalhe);
         }
       } catch (err) {
-        alert('Erro na conexão com o servidor.');
+        console.error("Falha de Conexão:", err);
+        alert("Erro de conexão ao servidor: " + err.message);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '🚀 Enviar Rascunho para o Wix Studio';
+        btn.innerText = "Enviar para o Wix";
+        btn.style.opacity = "1";
       }
     }
-
-    window.onload = () => { renderizarFila(); };
   </script>
 </body>
 </html>
