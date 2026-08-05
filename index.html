@@ -9,49 +9,49 @@
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <nav class="bg-black p-4 border-b border-green-500 flex justify-between items-center">
     <h1 class="text-xl font-bold text-green-400">PV ONE <span class="text-xs text-gray-400">v6.0</span></h1>
-    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Ponte API Wix Ativa • DRT 0007501/SC & ODS 2026</span>
+    <span id="status-tag" class="text-sm bg-green-900 text-green-300 px-3 py-1 rounded-full">Ponte API Wix & Módulo Redes Ativos • DRT 0007501/SC</span>
   </nav>
 
-  <main class="p-6 max-w-7xl mx-auto space-y-6">
+  <main class="p-6 max-w-[1600px] mx-auto space-y-6">
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 shadow-xl">
       <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial & Automação Wix</h2>
+        <h2 class="text-2xl font-bold text-green-400">Módulo Editorial & Distribuição Omnichannel</h2>
       </div>
       
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Coluna 1: Entrada e Modos de Produção -->
-        <div class="space-y-4 lg:col-span-1">
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        <!-- Coluna 1: Entrada de Dados -->
+        <div class="space-y-3 lg:col-span-1">
           <div>
-            <label class="block text-sm font-medium mb-1 text-green-300">Tipo de Conteúdo</label>
-            <select id="tipo-linha" class="w-full p-2 bg-gray-900 border border-green-500 rounded text-white font-bold focus:outline-none">
-              <option value="agencia">🏢 Release de Agência (Texto Ipsis Litteris)</option>
-              <option value="propria">🏎️ Produção Própria Pista Verde</option>
+            <label class="block text-xs font-medium mb-1 text-green-300">Tipo de Conteúdo</label>
+            <select id="tipo-linha" class="w-full p-2 bg-gray-900 border border-green-500 rounded text-white font-bold text-xs focus:outline-none">
+              <option value="agencia">Release de Agência (Ipsis Litteris)</option>
+              <option value="propria">Produção Própria Pista Verde</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Título da Matéria</label>
-            <input id="titulo" type="text" placeholder="Ex: Final da Copa Brasil de Kart" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-xs font-medium mb-1">Título da Matéria</label>
+            <input id="titulo" type="text" placeholder="Ex: Final da Copa Brasil de Kart" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Subtítulo / Linha de Sutiã</label>
-            <input id="subtitulo" type="text" placeholder="Ex: Após duas semanas, 27ª edição..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-xs font-medium mb-1">Subtítulo / Linha de Sutiã</label>
+            <input id="subtitulo" type="text" placeholder="Ex: Após duas semanas, 27ª edição..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">URL da Imagem da Capa</label>
-            <input id="img-capa" type="text" placeholder="https://static.wixstatic.com/media/..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-xs font-medium mb-1">URL da Imagem da Capa</label>
+            <input id="img-capa" type="text" placeholder="https://static.wixstatic.com/media/..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Crédito da Foto</label>
-            <input id="credito-foto" type="text" placeholder="Ex: Foto: Flávio Quick / CBA" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-xs font-medium mb-1">Crédito da Foto</label>
+            <input id="credito-foto" type="text" placeholder="Ex: Foto: Flávio Quick / CBA" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Categoria</label>
-            <select id="categoria" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-xs font-medium mb-1">Categoria</label>
+            <select id="categoria" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
               <option value="Kartismo">Kartismo</option>
               <option value="Automobilismo">Automobilismo</option>
               <option value="Sustentabilidade">Sustentabilidade</option>
@@ -66,8 +66,8 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">2º Apoiador do Rodízio</label>
-            <select id="apoiador-rotativo" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500">
+            <label class="block text-xs font-medium mb-1">2º Apoiador do Rodízio</label>
+            <select id="apoiador-rotativo" class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500">
               <option value="paralego">Paralego Racing</option>
               <option value="krona">Krona Brasil</option>
               <option value="kartodromo">Parque Kartódromo - Joinville</option>
@@ -83,32 +83,32 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">Texto / Release da Agência</label>
-            <textarea id="rascunho" rows="4" placeholder="Cole o texto da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:border-green-500"></textarea>
+            <label class="block text-xs font-medium mb-1">Texto / Release da Agência</label>
+            <textarea id="rascunho" rows="4" placeholder="Cole o texto da matéria..." class="w-full p-2 bg-gray-900 border border-gray-700 rounded text-white text-xs focus:outline-none focus:border-green-500"></textarea>
           </div>
 
-          <button id="btn-ia" onclick="gerarEEnviarWix()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition flex justify-center items-center gap-2 text-lg">
-            🚀 Processar & Enviar para Rascunhos do Wix
+          <button id="btn-ia" onclick="gerarEEnviarWix()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded transition flex justify-center items-center gap-2 text-sm">
+            Processar & Enviar para Rascunhos do Wix
           </button>
         </div>
 
         <!-- Coluna 2: Código HTML Gerado -->
-        <div class="space-y-2 lg:col-span-1">
-          <label class="block text-sm font-medium">Código HTML Processado</label>
-          <textarea id="resultado" rows="22" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none"></textarea>
+        <div class="space-y-1 lg:col-span-1">
+          <label class="block text-xs font-medium">Código HTML Processado</label>
+          <textarea id="resultado" rows="24" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-[10px] focus:outline-none"></textarea>
         </div>
 
         <!-- Coluna 3: Pré-visualização -->
-        <div class="space-y-2 lg:col-span-1">
-          <label class="block text-sm font-medium">Pré-visualização</label>
-          <div id="preview" class="w-full h-[460px] bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto">
-            <p class="p-4 text-gray-400 italic">A pré-visualização aparecerá aqui...</p>
+        <div class="space-y-1 lg:col-span-1">
+          <label class="block text-xs font-medium">Pré-visualização</label>
+          <div id="preview" class="w-full h-[500px] bg-white text-gray-900 rounded border border-gray-300 overflow-y-auto">
+            <p class="p-4 text-gray-400 italic text-xs">A pré-visualização aparecerá aqui...</p>
           </div>
         </div>
 
         <!-- Coluna 4: Suíte SEO -->
-        <div class="space-y-3 lg:col-span-1 bg-gray-900 p-4 rounded-lg border border-gray-700 text-xs overflow-y-auto max-h-[520px]">
-            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-sm">Metadados SEO</h3>
+        <div class="space-y-2 lg:col-span-1 bg-gray-900 p-3 rounded-lg border border-gray-700 text-[11px] overflow-y-auto max-h-[520px]">
+            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-xs">Metadados SEO</h3>
             
             <div>
               <label class="block text-gray-400 font-medium">Palavra-chave Foco</label>
@@ -132,21 +132,45 @@
 
             <div>
               <label class="block text-gray-400 font-medium">Dados Estruturados (JSON-LD)</label>
-              <textarea id="seo-schema" rows="3" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono text-[10px] focus:outline-none"></textarea>
+              <textarea id="seo-schema" rows="4" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 font-mono text-[9px] focus:outline-none"></textarea>
+            </div>
+        </div>
+
+        <!-- Coluna 5: Redes Sociais -->
+        <div class="space-y-2 lg:col-span-1 bg-gray-900 p-3 rounded-lg border border-gray-700 text-[11px] overflow-y-auto max-h-[520px]">
+            <h3 class="font-bold text-green-400 border-b border-gray-700 pb-1 text-xs">Redes Sociais (Omnichannel)</h3>
+            
+            <div>
+              <label class="block text-gray-400 font-medium">Instagram Feed (Até 2.000 car.)</label>
+              <textarea id="social-ig" rows="5" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-gray-400 font-medium">Instagram Stories / Reels</label>
+              <textarea id="social-stories" rows="3" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-gray-400 font-medium">TikTok Legenda & Roteiro</label>
+              <textarea id="social-tiktok" rows="4" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
+            </div>
+
+            <div>
+              <label class="block text-gray-400 font-medium">Facebook Institucional</label>
+              <textarea id="social-fb" rows="3" readonly class="w-full p-1 bg-black border border-gray-700 rounded text-green-300 text-[10px] focus:outline-none"></textarea>
             </div>
         </div>
       </div>
 
       <!-- 28 Tags -->
-      <div class="mt-6 pt-4 border-t border-gray-700 bg-gray-900 p-4 rounded-lg">
-        <label class="block text-sm font-bold text-green-400 mb-2">28 Tags Geradas</label>
-        <textarea id="seo-tags" rows="2" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-xs focus:outline-none leading-relaxed"></textarea>
+      <div class="mt-4 pt-3 border-t border-gray-700 bg-gray-900 p-3 rounded-lg">
+        <label class="block text-xs font-bold text-green-400 mb-1">28 Tags Geradas</label>
+        <textarea id="seo-tags" rows="2" readonly class="w-full p-2 bg-black border border-gray-700 rounded text-green-300 font-mono text-[11px] focus:outline-none leading-relaxed"></textarea>
       </div>
     </div>
   </main>
 
   <script>
-    // CREDENCIAIS OFICIAIS WIX EMBUTIDAS
     const WIX_API_KEY = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImRjMGM3OGI3LWE2MTgtNDYwOS1hMjg1LTViMmY3MzkxZjcwY1wiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjgwNWEzZTk4LWIwYmYtNDliOS1iZGVlLWEyZTlkMDk1YjIxOFwifSxcInRlbmFudFwiOntcInR5cGVcIbA3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg1OTAwNjE5fQ.KfX4t6Sw3Wz745uSdw6UN1hXdm2vSZVq2nRDgvMNIRX9auY2NhhF1ikIhyz4pjkSoy07dBbsCjjO_hAzRKbEVMcmIaz5XouW25v6Wa6qdn8G5ui-SGNI3OG7McCwYbbCKiaF7ShA9Ha4c8KlnhZunfZvwHqIuPcEZ74Od0ThbQP0YAlqgVOmSYnr_hwiDodMXO-0nc_jQrrlj6FByUiw4ccfF-4cKEY_H8MIJXqVpoONTbJd-mhPL_U6xwvMK3plUeIswu2abnGvpB-Y-xuVmIbJY3ojHTs6czTRukg3nL0yMd3j3reVgHd2ovycu_rpWV4R0jImSrDqmBKhNVmfhQ";
     const WIX_SITE_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
 
@@ -164,7 +188,7 @@
       paragon: { nome: "Paragon Ergonomics", url: "https://paragonergonomics.wixsite.com/paragon/blank", img: "https://static.wixstatic.com/media/74713a_a555ee351a4d42d1bce1e33ee7fad659~mv2.avif", desc: "Assentos esportivos para kart de competição." }
     };
 
-    const baseTagsGerais = ["kart", "kartodromo", "automobilismo", "velocidade", "pista verde", "corrida", "piloto", "paddock", "grid de largada", "podio", "motorsport", "pole position", "volta rapida", "campeonato de kart", "pneu slick", "motor 2 tempos", "motor 4 tempos", "categoria kart", "tropa de elite", "estrada e pista", "noticias de automobilismo", "cobertura de corrida", "resultado kart", "pontuacao campeonato", "ultrapassagem", "bandeira quadriculada", "telemetria", "telemetria kart"];
+    const baseTagsGerais = ["kart", "kartodromo", "automobilismo", "velocidade", "pistaverde", "corrida", "piloto", "paddock", "grid", "podio", "motorsport", "poleposition", "voltarapida", "campeonatodekart", "pneuslick", "motor2tempos", "motor4tempos", "categoriakart", "tropadeelite", "estradaepista", "noticiasautomobilismo", "coberturadecorrida", "resultadokart", "pontuacaocampeonato", "ultrapassagem", "bandeiraquadriculada", "telemetria", "telemetriakart"];
 
     async function gerarEEnviarWix() {
       const tipoLinha = document.getElementById('tipo-linha').value;
@@ -180,7 +204,7 @@
       if (!titulo || !rascunho) return alert('Preencha o Título e o Texto da Matéria.');
 
       btn.disabled = true;
-      btn.innerHTML = '⏳ Formatando e Mapeando API Wix...';
+      btn.innerHTML = 'Formatando e Mapeando API Wix...';
 
       const clienteSecundario = clientesRodizio[chaveRotativo];
       const slugCat = categoria.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -219,11 +243,10 @@
 
       const htmlFinal = `${cssOficial}\n<article class="ppv-materia">\n${htmlHero}\n<div class="ppv-container">\n${conteudoCorpo}\n${htmlAssinaturaJornalista}\n${htmlFooterSponsors}\n</div>\n</article>`;
 
-      atualizarCamposInterface(titulo, categoria, htmlFinal);
+      atualizarCamposInterface(titulo, subtitulo, categoria, htmlFinal, rascunho);
 
-      // DISPARO AUTOMÁTICO PARA A WIX REST API
       try {
-        btn.innerHTML = '🚀 Enviando direto para o Wix...';
+        btn.innerHTML = 'Enviando direto para o Wix...';
         
         const tagsArray = document.getElementById('seo-tags').value.split(',').map(t => t.trim());
         
@@ -253,7 +276,7 @@
         });
 
         if (response.ok) {
-          alert('✅ SUCESSO! A matéria foi enviada diretamente para os RASCUNHOS do seu Wix Studio.');
+          alert('SUCESSO: A matéria foi enviada diretamente para os RASCUNHOS do seu Wix Studio.');
         } else {
           console.log('Resposta da API Wix registrada.');
           alert('Matéria processada com sucesso no PV ONE.');
@@ -264,7 +287,7 @@
       } finally {
         avancarRotizio();
         btn.disabled = false;
-        btn.innerHTML = '🚀 Processar & Enviar para Rascunhos do Wix';
+        btn.innerHTML = 'Processar & Enviar para Rascunhos do Wix';
       }
     }
 
@@ -273,10 +296,13 @@
       selectRot.selectedIndex = (selectRot.selectedIndex < selectRot.options.length - 1) ? selectRot.selectedIndex + 1 : 0;
     }
 
-    function atualizarCamposInterface(titulo, categoria, html) {
+    function atualizarCamposInterface(titulo, subtitulo, categoria, html, textoPuro) {
       const slug = titulo.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-');
+      
       document.getElementById('resultado').value = html;
       document.getElementById('preview').innerHTML = html;
+      
+      // Metadados SEO
       document.getElementById('seo-kw').value = `${categoria.toLowerCase()} ${titulo.split(' ')[0].toLowerCase()}`;
       document.getElementById('seo-title').value = `${titulo} | Portal Pista Verde`;
       document.getElementById('seo-desc').value = `Confira a cobertura sobre ${titulo} na categoria ${categoria}. Leia no Portal Pista Verde.`;
@@ -291,7 +317,24 @@
         "publisher": { "@type": "Organization", "name": "Portal Pista Verde" } 
       };
       document.getElementById('seo-schema').value = JSON.stringify(schemaLocal, null, 2);
-      document.getElementById('seo-tags').value = [categoria.toLowerCase(), ...baseTagsGerais].slice(0, 28).join(", ");
+      
+      const arrayTags = [categoria.toLowerCase(), ...baseTagsGerais].slice(0, 28);
+      document.getElementById('seo-tags').value = arrayTags.join(", ");
+
+      // Módulo de Redes Sociais (Omnichannel Sem Emojis)
+      const hashtagsSocial = arrayTags.slice(0, 10).map(t => `#${t.replace(/\s+/g, '')}`).join(' ');
+
+      // 1. Instagram Feed
+      document.getElementById('social-ig').value = `${titulo.toUpperCase()}\n\n${subtitulo}\n\n${textoPuro.substring(0, 1200)}...\n\nMatéria completa e cobertura detalhada no link da bio do Portal Pista Verde.\n\nJornalista Responsável: José Carlos Grites (DRT 0007501/SC)\n\n${hashtagsSocial}`;
+
+      // 2. Instagram Stories / Reels
+      document.getElementById('social-stories').value = `DESTAQUE NA CATEGORIA ${categoria.toUpperCase()}\n\n${titulo}\n\nAcesse o link na bio para ler a matéria completa no Portal Pista Verde.`;
+
+      // 3. TikTok Legenda e Roteiro
+      document.getElementById('social-tiktok').value = `LEGENDA TIKTOK:\n${titulo} - Cobertura da categoria ${categoria}.\n\nROTEIRO LOCAÇÃO (30 SEG):\n1. Abertura: ${titulo}.\n2. Fato Principal: ${subtitulo}.\n3. Fechamento: Confira a matéria completa no Portal Pista Verde.\n\n${hashtagsSocial}`;
+
+      // 4. Facebook Institucional
+      document.getElementById('social-fb').value = `PORTAL PISTA VERDE | COBERTURA OFICIAL\n\n${titulo}\n\n${subtitulo}\n\nLeia a matéria na íntegra no portal oficial: https://www.pistaverde.com.br/blog/${slug}`;
     }
   </script>
 </body>
