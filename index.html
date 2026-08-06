@@ -5,146 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PV ONE 1.0 Pro — Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
+    /* RESET & ESSENCIAIS PV ONE */
     * { box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background-color: #080d08; color: #f3f4f6; }
-    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 16px; font-weight: 600; font-size: 13px; color: #9ca3af; border-radius: 10px; transition: all 0.2s; border: 1px solid transparent; }
-    .sidebar-link:hover, .sidebar-link.active { background-color: #112211; color: #00ae35; border-color: #182e18; }
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background-color: #040704; border: 1px solid #182e18; font-size: 11px; font-weight: 600; color: #9ca3af; }
+    body { font-family: 'Poppins', sans-serif; background-color: #0b110b; color: #ffffff; margin: 0; padding: 0; }
+    
+    /* INTERFACE PV ONE */
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-weight: 600; font-size: 13px; color: #9ca3af; border-radius: 12px; transition: all 0.2s; text-decoration: none; }
+    .sidebar-link:hover, .sidebar-link.active { background-color: #142814; color: #00ae35; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background-color: #111811; border: 1px solid #1c3b1c; font-size: 11px; font-weight: 600; color: #9ca3af; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; background-color: #00ae35; box-shadow: 0 0 6px #00ae35; }
-    .tab-pill { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; background-color: #040704; border: 1px solid #182e18; color: #9ca3af; cursor: pointer; }
-    .tab-pill.active { background-color: #142814; border-color: #00ae35; color: #ffffff; }
-    .btn-action { background-color: #00ae35; color: #000; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-    .btn-action:hover { background-color: #00cd3e; }
+    
+    /* CSS OFICIAL DO MODELO DA MATÉRIA (PORTAL PISTA VERDE) */
+    .ppv-materia { font-family: "Poppins", "Inter", Arial, sans-serif; color: #21300c; background: #ffffff; line-height: 1.75; text-align: left; border-radius: 16px; overflow: hidden; }
+    .ppv-materia * { box-sizing: border-box; }
+    .ppv-hero { min-height: 480px; display: flex; align-items: flex-end; padding: 40px 24px; overflow: hidden; border-radius: 0 0 22px 22px; background: linear-gradient(90deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.70) 46%, rgba(0, 0, 0, 0.18) 100%), url("https://static.wixstatic.com/media/74713a_410fafbfc160486895cacbff35e65cbb~mv2.jpeg") center center / cover no-repeat; }
+    .ppv-hero-content { width: 100%; max-width: 920px; margin: 0 auto; }
+    .ppv-label { display: inline-block; margin-bottom: 16px; padding: 6px 14px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .ppv-hero-title { max-width: 900px; margin: 0 0 14px; color: #ffffff; font-size: clamp(28px, 4vw, 50px); font-weight: 900; line-height: 1.05; text-transform: uppercase; }
+    .ppv-underline { width: 80px; height: 5px; margin: 0 0 16px; border-radius: 999px; background: #00ae35; }
+    .ppv-subtitle { max-width: 790px; margin: 0; color: #f3f3f3; font-size: clamp(15px, 1.8vw, 19px); font-weight: 500; line-height: 1.45; }
+    .ppv-container { max-width: 760px; margin: 0 auto; padding: 32px 20px 50px; }
+    .ppv-info { margin: 0 0 30px; padding: 20px 22px; border-top: 5px solid #00ae35; border-radius: 16px; background: #f7f9f6; box-shadow: 0 10px 26px rgba(33, 48, 12, 0.08); }
+    .ppv-info p { margin: 6px 0; font-size: 14px; color: #21300c; }
+    .ppv-container > p { margin: 0 0 20px; color: #263618; font-size: 16px; }
+    .ppv-container h2 { margin: 36px 0 14px; color: #00ae35; font-size: 24px; font-weight: 900; line-height: 1.2; }
+    .ppv-container h3 { margin: 26px 0 10px; color: #21300c; font-size: 19px; font-weight: 800; line-height: 1.3; }
+    .ppv-link { color: #008a2a; font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    .ppv-inline-photo { margin: 28px 0; }
+    .ppv-inline-photo img { display: block; width: 100%; height: auto; max-height: 600px; object-fit: contain; border-radius: 16px; background: #101510; box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14); }
+    .ppv-inline-photo figcaption { padding: 8px 3px 0; color: #56634f; font-size: 12px; line-height: 1.5; }
+    .ppv-highlight { margin: 30px 0; padding: 20px 22px; border-left: 6px solid #00ae35; border-radius: 0 16px 16px 0; background: #f3f7f1; }
+    .ppv-highlight p { margin: 0; color: #21300c; font-size: 17px; font-weight: 700; line-height: 1.55; }
+    .ppv-ad { margin: 36px 0; overflow: hidden; border: 1px solid rgba(0, 174, 53, 0.35); border-radius: 18px; background: #101510; color: #ffffff; box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18); }
+    .ppv-ad-click { display: block; color: inherit; text-decoration: none; }
+    .ppv-ad-inner { display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: center; padding: 20px; }
+    .ppv-ad img { display: block; width: 100%; border-radius: 12px; background: #ffffff; }
+    .ppv-ad-tag { display: inline-block; margin-bottom: 8px; padding: 4px 10px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 10px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; }
+    .ppv-ad h3 { margin: 0 0 6px; color: #ffffff; font-size: 22px; font-weight: 900; }
+    .ppv-ad p { margin: 0 0 14px; color: #dfe7dc; font-size: 14px; line-height: 1.5; }
+    .ppv-ad-button, .ppv-sponsor-btn { display: inline-block; padding: 9px 16px; border-radius: 999px; background: #00ae35; color: #ffffff !important; font-size: 12px; font-weight: 900; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+    .ppv-result { margin: 28px 0; padding: 20px; border-top: 5px solid #00ae35; border-radius: 16px; background: #f7f9f6; }
+    .ppv-result h3 { margin-top: 0; }
+    .ppv-result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .ppv-result-item { padding: 12px; border: 1px solid #e3eadf; border-radius: 10px; background: #ffffff; }
+    .ppv-result-item strong { display: block; color: #00ae35; font-size: 12px; text-transform: uppercase; }
+    .ppv-creditos { margin-top: 36px; padding-top: 18px; border-top: 1px solid #dfe7dc; color: #4d5b43; font-size: 14px; line-height: 1.6; }
+    .ppv-creditos p { margin: 0 0 6px !important; font-size: 14px !important; }
+    .ppv-apoio { margin-top: 32px; padding: 24px 20px; border: 1px solid #e3eadf; border-radius: 18px; background: #f7f9f6; }
+    .ppv-apoio h2 { margin-top: 0; color: #21300c; font-size: 22px; }
+    .ppv-sponsor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .ppv-sponsor-card { display: flex; min-width: 0; flex-direction: column; padding: 18px; border-left: 5px solid #00ae35; border-radius: 14px; background: #ffffff; box-shadow: 0 10px 24px rgba(33, 48, 12, 0.08); }
+    .ppv-sponsor-card img { display: block; width: 100%; height: 95px; margin-bottom: 14px; object-fit: contain; }
+    .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300c; font-size: 18px; }
+    .ppv-sponsor-card p { margin: 0 0 16px; font-size: 13px; line-height: 1.55; color: #333333; }
+    .ppv-sponsor-btn { align-self: flex-start; margin-top: auto; }
+    .ppv-portal-footer { margin-top: 32px; padding: 24px 22px; border-top: 6px solid #00ae35; border-radius: 18px; background: #14240f; color: #ffffff; }
+    .ppv-portal-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .ppv-portal-mark { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 10px; background: #00ae35; color: #ffffff; font-size: 16px; font-weight: 900; }
+    .ppv-portal-name strong { display: block; color: #ffffff; font-size: 20px; line-height: 1; }
+    .ppv-portal-name span { color: #a9bf9e; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+    .ppv-portal-footer p { margin: 0 0 16px !important; color: #e6eee2 !important; font-size: 14px !important; line-height: 1.6; }
+    .ppv-portal-footer a { display: inline-block; padding: 9px 16px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 12px; font-weight: 900; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+
+    @media (max-width: 720px) {
+      .ppv-hero { min-height: 440px; padding: 28px 16px; }
+      .ppv-container { padding: 24px 14px 40px; }
+      .ppv-ad-inner { grid-template-columns: 1fr; }
+      .ppv-sponsor-grid, .ppv-result-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased">
-  <header class="h-16 border-b border-[#182e18] bg-[#080d08] px-6 flex items-center justify-between sticky top-0 z-50">
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOPBAR SUPERIOR (FIXO) -->
+  <header class="h-16 border-b border-[#182e18] bg-[#0b110b] px-6 flex items-center justify-between sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-[#00ae35] flex items-center justify-center font-black text-black text-lg">PV</div>
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="font-extrabold tracking-wider text-white text-base">PV ONE</span>
-          <span class="text-[10px] bg-[#00ae35]/20 text-[#00ae35] px-1.5 py-0.5 rounded border border-[#00ae35]/30 font-bold">v1.0 Pro</span>
-        </div>
-      </div>
+      <img src="https://static.wixstatic.com/media/74713a_2e376012845b44bf966a24a6f6e5b427~mv2.png" alt="Portal Pista Verde" class="h-8 object-contain">
+      <span class="font-extrabold tracking-wider text-white text-base">PV ONE <span class="text-xs bg-[#00ae35]/20 text-[#00ae35] px-2 py-0.5 rounded border border-[#00ae35]/30 ml-1">v1.0 Pro</span></span>
     </div>
-    <div class="hidden md:flex items-center gap-3">
-      <div class="status-badge"><span class="status-dot"></span> Gmail Sync</div>
-      <div class="status-badge"><span class="status-dot"></span> Gerador IA Ativo</div>
-      <div class="status-badge"><span class="status-dot"></span> API Wix: <span class="text-[#00ae35] ml-1">Conectada</span></div>
+    
+    <!-- BADGES DE STATUS EM TEMPO REAL -->
+    <div class="flex items-center gap-3">
+      <div class="status-badge"><span class="status-dot"></span> Gmail API</div>
+      <div class="status-badge"><span class="status-dot"></span> IA Pista Verde</div>
+      <div class="status-badge"><span class="status-dot"></span> Wix Studio API</div>
+      <div class="status-badge"><span class="status-dot"></span> Search Console</div>
     </div>
   </header>
 
-  <div class="flex flex-1 overflow-hidden">
-    <aside class="w-60 border-r border-[#182e18] bg-[#080d08] p-4 flex flex-col justify-between shrink-0">
-      <nav class="space-y-1.5">
-        <a href="#" class="sidebar-link active">Redação & Matérias</a>
-        <a href="#" class="sidebar-link">Fila de Publicação</a>
-        <a href="#" class="sidebar-link">Ativos de Redes</a>
-        <a href="#" class="sidebar-link">Conexão Wix</a>
+  <div class="flex flex-1">
+    <!-- SIDEBAR LATERAL (NAVEGAÇÃO) -->
+    <aside class="w-64 border-r border-[#182e18] bg-[#0b110b] p-4 flex flex-col justify-between">
+      <nav class="space-y-1">
+        <a href="#" class="sidebar-link active">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          Redação — Agências
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          Redação — Clientes PV
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+          Central de Redes Sociais
+        </a>
+        <a href="#" class="sidebar-link">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+          Configurações & Parceiros
+        </a>
       </nav>
-      <div class="text-[11px] text-gray-500 border-t border-[#182e18] pt-3">
-        <p class="font-bold text-gray-400">Portal Pista Verde</p>
+      <div class="text-[11px] text-gray-500 px-4 py-2 border-t border-[#182e18]">
+        Portal Pista Verde © 2026<br>Grid aquecido com responsabilidade.
       </div>
     </aside>
 
-    <main class="flex-1 p-6 overflow-y-auto bg-[#050805]">
-      <div class="flex items-center gap-2 border-b border-[#182e18] pb-3 mb-6">
-        <button class="tab-pill active">Fila Ativa</button>
-        <button class="tab-pill">Em Processamento</button>
-        <button class="tab-pill">Publicadas no Wix</button>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-4 bg-[#080d08] p-4 rounded-xl border border-[#182e18] space-y-3">
-          <h3 class="font-bold text-xs uppercase tracking-wider text-gray-300">Entradas & Releases</h3>
-          <input id="campo-busca" type="text" placeholder="Buscar piloto..." class="w-full bg-[#040704] border border-[#182e18] rounded-lg px-3 py-2 text-xs text-white">
-          <div id="lista-releases" class="space-y-2">
-            <div class="p-3 rounded-lg bg-[#040704] border border-[#00ae35]">
-              <span class="text-[9px] font-bold uppercase text-[#00ae35]">Pronto para Wix</span>
-              <h4 class="font-bold text-xs text-white mt-1">Copa Brasil de Kart CBA — Imperatriz</h4>
-            </div>
-          </div>
-        </div>
-
-        <div class="lg:col-span-8 bg-[#080d08] p-5 rounded-xl border border-[#182e18] space-y-5">
-          <div class="flex items-center justify-between border-b border-[#182e18] pb-4">
-            <h2 class="font-extrabold text-sm text-white uppercase tracking-wider">Central de Redação & IA</h2>
-            <button id="btn-enviar" onclick="sendToWix()" class="btn-action px-5 py-2 rounded-lg text-xs">Publicar no Wix</button>
-          </div>
-
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Título da Matéria</label>
-              <input id="title" type="text" value="Copa Brasil de Kart CBA: Grandes disputas e novos campeões coroados em Imperatriz" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-semibold">
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Capa Hero Website (16:9)</label>
-                <input id="coverImage" type="text" value="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Vídeo MP4 Vertical (9:16)</label>
-                <input id="videoUrl" type="text" value="https://assets.mixkit.co/videos/preview/mixkit-race-car-driving-on-a-track-41562-large.mp4" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2.5 text-xs text-white font-mono">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Conteúdo da Matéria</label>
-              <textarea id="richContent" rows="5" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-3 text-xs text-gray-200">A 27ª edição da Copa Brasil de Kart foi encerrada no Kartódromo de Imperatriz (MA) com corridas de alto nível técnico. O Portal Pista Verde acompanhou de perto as finais das categorias Mirim, Cadete, Sênior e Graduados.</textarea>
-            </div>
-          </div>
-
-          <div class="border-t border-[#182e18] pt-4 space-y-3">
-            <h3 class="font-extrabold text-xs text-[#00ae35] uppercase tracking-wider">Ativos de Mídia para Redes</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label class="text-[11px] font-bold text-gray-300 uppercase block mb-1">Legenda Instagram</label>
-                <textarea id="instaLegenda" rows="3" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300">🏁 FINAL HISTÓRICA NA COPA BRASIL DE KART! 🏆 Imperatriz (MA) foi palco de chegadas de tirar o fôlego. Acesse o Portal Pista Verde para ler a matéria completa!</textarea>
-              </div>
-              <div>
-                <label class="text-[11px] font-bold text-gray-300 uppercase block mb-1">Roteiro TikTok / Reels</label>
-                <textarea id="tiktokRoteiro" rows="3" class="w-full bg-[#040704] border border-[#182e18] rounded-lg p-2 text-xs text-gray-300">[00:00-00:03] A Copa Brasil de Kart 2026 conheceu seus grandes campeões! [00:03-00:07] Disputas no milésimo de segundo decidiram os títulos no Maranhão!</textarea>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- ÁREA PRINCIPAL DO PAINEL -->
+    <main class="flex-1 p-6 overflow-y-auto bg-[#060a06]">
+      <div class="border border-dashed border-[#182e18] rounded-2xl p-8 text-center text-gray-400">
+        <p class="font-semibold text-sm">Módulo 1 — Shell e Estrutura Globais Aplicados com Sucesso!</p>
+        <p class="text-xs text-gray-500 mt-1">Aguardando o próximo comando para acoplar o Módulo 2 (Formulário do Editor & Motor IA).</p>
       </div>
     </main>
   </div>
 
-  <script>
-    async function sendToWix() {
-      const btn = document.getElementById('btn-enviar');
-      btn.innerText = "Enviando ao Wix...";
-      btn.disabled = true;
-
-      const payload = {
-        title: document.getElementById('title').value,
-        coverImage: document.getElementById('coverImage').value,
-        videoUrl: document.getElementById('videoUrl').value,
-        content: document.getElementById('richContent').value,
-        instaLegenda: document.getElementById('instaLegenda').value,
-        tiktokRoteiro: document.getElementById('tiktokRoteiro').value
-      };
-
-      try {
-        await fetch('/api/wix', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        alert("✅ Matéria enviada para o Wix com sucesso!");
-      } catch (err) {
-        alert("⚠️ Dados salvos localmente no painel.");
-      } finally {
-        btn.innerText = "Publicar no Wix";
-        btn.disabled = false;
-      }
-    }
-  </script>
 </body>
 </html>
