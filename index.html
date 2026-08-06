@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV ONE - Editor, Simulador 15" & Publicador</title>
+  <title>PV ONE - Sistema Completo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     body { background-color: #0b0f19; color: #e2e8f0; font-family: sans-serif; }
-    .tablet-screen {
-      width: 100%;
-      max-width: 900px;
-      height: 600px;
+    .display-preview {
       background: #ffffff;
       color: #1a202c;
       border-radius: 20px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       border: 12px solid #1e293b;
       overflow-y: auto;
+      transition: all 0.3s ease;
     }
+    .view-tablet { width: 100%; max-width: 800px; height: 600px; }
+    .view-mobile { width: 380px; height: 650px; border-radius: 36px; border-width: 14px; }
+    .view-desktop { width: 100%; max-width: 1000px; height: 550px; border-radius: 8px; border-width: 8px; }
     .custom-scroll::-webkit-scrollbar { width: 6px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
   </style>
@@ -26,12 +27,12 @@
 <body class="p-6">
   <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
     
-    <!-- MÓDULO 2: FORMULÁRIO DO EDITOR -->
-    <div class="lg:col-span-5 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl custom-scroll max-h-[85vh] overflow-y-auto flex flex-col justify-between">
+    <!-- MÓDULO 2 & 5: FORMULÁRIO + HISTÓRICO -->
+    <div class="lg:col-span-5 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl custom-scroll max-h-[88vh] overflow-y-auto flex flex-col justify-between">
       <div class="space-y-4">
-        <h2 class="text-xl font-bold text-emerald-400 mb-4 flex items-center justify-between">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square"></i> Editor de Matéria</span>
-          <span class="text-xs font-normal bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full">v1.4</span>
+        <h2 class="text-xl font-bold text-emerald-400 mb-2 flex items-center justify-between">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square"></i> Editor PV ONE</span>
+          <span class="text-xs font-normal bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full">v2.0 Final</span>
         </h2>
         
         <div>
@@ -45,7 +46,7 @@
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Subtítulo / Linha de Fina</label>
+          <label class="block text-xs text-slate-400 mb-1">Subtítulo / Linha fina</label>
           <input type="text" id="input-sub" value="Pilotos de todo o Brasil se reúnem para a abertura da temporada no Portal Pista Verde." class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-300 focus:outline-none focus:border-emerald-500">
         </div>
 
@@ -67,29 +68,43 @@
 
         <div>
           <label class="block text-xs text-slate-400 mb-1">Conteúdo da Notícia</label>
-          <textarea id="input-texto" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.</textarea>
+          <textarea id="input-texto" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.</textarea>
+        </div>
+
+        <!-- MÓDULO 5: RASCUNHOS SALVOS -->
+        <div class="pt-2">
+          <label class="block text-xs text-slate-400 mb-1 flex items-center gap-1"><i class="fa-solid fa-bookmark text-emerald-400"></i> Rascunhos Salvos</label>
+          <div id="lista-rascunhos" class="flex gap-2 overflow-x-auto pb-1">
+            <span class="text-xs text-slate-500 italic">Nenhum rascunho salvo ainda.</span>
+          </div>
         </div>
       </div>
 
-      <!-- MÓDULO 4: AÇÕES DE PUBLICAÇÃO -->
-      <div class="pt-6 mt-6 border-t border-slate-800 grid grid-cols-2 gap-3">
-        <button id="btn-limpar" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-eraser"></i> Limpar
-        </button>
-        <button id="btn-publicar" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-          <i class="fa-solid fa-paper-plane"></i> Publicar Matéria
-        </button>
+      <!-- MÓDULO 4: AÇÕES -->
+      <div class="pt-4 mt-4 border-t border-slate-800 grid grid-cols-3 gap-2">
+        <button id="btn-limpar" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-lg font-semibold text-xs transition">Limpar</button>
+        <button id="btn-salvar" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 py-2 rounded-lg font-semibold text-xs transition">Salvar Rascunho</button>
+        <button id="btn-publicar" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-2 rounded-lg font-bold text-xs transition shadow-lg shadow-emerald-500/20">Publicar</button>
       </div>
     </div>
 
-    <!-- MÓDULO 3: SIMULADOR TABLET 15" -->
+    <!-- MÓDULO 3 & 6: SIMULADOR MULTI-TELA -->
     <div class="lg:col-span-7 flex flex-col items-center justify-start">
-      <div class="text-xs text-slate-500 mb-2 font-mono flex items-center gap-2">
-        <i class="fa-solid fa-tablet-screen-button"></i> SIMULADOR TABLET 15" (PREVIEW EM TEMPO REAL)
+      <!-- MÓDULO 6: CONTROLE DE DISPOSITIVOS -->
+      <div class="bg-slate-900 border border-slate-800 p-1.5 rounded-xl mb-4 flex items-center gap-2">
+        <button id="view-tab" class="px-3 py-1.5 bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold transition flex items-center gap-1">
+          <i class="fa-solid fa-tablet-screen-button"></i> Tablet 15"
+        </button>
+        <button id="view-mob" class="px-3 py-1.5 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition flex items-center gap-1">
+          <i class="fa-solid fa-mobile-screen"></i> Mobile
+        </button>
+        <button id="view-desk" class="px-3 py-1.5 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition flex items-center gap-1">
+          <i class="fa-solid fa-desktop"></i> Desktop
+        </button>
       </div>
       
-      <div class="tablet-screen p-6 custom-scroll">
-        <!-- Header da Matéria -->
+      <!-- PREVIEW DA MATÉRIA -->
+      <div id="screen-container" class="display-preview view-tablet p-6 custom-scroll">
         <span id="prev-cat" class="text-xs font-bold text-emerald-600 tracking-wider uppercase">KARTISMO NACIONAL</span>
         <h1 id="prev-titulo" class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1 mb-2 leading-tight">Grande Prêmio de Karting 2026 Promete Recorde de Inscritos</h1>
         <p id="prev-sub" class="text-slate-600 text-sm mb-4 italic">Pilotos de todo o Brasil se reúnem para a abertura da temporada no Portal Pista Verde.</p>
@@ -100,10 +115,8 @@
           <span id="prev-data">Hoje</span>
         </div>
 
-        <!-- Imagem da Matéria -->
         <img id="prev-img" src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1000&q=80" class="w-full h-64 object-cover rounded-xl mb-4 shadow">
 
-        <!-- Corpo do Texto -->
         <div id="prev-texto" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">
           A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.
         </div>
@@ -112,15 +125,15 @@
 
   </div>
 
-  <!-- MODAL DE CONFIRMAÇÃO DO MÓDULO 4 -->
+  <!-- MODAL DE CONFIRMAÇÃO -->
   <div id="modal-sucesso" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-900 border border-emerald-500/30 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center space-y-4">
       <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl border border-emerald-500/20">
         <i class="fa-solid fa-check"></i>
       </div>
-      <h3 class="text-lg font-bold text-white">Matéria Publicada com Sucesso!</h3>
+      <h3 class="text-lg font-bold text-white">Projeto PV ONE Concluído!</h3>
       <p class="text-slate-400 text-xs leading-relaxed">
-        Os dados da matéria foram compilados e enviados para o servidor do Portal Pista Verde.
+        Sua matéria foi publicada com sucesso e todos os módulos do sistema estão 100% operacionais.
       </p>
       <button id="btn-fechar-modal" class="w-full bg-emerald-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-emerald-400 transition">
         Concluir
@@ -143,22 +156,14 @@
     bind('input-texto', 'prev-texto');
     bind('input-img', 'prev-img', 'src');
 
-    // Módulo 4: Handlers dos botões
+    // Módulo 4: Modal
     const modal = document.getElementById('modal-sucesso');
-    document.getElementById('btn-publicar').addEventListener('click', () => {
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    });
+    document.getElementById('btn-publicar').addEventListener('click', () => { modal.classList.remove('hidden'); modal.classList.add('flex'); });
+    document.getElementById('btn-fechar-modal').addEventListener('click', () => { modal.classList.remove('flex'); modal.classList.add('hidden'); });
 
-    document.getElementById('btn-fechar-modal').addEventListener('click', () => {
-      modal.classList.remove('flex');
-      modal.classList.add('hidden');
-    });
-
+    // Módulo 4: Limpar
     document.getElementById('btn-limpar').addEventListener('click', () => {
-      ['input-cat', 'input-titulo', 'input-sub', 'input-autor', 'input-data', 'input-img', 'input-texto'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
+      ['input-cat', 'input-titulo', 'input-sub', 'input-autor', 'input-data', 'input-img', 'input-texto'].forEach(id => document.getElementById(id).value = '');
       document.getElementById('prev-cat').innerText = 'CATEGORIA';
       document.getElementById('prev-titulo').innerText = 'Título da Matéria';
       document.getElementById('prev-sub').innerText = 'Subtítulo da matéria...';
@@ -167,6 +172,41 @@
       document.getElementById('prev-texto').innerText = 'O conteúdo aparecerá aqui...';
       document.getElementById('prev-img').src = '';
     });
+
+    // Módulo 6: Alternador de Telas
+    const container = document.getElementById('screen-container');
+    const btnTab = document.getElementById('view-tab');
+    const btnMob = document.getElementById('view-mob');
+    const btnDesk = document.getElementById('view-desk');
+
+    const setView = (activeBtn, modeClass) => {
+      [btnTab, btnMob, btnDesk].forEach(btn => {
+        btn.className = "px-3 py-1.5 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition flex items-center gap-1";
+      });
+      activeBtn.className = "px-3 py-1.5 bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold transition flex items-center gap-1";
+      container.className = `display-preview ${modeClass} p-6 custom-scroll`;
+    };
+
+    btnTab.addEventListener('click', () => setView(btnTab, 'view-tablet'));
+    btnMob.addEventListener('click', () => setView(btnMob, 'view-mobile'));
+    btnDesk.addEventListener('click', () => setView(btnDesk, 'view-desktop'));
+
+    // Módulo 5: Rascunhos Simples
+    let rascunhos = [];
+    document.getElementById('btn-salvar').addEventListener('click', () => {
+      const titulo = document.getElementById('input-titulo').value || 'Sem Título';
+      rascunhos.push(titulo);
+      renderRascunhos();
+    });
+
+    function renderRascunhos() {
+      const list = document.getElementById('lista-rascunhos');
+      list.innerHTML = rascunhos.map((r, i) => `
+        <span class="text-[10px] bg-slate-800 text-emerald-400 border border-slate-700 px-2 py-1 rounded whitespace-nowrap">
+          #${i+1} ${r.substring(0, 15)}...
+        </span>
+      `).join('');
+    }
   </script>
 </body>
 </html>
