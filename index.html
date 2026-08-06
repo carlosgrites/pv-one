@@ -3,452 +3,486 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV ONE - Central de Produção Pista Verde</title>
+  <title>PV ONE v3.0 - Central Editorial Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
   <style>
-    body { background-color: #0b0f19; color: #e2e8f0; font-family: 'Inter', sans-serif; }
-    .tablet-screen {
-      width: 100%;
-      max-width: 800px;
-      height: 600px;
-      background: #0d131f;
-      color: #1a202c;
-      border-radius: 20px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-      border: 12px solid #1e293b;
-      overflow-y: auto;
-    }
+    body { background-color: #080c14; color: #e2e8f0; font-family: 'Inter', sans-serif; }
     .custom-scroll::-webkit-scrollbar { width: 6px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    .aba-ativa { background-color: #10b981; color: #022c22; font-weight: 800; }
-    .aba-inativa { background-color: #1e293b; color: #94a3b8; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    
+    /* ESTILOS NATIVOS DO MODELO PISTA VERDE (APLICADOS NO LEITOR) */
+    .ppv-materia { font-family: "Poppins", "Inter", sans-serif; color: #21300c; background: #ffffff; line-height: 1.75; border-radius: 12px; overflow: hidden; }
+    .ppv-hero { min-height: 420px; display: flex; align-items: flex-end; padding: 36px 24px; position: relative; background-size: cover; background-position: center; }
+    .ppv-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%); }
+    .ppv-hero-content { position: relative; z-index: 2; width: 100%; max-width: 920px; margin: 0 auto; }
+    .ppv-label { display: inline-block; margin-bottom: 12px; padding: 6px 14px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .ppv-hero-title { margin: 0 0 12px; color: #ffffff; font-size: clamp(24px, 3.5vw, 42px); font-weight: 900; line-height: 1.1; text-transform: uppercase; font-family: "Anton", sans-serif; }
+    .ppv-underline { width: 70px; height: 4px; margin: 0 0 14px; border-radius: 999px; background: #00ae35; }
+    .ppv-subtitle { margin: 0; color: #f3f3f3; font-size: clamp(14px, 1.5vw, 18px); font-weight: 500; line-height: 1.45; }
+    .ppv-container { max-width: 860px; margin: 0 auto; padding: 30px 20px 50px; }
+    
+    /* BANNERS DE PUBLICIDADE E APOIO */
+    .ppv-ad { margin: 34px 0; border: 1px solid rgba(0,174,53,.35); border-radius: 16px; background: #101510; color: #ffffff; overflow: hidden; }
+    .ppv-ad-inner { display: grid; grid-template-columns: 140px 1fr; gap: 18px; align-items: center; padding: 18px; }
+    .ppv-ad img { width: 100%; border-radius: 10px; background: #fff; object-fit: contain; }
+    .ppv-ad-tag { display: inline-block; margin-bottom: 6px; padding: 4px 8px; border-radius: 999px; background: #00ae35; color: #fff; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+    .ppv-ad h3 { margin: 0 0 6px; color: #fff; font-size: 20px; font-weight: 900; }
+    .ppv-ad p { margin: 0 0 12px; color: #dfe7dc; font-size: 13px; line-height: 1.45; }
+    .ppv-ad-button, .ppv-sponsor-btn { display: inline-block; padding: 8px 16px; border-radius: 999px; background: #00ae35; color: #fff !important; font-size: 11px; font-weight: 900; text-transform: uppercase; text-decoration: none; }
+    
+    .ppv-apoio { margin-top: 38px; padding: 24px; border: 1px solid #e3eadf; border-radius: 18px; background: #f7f9f6; }
+    .ppv-sponsor-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; margin-top: 16px; }
+    .ppv-sponsor-card { display: flex; flex-direction: column; padding: 16px; border-left: 4px solid #00ae35; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,.05); }
+    .ppv-sponsor-card img { width: 100%; height: 70px; object-fit: contain; margin-bottom: 12px; }
+    .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300c; font-size: 16px; font-weight: 800; }
+    .ppv-sponsor-card p { margin: 0 0 12px; font-size: 12px; color: #4d5b43; line-height: 1.5; }
+    
+    /* DISPOSITIVOS DE VISUALIZAÇÃO */
+    .view-pc { width: 100%; max-width: 1000px; }
+    .view-tablet { width: 768px; margin: 0 auto; }
+    .view-mobile { width: 375px; margin: 0 auto; }
   </style>
 </head>
 <body class="p-3 md:p-6">
-  <div class="max-w-[1700px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+  <div class="max-w-[1750px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
     
-    <!-- COLUNA DA ESQUERDA: FORMULÁRIO -->
-    <div class="lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 custom-scroll max-h-[94vh] overflow-y-auto space-y-4">
+    <!-- COLUNA DA ESQUERDA: FORMULÁRIO DE ENTRADA -->
+    <div class="lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 custom-scroll max-h-[95vh] overflow-y-auto space-y-4">
       
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center gap-2">
-          <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-          <h2 class="text-lg font-black tracking-wider text-white">PV ONE <span class="text-xs text-emerald-400 font-normal">v3.0 Pista</span></h2>
+          <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse"></div>
+          <h2 class="text-base font-black tracking-wider text-white">PV ONE <span class="text-xs text-emerald-400 font-normal">v3.0 Pista</span></h2>
         </div>
-        <span class="text-[10px] font-mono bg-slate-800 text-slate-400 px-2 py-1 rounded">Editor de Matérias</span>
+        <span class="text-[10px] font-mono bg-slate-800 text-emerald-400 px-2 py-1 rounded border border-emerald-500/20">Bloco 1 Oficial</span>
       </div>
 
+      <!-- ORIGEM DA MATÉRIA -->
       <div class="flex rounded-xl overflow-hidden p-1 bg-slate-950 border border-slate-800">
-        <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="w-1/2 py-2 text-xs rounded-lg transition aba-ativa">1- Matéria Recebida (Release)</button>
-        <button id="tab-propria" onclick="trocarOrigem('propria')" class="w-1/2 py-2 text-xs rounded-lg transition aba-inativa">2- Matéria Própria (Pista)</button>
+        <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950">1- Release Recebido</button>
+        <button id="tab-propria" onclick="trocarOrigem('propria')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400">2- Matéria Própria</button>
       </div>
 
       <div class="space-y-3">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Título Principal (H1 / Capa)</label>
-          <input type="text" id="input-h1" oninput="processarTudo()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:border-emerald-500 outline-none font-bold" placeholder="Ex: 27ª COPA BRASIL DE KART: IRMÃOS EMERICK CHEGAM AO MARANHÃO">
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Título Principal (H1)</label>
+          <input type="text" id="input-h1" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-emerald-500 outline-none font-bold" value="COPA BRASIL DE KART DA CBA CHEGA AO FIM EM IMPERATRIZ COM SETE CAMPEÕES">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Subtítulo / Linha Fina (Texto da Capa)</label>
-          <input type="text" id="input-subtitulo" oninput="processarTudo()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-slate-200 focus:border-emerald-500 outline-none" placeholder="Ex: Os pilotos do Espírito Santo buscam títulos inéditos em Imperatriz">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria (1 de 10 Selecionáveis)</label>
-          <select id="input-categoria" onchange="processarTudo()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-sm text-emerald-400 font-extrabold focus:border-emerald-500 outline-none">
-            <option value="COPA DO BRASIL">COPA DO BRASIL</option>
-            <option value="KARTISMO">KARTISMO</option>
-            <option value="AUTOMOBILISMO">AUTOMOBILISMO</option>
-            <option value="SUSTENTABILIDADE">SUSTENTABILIDADE</option>
-            <option value="KIG RJ 2026">KIG RJ 2026</option>
-            <option value="COPA SÃO PAULO LIGHT">COPA SÃO PAULO LIGHT</option>
-            <option value="CIRCUITO PAULISTA DE KART">CIRCUITO PAULISTA DE KART</option>
-            <option value="SUL BRASILEIRO DE KART">SUL BRASILEIRO DE KART</option>
-            <option value="BRK">BRK</option>
-            <option value="ALDEIA KART CUP">ALDEIA KART CUP</option>
-          </select>
-        </div>
-
-        <!-- UPLOAD DUAL -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div class="p-3 bg-slate-950 border border-emerald-500/30 rounded-xl space-y-1">
-            <label class="block text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-camera"></i> Foto 1: Capa Oficial
-            </label>
-            <input type="file" id="input-file-capa" accept="image/*" class="w-full text-[11px] text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-500 file:text-slate-950 hover:file:bg-emerald-400 cursor-pointer">
-          </div>
-
-          <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
-            <label class="block text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
-              <i class="fa-solid fa-images"></i> Fotos 2+: Galeria Corpo
-            </label>
-            <input type="file" id="input-file-galeria" accept="image/*" multiple class="w-full text-[11px] text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
-          </div>
-        </div>
-
-        <!-- UPLOAD DE LOGOS DOS PATROCINADORES -->
-        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-          <label class="block text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
-            <i class="fa-solid fa-handshake"></i> Logos dos Patrocinadores (PNG com fundo transparente)
-          </label>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <span class="text-[10px] text-slate-400 block mb-0.5">Patrocinador 1 (ex: Mega Kart):</span>
-              <input type="file" id="input-logo-patro1" accept="image/*" class="w-full text-[10px] text-slate-400 file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-slate-800 file:text-slate-200 cursor-pointer">
-            </div>
-            <div>
-              <span class="text-[10px] text-slate-400 block mb-0.5">Patrocinador 2:</span>
-              <input type="file" id="input-logo-patro2" accept="image/*" class="w-full text-[10px] text-slate-400 file:mr-1 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-slate-800 file:text-slate-200 cursor-pointer">
-            </div>
-          </div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Subtítulo / Linha Fina</label>
+          <input type="text" id="input-subtitulo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-emerald-500 outline-none" value="Após duas semanas, 27ª edição terminou com grandes corridas e títulos históricos em Imperatriz.">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Créditos da Foto</label>
-            <input type="text" id="input-fotografo" oninput="processarTudo()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white focus:border-emerald-500 outline-none" placeholder="Ex: DARKSIDE KARTS">
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria Oficial Wix</label>
+            <select id="input-categoria" onchange="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-bold focus:border-emerald-500 outline-none">
+              <option value="Copa do Brasil de Kart">Copa do Brasil de Kart</option>
+              <option value="Kartismo">Kartismo</option>
+              <option value="Automobilismo">Automobilismo</option>
+              <option value="Sustentabilidade">Sustentabilidade</option>
+              <option value="KIG RJ 2026">KIG RJ 2026</option>
+              <option value="Copa São Paulo Light">Copa São Paulo Light</option>
+              <option value="Circuito Paulista de Kart">Circuito Paulista de Kart</option>
+              <option value="Sul Brasileiro de Kart">Sul Brasileiro de Kart</option>
+              <option value="BRK">BRK</option>
+              <option value="Aldeia Kart Cup">Aldeia Kart Cup</option>
+            </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Fonte / Assessoria</label>
-            <input type="text" id="input-creditos" oninput="processarTudo()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white focus:border-emerald-500 outline-none" placeholder="Ex: KMCom Assessoria">
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Fotógrafo / Imagem</label>
+            <input type="text" id="input-fotografo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="Fábio Oliveira / Radical Motors">
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Release Completo / Corpo do Texto</label>
-          <textarea id="input-release" oninput="processarTudo()" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-emerald-500 outline-none leading-relaxed" placeholder="Cole o release completo aqui..."></textarea>
+        <!-- UPLOAD DE FOTOGRAFIAS -->
+        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+          <label class="block text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-camera"></i> Fotografias da Matéria (Primeira = Capa)
+          </label>
+          <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-[11px] text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-500 file:text-slate-950 hover:file:bg-emerald-400 cursor-pointer">
+          <span class="text-[10px] text-slate-500 block">Regra: 1 Foto=Capa | 2 a 4 Fotos=Corpo | 5+ Fotos=Carrossel no final</span>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">@ do Piloto (Instagram)</label>
-          <input type="text" id="input-piloto-insta" oninput="processarTudo()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white focus:border-emerald-500 outline-none" placeholder="@piloto_oficial">
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Release / Corpo da Matéria</label>
+          <textarea id="input-release" oninput="processarMateria()" rows="6" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-emerald-500 outline-none leading-relaxed" placeholder="Cole o texto completo do release aqui..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Fonte / Assessoria</label>
+            <input type="text" id="input-creditos" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="Comunicação CBA">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">@ do Piloto (Instagram)</label>
+            <input type="text" id="input-piloto-insta" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" placeholder="@piloto_oficial">
+          </div>
         </div>
       </div>
 
-      <button onclick="processarTudo()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-        <i class="fa-solid fa-sync"></i> REPROCESSAR MATÉRIA E ARTES
+      <button onclick="processarMateria()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 uppercase tracking-wider">
+        <i class="fa-solid fa-rotate"></i> Gerar Matéria PV & Redes Sociais
       </button>
     </div>
 
-    <!-- COLUNA DA DIREIRA: PREVIEW & ARTES -->
-    <div class="lg:col-span-7 space-y-6 custom-scroll max-h-[94vh] overflow-y-auto pr-2">
+    <!-- COLUNA DA DIREIRA: PRÉVIAS & EXPORTAÇÕES -->
+    <div class="lg:col-span-7 space-y-5 custom-scroll max-h-[95vh] overflow-y-auto pr-1">
       
-      <!-- PREVIEW CAPA -->
-      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
+      <!-- GERADOR GRÁFICO DE CAPAS (1080p) -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
           <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-award"></i> Modelo Oficial Pista Verde (Capa do Site & Redes)
+            <i class="fa-solid fa-image"></i> Capas Gráficas 1080p (Modelo Oficial)
           </h3>
-          <span class="text-[10px] text-slate-500 font-mono">1080 x 1920 (Proporção Stories/TikTok/Capa)</span>
+          <span class="text-[10px] text-slate-500 font-mono">Renderizador Canvas Proporcional</span>
         </div>
 
-        <div class="flex flex-col md:flex-row items-center gap-6 justify-center">
+        <div class="flex flex-col md:flex-row items-center gap-5 justify-center">
           <div class="relative shadow-2xl rounded-xl overflow-hidden border border-slate-700 bg-black">
-            <canvas id="canvas-capa-oficial" width="360" height="640" class="block"></canvas>
+            <canvas id="canvas-capa-oficial" width="270" height="480" class="block"></canvas>
           </div>
 
-          <div class="space-y-3 w-full md:w-64">
-            <span class="text-xs font-bold text-slate-300 block border-b border-slate-800 pb-1">Gerar Arquivos Prontos:</span>
+          <div class="space-y-2 w-full md:w-64">
+            <span class="text-xs font-bold text-slate-300 block border-b border-slate-800 pb-1">Exportar Arquivos 1080p:</span>
             
-            <a id="link-download-capa" download="capa-oficial-pistaverde.png" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow transition cursor-pointer">
-              <i class="fa-solid fa-download"></i> Baixar Capa Oficial (.PNG)
+            <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow transition cursor-pointer">
+              <i class="fa-solid fa-download"></i> Capa Stories (1080x1920)
             </a>
 
-            <a id="link-download-feed" download="feed-instagram-pistaverde.png" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition cursor-pointer">
-              <i class="fa-solid fa-instagram"></i> Baixar Versão Feed (1080x1350)
+            <a id="link-download-feed" download="capa-feed-pistaverde.png" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+              <i class="fa-solid fa-instagram"></i> Capa Feed (1080x1350)
+            </a>
+
+            <a id="link-download-tiktok" download="capa-tiktok-pistaverde.png" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition cursor-pointer">
+              <i class="fa-solid fa-tiktok"></i> Capa TikTok MP4 (1080x1920)
             </a>
           </div>
         </div>
       </div>
 
-      <!-- TABLET 15" -->
-      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
-        <div class="text-xs font-black text-slate-400 tracking-wider uppercase flex items-center justify-between">
-          <span><i class="fa-solid fa-tablet-screen-button"></i> Leitura da Matéria no Tablet 15" (Simulação Pista Verde)</span>
-          <span class="text-[10px] text-slate-500">Formato Wix Studio</span>
+      <!-- LEITOR RESPONSIVO DA MATÉRIA -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h3 class="text-xs font-black text-slate-300 uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-desktop"></i> Simulador Responsivo de Leitura (Modelo Oficial Pista Verde)
+          </h3>
+          
+          <div class="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <button onclick="mudarView('pc')" class="px-2 py-1 text-[10px] font-bold rounded text-slate-300 hover:text-white">PC</button>
+            <button onclick="mudarView('tablet')" class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500 text-slate-950">Tablet 15"</button>
+            <button onclick="mudarView('mobile')" class="px-2 py-1 text-[10px] font-bold rounded text-slate-300 hover:text-white">Celular</button>
+          </div>
         </div>
 
-        <div class="tablet-screen p-6 custom-scroll mx-auto">
-          <div class="relative rounded-xl overflow-hidden mb-6 border border-slate-800">
-            <img id="prev-capa-tablet" src="https://via.placeholder.com/800x450?text=Capa+Oficial+Pista+Verde" class="w-full h-auto object-cover">
-          </div>
-
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-4 pb-2 border-b border-slate-800">
-            <span>Fonte/Créditos: <strong id="prev-creditos" class="text-slate-200">Pista Verde</strong></span>
-            <span>Foto: <strong id="prev-fotografo" class="text-slate-200">Divulgação</strong></span>
-          </div>
-
-          <div id="prev-corpo-texto" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line space-y-4">
-            O release formatado aparecerá aqui...
-          </div>
-
-          <div id="prev-galeria-container" class="mt-6 pt-4 border-t border-slate-800 hidden">
-            <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-3"><i class="fa-solid fa-images"></i> Galeria da Corrida</h4>
-            <div id="prev-galeria-grid" class="grid grid-cols-2 gap-3"></div>
+        <div class="bg-slate-950 p-3 rounded-xl overflow-x-auto">
+          <div id="leitor-container" class="view-tablet transition-all duration-300">
+            <!-- LEITOR DA MATÉRIA RENDERIZADO VIA JS -->
+            <div id="leitor-materia-html"></div>
           </div>
         </div>
       </div>
 
-      <!-- PAINEL SEO -->
-      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
+      <!-- REDES SOCIAIS & LEGENDAS -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
         <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-magnifying-glass"></i> Estrutura de SEO (Wix & Search Console)
+          <i class="fa-solid fa-hashtag"></i> Textos Formatos para Instagram & TikTok
         </h3>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div><span class="text-slate-400 block mb-0.5">1. Palavra-Chave Foco:</span><input id="seo-kw" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2"></div>
-          <div><span class="text-slate-400 block mb-0.5">2. Title Tag:</span><input id="seo-title" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2"></div>
-          <div class="md:col-span-2"><span class="text-slate-400 block mb-0.5">3. Meta Descrição:</span><input id="seo-desc" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2"></div>
-          <div><span class="text-slate-400 block mb-0.5">4. Schema Wix:</span><input id="seo-schema" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2"></div>
-          <div><span class="text-slate-400 block mb-0.5">5. Alt Text:</span><input id="seo-alt" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 block mb-1">Legenda Instagram (até 2.000 carac.):</span>
+            <textarea id="text-insta" rows="5" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-lg p-2 text-xs font-mono"></textarea>
+          </div>
+          <div>
+            <span class="text-[11px] font-bold text-slate-400 block mb-1">Legenda TikTok:</span>
+            <textarea id="text-tiktok" rows="5" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-lg p-2 text-xs font-mono"></textarea>
+          </div>
         </div>
-      </div>
-
-      <!-- LEGENDA SOCIAL -->
-      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
-        <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-hashtag"></i> Legenda Formatada (Instagram & TikTok)
-        </h3>
-        <textarea id="social-legenda" rows="4" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded-lg p-2.5 text-xs font-mono"></textarea>
       </div>
 
     </div>
   </div>
 
   <script>
-    let imgCapaObjeto = null;
-    let imgPatro1 = null;
-    let imgPatro2 = null;
+    // CADASTROS OFICIAIS IMUTÁVEIS (DOCUMENTO OFICIAL PV ONE)
+    const PUBLICIDADE_ROTAÇÃO = [
+      {
+        id: "inovimpress",
+        nome: "Inovimpress",
+        logo: "https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg",
+        url: "https://anovimpress.com.br/",
+        desc: "Soluções em impressão para empresas, com venda e locação de impressoras e multifuncionais, suprimentos e suporte técnico.",
+        btn: "Acessar Inovimpress"
+      },
+      {
+        id: "casa-das-copias",
+        nome: "Casa das Cópias",
+        logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp",
+        url: "https://cdcj.shop/",
+        desc: "Sua gráfica digital, rápida e moderna. Da impressão de pequenos projetos a grandes tiragens corporativas, entregamos qualidade profissional com a agilidade que seu negócio precisa.",
+        btn: "Acessar Casa das Cópias"
+      }
+    ];
 
-    // Foto Capa
-    document.getElementById('input-file-capa').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
+    const APOIADORES_FIXO = {
+      nome: "Mega Kart",
+      logo: "https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp",
+      url: "https://www.megakart.com.br/",
+      desc: "O Projeto Mega é totalmente brasileiro, com sua primeira homologação CBA/CIK-FIA realizada em 1997. A Mega Kart cresce continuamente no mercado latino-americano de kart.",
+      btn: "Acessar Mega Kart"
+    };
+
+    const APOIADORES_ROTATIVO = [
+      { nome: "Paralego Racing", logo: "https://static.wixstatic.com/media/74713a_c2a31e7ef0e948d48509688f39df0428~mv2.webp", url: "https://www.paralegoracing.com.br/", desc: "A Paralego Racing reúne experiência, qualidade e variedade de produtos, acompanhando as tendências nacionais e internacionais.", btn: "Acessar Paralego Racing" },
+      { nome: "Krona Brasil", logo: "https://static.wixstatic.com/media/74713a_cefb94e3ec62450c9ef6ee52757e90e4~mv2.png", url: "https://www.instagram.com/krona_brasil/", desc: "Tubos e conexões. A Krona é show! Uma marca do Grupo Krona.", btn: "Acessar Krona Brasil" },
+      { nome: "Parque Kartódromo", logo: "https://static.wixstatic.com/media/67ee14_f99a22c74516489e926c13d31e2554b5~mv2.jpeg", url: "https://wa.me/5547988282163", desc: "Parque Kartódromo — Joinville (SC). O espaço ideal para experiências únicas. Kart, eventos, esportes e lazer.", btn: "Falar pelo WhatsApp" },
+      { nome: "Instituto Atenas", logo: "https://static.wixstatic.com/media/74713a_956fb3cc7d9e448383c6cfca36ad1966~mv2.png", url: "https://www.instagram.com/iatenas/", desc: "Referência em Medicina Integrada do Esporte e Saúde. Diretor Técnico: Dr. André Vilela — CRM/SC 8815.", btn: "Acessar Instituto Atenas" },
+      { nome: "Gatti FX Pirotecnia", logo: "https://static.wixstatic.com/media/74713a_4d7cb3fbe19b4013aaaa878ef9b41da3~mv2.jpeg", url: "https://wa.me/5511999403894", desc: "Know-how, inovação e arte. Criação de efeitos para shows, cinema, televisão e teatro.", btn: "Falar pelo WhatsApp" },
+      { nome: "Casa das Cópias", logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp", url: "https://cdcj.shop/", desc: "Sua gráfica digital, rápida e moderna. Entrega qualidade profissional com a agilidade que seu negócio precisa.", btn: "Acessar Casa das Cópias" },
+      { nome: "RBC Motorsport", logo: "https://static.wixstatic.com/media/74713a_59409fee566a4c33b01f0589c053e4fd~mv2.jpg", url: "https://www.instagram.com/rbcmotorsport/", desc: "Sua vitória é nosso objetivo. Há 30 anos fazendo campeões. Referência em preparação de motores.", btn: "Acessar RBC Motorsport" },
+      { nome: "Massagem Coradelli", logo: "https://static.wixstatic.com/media/74713a_9e14db73dbc94f818a4e5f5b9abd4ede~mv2.jpg", url: "https://www.instagram.com/massagemcoradelli/", desc: "Quiropraxia e massoterapia. Atendimento especializado em Joinville (SC).", btn: "Acessar Massagem Coradelli" },
+      { nome: "Formas Comunicação Visual", logo: "https://static.wixstatic.com/media/74713a_e9b6f001ce98428e98e9ffda55a1aa18~mv2.png", url: "https://www.instagram.com/formascomvisual/", desc: "Há 25 anos, referência nacional. Especialista em projetos especiais.", btn: "Falar com a equipe" },
+      { nome: "Clínica Cães & Gatos", logo: "https://static.wixstatic.com/media/74713a_cd90ff47c9cf42d5b6d5d6839cb5228a~mv2.webp", url: "https://clinicacaesegatos.com.br/", desc: "Dedicação e profissionalismo fazem parte do nosso dia a dia. Excelente corpo clínico.", btn: "Acessar Clínica" },
+      { nome: "Paragon Ergonomics", logo: "https://static.wixstatic.com/media/74713a_a555ee351a4d42d1bce1e33ee7fad659~mv2.avif", url: "https://paragonergonomics.wixsite.com/paragon/blank", desc: "Assentos esportivos para karts de competição das linhas Conforto e Agressiva.", btn: "Acessar Paragon Ergonomics" }
+    ];
+
+    let fotosCarregadas = [];
+    let indicePublicidade = 0; // Alterna entre Inovimpress e Casa das Cópias
+    let indiceApoiador = 0;     // Alterna entre os 11 apoiadores
+
+    function carregarFotos(e) {
+      const files = Array.from(e.target.files);
+      fotosCarregadas = [];
+      
+      let lidos = 0;
+      files.forEach((file, idx) => {
         const reader = new FileReader();
         reader.onload = function(evt) {
           const img = new Image();
           img.onload = function() {
-            imgCapaObjeto = img;
-            document.getElementById('prev-capa-tablet').src = evt.target.result;
-            processarTudo();
+            fotosCarregadas.push({ elem: img, src: evt.target.result, ordem: idx });
+            lidos++;
+            if (lidos === files.length) {
+              fotosCarregadas.sort((a, b) => a.ordem - b.ordem);
+              processarMateria();
+            }
           };
           img.src = evt.target.result;
         };
         reader.readAsDataURL(file);
-      }
-    });
-
-    // Logo Patrocinador 1
-    document.getElementById('input-logo-patro1').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const img = new Image();
-          img.onload = function() { imgPatro1 = img; processarTudo(); };
-          img.src = evt.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Logo Patrocinador 2
-    document.getElementById('input-logo-patro2').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const img = new Image();
-          img.onload = function() { imgPatro2 = img; processarTudo(); };
-          img.src = evt.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Galeria
-    document.getElementById('input-file-galeria').addEventListener('change', function(e) {
-      const files = e.target.files;
-      const grid = document.getElementById('prev-galeria-grid');
-      const container = document.getElementById('prev-galeria-container');
-      grid.innerHTML = '';
-
-      if (files.length > 0) {
-        container.classList.remove('hidden');
-        Array.from(files).forEach(file => {
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            const imgElem = document.createElement('img');
-            imgElem.src = evt.target.result;
-            imgElem.className = 'w-full h-32 object-cover rounded-lg border border-slate-700';
-            grid.appendChild(imgElem);
-          };
-          reader.readAsDataURL(file);
-        });
-      } else {
-        container.classList.add('hidden');
-      }
-    });
+      });
+    }
 
     function trocarOrigem(tipo) {
-      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'w-1/2 py-2 text-xs rounded-lg transition aba-ativa' : 'w-1/2 py-2 text-xs rounded-lg transition aba-inativa';
-      document.getElementById('tab-propria').className = tipo === 'propria' ? 'w-1/2 py-2 text-xs rounded-lg transition aba-ativa' : 'w-1/2 py-2 text-xs rounded-lg transition aba-inativa';
+      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
+      document.getElementById('tab-propria').className = tipo === 'propria' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
     }
 
-    function processarTudo() {
-      const h1 = document.getElementById('input-h1').value || '27ª COPA BRASIL DE KART: IRMÃOS EMERICK CHEGAM AO MARANHÃO E BUSCAM TÍTULOS';
-      const subtitulo = document.getElementById('input-subtitulo').value || 'Os pilotos do Espírito Santo, Miguel e Joaquim Emerick, desembarcam no Nordeste com o objetivo de conquistar títulos em suas categorias.';
-      const cat = document.getElementById('input-categoria').value;
-      const fotografo = document.getElementById('input-fotografo').value || 'DARKSIDE KARTS';
-      const creditos = document.getElementById('input-creditos').value || 'Redação Pista Verde';
-      const release = document.getElementById('input-release').value || 'O fim de semana será de velocidade e muita disputa para os pilotos...';
+    function mudarView(modo) {
+      const el = document.getElementById('leitor-container');
+      el.className = modo === 'pc' ? 'view-pc transition-all duration-300' : modo === 'tablet' ? 'view-tablet transition-all duration-300' : 'view-mobile transition-all duration-300';
+    }
+
+    function processarMateria() {
+      const h1 = document.getElementById('input-h1').value || 'TÍTULO DA MATÉRIA PISTA VERDE';
+      const subtitulo = document.getElementById('input-subtitulo').value || 'Subtítulo informativo e objetivo da matéria...';
+      const categoria = document.getElementById('input-categoria').value;
+      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
+      const creditos = document.getElementById('input-creditos').value || 'Comunicação Oficial';
+      const release = document.getElementById('input-release').value || 'O Portal Pista Verde acompanha as principais competições de kartismo e automobilismo do Brasil...';
       const piloto = document.getElementById('input-piloto-insta').value || '';
 
-      document.getElementById('prev-creditos').innerText = creditos;
-      document.getElementById('prev-fotografo').innerText = fotografo;
-      document.getElementById('prev-corpo-texto').innerText = release;
+      const fotoCapa = fotosCarregadas.length > 0 ? fotosCarregadas[0].src : 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
 
-      const kw = h1.split(' ').slice(0, 3).join(' ');
-      document.getElementById('seo-kw').value = kw;
-      document.getElementById('seo-title').value = `${h1} | Portal Pista Verde`;
-      document.getElementById('seo-desc').value = subtitulo || release.substring(0, 150);
-      document.getElementById('seo-schema').value = `Article_${cat.replace(/\s+/g, '_')}_PV`;
-      document.getElementById('seo-alt').value = `Foto: ${h1} - ${fotografo}`;
+      // SELEÇÃO DOS ANUNCIANTES DA ROTAÇÃO
+      const adAtual = PUBLICIDADE_ROTAÇÃO[indicePublicidade % PUBLICIDADE_ROTAÇÃO.length];
+      const apoiaRotativo = APOIADORES_ROTATIVO[indiceApoiador % APOIADORES_ROTATIVO.length];
 
-      const leg = `${h1}\n\n${subtitulo}\n\n${release.substring(0, 800)}...\n\nCréditos: ${creditos}\nFoto: ${fotografo}\nPiloto: ${piloto}\n\n#pistaverde #${cat.toLowerCase().replace(/\s+/g, '')} #kartismo #automobilismo`;
-      document.getElementById('social-legenda').value = leg;
+      // MONTAGEM DO HTML DA MATÉRIA NO LEITOR RESPONSIVO
+      let htmlCorpo = `<div class="ppv-materia">
+        <header class="ppv-hero" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%), url('${fotoCapa}');">
+          <div class="ppv-hero-content">
+            <span class="ppv-label">${categoria}</span>
+            <h1 class="ppv-hero-title">${h1}</h1>
+            <div class="ppv-underline"></div>
+            <p class="ppv-subtitle">${subtitulo}</p>
+          </div>
+        </header>
 
-      renderizarCapaOficial(h1, subtitulo, cat, fotografo);
+        <main class="ppv-container">`;
+
+      // DISTRIBUIÇÃO DAS FOTOGRAFIAS CONFORME REGRA OFICIAL
+      const paragrafos = release.split('\n').filter(p => p.trim() !== '');
+      
+      paragrafos.forEach((p, idx) => {
+        htmlCorpo += `<p class="my-4 text-slate-800 text-base leading-relaxed">${p}</p>`;
+
+        // Foto 2 no primeiro terço
+        if (idx === Math.floor(paragrafos.length * 0.3) && fotosCarregadas.length >= 2) {
+          htmlCorpo += `<figure class="my-6"><img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[500px] object-cover"><figcaption class="text-xs text-slate-500 mt-1">Foto: ${fotografo}</figcaption></figure>`;
+        }
+
+        // Publicidade Obrigatória no Meio (45% a 60%)
+        if (idx === Math.floor(paragrafos.length * 0.5)) {
+          htmlCorpo += `
+            <aside class="ppv-ad" aria-label="Publicidade">
+              <a class="block" href="${adAtual.url}" target="_blank" rel="noopener noreferrer sponsored">
+                <div class="ppv-ad-inner">
+                  <img src="${adAtual.logo}" alt="${adAtual.nome}">
+                  <div>
+                    <span class="ppv-ad-tag">Publicidade</span>
+                    <h3>${adAtual.nome}</h3>
+                    <p>${adAtual.desc}</p>
+                    <span class="ppv-ad-button">${adAtual.btn}</span>
+                  </div>
+                </div>
+              </a>
+            </aside>`;
+        }
+
+        // Foto 3 no segundo terço
+        if (idx === Math.floor(paragrafos.length * 0.7) && fotosCarregadas.length >= 3) {
+          htmlCorpo += `<figure class="my-6"><img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[500px] object-cover"><figcaption class="text-xs text-slate-500 mt-1">Foto: ${fotografo}</figcaption></figure>`;
+        }
+      });
+
+      // SEÇÃO EMPRESAS QUE APOIAM O KARTISMO (MEGA KART FIXA + ROTATIVO)
+      htmlCorpo += `
+        <div class="ppv-creditos text-xs text-slate-500 my-6 pt-4 border-t border-slate-200">
+          <p><strong>Texto/Fonte:</strong> ${creditos}</p>
+          <p><strong>Fotos:</strong> ${fotografo}</p>
+          <p><strong>Edição:</strong> Portal Pista Verde</p>
+        </div>
+
+        <section class="ppv-apoio">
+          <h2 class="text-xl font-black text-slate-900 mb-1">Empresas que apoiam o kartismo</h2>
+          <p class="text-xs text-slate-600">O Portal Pista Verde valoriza as empresas que acreditam no kartismo e ajudam a fortalecer a base do automobilismo nacional.</p>
+          
+          <div class="ppv-sponsor-grid">
+            <!-- MEGA KART FIXA -->
+            <article class="ppv-sponsor-card">
+              <img src="${APOIADORES_FIXO.logo}" alt="Mega Kart">
+              <h3>${APOIADORES_FIXO.nome}</h3>
+              <p>${APOIADORES_FIXO.desc}</p>
+              <a class="ppv-sponsor-btn" href="${APOIADORES_FIXO.url}" target="_blank" rel="noopener noreferrer">${APOIADORES_FIXO.btn}</a>
+            </article>
+
+            <!-- EMPRESA ROTATIVA -->
+            <article class="ppv-sponsor-card">
+              <img src="${apoiaRotativo.logo}" alt="${apoiaRotativo.nome}">
+              <h3>${apoiaRotativo.nome}</h3>
+              <p>${apoiaRotativo.desc}</p>
+              <a class="ppv-sponsor-btn" href="${apoiaRotativo.url}" target="_blank" rel="noopener noreferrer sponsored">${apoiaRotativo.btn}</a>
+            </article>
+          </div>
+        </section>
+        </main>
+      </div>`;
+
+      document.getElementById('leitor-materia-html').innerHTML = htmlCorpo;
+
+      // TEXTOS PARA REDES SOCIAIS
+      document.getElementById('text-insta').value = `${h1}\n\n${subtitulo}\n\n${release.substring(0, 1100)}...\n\nMatéria completa no link da bio do Portal Pista Verde.\n\nFoto: ${fotografo}\nFonte: ${creditos}${piloto ? '\nPiloto: ' + piloto : ''}\n\n#pistaverde #${categoria.toLowerCase().replace(/\s+/g, '')} #kartismo #automobilismo`;
+      document.getElementById('text-tiktok').value = `${h1}\n\n${subtitulo}\n\nConfira no Portal Pista Verde!\n\n#pistaverde #kartismo #esporte`;
+
+      renderizarCapaGrafica(h1, subtitulo, categoria, fotografo, fotoCapa, apoiaRotativo);
     }
 
-    function renderizarCapaOficial(titulo, subtitulo, cat, fotografo) {
+    function renderizarCapaGrafica(titulo, subtitulo, cat, fotografo, srcCapa, apoiaRotativo) {
       const canvas = document.getElementById('canvas-capa-oficial');
       const ctx = canvas.getContext('2d');
-      const w = 360;
-      const h = 640;
+      const w = 270;
+      const h = 480;
 
       ctx.fillStyle = '#0a0e17';
       ctx.fillRect(0, 0, w, h);
 
-      if (imgCapaObjeto) {
-        ctx.drawImage(imgCapaObjeto, 0, 0, w, h);
-      } else {
-        ctx.fillStyle = '#1e293b';
-        ctx.fillRect(0, 0, w, h);
-      }
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = function() {
+        // ENQUADRAMENTO PROPORCIONAL COVER (SEM DISTORÇÃO)
+        const scale = Math.max(w / img.width, h / img.height);
+        const x = (w / 2) - (img.width / 2) * scale;
+        const y = (h / 2) - (img.height / 2) * scale;
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-      const grad = ctx.createLinearGradient(0, h * 0.3, 0, h);
-      grad.addColorStop(0, 'rgba(0,0,0,0)');
-      grad.addColorStop(0.4, 'rgba(0,0,0,0.65)');
-      grad.addColorStop(0.85, 'rgba(0,0,0,0.95)');
-      grad.addColorStop(1, 'rgba(0,0,0,1)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, h * 0.2, w, h * 0.8);
+        // Gradiente de Leitura
+        const grad = ctx.createLinearGradient(0, h * 0.25, 0, h);
+        grad.addColorStop(0, 'rgba(0,0,0,0)');
+        grad.addColorStop(0.4, 'rgba(0,0,0,0.7)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.98)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, h * 0.2, w, h * 0.8);
 
-      // Top Line
-      ctx.fillStyle = '#10b981';
-      ctx.fillRect(20, 15, w - 40, 3.5);
+        // Linha Neon Superior
+        ctx.fillStyle = '#00ae35';
+        ctx.fillRect(15, 12, w - 30, 3);
 
-      // Category Pill
-      const catY = h * 0.46;
-      ctx.fillStyle = '#059669';
-      ctx.beginPath();
-      ctx.roundRect(20, catY, 130, 22, 11);
-      ctx.fill();
+        // Categoria Pill
+        const catY = h * 0.44;
+        ctx.beginPath();
+        ctx.roundRect(15, catY, 110, 18, 9);
+        ctx.fillStyle = '#00ae35';
+        ctx.fill();
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 10px sans-serif';
-      ctx.fillText(cat.toUpperCase(), 28, catY + 15);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 8.5px sans-serif';
+        ctx.fillText(cat.toUpperCase(), 22, catY + 12);
 
-      // H1 Title
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '900 21px "Anton", "Impact", sans-serif';
-      
-      const palavras = titulo.toUpperCase().split(' ');
-      let linha = '';
-      let posY = catY + 45;
-      const maxW = w - 40;
-
-      for (let n = 0; n < palavras.length; n++) {
-        let testeLinha = linha + palavras[n] + ' ';
-        let me = ctx.measureText(testeLinha);
-        if (me.width > maxW && n > 0) {
-          ctx.fillText(linha, 20, posY);
-          linha = palavras[n] + ' ';
-          posY += 23;
-        } else {
-          linha = testeLinha;
+        // H1 Title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 16px "Anton", sans-serif';
+        const palavras = titulo.toUpperCase().split(' ');
+        let linha = '';
+        let posY = catY + 36;
+        for (let n = 0; n < palavras.length; n++) {
+          let test = linha + palavras[n] + ' ';
+          if (ctx.measureText(test).width > (w - 30) && n > 0) {
+            ctx.fillText(linha, 15, posY);
+            linha = palavras[n] + ' ';
+            posY += 18;
+          } else { linha = test; }
         }
-      }
-      ctx.fillText(linha, 20, posY);
+        ctx.fillText(linha, 15, posY);
 
-      // Divider Line
-      posY += 10;
-      ctx.fillStyle = '#10b981';
-      ctx.fillRect(20, posY, 50, 3);
+        // Rodapé de Apoiadores
+        const rodapeY = h - 38;
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+        ctx.fillRect(0, rodapeY, w, 38);
 
-      // Subtitle
-      posY += 18;
-      ctx.fillStyle = '#f1f5f9';
-      ctx.font = '400 10.5px sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 6px sans-serif';
+        ctx.fillText('EMPRESAS QUE APOIAM O KARTISMO', 12, rodapeY + 10);
 
-      const palavrasSub = subtitulo.split(' ');
-      let linhaSub = '';
-      for (let s = 0; s < palavrasSub.length; s++) {
-        let testeSub = linhaSub + palavrasSub[s] + ' ';
-        let meSub = ctx.measureText(testeSub);
-        if (meSub.width > maxW && s > 0) {
-          ctx.fillText(linhaSub, 20, posY);
-          linhaSub = palavrasSub[s] + ' ';
-          posY += 14;
-        } else {
-          linhaSub = testeSub;
-        }
-      }
-      ctx.fillText(linhaSub, 20, posY);
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.roundRect(12, rodapeY + 13, 45, 18, 3);
+        ctx.roundRect(62, rodapeY + 13, 45, 18, 3);
+        ctx.fill();
 
-      // Rodapé Fixo
-      const rodapeY = h - 45;
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-      ctx.fillRect(0, rodapeY, w, 45);
+        // Crédito Foto
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 6.5px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('FOTO: ' + fotografo.toUpperCase(), w - 12, rodapeY + 24);
+        ctx.textAlign = 'left';
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 7px sans-serif';
-      ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 15, rodapeY + 12);
-
-      // Desenha Cards dos Patrocinadores
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.roundRect(15, rodapeY + 16, 60, 22, 4);
-      ctx.roundRect(82, rodapeY + 16, 60, 22, 4);
-      ctx.fill();
-
-      // Renderiza Imagens Reais dos Patrocinadores se enviadas
-      if (imgPatro1) {
-        ctx.drawImage(imgPatro1, 17, rodapeY + 17, 56, 20);
-      }
-      if (imgPatro2) {
-        ctx.drawImage(imgPatro2, 84, rodapeY + 17, 56, 20);
-      }
-
-      // Créditos
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '700 7.5px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText('FOTO: ' + fotografo.toUpperCase(), w - 15, rodapeY + 28);
-      ctx.textAlign = 'left';
-
-      document.getElementById('link-download-capa').href = canvas.toDataURL('image/png');
-      document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
+        document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
+        document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
+        document.getElementById('link-download-tiktok').href = canvas.toDataURL('image/png');
+      };
+      img.src = srcCapa;
     }
 
     window.onload = function() {
-      processarTudo();
+      processarMateria();
     };
   </script>
 </body>
