@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV ONE - Editor & Simulador 15"</title>
+  <title>PV ONE - Editor, Simulador 15" & Publicador</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -24,15 +24,16 @@
   </style>
 </head>
 <body class="p-6">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
     
     <!-- MÓDULO 2: FORMULÁRIO DO EDITOR -->
-    <div class="lg:col-span-5 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl custom-scroll max-h-[85vh] overflow-y-auto">
-      <h2 class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-pen-to-square"></i> Editor de Matéria
-      </h2>
-      
+    <div class="lg:col-span-5 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl custom-scroll max-h-[85vh] overflow-y-auto flex flex-col justify-between">
       <div class="space-y-4">
+        <h2 class="text-xl font-bold text-emerald-400 mb-4 flex items-center justify-between">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square"></i> Editor de Matéria</span>
+          <span class="text-xs font-normal bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full">v1.4</span>
+        </h2>
+        
         <div>
           <label class="block text-xs text-slate-400 mb-1">Categoria</label>
           <input type="text" id="input-cat" value="KARTISMO NACIONAL" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-emerald-400 font-bold focus:outline-none focus:border-emerald-500">
@@ -66,8 +67,18 @@
 
         <div>
           <label class="block text-xs text-slate-400 mb-1">Conteúdo da Notícia</label>
-          <textarea id="input-texto" rows="6" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.</textarea>
+          <textarea id="input-texto" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.</textarea>
         </div>
+      </div>
+
+      <!-- MÓDULO 4: AÇÕES DE PUBLICAÇÃO -->
+      <div class="pt-6 mt-6 border-t border-slate-800 grid grid-cols-2 gap-3">
+        <button id="btn-limpar" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl font-semibold text-xs transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-eraser"></i> Limpar
+        </button>
+        <button id="btn-publicar" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-paper-plane"></i> Publicar Matéria
+        </button>
       </div>
     </div>
 
@@ -101,6 +112,22 @@
 
   </div>
 
+  <!-- MODAL DE CONFIRMAÇÃO DO MÓDULO 4 -->
+  <div id="modal-sucesso" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-emerald-500/30 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center space-y-4">
+      <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl border border-emerald-500/20">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 class="text-lg font-bold text-white">Matéria Publicada com Sucesso!</h3>
+      <p class="text-slate-400 text-xs leading-relaxed">
+        Os dados da matéria foram compilados e enviados para o servidor do Portal Pista Verde.
+      </p>
+      <button id="btn-fechar-modal" class="w-full bg-emerald-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-emerald-400 transition">
+        Concluir
+      </button>
+    </div>
+  </div>
+
   <script>
     const bind = (inputId, prevId, attr = 'innerText') => {
       const el = document.getElementById(inputId);
@@ -115,6 +142,31 @@
     bind('input-data', 'prev-data');
     bind('input-texto', 'prev-texto');
     bind('input-img', 'prev-img', 'src');
+
+    // Módulo 4: Handlers dos botões
+    const modal = document.getElementById('modal-sucesso');
+    document.getElementById('btn-publicar').addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+
+    document.getElementById('btn-fechar-modal').addEventListener('click', () => {
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    });
+
+    document.getElementById('btn-limpar').addEventListener('click', () => {
+      ['input-cat', 'input-titulo', 'input-sub', 'input-autor', 'input-data', 'input-img', 'input-texto'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('prev-cat').innerText = 'CATEGORIA';
+      document.getElementById('prev-titulo').innerText = 'Título da Matéria';
+      document.getElementById('prev-sub').innerText = 'Subtítulo da matéria...';
+      document.getElementById('prev-autor').innerText = '-';
+      document.getElementById('prev-data').innerText = '-';
+      document.getElementById('prev-texto').innerText = 'O conteúdo aparecerá aqui...';
+      document.getElementById('prev-img').src = '';
+    });
   </script>
 </body>
 </html>
