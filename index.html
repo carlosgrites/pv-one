@@ -52,8 +52,8 @@
     .ppv-result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
     .ppv-result-item { padding: 12px; border: 1px solid #e3eadf; border-radius: 10px; background: #ffffff; }
     .ppv-result-item strong { display: block; color: #00ae35; font-size: 12px; text-transform: uppercase; }
-    .ppv-creditos { margin-top: 36px; padding-top: 18px; border-top: 1px solid #dfe7dc; color: #4d5b43; font-size: 14px; line-height: 1.6; }
-    .ppv-creditos p { margin: 0 0 6px !important; font-size: 14px !important; }
+    .ppv-creditos { margin-top: 36px; padding-top: 18px; border-top: 1px solid #dfe7dc; color: #4d5b43; font-size: 13px; line-height: 1.6; }
+    .ppv-creditos p { margin: 0 0 4px !important; font-size: 13px !important; }
     .ppv-apoio { margin-top: 32px; padding: 24px 20px; border: 1px solid #e3eadf; border-radius: 18px; background: #f7f9f6; }
     .ppv-apoio h2 { margin-top: 0; color: #21300c; font-size: 22px; }
     .ppv-sponsor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
@@ -62,19 +62,24 @@
     .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300c; font-size: 18px; }
     .ppv-sponsor-card p { margin: 0 0 16px; font-size: 13px; line-height: 1.55; color: #333333; }
     .ppv-sponsor-btn { align-self: flex-start; margin-top: auto; }
-    .ppv-portal-footer { margin-top: 32px; padding: 24px 22px; border-top: 6px solid #00ae35; border-radius: 18px; background: #14240f; color: #ffffff; }
+    
+    /* RODAPÉ INSTITUCIONAL & SELO ODS */
+    .ppv-portal-footer { margin-top: 32px; padding: 24px 22px; border-top: 6px solid #00ae35; border-radius: 18px; background: #14240f; color: #ffffff; position: relative; }
+    .ppv-footer-content-grid { display: grid; grid-template-columns: 1fr 110px; gap: 20px; align-items: center; }
     .ppv-portal-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .ppv-portal-mark { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 10px; background: #00ae35; color: #ffffff; font-size: 16px; font-weight: 900; }
     .ppv-portal-name strong { display: block; color: #ffffff; font-size: 20px; line-height: 1; }
-    .ppv-portal-name span { color: #a9bf9e; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
-    .ppv-portal-footer p { margin: 0 0 16px !important; color: #e6eee2 !important; font-size: 14px !important; line-height: 1.6; }
+    .ppv-portal-name span { color: #a9bf9e; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+    .ppv-portal-footer p { margin: 0 0 16px !important; color: #e6eee2 !important; font-size: 13px !important; line-height: 1.6; }
     .ppv-portal-footer a { display: inline-block; padding: 9px 16px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 12px; font-weight: 900; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+    .ppv-ods-badge { display: block; width: 100px; height: 100px; object-fit: contain; }
 
     @media (max-width: 720px) {
       .ppv-hero { min-height: 440px; padding: 28px 16px; }
       .ppv-container { padding: 24px 14px 40px; }
       .ppv-ad-inner { grid-template-columns: 1fr; }
       .ppv-sponsor-grid, .ppv-result-grid { grid-template-columns: 1fr; }
+      .ppv-footer-content-grid { grid-template-columns: 1fr; justify-items: start; }
     }
   </style>
 </head>
@@ -118,15 +123,15 @@
         </a>
       </nav>
       <div class="text-[11px] text-gray-500 px-4 py-2 border-t border-[#182e18]">
-        Portal Pista Verde © 2026<br>Grid aquecido com responsabilidade.
+        Portal Pista Verde © 2026<br>1ª Startup de Kartismo do Brasil.
       </div>
     </aside>
 
     <!-- ÁREA PRINCIPAL DO PAINEL -->
     <main class="flex-1 p-6 overflow-y-auto bg-[#060a06]">
       <div class="border border-dashed border-[#182e18] rounded-2xl p-8 text-center text-gray-400">
-        <p class="font-semibold text-sm">Módulo 1 — Shell e Estrutura Globais Aplicados com Sucesso!</p>
-        <p class="text-xs text-gray-500 mt-1">Aguardando o próximo comando para acoplar o Módulo 2 (Formulário do Editor & Motor IA).</p>
+        <p class="font-semibold text-sm">Módulo 1 — Atualizado com Chancela Startup + Registro MTE + Selo ODS!</p>
+        <p class="text-xs text-gray-500 mt-1">Aguardando confirmação para iniciar a codificação do Módulo 2.</p>
       </div>
     </main>
   </div>
