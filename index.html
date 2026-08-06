@@ -3,209 +3,238 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PV ONE - Sistema Completo</title>
+  <title>PV ONE - Painel Completo de Produção</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     body { background-color: #0b0f19; color: #e2e8f0; font-family: sans-serif; }
-    .display-preview {
+    .tablet-screen {
+      width: 100%;
+      max-width: 800px;
+      height: 600px;
       background: #ffffff;
       color: #1a202c;
       border-radius: 20px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       border: 12px solid #1e293b;
       overflow-y: auto;
-      transition: all 0.3s ease;
     }
-    .view-tablet { width: 100%; max-width: 800px; height: 600px; }
-    .view-mobile { width: 380px; height: 650px; border-radius: 36px; border-width: 14px; }
-    .view-desktop { width: 100%; max-width: 1000px; height: 550px; border-radius: 8px; border-width: 8px; }
     .custom-scroll::-webkit-scrollbar { width: 6px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .aba-ativa { background-color: #10b981; color: #022c22; font-weight: bold; }
+    .aba-inativa { background-color: #1e293b; color: #94a3b8; }
   </style>
 </head>
-<body class="p-6">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 relative">
+<body class="p-4">
+  <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
     
-    <!-- MÓDULO 2 & 5: FORMULÁRIO + HISTÓRICO -->
-    <div class="lg:col-span-5 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl custom-scroll max-h-[88vh] overflow-y-auto flex flex-col justify-between">
-      <div class="space-y-4">
-        <h2 class="text-xl font-bold text-emerald-400 mb-2 flex items-center justify-between">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square"></i> Editor PV ONE</span>
-          <span class="text-xs font-normal bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full">v2.0 Final</span>
-        </h2>
-        
+    <!-- COLUNA DA ESQUERDA: ENTRADA DE DADOS E CONFIGURAÇÃO -->
+    <div class="lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 custom-scroll max-h-[92vh] overflow-y-auto space-y-4">
+      
+      <!-- ABAS: MATÉRIAS RECEBIDAS / PRÓPRIAS -->
+      <div class="flex rounded-xl overflow-hidden p-1 bg-slate-950 border border-slate-800">
+        <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="w-1/2 py-2 text-xs rounded-lg transition aba-ativa">1- Matérias Recebidas</button>
+        <button id="tab-propria" onclick="trocarOrigem('propria')" class="w-1/2 py-2 text-xs rounded-lg transition aba-inativa">2- Matérias Próprias</button>
+      </div>
+
+      <div class="space-y-3">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Categoria</label>
-          <input type="text" id="input-cat" value="KARTISMO NACIONAL" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-emerald-400 font-bold focus:outline-none focus:border-emerald-500">
-        </div>
-        
-        <div>
-          <label class="block text-xs text-slate-400 mb-1">Título Principal</label>
-          <input type="text" id="input-titulo" value="Grande Prêmio de Karting 2026 Promete Recorde de Inscritos" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <label class="block text-xs text-slate-400 mb-1">H1 Recebido / Título Principal</label>
+          <input type="text" id="input-h1" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="Digite o H1 da matéria...">
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Subtítulo / Linha fina</label>
-          <input type="text" id="input-sub" value="Pilotos de todo o Brasil se reúnem para a abertura da temporada no Portal Pista Verde." class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-300 focus:outline-none focus:border-emerald-500">
+          <label class="block text-xs text-slate-400 mb-1">Categoria (1 de 10)</label>
+          <select id="input-categoria" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-emerald-400 font-bold focus:border-emerald-500 outline-none">
+            <option value="Kartismo">Kartismo</option>
+            <option value="Automobilismo">Automobilismo</option>
+            <option value="Sustentabilidade">Sustentabilidade</option>
+            <option value="KIG RJ 2026">KIG RJ 2026</option>
+            <option value="Copa São Paulo Light">Copa São Paulo Light</option>
+            <option value="Circuito Paulista de Kart">Circuito Paulista de Kart</option>
+            <option value="Sul Brasileiro de Kart">Sul Brasileiro de Kart</option>
+            <option value="Copa do Brasil de Kart">Copa do Brasil de Kart</option>
+            <option value="BRK">BRK</option>
+            <option value="Aldeia Kart Cup">Aldeia Kart Cup</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Upload/URL da Foto da Matéria</label>
+          <input type="text" id="input-foto" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="Link da imagem...">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-xs text-slate-400 mb-1">Autor</label>
-            <input type="text" id="input-autor" value="Redação PV" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+            <label class="block text-xs text-slate-400 mb-1">Fotógrafo</label>
+            <input type="text" id="input-fotografo" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="Nome do fotógrafo">
           </div>
           <div>
-            <label class="block text-xs text-slate-400 mb-1">Data</label>
-            <input type="text" id="input-data" value="Hoje" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+            <label class="block text-xs text-slate-400 mb-1">Créditos / Fonte</label>
+            <input type="text" id="input-creditos" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="Créditos da matéria">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">URL da Imagem de Capa</label>
-          <input type="text" id="input-img" value="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1000&q=80" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <label class="block text-xs text-slate-400 mb-1">Release Completo / Texto Base</label>
+          <textarea id="input-release" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-emerald-500 outline-none" placeholder="Cole o release completo aqui..."></textarea>
         </div>
 
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Conteúdo da Notícia</label>
-          <textarea id="input-texto" rows="4" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:outline-none focus:border-emerald-500">A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.</textarea>
-        </div>
-
-        <!-- MÓDULO 5: RASCUNHOS SALVOS -->
-        <div class="pt-2">
-          <label class="block text-xs text-slate-400 mb-1 flex items-center gap-1"><i class="fa-solid fa-bookmark text-emerald-400"></i> Rascunhos Salvos</label>
-          <div id="lista-rascunhos" class="flex gap-2 overflow-x-auto pb-1">
-            <span class="text-xs text-slate-500 italic">Nenhum rascunho salvo ainda.</span>
-          </div>
+          <label class="block text-xs text-slate-400 mb-1">@ do Piloto / Perfil Instagram</label>
+          <input type="text" id="input-piloto-insta" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="@do_piloto">
         </div>
       </div>
 
-      <!-- MÓDULO 4: AÇÕES -->
-      <div class="pt-4 mt-4 border-t border-slate-800 grid grid-cols-3 gap-2">
-        <button id="btn-limpar" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-lg font-semibold text-xs transition">Limpar</button>
-        <button id="btn-salvar" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 py-2 rounded-lg font-semibold text-xs transition">Salvar Rascunho</button>
-        <button id="btn-publicar" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 py-2 rounded-lg font-bold text-xs transition shadow-lg shadow-emerald-500/20">Publicar</button>
-      </div>
-    </div>
-
-    <!-- MÓDULO 3 & 6: SIMULADOR MULTI-TELA -->
-    <div class="lg:col-span-7 flex flex-col items-center justify-start">
-      <!-- MÓDULO 6: CONTROLE DE DISPOSITIVOS -->
-      <div class="bg-slate-900 border border-slate-800 p-1.5 rounded-xl mb-4 flex items-center gap-2">
-        <button id="view-tab" class="px-3 py-1.5 bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold transition flex items-center gap-1">
-          <i class="fa-solid fa-tablet-screen-button"></i> Tablet 15"
-        </button>
-        <button id="view-mob" class="px-3 py-1.5 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition flex items-center gap-1">
-          <i class="fa-solid fa-mobile-screen"></i> Mobile
-        </button>
-        <button id="view-desk" class="px-3 py-1.5 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition flex items-center gap-1">
-          <i class="fa-solid fa-desktop"></i> Desktop
-        </button>
-      </div>
-      
-      <!-- PREVIEW DA MATÉRIA -->
-      <div id="screen-container" class="display-preview view-tablet p-6 custom-scroll">
-        <span id="prev-cat" class="text-xs font-bold text-emerald-600 tracking-wider uppercase">KARTISMO NACIONAL</span>
-        <h1 id="prev-titulo" class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1 mb-2 leading-tight">Grande Prêmio de Karting 2026 Promete Recorde de Inscritos</h1>
-        <p id="prev-sub" class="text-slate-600 text-sm mb-4 italic">Pilotos de todo o Brasil se reúnem para a abertura da temporada no Portal Pista Verde.</p>
-        
-        <div class="flex items-center gap-4 text-xs text-slate-400 border-y border-slate-100 py-2 mb-4">
-          <span>Por <strong id="prev-autor" class="text-slate-700">Redação PV</strong></span>
-          <span>•</span>
-          <span id="prev-data">Hoje</span>
-        </div>
-
-        <img id="prev-img" src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1000&q=80" class="w-full h-64 object-cover rounded-xl mb-4 shadow">
-
-        <div id="prev-texto" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">
-          A temporada 2026 do kartismo brasileiro começa com altíssima expectativa. Com mais de 150 pilotos confirmados em diversas categorias, o evento promete bater todos os recordes de público e transmissão ao vivo. A estrutura do complexo passou por melhorias significativas para garantir segurança e alto nível de competição.
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- MODAL DE CONFIRMAÇÃO -->
-  <div id="modal-sucesso" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-emerald-500/30 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center space-y-4">
-      <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-xl border border-emerald-500/20">
-        <i class="fa-solid fa-check"></i>
-      </div>
-      <h3 class="text-lg font-bold text-white">Projeto PV ONE Concluído!</h3>
-      <p class="text-slate-400 text-xs leading-relaxed">
-        Sua matéria foi publicada com sucesso e todos os módulos do sistema estão 100% operacionais.
-      </p>
-      <button id="btn-fechar-modal" class="w-full bg-emerald-500 text-slate-950 font-bold py-2 rounded-xl text-xs hover:bg-emerald-400 transition">
-        Concluir
+      <!-- BOTÃO GERADOR -->
+      <button onclick="processarTudo()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-3 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> GERAR MATÉRIA, SEO WIX E REDES SOCIAIS
       </button>
+    </div>
+
+    <!-- COLUNA DA DIREITA: TABLET 15" + PAINÉIS DE SEO E REDES -->
+    <div class="lg:col-span-7 space-y-6 custom-scroll max-h-[92vh] overflow-y-auto pr-2">
+      
+      <!-- SIMULADOR TABLET 15" -->
+      <div class="flex flex-col items-center">
+        <div class="text-xs text-slate-500 mb-2 font-mono flex items-center gap-2">
+          <i class="fa-solid fa-tablet-screen-button"></i> VISUALIZAÇÃO TABLET 15" (MODELO OFICIAL)
+        </div>
+        <div class="tablet-screen p-6 custom-scroll">
+          <span id="prev-cat" class="text-xs font-bold text-emerald-600 tracking-wider uppercase">KARTISMO</span>
+          <h1 id="prev-h1" class="text-2xl md:text-3xl font-extrabold text-slate-900 mt-1 mb-2 leading-tight">Título da Matéria</h1>
+          <div class="flex items-center gap-2 text-xs text-slate-500 mb-4 border-b pb-2">
+            <span>Créditos: <strong id="prev-creditos">Pista Verde</strong></span> • 
+            <span>Foto: <strong id="prev-fotografo">Divulgação</strong></span>
+          </div>
+          <img id="prev-img" src="https://via.placeholder.com/800x450?text=Aguardando+Imagem" class="w-full h-64 object-cover rounded-xl mb-4 shadow">
+          <div id="prev-corpo" class="text-slate-700 text-sm leading-relaxed whitespace-pre-line">O texto completo da matéria aparecerá aqui formatado...</div>
+        </div>
+      </div>
+
+      <!-- PAINEL WIX DE SEO AUTOMÁTICO -->
+      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-3">
+        <h3 class="text-md font-bold text-emerald-400 flex items-center gap-2">
+          <i class="fa-solid fa-search"></i> SEO Automático (Módulo Wix)
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <span class="text-slate-400 block">1. Palavra-Chave Foco:</span>
+            <input id="seo-kw" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div>
+            <span class="text-slate-400 block">2. Tag de Título (Title Tag):</span>
+            <input id="seo-title" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div class="md:col-span-2">
+            <span class="text-slate-400 block">3. Meta Descrição:</span>
+            <input id="seo-desc" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div>
+            <span class="text-slate-400 block">4. Dados Estruturados (Nome Schema Wix):</span>
+            <input id="seo-schema" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div>
+            <span class="text-slate-400 block">5. Alt Texto da Imagem:</span>
+            <input id="seo-alt" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div>
+            <span class="text-slate-400 block">6. OG Title:</span>
+            <input id="seo-ogtitle" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div>
+            <span class="text-slate-400 block">7. OG Description:</span>
+            <input id="seo-ogdesc" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+          <div class="md:col-span-2">
+            <span class="text-slate-400 block">8. Trecho / Excerpt:</span>
+            <input id="seo-trecho" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-1.5 mt-0.5">
+          </div>
+        </div>
+
+        <button onclick="copiarRascunhoWix()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold py-2 rounded-lg text-xs border border-emerald-500/30 transition">
+          <i class="fa-solid fa-copy"></i> Copiar Dados Formatados para Guardar nos Rascunhos do Wix
+        </button>
+      </div>
+
+      <!-- PAINEL REDES SOCIAIS (INSTAGRAM & TIKTOK) -->
+      <div class="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-4">
+        <h3 class="text-md font-bold text-emerald-400 flex items-center gap-2">
+          <i class="fa-solid fa-share-nodes"></i> Módulo Redes Sociais
+        </h3>
+
+        <!-- INSTAGRAM -->
+        <div class="space-y-2 border-b border-slate-800 pb-3">
+          <span class="text-xs font-bold text-slate-300 block">INSTAGRAM (Capa 1080x1350 & Legenda)</span>
+          <div class="text-xs text-slate-400">
+            <span>Dimensão Capa Feed: <strong>1080 x 1350 px</strong></span> | 
+            <span>Dimensão Stories: <strong>1080 x 1920 px</strong></span>
+          </div>
+          <textarea id="social-insta-texto" rows="4" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2 text-xs" placeholder="Legenda do Instagram (máx 2000 caracteres)..."></textarea>
+        </div>
+
+        <!-- TIKTOK -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-slate-300 block">TIKTOK (Vídeo MP4 Capa Feed)</span>
+          <textarea id="social-tiktok-texto" rows="2" readonly class="w-full bg-slate-800 text-slate-200 border border-slate-700 rounded p-2 text-xs" placeholder="Texto e hashtags do TikTok..."></textarea>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <script>
-    const bind = (inputId, prevId, attr = 'innerText') => {
-      const el = document.getElementById(inputId);
-      const prev = document.getElementById(prevId);
-      el.addEventListener('input', () => { prev[attr] = el.value; });
-    };
+    let origemMateria = 'recebida';
 
-    bind('input-cat', 'prev-cat');
-    bind('input-titulo', 'prev-titulo');
-    bind('input-sub', 'prev-sub');
-    bind('input-autor', 'prev-autor');
-    bind('input-data', 'prev-data');
-    bind('input-texto', 'prev-texto');
-    bind('input-img', 'prev-img', 'src');
+    function trocarOrigem(tipo) {
+      origemMateria = tipo;
+      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'w-1/2 py-2 text-xs rounded-lg transition aba-ativa' : 'w-1/2 py-2 text-xs rounded-lg transition aba-inativa';
+      document.getElementById('tab-propria').className = tipo === 'propria' ? 'w-1/2 py-2 text-xs rounded-lg transition aba-ativa' : 'w-1/2 py-2 text-xs rounded-lg transition aba-inativa';
+    }
 
-    // Módulo 4: Modal
-    const modal = document.getElementById('modal-sucesso');
-    document.getElementById('btn-publicar').addEventListener('click', () => { modal.classList.remove('hidden'); modal.classList.add('flex'); });
-    document.getElementById('btn-fechar-modal').addEventListener('click', () => { modal.classList.remove('flex'); modal.classList.add('hidden'); });
+    function processarTudo() {
+      const h1 = document.getElementById('input-h1').value || 'Matéria Pista Verde';
+      const cat = document.getElementById('input-categoria').value;
+      const foto = document.getElementById('input-foto').value || 'https://via.placeholder.com/800x450?text=Pista+Verde';
+      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
+      const creditos = document.getElementById('input-creditos').value || 'Redação PV';
+      const release = document.getElementById('input-release').value || 'Conteúdo do release...';
+      const piloto = document.getElementById('input-piloto-insta').value || '';
 
-    // Módulo 4: Limpar
-    document.getElementById('btn-limpar').addEventListener('click', () => {
-      ['input-cat', 'input-titulo', 'input-sub', 'input-autor', 'input-data', 'input-img', 'input-texto'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('prev-cat').innerText = 'CATEGORIA';
-      document.getElementById('prev-titulo').innerText = 'Título da Matéria';
-      document.getElementById('prev-sub').innerText = 'Subtítulo da matéria...';
-      document.getElementById('prev-autor').innerText = '-';
-      document.getElementById('prev-data').innerText = '-';
-      document.getElementById('prev-texto').innerText = 'O conteúdo aparecerá aqui...';
-      document.getElementById('prev-img').src = '';
-    });
+      // Atualiza Tablet
+      document.getElementById('prev-cat').innerText = cat;
+      document.getElementById('prev-h1').innerText = h1;
+      document.getElementById('prev-fotografo').innerText = fotografo;
+      document.getElementById('prev-creditos').innerText = creditos;
+      document.getElementById('prev-img').src = foto;
+      document.getElementById('prev-corpo').innerText = release;
 
-    // Módulo 6: Alternador de Telas
-    const container = document.getElementById('screen-container');
-    const btnTab = document.getElementById('view-tab');
-    const btnMob = document.getElementById('view-mob');
-    const btnDesk = document.getElementById('view-desk');
+      // Gera SEO Wix
+      const kw = h1.split(' ').slice(0, 3).join(' ');
+      document.getElementById('seo-kw').value = kw;
+      document.getElementById('seo-title').value = `${h1} | Portal Pista Verde`;
+      document.getElementById('seo-desc').value = release.substring(0, 150) + '...';
+      document.getElementById('seo-schema').value = `Article_${cat.replace(/\s+/g, '_')}_PV`;
+      document.getElementById('seo-alt').value = `Foto: ${h1} - ${fotografo}`;
+      document.getElementById('seo-ogtitle').value = h1;
+      document.getElementById('seo-ogdesc').value = release.substring(0, 120) + '...';
+      document.getElementById('seo-trecho').value = release.substring(0, 90) + '...';
 
-    const setView = (activeBtn, modeClass) => {
-      [btnTab, btnMob, btnDesk].forEach(btn => {
-        btn.className = "px-3 py-1.5 text-slate-400 hover:text-white rounded-lg text-xs font-semibold transition flex items-center gap-1";
-      });
-      activeBtn.className = "px-3 py-1.5 bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold transition flex items-center gap-1";
-      container.className = `display-preview ${modeClass} p-6 custom-scroll`;
-    };
+      // Gera Redes Sociais
+      const legInsta = `${h1}\n\n${release.substring(0, 1200)}\n\nCréditos: ${creditos}\nFoto: ${fotografo}\nPiloto: ${piloto}\n\n#pistaverde #${cat.toLowerCase().replace(/\s+/g, '')} #kart #automobilismo`;
+      document.getElementById('social-insta-texto').value = legInsta.substring(0, 2000);
 
-    btnTab.addEventListener('click', () => setView(btnTab, 'view-tablet'));
-    btnMob.addEventListener('click', () => setView(btnMob, 'view-mobile'));
-    btnDesk.addEventListener('click', () => setView(btnDesk, 'view-desktop'));
+      const legTikTok = `${h1} 🏎️🏁\n\nConfira a matéria completa no Portal Pista Verde!\n\n#pistaverde #${cat.toLowerCase().replace(/\s+/g, '')}`;
+      document.getElementById('social-tiktok-texto').value = legTikTok;
+    }
 
-    // Módulo 5: Rascunhos Simples
-    let rascunhos = [];
-    document.getElementById('btn-salvar').addEventListener('click', () => {
-      const titulo = document.getElementById('input-titulo').value || 'Sem Título';
-      rascunhos.push(titulo);
-      renderRascunhos();
-    });
-
-    function renderRascunhos() {
-      const list = document.getElementById('lista-rascunhos');
-      list.innerHTML = rascunhos.map((r, i) => `
-        <span class="text-[10px] bg-slate-800 text-emerald-400 border border-slate-700 px-2 py-1 rounded whitespace-nowrap">
-          #${i+1} ${r.substring(0, 15)}...
-        </span>
-      `).join('');
+    function copiarRascunhoWix() {
+      const h1 = document.getElementById('input-h1').value;
+      if (!h1) { alert('Preencha o título antes de copiar!'); return; }
+      const payload = `=== DADOS PARA RASCUNHO WIX ===\nTÍTULO: ${h1}\nCATEGORIA: ${document.getElementById('input-categoria').value}\nSEO TITLE: ${document.getElementById('seo-title').value}\nMETA DESC: ${document.getElementById('seo-desc').value}\nKW FOCO: ${document.getElementById('seo-kw').value}\nSCHEMA WIX: ${document.getElementById('seo-schema').value}\nALT TEXT: ${document.getElementById('seo-alt').value}`;
+      navigator.clipboard.writeText(payload);
+      alert('Dados de SEO e texto copiados para a área de transferência! Só colar no Wix.');
     }
   </script>
 </body>
