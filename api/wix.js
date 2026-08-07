@@ -9,6 +9,9 @@ export default async function handler(req, res) {
   try {
     const { draftPost } = req.body;
 
+    // LOG DO JSON COMPLETO LOGO ANTES DO FETCH
+    console.log("JSON enviado ao Wix:", JSON.stringify({ draftPost }));
+
     const response = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
       headers: {
@@ -19,10 +22,9 @@ export default async function handler(req, res) {
       body: JSON.stringify({ draftPost })
     });
 
-    // --- LOGS TEMPORÁRIOS PARA DEPURAÇÃO ---
     const responseText = await response.text();
     console.log("Status HTTP Wix:", response.status);
-    console.log("Corpo da resposta Wix:", responseText);
+    console.log("Resposta Wix:", responseText);
 
     let data;
     try {
