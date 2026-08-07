@@ -147,6 +147,9 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
             <a id="link-download-feed" download="capa-feed-pistaverde.png" class="w-full bg-slate-800 text-emerald-400 border border-emerald-500/30 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-download"></i> Download Feed (1080x1350)
             </a>
+            <button id="btn-download-mp4" onclick="gerarVideoTikTok()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition">
+              <i class="fa-solid fa-video"></i> Gerar Vídeo TikTok (MP4/WebM)
+            </button>
           </div>
         </div>
       </div>
@@ -393,6 +396,8 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       const w = 270;
       const h = 480;
 
+      const subtitulo = document.getElementById('input-subtitulo').value || '';
+
       ctx.fillStyle = '#0a0e17';
       ctx.fillRect(0, 0, w, h);
 
@@ -404,7 +409,7 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         const y = (h / 2) - (img.height / 2) * scale;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        // Gradiente de leitura na parte inferior
+        // Gradiente escuro
         const grad = ctx.createLinearGradient(0, h * 0.25, 0, h);
         grad.addColorStop(0, 'rgba(0,0,0,0)');
         grad.addColorStop(0.5, 'rgba(0,0,0,0.75)');
@@ -412,24 +417,24 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
 
-        // Linha verde superior
+        // Linha Verde Superior
         ctx.fillStyle = '#00ae35';
         ctx.fillRect(15, 12, w - 30, 4);
 
         // Categoria
         ctx.fillStyle = '#00ae35';
-        ctx.fillRect(15, h - 195, 95, 18);
+        ctx.fillRect(15, h - 235, 95, 18);
         ctx.fillStyle = '#ffffff';
         ctx.font = '800 9px sans-serif';
-        ctx.fillText(cat.toUpperCase(), 20, h - 183);
+        ctx.fillText(cat.toUpperCase(), 20, h - 223);
 
         // Título Principal (H1)
         ctx.fillStyle = '#ffffff';
-        ctx.font = '900 14px "Anton", sans-serif';
+        ctx.font = '900 15px "Anton", sans-serif';
         
         const palavras = titulo.toUpperCase().split(' ');
         let linha = '';
-        let posY = h - 155;
+        let posY = h - 200;
         
         for (let n = 0; n < palavras.length; n++) {
           let test = linha + palavras[n] + ' ';
@@ -443,22 +448,108 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         }
         ctx.fillText(linha, 15, posY);
 
-        // Crédito do Fotógrafo
-        ctx.fillStyle = 'rgba(255,255,255,0.75)';
-        ctx.font = '600 8px sans-serif';
-        ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 15, h - 35);
-
-        // Barra de Clientes/Apoiadores no Rodapé da Capa
-        ctx.fillStyle = '#101510';
-        ctx.fillRect(0, h - 25, w, 25);
+        // Linha verde separadora
+        posY += 5;
         ctx.fillStyle = '#00ae35';
-        ctx.font = '800 8px sans-serif';
-        ctx.fillText('APOIO: MEGA KART | PARALEGO RACING', 15, h - 10);
+        ctx.fillRect(15, posY, 40, 2);
+
+        // Subtítulo
+        posY += 12;
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '500 8px sans-serif';
+        
+        const palavrasSub = subtitulo.split(' ');
+        let linhaSub = '';
+        
+        for (let m = 0; m < palavrasSub.length; m++) {
+          let testSub = linhaSub + palavrasSub[m] + ' ';
+          if (ctx.measureText(testSub).width > (w - 30) && m > 0) {
+            ctx.fillText(linhaSub, 15, posY);
+            linhaSub = palavrasSub[m] + ' ';
+            posY += 10;
+          } else {
+            linhaSub = testSub;
+          }
+        }
+        ctx.fillText(linhaSub, 15, posY);
+
+        // BARRA PRETA DE APOIADORES (EXATAMENTE COMO A REFERÊNCIA)
+        ctx.fillStyle = '#05080d';
+        ctx.fillRect(0, h - 35, w, 35);
+
+        // Texto Chamada
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 6px sans-serif';
+        ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 10, h - 24);
+
+        // Card Apoiador 1 (Mega Kart)
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(10, h - 20, 50, 14);
+        ctx.fillStyle = '#000000';
+        ctx.font = '900 6px sans-serif';
+        ctx.fillText('MEGA KART', 14, h - 11);
+
+        // Card Apoiador 2 (Paralego / Casa das Cópias)
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(65, h - 20, 50, 14);
+        ctx.fillStyle = '#d97706';
+        ctx.font = '900 6px sans-serif';
+        ctx.fillText('PARALEGO', 70, h - 11);
+
+        // Crédito do Fotógrafo na Direita
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '600 6px sans-serif';
+        ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 122, h - 11);
 
         document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
         document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
       };
       img.src = srcCapa;
+    }
+
+    // GERADOR DE VÍDEO DO TIKTOK A PARTIR DO CANVAS (WEBM / MP4)
+    function gerarVideoTikTok() {
+      const canvas = document.getElementById('canvas-capa-oficial');
+      const btn = document.getElementById('btn-download-mp4');
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Gerando Vídeo (3s)...';
+      btn.disabled = true;
+
+      try {
+        const stream = canvas.captureStream(30);
+        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        const chunks = [];
+
+        mediaRecorder.ondataavailable = function(e) {
+          if (e.data.size > 0) chunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = function() {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'video-tiktok-pistaverde.webm';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 100);
+
+          btn.innerHTML = '<i class="fa-solid fa-video"></i> Gerar Vídeo TikTok (MP4/WebM)';
+          btn.disabled = false;
+        };
+
+        mediaRecorder.start();
+        setTimeout(() => {
+          mediaRecorder.stop();
+        }, 3000);
+      } catch (err) {
+        alert('Seu navegador bloqueou a gravação direta. A imagem estática 1080p pode ser usada como vinheta.');
+        btn.innerHTML = '<i class="fa-solid fa-video"></i> Gerar Vídeo TikTok (MP4/WebM)';
+        btn.disabled = false;
+      }
     }
 
     window.onload = function() { processarMateria(); };
