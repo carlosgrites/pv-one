@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Método não permitido' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Método não permitido" });
   }
 
   const WIX_API_KEY = process.env.WIX_API_KEY;
@@ -9,30 +9,44 @@ export default async function handler(req, res) {
   try {
     const { draftPost } = req.body;
 
-    if (draftPost) {
-      delete draftPost.memberIds;
-      // Injeta o seu ID real de escritor do Wix (José Carlos Grites)
-      draftPost.memberId = "1786139062248"; 
+    if (!draftPost) {
+      return res.status(400).json({
+        message: "draftPost não recebido"
+      });
     }
 
-    const response = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": WIX_API_KEY,
-        "wix-site-id": WIX_SITE_ID
-      },
-      body: JSON.stringify({ draftPost })
+    delete draftPost.memberIds;
+    draftPost.memberId = "1786139062248";
+
+    console.log("=== ENVIANDO PARA O WIX ===");
+    console.log(JSON.stringify(draftPost, null, 2));
+
+    const response = await fetch(
+      "https://www.wixapis.com/blog/v3/draft-posts",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": WIX_API_KEY,
+          "Content-Type": "application/json",
+          "wix-site-id": WIX_SITE_ID
+        },
+        body: JSON.stringify({ draftPost })
+      }
+    );
+
+    const text = await response.text();
+
+    console.log("STATUS:", response.status);
+    console.log("RESPOSTA DO WIX:");
+    console.log(text);
+
+    return res.status(response.status).send(text);
+
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({
+      message: err.message
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(response.status).json(data);
-    }
-
-    return res.status(200).json(data);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
   }
 }
