@@ -5,7 +5,7 @@
     { "src": "api/wix.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/wix", "dest": "api/wix.js" },
+    { "src": "/api/wix", "dest": "/api/wix.js" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
