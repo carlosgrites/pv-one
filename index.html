@@ -108,7 +108,7 @@
 
 O piloto Rafael Kerkoff vem focado para manter a regularidade na temporada. Com treinos intensivos ao longo da semana, o competidor busca acertar a regulagem do chassis para extrair o máximo rendimento nas duas baterias decisivas.
 
-A expectativa para o final de semana é de grid cheio e disputas acirradas curva a curva. A equipe trabalha no acerto final para garantir velocidade de reta e estabilidade nos trechos de mola do circuito da Serra.</textarea>
+A expectativa para el final de semana é de grid cheio e disputas acirradas curva a curva. A equipe trabalha no acerto final para garantir velocidade de reta e estabilidade nos trechos de mola do circuito da Serra.</textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
@@ -473,7 +473,7 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         }
         ctx.fillText(linhaSub, 15, posY);
 
-        // BARRA PRETA DE APOIADORES (EXATAMENTE COMO A REFERÊNCIA)
+        // BARRA PRETA DE APOIADORES
         ctx.fillStyle = '#05080d';
         ctx.fillRect(0, h - 35, w, 35);
 
@@ -482,27 +482,32 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         ctx.font = '800 6px sans-serif';
         ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 10, h - 24);
 
-        // Card Apoiador 1 (Mega Kart)
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(10, h - 20, 50, 14);
-        ctx.fillStyle = '#000000';
-        ctx.font = '900 6px sans-serif';
-        ctx.fillText('MEGA KART', 14, h - 11);
+        // CARREGAMENTO DAS LOGOS DOS PATROCINADORES EM BASE64 SEM BLOQUEIO DE CORS
+        const logo1 = new Image();
+        logo1.crossOrigin = "anonymous";
+        logo1.onload = function() {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(10, h - 20, 52, 14);
+          ctx.drawImage(logo1, 12, h - 18, 48, 10);
+          
+          const logo2 = new Image();
+          logo2.crossOrigin = "anonymous";
+          logo2.onload = function() {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(66, h - 20, 52, 14);
+            ctx.drawImage(logo2, 68, h - 18, 48, 10);
 
-        // Card Apoiador 2 (Paralego / Casa das Cópias)
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(65, h - 20, 50, 14);
-        ctx.fillStyle = '#d97706';
-        ctx.font = '900 6px sans-serif';
-        ctx.fillText('PARALEGO', 70, h - 11);
+            // Crédito do Fotógrafo na Direita
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '600 6px sans-serif';
+            ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 122, h - 11);
 
-        // Crédito do Fotógrafo na Direita
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '600 6px sans-serif';
-        ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 122, h - 11);
-
-        document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
-        document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
+            document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
+            document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
+          };
+          logo2.src = APOIADORES_ROTATIVO[0].logo;
+        };
+        logo1.src = APOIADORES_FIXO.logo;
       };
       img.src = srcCapa;
     }
