@@ -51,7 +51,6 @@
 <body class="p-3 md:p-6">
   <div class="max-w-[1750px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
     
-    <!-- COLUNA DA ESQUERDA: FORMULÁRIO E ENTRADAS -->
     <div class="lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 custom-scroll max-h-[95vh] overflow-y-auto space-y-4">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center gap-2">
@@ -128,10 +127,8 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       </button>
     </div>
 
-    <!-- COLUNA DA DIREITA: PREVISÃO, EXPORTAÇÃO E INTEGRAÇÃO WIX -->
     <div class="lg:col-span-7 space-y-5 custom-scroll max-h-[95vh] overflow-y-auto pr-1">
       
-      <!-- PAINEL DE AÇÃO WIX API -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-emerald-500/30 space-y-3">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
           <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
@@ -148,7 +145,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         <div id="status-wix-envio" class="hidden p-2.5 rounded-lg text-xs font-mono border"></div>
       </div>
 
-      <!-- CAPA GRÁFICA -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
         <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
           <i class="fa-solid fa-image"></i> Capa Gráfica Proporcional (1080p)
@@ -171,7 +167,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         </div>
       </div>
 
-      <!-- SIMULADOR RESPONSIVO DA MATÉRIA -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
           <h3 class="text-xs font-black text-slate-300 uppercase tracking-wider">Simulador Responsivo da Matéria</h3>
@@ -188,14 +183,12 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         </div>
       </div>
 
-      <!-- MÓDULO EXCLUSIVO DE REDES SOCIAIS & TIKTOK -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-4">
         <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
           <i class="fa-share-nodes fa-solid"></i> Central de Conteúdo para Redes Sociais
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- INSTAGRAM -->
           <div class="space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-bold text-pink-400 flex items-center gap-1">
@@ -208,7 +201,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
             <textarea id="text-insta" rows="6" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
           </div>
 
-          <!-- TIKTOK LEGENDA -->
           <div class="space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-bold text-cyan-400 flex items-center gap-1">
@@ -222,7 +214,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
           </div>
         </div>
 
-        <!-- TIKTOK ROTEIRO / TTS -->
         <div class="space-y-1.5 border-t border-slate-800 pt-3">
           <div class="flex items-center justify-between">
             <span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
@@ -509,7 +500,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       img.src = srcCapa;
     }
 
-    // FUNÇÃO DE ENVIO PARA O WIX CORRIGIDA COM RICHCONTENT V3
     async function enviarParaWixDraft() {
       const btn = document.getElementById('btn-enviar-wix');
       const status = document.getElementById('status-wix-envio');
@@ -524,7 +514,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       const subtitulo = document.getElementById('input-subtitulo').value || '';
       const releaseText = document.getElementById('input-release').value || '';
 
-      // Converte os parágrafos do release no formato RichContent exigido pelo Wix
       const paragrafos = releaseText.split('\n').filter(p => p.trim() !== '');
       const richNodes = paragrafos.map(p => ({
         type: "PARAGRAPH",
