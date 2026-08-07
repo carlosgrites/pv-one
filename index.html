@@ -404,44 +404,56 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         const y = (h / 2) - (img.height / 2) * scale;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        const grad = ctx.createLinearGradient(0, h * 0.2, 0, h);
+        // Gradiente de leitura na parte inferior
+        const grad = ctx.createLinearGradient(0, h * 0.25, 0, h);
         grad.addColorStop(0, 'rgba(0,0,0,0)');
-        grad.addColorStop(0.5, 'rgba(0,0,0,0.65)');
-        grad.addColorStop(1, 'rgba(0,0,0,0.95)');
+        grad.addColorStop(0.5, 'rgba(0,0,0,0.75)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.98)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
 
+        // Linha verde superior
         ctx.fillStyle = '#00ae35';
         ctx.fillRect(15, 12, w - 30, 4);
 
+        // Categoria
         ctx.fillStyle = '#00ae35';
-        ctx.fillRect(15, h - 180, 95, 18);
+        ctx.fillRect(15, h - 195, 95, 18);
         ctx.fillStyle = '#ffffff';
         ctx.font = '800 9px sans-serif';
-        ctx.fillText(cat.toUpperCase(), 20, h - 168);
+        ctx.fillText(cat.toUpperCase(), 20, h - 183);
 
+        // Título Principal (H1)
         ctx.fillStyle = '#ffffff';
-        ctx.font = '900 15px "Anton", sans-serif';
+        ctx.font = '900 14px "Anton", sans-serif';
         
         const palavras = titulo.toUpperCase().split(' ');
         let linha = '';
-        let posY = h - 140;
+        let posY = h - 155;
         
         for (let n = 0; n < palavras.length; n++) {
           let test = linha + palavras[n] + ' ';
           if (ctx.measureText(test).width > (w - 30) && n > 0) {
             ctx.fillText(linha, 15, posY);
             linha = palavras[n] + ' ';
-            posY += 18;
+            posY += 17;
           } else {
             linha = test;
           }
         }
         ctx.fillText(linha, 15, posY);
 
-        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        // Crédito do Fotógrafo
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
         ctx.font = '600 8px sans-serif';
-        ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 15, h - 15);
+        ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 15, h - 35);
+
+        // Barra de Clientes/Apoiadores no Rodapé da Capa
+        ctx.fillStyle = '#101510';
+        ctx.fillRect(0, h - 25, w, 25);
+        ctx.fillStyle = '#00ae35';
+        ctx.font = '800 8px sans-serif';
+        ctx.fillText('APOIO: MEGA KART | PARALEGO RACING', 15, h - 10);
 
         document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
         document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
