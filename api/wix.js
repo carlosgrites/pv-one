@@ -13,14 +13,12 @@ export default async function handler(req, res) {
 
   const WIX_SITE_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
   const WIX_MEMBER_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
-  const WIX_API_TOKEN = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjYwMTQ0NWVlLTk2NDYtNDU5NC1hYWFlLWQ0NmJkNzc1NjNkZFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjBkMWRjNTE3LTRlMDktNDAwZS04NGJhLTIyZWJhNGZlMTU5MFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg2MTI5ODYzfQ.Bf5McTn0XNDKAeTM5vPOqnjkx-qahrPFv9DNYbo8RiChRgmitrf0qRWzuEQ4zZJd2vPnOAr00XmmzNO2BNrBHm04vdg4AaosPvPz2OOnYqAoTesQgQTgiqZA1TCqC1Xz9Nna1XUctgcYOeggtTjdInmeqlzF82riWDTC__W2W3KbTNcQGeUTcjos5RhNWHh8wKzOoBQBEAjpXPE7vHVERQ-_3oukmHAVzZme62SOixjOAKX6h2mbxrGnI1CM4zxbpqUy6cp5hh9r1H6yn2txcyfEitHx-vLVPp1pRfB7AbE65jSvC8eXJb_bsl80hqR7XAM-0plsgMZqR51smX54vw
-
-";
+  const WIX_API_TOKEN = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjYwMTQ0NWVlLTk2NDYtNDU5NC1hYWFlLWQ0NmJkNzc1NjNkZFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjBkMWRjNTE3LTRlMDktNDAwZS04NGJhLTIyZWJhNGZlMTU5MFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg2MTI5ODYzfQ.Bf5McTn0XNDKAeTM5vPOqnjkx-qahrPFv9DNYbo8RiChRgmitrf0qRWzuEQ4zZJd2vPnOAr00XmmzNO2BNrBHm04vdg4AaosPvPz2OOnYqAoTesQgQTgiqZA1TCqC1Xz9Nna1XUctgcYOeggtTjdInmeqlzF82riWDTC__W2W3KbTNcQGeUTcjos5RhNWHh8wKzOoBQBEAjpXPE7vHVERQ-_3oukmHAVzZme62SOixjOAKX6h2mbxrGnI1CM4zxbpqUy6cp5hh9r1H6yn2txcyfEitHx-vLVPp1pRfB7AbE65jSvC8eXJb_bsl80hqR7XAM-0plsgMZqR51smX54vw";
 
   try {
     let bodyData = req.body || {};
     if (typeof bodyData === 'string') {
-      try { bodyData = JSON.parse(bodyData); } catch(e) {}
+      try { bodyData = JSON.parse(bodyData); } catch (e) { bodyData = {}; }
     }
 
     const payload = bodyData.draftPost ? bodyData : { draftPost: bodyData };
@@ -40,11 +38,7 @@ export default async function handler(req, res) {
 
     const textResponse = await wixResponse.text();
     let data;
-    try {
-      data = JSON.parse(textResponse);
-    } catch (e) {
-      data = { message: textResponse };
-    }
+    try { data = JSON.parse(textResponse); } catch (e) { data = { message: textResponse }; }
 
     if (!wixResponse.ok) {
       return res.status(wixResponse.status).json(data);
