@@ -1,7 +1,11 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "api/wix.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/wix", "dest": "api/wix.js" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
