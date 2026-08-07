@@ -3,10 +3,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Método não permitido' });
   }
 
-  const WIX_SITE_ID = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
-  const WIX_API_KEY = process.env.WIX_API_KEY || "";
+  const WIX_API_KEY = process.env.WIX_API_KEY;
+  const WIX_SITE_ID = process.env.WIX_SITE_ID || "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
 
   try {
+    const { draftPost } = req.body;
+
+    // ELIMINA OS CAMPOS DE AUTOR QUE ESTÃO BARRANDO O ENVIO
+    if (draftPost) {
+      delete draftPost.memberId;
+      delete draftPost.memberIds;
+    }
+
     const response = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
       headers: {
@@ -14,7 +22,7 @@ export default async function handler(req, res) {
         "Authorization": WIX_API_KEY,
         "wix-site-id": WIX_SITE_ID
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify({ draftPost })
     });
 
     const data = await response.json();
