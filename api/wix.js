@@ -1,37 +1,38 @@
-const https = require('https');
-
-module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Método não permitido.' });
+    return res.status(405).json({ message: 'Método não permitido' });
   }
+
+  const WIX_SITE_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
+  const WIX_API_TOKEN = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImRjMGM3OGI3LWE2MTgtNDYwOS1hMjg1LTViMmY3MzkxZjcwY1wiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjgwNWEzZTk4LWIwYmYtNDliOS1iZGVlLWEyZTlkMDk1YjIxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg1OTAwNjE5fQ.KfX4t6Sw3Wz745uSdw6UN1hXdm2vSZVq2nRDgvMNIRX9auY2NhhF1ikIhyz4pjkSoy07dBbsCjjO_hAzRKbEVMcmIaz5XouW25v6Wa6qdn8G5ui-SGNI3OG7McCwYbbCKiaF7ShA9Ha4c8KlnhZunfZvwHqIuPcEZ74Od0ThbQP0YAlqgVOmSYnr_hwiDodMXO-0nc_jQrrlj6FByUiw4ccfF-4cKEY_H8MIJXqVpoONTbJd-mhPL_U6xwvMK3plUeIswu2abnGvpB-Y-xuVmIbJY3ojHTs6czTRukg3nL0yMd3j3reVgHd2ovycu_rpWV4R0jImSrDqmBKhNVmfhQ";
 
   try {
-    let body = req.body || {};
-    if (typeof body === 'string') {
-      try { body = JSON.parse(body); } catch (e) {}
+    const response = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": WIX_API_TOKEN,
+        "wix-site-id": WIX_SITE_ID
+      },
+      body: JSON.stringify(req.body)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
     }
 
-    const title = body.title || body.Title || "Matéria PV ONE";
-    const content = body.content || body.richContent || body.excerpt || "";
-    const coverImage = body.coverImage || body.capa || "";
-    const videoUrl = body.videoUrl || body.video || "";
-
-    // Retorna resposta de sucesso para a interface
-    return res.status(200).json({
-      success: true,
-      message: "Payload processado com sucesso no backend do PV ONE",
-      data: { title, coverImage, videoUrl, content }
-    });
+    return res.status(200).json(data);
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ message: error.message });
   }
-};
+}
