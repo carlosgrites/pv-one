@@ -509,7 +509,7 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       img.src = srcCapa;
     }
 
-    // FUNÇÃO DE ENVIO AUTOMÁTICO PARA A API VERCEL
+    // FUNÇÃO DE ENVIO PARA O WIX CORRIGIDA COM RICHCONTENT V3
     async function enviarParaWixDraft() {
       const btn = document.getElementById('btn-enviar-wix');
       const status = document.getElementById('status-wix-envio');
@@ -520,29 +520,36 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
 
       btn.disabled = true;
 
-      const h1 = document.getElementById('input-h1').value;
-      const subtitulo = document.getElementById('input-subtitulo').value;
-      const htmlCorpo = document.getElementById('leitor-materia-html').innerHTML;
-      
-      const slug = h1.toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9 -]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-");
+      const h1 = document.getElementById('input-h1').value || 'Sem título';
+      const subtitulo = document.getElementById('input-subtitulo').value || '';
+      const releaseText = document.getElementById('input-release').value || '';
+
+      // Converte os parágrafos do release no formato RichContent exigido pelo Wix
+      const paragrafos = releaseText.split('\n').filter(p => p.trim() !== '');
+      const richNodes = paragrafos.map(p => ({
+        type: "PARAGRAPH",
+        nodes: [
+          {
+            type: "TEXT",
+            textData: {
+              text: p,
+              decorations: []
+            }
+          }
+        ]
+      }));
 
       const payload = {
         draftPost: {
           title: h1,
           excerpt: subtitulo,
-          content: htmlCorpo,
-          slug: slug,
-          categoryIds: [],
-          seoData: {
-            tags: [
-              { name: "title", children: h1 },
-              { name: "description", children: subtitulo },
-              { property: "og:title", content: h1 },
-              { property: "og:description", content: subtitulo }
+          memberId: "50bca98c-31f2-4172-a19d-c3abf3dd9dd7",
+          richContent: {
+            nodes: richNodes.length > 0 ? richNodes : [
+              {
+                type: "PARAGRAPH",
+                nodes: [{ type: "TEXT", textData: { text: h1, decorations: [] } }]
+              }
             ]
           }
         }
@@ -570,7 +577,8 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
           status.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
           status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> Abra o painel do seu Wix Blog para publicar.';
         } else {
-          throw new Error(data.message || "Erro retornado pela API Wix (" + response.status + ")");
+          const msgErro = data.message || data.details || JSON.stringify(data);
+          throw new Error(`Erro Wix (${response.status}): ${msgErro}`);
         }
       } catch (err) {
         status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
