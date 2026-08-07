@@ -1,6 +1,4 @@
 export default async function handler(req, res) {
-  console.log("ENTROU NO HANDLER", req.method);
-
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Método não permitido' });
   }
@@ -11,8 +9,8 @@ export default async function handler(req, res) {
   try {
     const { draftPost } = req.body;
 
-    // LOG DO JSON COMPLETO LOGO ANTES DO FETCH
-    console.log("JSON enviado ao Wix:", JSON.stringify({ draftPost }));
+    // RETORNO TEMPORÁRIO DE DEBUG ANTES DO FETCH
+    return res.status(200).json({ debug: { draftPost } });
 
     const response = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
@@ -25,8 +23,6 @@ export default async function handler(req, res) {
     });
 
     const responseText = await response.text();
-    console.log("Status HTTP Wix:", response.status);
-    console.log("Resposta Wix:", responseText);
 
     let data;
     try {
@@ -41,7 +37,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (error) {
-    console.error("Erro interno no handler:", error.message);
     return res.status(500).json({ message: error.message });
   }
 }
