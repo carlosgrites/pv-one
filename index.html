@@ -240,10 +240,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
   </div>
 
   <script>
-    // CREDENCIAIS OFICIAIS WIX API
-    const WIX_SITE_ID = "74713a6e-e007-4df9-8cc4-a1058c55d05d";
-    const WIX_API_TOKEN = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImRjMGM3OGI3LWE2MTgtNDYwOS1hMjg1LTViMmY3MzkxZjcwY1wiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcIjgwNWEzZTk4LWIwYmYtNDliOS1iZGVlLWEyZTlkMDk1YjIxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg1OTAwNjE5fQ.KfX4t6Sw3Wz745uSdw6UN1hXdm2vSZVq2nRDgvMNIRX9auY2NhhF1ikIhyz4pjkSoy07dBbsCjjO_hAzRKbEVMcmIaz5XouW25v6Wa6qdn8G5ui-SGNI3OG7McCwYbbCKiaF7ShA9Ha4c8KlnhZunfZvwHqIuPcEZ74Od0ThbQP0YAlqgVOmSYnr_hwiDodMXO-0nc_jQrrlj6FByUiw4ccfF-4cKEY_H8MIJXqVpoONTbJd-mhPL_U6xwvMK3plUeIswu2abnGvpB-Y-xuVmIbJY3ojHTs6czTRukg3nL0yMd3j3reVgHd2ovycu_rpWV4R0jImSrDqmBKhNVmfhQ";
-
     const PUBLICIDADE_ROTACAO = [
       { nome: "Inovimpress", logo: "https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg", url: "https://anovimpress.com.br/", desc: "Soluções em impressão para empresas, locação e suporte técnico.", btn: "Acessar Inovimpress" },
       { nome: "Casa das Cópias", logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp", url: "https://cdcj.shop/", desc: "Sua gráfica digital rápida e moderna para impressões corporativas.", btn: "Acessar Casa das Cópias" }
@@ -323,7 +319,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       paragrafos.forEach((p, idx) => {
         htmlCorpo += `<p class="my-4 text-slate-800 text-base leading-relaxed">${p}</p>`;
 
-        // FOTO 2: Inserida no meio da matéria (após o 1º parágrafo)
         if (fotosCarregadas.length > 1 && idx === 0) {
           htmlCorpo += `
             <figure class="my-6">
@@ -332,7 +327,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
             </figure>`;
         }
 
-        // BANNER DE PUBLICIDADE: Inserido exatamente no MEIO do texto
         if (idx === meioIndice) {
           htmlCorpo += `
             <aside class="ppv-ad">
@@ -350,7 +344,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
             </aside>`;
         }
 
-        // FOTO 3: Inserida no final do texto
         if (fotosCarregadas.length > 2 && idx === paragrafos.length - 1) {
           htmlCorpo += `
             <figure class="my-6">
@@ -366,7 +359,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
           <p><strong>Fotos:</strong> ${fotografo}</p>
         </div>
 
-        <!-- SEÇÃO APOS A MATÉRIA: EMPRESAS QUE APOIAM O KARTISMO -->
         <section class="ppv-apoio">
           <h2 class="text-xl font-black text-slate-900 mb-1">Empresas que apoiam o kartismo</h2>
           <p class="text-xs text-slate-600">O Portal Pista Verde valoriza e incentiva as marcas que fortalecem o esporte a motor no Brasil.</p>
@@ -390,7 +382,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
           </div>
         </section>
 
-        <!-- BLOCO INSTITUCIONAL NO RODAPÉ -->
         <section class="ppv-institucional">
           <h4>Portal Pista Verde</h4>
           <p>Acompanhe a cobertura jornalística completa do kartismo e automobilismo brasileiro. Notícias atualizadas, coberturas de etapas e valorização dos pilotos da nossa pista.</p>
@@ -399,13 +390,8 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
 
       document.getElementById('leitor-materia-html').innerHTML = htmlCorpo;
 
-      // GERADOR DE LEGENDA INSTAGRAM
       document.getElementById('text-insta').value = `🏁 ${h1}\n\n${subtitulo}\n\n${paragrafos.slice(0, 2).join('\n\n')}\n\n📲 Leia a matéria completa no Portal Pista Verde!\n\n📷 Foto: ${fotografo}\n✍️ Fonte: ${creditos}${pilotoInsta ? '\n🏎️ Piloto: ' + pilotoInsta : ''}\n\n#pistaverde #kartismo #${categoria.toLowerCase().replace(/\s+/g, '')} #automobilismo`;
-      
-      // GERADOR DE LEGENDA TIKTOK
       document.getElementById('text-tiktok').value = `🚨 ${h1}\n\n${subtitulo}\n\nConfira todos os detalhes e a cobertura completa no Portal Pista Verde! 🏁🔥\n\n#pistaverde #kartismo #automobilismo #karting #${categoria.toLowerCase().replace(/\s+/g, '')}`;
-
-      // GERADOR DE ROTEIRO TIKTOK (TTS)
       document.getElementById('text-tts').value = `Atenção apaixonados por velocidade! ${h1}. ${subtitulo} Acompanhe todos os detalhes e notícias completas no Portal Pista Verde. Acesse o link da bio e fique por dentro!`;
 
       renderizarCapaCanvas(h1, categoria, fotografo, fotoCapa);
@@ -430,7 +416,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         const y = (h / 2) - (img.height / 2) * scale;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        // Gradiente escuro
         const grad = ctx.createLinearGradient(0, h * 0.25, 0, h);
         grad.addColorStop(0, 'rgba(0,0,0,0)');
         grad.addColorStop(0.5, 'rgba(0,0,0,0.75)');
@@ -438,18 +423,15 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
 
-        // Linha Verde Superior
         ctx.fillStyle = '#00ae35';
         ctx.fillRect(15, 12, w - 30, 4);
 
-        // Categoria
         ctx.fillStyle = '#00ae35';
         ctx.fillRect(15, h - 235, 95, 18);
         ctx.fillStyle = '#ffffff';
         ctx.font = '800 9px sans-serif';
         ctx.fillText(cat.toUpperCase(), 20, h - 223);
 
-        // Título Principal (H1)
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 15px "Anton", sans-serif';
         
@@ -469,12 +451,10 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         }
         ctx.fillText(linha, 15, posY);
 
-        // Linha verde separadora
         posY += 5;
         ctx.fillStyle = '#00ae35';
         ctx.fillRect(15, posY, 40, 2);
 
-        // Subtítulo
         posY += 12;
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '500 8px sans-serif';
@@ -494,16 +474,13 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         }
         ctx.fillText(linhaSub, 15, posY);
 
-        // BARRA PRETA DE APOIADORES
         ctx.fillStyle = '#05080d';
         ctx.fillRect(0, h - 35, w, 35);
 
-        // Texto Chamada
         ctx.fillStyle = '#ffffff';
         ctx.font = '800 6px sans-serif';
         ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 10, h - 24);
 
-        // CARREGAMENTO DAS LOGOS DOS PATROCINADORES EM BASE64 SEM BLOQUEIO DE CORS
         const logo1 = new Image();
         logo1.crossOrigin = "anonymous";
         logo1.onload = function() {
@@ -518,7 +495,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
             ctx.fillRect(66, h - 20, 52, 14);
             ctx.drawImage(logo2, 68, h - 18, 48, 10);
 
-            // Crédito do Fotógrafo na Direita
             ctx.fillStyle = '#94a3b8';
             ctx.font = '600 6px sans-serif';
             ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 122, h - 11);
@@ -533,71 +509,78 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       img.src = srcCapa;
     }
 
-async function enviarParaWixDraft() {
-  const btn = document.getElementById('btn-enviar-wix');
-  const status = document.getElementById('status-wix-envio');
+    // FUNÇÃO DE ENVIO AUTOMÁTICO DE RASCUNHO + SEO PARA A WIX API REST
+    async function enviarParaWixDraft() {
+      const btn = document.getElementById('btn-enviar-wix');
+      const status = document.getElementById('status-wix-envio');
 
-  status.classList.remove('hidden', 'bg-red-500/10', 'text-red-400', 'border-red-500/20', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
-  status.classList.add('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
-  status.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Montando pacote de SEO e enviando rascunho para o Wix...';
+      status.classList.remove('hidden', 'bg-red-500/10', 'text-red-400', 'border-red-500/20', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
+      status.classList.add('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
+      status.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Montando pacote de SEO e enviando rascunho para o Wix...';
 
-  btn.disabled = true;
+      btn.disabled = true;
 
-  const h1 = document.getElementById('input-h1').value;
-  const subtitulo = document.getElementById('input-subtitulo').value;
-  const htmlCorpo = document.getElementById('leitor-materia-html').innerHTML;
-  
-  const slug = h1.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9 -]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+      const h1 = document.getElementById('input-h1').value;
+      const subtitulo = document.getElementById('input-subtitulo').value;
+      const htmlCorpo = document.getElementById('leitor-materia-html').innerHTML;
+      
+      const slug = h1.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9 -]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
 
-  const payload = {
-    draftPost: {
-      title: h1,
-      excerpt: subtitulo,
-      content: htmlCorpo,
-      slug: slug,
-      categoryIds: [],
-      seoData: {
-        tags: [
-          { name: "title", children: h1 },
-          { name: "description", children: subtitulo },
-          { property: "og:title", content: h1 },
-          { property: "og:description", content: subtitulo }
-        ]
+      const payload = {
+        draftPost: {
+          title: h1,
+          excerpt: subtitulo,
+          content: htmlCorpo,
+          slug: slug,
+          categoryIds: [],
+          seoData: {
+            tags: [
+              { name: "title", children: h1 },
+              { name: "description", children: subtitulo },
+              { property: "og:title", content: h1 },
+              { property: "og:description", content: subtitulo }
+            ]
+          }
+        }
+      };
+
+      try {
+        const response = await fetch("/api/wix", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const textData = await response.text();
+        let data;
+        try {
+          data = JSON.parse(textData);
+        } catch (e) {
+          data = { message: textData || "Resposta inválida do servidor." };
+        }
+
+        if (response.ok) {
+          status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
+          status.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
+          status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> Abra seu painel do Wix Blog para revisar e publicar.';
+        } else {
+          throw new Error(data.message || "Erro de resposta da API Wix (" + response.status + ")");
+        }
+      } catch (err) {
+        status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
+        status.classList.add('bg-red-500/10', 'text-red-400', 'border-red-500/20');
+        status.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <strong>Falha no Envio:</strong> ' + err.message;
+      } finally {
+        btn.disabled = false;
       }
     }
-  };
 
-  try {
-    const response = await fetch("/api/wix", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (response.ok) {
-      status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
-      status.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
-      status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> Abra seu painel do Wix Blog para revisar e publicar.';
-    } else {
-      const errData = await response.json();
-      throw new Error(errData.message || "Erro de resposta da API Wix (" + response.status + ")");
-    }
-  } catch (err) {
-    status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
-    status.classList.add('bg-red-500/10', 'text-red-400', 'border-red-500/20');
-    status.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <strong>Falha no Envio:</strong> ' + err.message;
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-    // GERADOR DE VÍDEO DO TIKTOK A PARTIR DO CANVAS (WEBM / MP4)
     function gerarVideoTikTok() {
       const canvas = document.getElementById('canvas-capa-oficial');
       const btn = document.getElementById('btn-download-mp4');
