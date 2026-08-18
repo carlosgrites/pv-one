@@ -1,12 +1,16 @@
-// api/wix.js (Código Completo - PV ONE v3.0)
+// api/wix.js - DISPARO DIRETO PV ONE v3.0
+
+// =========================================================================
+// 1. COLE SUAS CHAVES DENTRO DAS ASPAS ABAIXO:
+// =========================================================================
+const WIX_API_KEY_VAL = 'IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjJlYjI5MmIyLWU2NGUtNGQ3Yy1hYzMwLTQyMzVhMDYzMWNiNFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImJmY2M1NzBmLTQ3MDUtNDI0MC1iOTliLTQ2Njg3NjQ3MGRlNVwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MDkyMzQ1fQ.MPXDGKra6zYTBVTzNWqSWvOxGMdLFAzoaBf9d5jOLNw5bi-pjo4JUOqIKcC0Rs2B1pN7WIdbVgeRXZTDtvejRQZ_L2qwcclVj2pXjXFUOWYOybBHEjC3WwqjwYoISaCkgdoHlhczRMrEmM8I7xYk8z00NgqKcul4_re2sDZdBkc9MHsv83Hy7aEEzx7D_ELDbS1jPYxPcD3Hv6ph1arfsUBJWNL_-2r8lkFmFyJfM8ckhnWUd4uwOoOrQ_9Q7V7Xe7RsYoTCTETy7nvXMGqZfT1dncMiWhdEb2vURgftrXXK9lJuqrsVNwOmuCekja0AjAHeC68inNcH1PdRgyxd4Q';
+const WIX_SITE_ID_VAL = '50bca98c-31f2-4172-a19d-c3abf3dd9dd7';
+const WIX_ACCOUNT_ID_VAL = '74713a6e-e007-4df9-8cc4-a1058c55d05d';
+// =========================================================================
 
 export default async function handler(req, res) {
-  // 1. Bloqueia métodos diferentes de POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ 
-      success: false, 
-      error: 'Método não permitido. Utilize POST.' 
-    });
+    return res.status(405).json({ success: false, error: 'Método não permitido.' });
   }
 
   try {
@@ -25,37 +29,16 @@ export default async function handler(req, res) {
       seoData
     } = req.body || {};
 
-    // 2. Leitura com fallback de todas as variações de nomes de variáveis
-    const WIX_API_KEY = process.env.WIX_API_KEY || process.env.NEXT_PUBLIC_WIX_API_KEY;
-    const WIX_SITE_ID = process.env.WIX_SITE_ID || process.env.NEXT_PUBLIC_WIX_SITE_ID;
-    const WIX_ACCOUNT_ID = process.env.WIX_ACCOUNT_ID || process.env.NEXT_PUBLIC_WIX_ACCOUNT_ID;
-
-    // Diagnóstico claro se ainda faltar alguma chave
-    const faltantes = [];
-    if (!WIX_API_KEY) faltantes.push('WIX_API_KEY');
-    if (!WIX_SITE_ID) faltantes.push('WIX_SITE_ID');
-    if (!WIX_ACCOUNT_ID) faltantes.push('WIX_ACCOUNT_ID');
-
-    if (faltantes.length > 0) {
-      return res.status(500).json({
-        success: false,
-        error: `Faltam as seguintes variáveis na Vercel: ${faltantes.join(', ')}`,
-        chavesDetectadas: Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('KEY'))
-      });
-    }
-
-    // 3. Validação dos campos obrigatórios do texto
     if (!headline || !lead || !editorialBody) {
       return res.status(400).json({
         success: false,
-        error: 'Campos obrigatórios ausentes: Título (headline), Lide (lead) ou Corpo da matéria (editorialBody).'
+        error: 'Campos obrigatórios ausentes: headline, lead ou editorialBody.'
       });
     }
 
-    // 4. Montagem da árvore do Wix RichContent v3
     const nodes = [];
 
-    // Lide Editorial em Destaque (Negrito)
+    // Lide
     nodes.push({
       type: 'PARAGRAPH',
       id: 'node-lead',
@@ -63,15 +46,12 @@ export default async function handler(req, res) {
         {
           type: 'TEXT',
           id: 'text-lead',
-          textData: {
-            text: lead,
-            decorations: [{ type: 'BOLD' }]
-          }
+          textData: { text: lead, decorations: [{ type: 'BOLD' }] }
         }
       ]
     });
 
-    // Intertítulo (H2) se existir
+    // Intertítulo
     if (sectionHeading) {
       nodes.push({
         type: 'HEADING',
@@ -87,15 +67,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // Divisão do corpo do texto em parágrafos
-    const paragraphs = editorialBody
-      .split('\n\n')
-      .map(p => p.trim())
-      .filter(p => p.length > 0);
-
+    const paragraphs = editorialBody.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
     const midIndex = Math.ceil(paragraphs.length / 2);
 
-    // Primeira metade do texto editorial
+    // Parágrafos 1ª Parte
     paragraphs.slice(0, midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
@@ -110,25 +85,20 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem do Meio (se houver)
+    // Imagem do Meio
     if (middleImageUrl) {
       nodes.push({
         type: 'IMAGE',
         id: 'node-mid-img',
         imageData: {
-          image: {
-            src: { url: middleImageUrl }
-          },
+          image: { src: { url: middleImageUrl } },
           altText: headline,
-          containerData: {
-            alignment: 'CENTER',
-            width: { size: 'ORIGINAL' }
-          }
+          containerData: { alignment: 'CENTER', width: { size: 'ORIGINAL' } }
         }
       });
     }
 
-    // BLOCO DE PUBLICIDADE INOVIMPRESS (Isolado no meio)
+    // Publicidade Inovimpress
     nodes.push({
       type: 'PARAGRAPH',
       id: 'node-inovimpress',
@@ -144,7 +114,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Segunda metade do texto editorial
+    // Parágrafos 2ª Parte
     paragraphs.slice(midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
@@ -159,25 +129,20 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem do Fim (se houver)
+    // Imagem do Fim
     if (endImageUrl) {
       nodes.push({
         type: 'IMAGE',
         id: 'node-end-img',
         imageData: {
-          image: {
-            src: { url: endImageUrl }
-          },
+          image: { src: { url: endImageUrl } },
           altText: `${headline} - Final`,
-          containerData: {
-            alignment: 'CENTER',
-            width: { size: 'ORIGINAL' }
-          }
+          containerData: { alignment: 'CENTER', width: { size: 'ORIGINAL' } }
         }
       });
     }
 
-    // Bloco Final de Créditos e Apoio
+    // Rodapé de Créditos
     const rodapeTexto = `Créditos Fotográficos: ${photoCredits || 'Divulgação'} | Fonte: ${sourceCredits || 'Assessoria de Imprensa'} | Redação Portal Pista Verde`;
     nodes.push({
       type: 'PARAGRAPH',
@@ -186,29 +151,21 @@ export default async function handler(req, res) {
         {
           type: 'TEXT',
           id: 'text-footer',
-          textData: {
-            text: rodapeTexto,
-            decorations: [{ type: 'ITALIC' }]
-          }
+          textData: { text: rodapeTexto, decorations: [{ type: 'ITALIC' }] }
         }
       ]
     });
 
-    // 5. Montagem do Payload para o Wix Draft API
+    // Montagem Payload Wix
     const draftPayload = {
       draftPost: {
         title: headline,
         excerpt: subtitle || lead.substring(0, 160),
-        richContent: {
-          nodes: nodes
-        },
+        richContent: { nodes: nodes },
         categoryIds: categoryId ? [categoryId] : [],
         seoData: {
           tags: [
-            {
-              type: 'title',
-              children: seoData?.title || `${headline} | Portal Pista Verde`
-            },
+            { type: 'title', children: seoData?.title || `${headline} | Portal Pista Verde` },
             {
               type: 'meta',
               props: {
@@ -221,27 +178,22 @@ export default async function handler(req, res) {
       }
     };
 
-    // Capa Principal (se houver)
     if (coverImageUrl) {
       draftPayload.draftPost.media = {
         displayed: true,
         custom: true,
-        mainMedia: {
-          image: {
-            url: coverImageUrl
-          }
-        }
+        mainMedia: { image: { url: coverImageUrl } }
       };
     }
 
-    // 6. Envio com os headers exigidos pelo Wix
+    // Requisição com headers obrigatórios
     const wixResponse = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': WIX_API_KEY,
-        'wix-site-id': WIX_SITE_ID,
-        'wix-account-id': WIX_ACCOUNT_ID
+        'Authorization': WIX_API_KEY_VAL,
+        'wix-site-id': WIX_SITE_ID_VAL,
+        'wix-account-id': WIX_ACCOUNT_ID_VAL
       },
       body: JSON.stringify(draftPayload)
     });
