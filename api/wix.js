@@ -1,8 +1,12 @@
-// api/wix.js (Vercel Serverless Function)
+// api/wix.js (Código Completo - PV ONE v3.0)
 
 export default async function handler(req, res) {
+  // 1. Bloqueia métodos diferentes de POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Método não permitido. Utilize POST.' });
+    return res.status(405).json({ 
+      success: false, 
+      error: 'Método não permitido. Utilize POST.' 
+    });
   }
 
   try {
@@ -19,37 +23,39 @@ export default async function handler(req, res) {
       sourceCredits,
       categoryId,
       seoData
-    } = req.body;
+    } = req.body || {};
 
-    // 1. Diagnóstico preciso das credenciais de ambiente
-    const WIX_API_KEY = process.env.WIX_API_KEY;
-    const WIX_SITE_ID = process.env.WIX_SITE_ID;
-    const WIX_ACCOUNT_ID = process.env.WIX_ACCOUNT_ID;
+    // 2. Leitura com fallback de todas as variações de nomes de variáveis
+    const WIX_API_KEY = process.env.WIX_API_KEY || process.env.NEXT_PUBLIC_WIX_API_KEY;
+    const WIX_SITE_ID = process.env.WIX_SITE_ID || process.env.NEXT_PUBLIC_WIX_SITE_ID;
+    const WIX_ACCOUNT_ID = process.env.WIX_ACCOUNT_ID || process.env.NEXT_PUBLIC_WIX_ACCOUNT_ID;
 
-    const missingVars = [];
-    if (!WIX_API_KEY) missingVars.push('WIX_API_KEY');
-    if (!WIX_SITE_ID) missingVars.push('WIX_SITE_ID');
-    if (!WIX_ACCOUNT_ID) missingVars.push('WIX_ACCOUNT_ID');
+    // Diagnóstico claro se ainda faltar alguma chave
+    const faltantes = [];
+    if (!WIX_API_KEY) faltantes.push('WIX_API_KEY');
+    if (!WIX_SITE_ID) faltantes.push('WIX_SITE_ID');
+    if (!WIX_ACCOUNT_ID) faltantes.push('WIX_ACCOUNT_ID');
 
-    if (missingVars.length > 0) {
+    if (faltantes.length > 0) {
       return res.status(500).json({
         success: false,
-        error: `Variáveis não encontradas no runtime: ${missingVars.join(', ')}`
+        error: `Faltam as seguintes variáveis na Vercel: ${faltantes.join(', ')}`,
+        chavesDetectadas: Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('KEY'))
       });
     }
 
-    // 2. Validação dos campos essenciais do release
+    // 3. Validação dos campos obrigatórios do texto
     if (!headline || !lead || !editorialBody) {
       return res.status(400).json({
         success: false,
-        error: 'Campos obrigatórios ausentes: headline, lead ou editorialBody.'
+        error: 'Campos obrigatórios ausentes: Título (headline), Lide (lead) ou Corpo da matéria (editorialBody).'
       });
     }
 
-    // 3. Montagem dos Nós do RichContent (Wix Blog v3 Schema)
+    // 4. Montagem da árvore do Wix RichContent v3
     const nodes = [];
 
-    // Lide editorial (Destaque)
+    // Lide Editorial em Destaque (Negrito)
     nodes.push({
       type: 'PARAGRAPH',
       id: 'node-lead',
@@ -65,11 +71,11 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Intertítulo / Section Heading
+    // Intertítulo (H2) se existir
     if (sectionHeading) {
       nodes.push({
         type: 'HEADING',
-        id: 'node-section-heading',
+        id: 'node-heading',
         headingData: { level: 2 },
         nodes: [
           {
@@ -81,14 +87,19 @@ export default async function handler(req, res) {
       });
     }
 
-    // Primeira parte do corpo editorial
-    const paragraphs = editorialBody.split('\n\n').filter(p => p.trim() !== '');
+    // Divisão do corpo do texto em parágrafos
+    const paragraphs = editorialBody
+      .split('\n\n')
+      .map(p => p.trim())
+      .filter(p => p.length > 0);
+
     const midIndex = Math.ceil(paragraphs.length / 2);
 
+    // Primeira metade do texto editorial
     paragraphs.slice(0, midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
-        id: `node-editorial-p1-${idx}`,
+        id: `node-p1-${idx}`,
         nodes: [
           {
             type: 'TEXT',
@@ -99,11 +110,11 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem do Meio
+    // Imagem do Meio (se houver)
     if (middleImageUrl) {
       nodes.push({
         type: 'IMAGE',
-        id: 'node-middle-image',
+        id: 'node-mid-img',
         imageData: {
           image: {
             src: { url: middleImageUrl }
@@ -117,10 +128,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // Bloco Comercial Isolado: Inovimpress
+    // BLOCO DE PUBLICIDADE INOVIMPRESS (Isolado no meio)
     nodes.push({
       type: 'PARAGRAPH',
-      id: 'node-inovimpress-ad',
+      id: 'node-inovimpress',
       nodes: [
         {
           type: 'TEXT',
@@ -133,11 +144,11 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Segunda parte do corpo editorial
+    // Segunda metade do texto editorial
     paragraphs.slice(midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
-        id: `node-editorial-p2-${idx}`,
+        id: `node-p2-${idx}`,
         nodes: [
           {
             type: 'TEXT',
@@ -148,11 +159,11 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem de Fim
+    // Imagem do Fim (se houver)
     if (endImageUrl) {
       nodes.push({
         type: 'IMAGE',
-        id: 'node-end-image',
+        id: 'node-end-img',
         imageData: {
           image: {
             src: { url: endImageUrl }
@@ -166,24 +177,24 @@ export default async function handler(req, res) {
       });
     }
 
-    // Bloco de Rodapé: Créditos e Fonte
-    const footerText = `Créditos Fotográficos: ${photoCredits || 'Divulgação'} | Fonte: ${sourceCredits || 'Assessoria de Imprensa'} | Redação Portal Pista Verde`;
+    // Bloco Final de Créditos e Apoio
+    const rodapeTexto = `Créditos Fotográficos: ${photoCredits || 'Divulgação'} | Fonte: ${sourceCredits || 'Assessoria de Imprensa'} | Redação Portal Pista Verde`;
     nodes.push({
       type: 'PARAGRAPH',
-      id: 'node-footer-credits',
+      id: 'node-footer',
       nodes: [
         {
           type: 'TEXT',
           id: 'text-footer',
           textData: {
-            text: footerText,
+            text: rodapeTexto,
             decorations: [{ type: 'ITALIC' }]
           }
         }
       ]
     });
 
-    // 4. Estruturação do Payload Wix
+    // 5. Montagem do Payload para o Wix Draft API
     const draftPayload = {
       draftPost: {
         title: headline,
@@ -210,6 +221,7 @@ export default async function handler(req, res) {
       }
     };
 
+    // Capa Principal (se houver)
     if (coverImageUrl) {
       draftPayload.draftPost.media = {
         displayed: true,
@@ -222,7 +234,7 @@ export default async function handler(req, res) {
       };
     }
 
-    // 5. Requisição para a Wix API com Headers
+    // 6. Envio com os headers exigidos pelo Wix
     const wixResponse = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
       method: 'POST',
       headers: {
@@ -234,28 +246,28 @@ export default async function handler(req, res) {
       body: JSON.stringify(draftPayload)
     });
 
-    const responseData = await wixResponse.json();
+    const dataRetorno = await wixResponse.json();
 
     if (!wixResponse.ok) {
       return res.status(wixResponse.status).json({
         success: false,
-        error: responseData.message || `Erro Wix (${wixResponse.status})`,
-        details: responseData
+        error: dataRetorno.message || `Erro Wix (${wixResponse.status})`,
+        detalhes: dataRetorno
       });
     }
 
     return res.status(200).json({
       success: true,
       message: 'Rascunho criado com sucesso no Wix Blog!',
-      draftPostId: responseData.draftPost?.id,
-      data: responseData
+      draftPostId: dataRetorno.draftPost?.id,
+      data: dataRetorno
     });
 
   } catch (error) {
     return res.status(500).json({
       success: false,
-      error: 'Erro interno no servidor ao processar rascunho.',
-      details: error.message
+      error: 'Erro interno no servidor ao processar o rascunho.',
+      detalhes: error.message
     });
   }
 }
