@@ -16,12 +16,10 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    // Mapeamento de todas as possibilidades de campos vindos da tela
+    // Mapeamento dos campos do formulário
     const title = body.headline || body.title || body.titulo || 'Matéria Portal Pista Verde';
     const subtitle = body.subtitle || body.subtitulo || body.lead || '';
     const leadText = body.lead || body.subtitle || body.subtitulo || '';
-    
-    // Captura qualquer texto presente (seja matéria gerada, release ou texto solto)
     const rawContent = body.editorialBody || body.content || body.corpo || body.release || body.rawText || body.text || subtitle || title;
     
     const categoryId = body.categoryId || body.categoriaId || '';
@@ -34,7 +32,7 @@ export default async function handler(req, res) {
 
     const nodes = [];
 
-    // 1. Lide Editorial (se houver)
+    // 1. Lide Editorial
     if (leadText) {
       nodes.push({
         type: 'PARAGRAPH',
@@ -97,7 +95,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Parágrafos da segunda parte
+    // Parágrafos 2ª Parte
     paragraphs.slice(midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
@@ -139,10 +137,11 @@ export default async function handler(req, res) {
       ]
     });
 
-    // 3. Montagem do Rascunho Wix
+    // 3. Montagem do Payload COM memberId OBRIGATÓRIO
     const draftPayload = {
       draftPost: {
         title: title,
+        memberId: WIX_ACCOUNT_ID_VAL,
         excerpt: subtitle || leadText.substring(0, 160) || title,
         richContent: { nodes: nodes },
         categoryIds: categoryId ? [categoryId] : [],
@@ -169,7 +168,7 @@ export default async function handler(req, res) {
       };
     }
 
-    // 4. Envio direto para o Wix Blog
+    // 4. Envio para a API do Wix
     const wixResponse = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
       method: 'POST',
       headers: {
