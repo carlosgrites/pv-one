@@ -1,7 +1,6 @@
 // api/wix.js (Vercel Serverless Function)
 
 export default async function handler(req, res) {
-  // Garantir apenas método POST
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Método não permitido. Utilize POST.' });
   }
@@ -22,13 +21,20 @@ export default async function handler(req, res) {
       seoData
     } = req.body;
 
-    // 1. Validação de credenciais de ambiente
-    const { WIX_API_KEY, WIX_SITE_ID, WIX_ACCOUNT_ID } = process.env;
+    // 1. Diagnóstico preciso das credenciais de ambiente
+    const WIX_API_KEY = process.env.WIX_API_KEY;
+    const WIX_SITE_ID = process.env.WIX_SITE_ID;
+    const WIX_ACCOUNT_ID = process.env.WIX_ACCOUNT_ID;
 
-    if (!WIX_API_KEY || !WIX_SITE_ID || !WIX_ACCOUNT_ID) {
+    const missingVars = [];
+    if (!WIX_API_KEY) missingVars.push('WIX_API_KEY');
+    if (!WIX_SITE_ID) missingVars.push('WIX_SITE_ID');
+    if (!WIX_ACCOUNT_ID) missingVars.push('WIX_ACCOUNT_ID');
+
+    if (missingVars.length > 0) {
       return res.status(500).json({
         success: false,
-        error: 'Configuração incompleta: WIX_API_KEY, WIX_SITE_ID ou WIX_ACCOUNT_ID não definidos na Vercel.'
+        error: `Variáveis não encontradas no runtime: ${missingVars.join(', ')}`
       });
     }
 
@@ -41,7 +47,6 @@ export default async function handler(req, res) {
     }
 
     // 3. Montagem dos Nós do RichContent (Wix Blog v3 Schema)
-    // O anúncio da Inovimpress é injetado estritamente aqui, sem contaminar os campos originais.
     const nodes = [];
 
     // Lide editorial (Destaque)
@@ -60,7 +65,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Intertítulo / Section Heading (se houver)
+    // Intertítulo / Section Heading
     if (sectionHeading) {
       nodes.push({
         type: 'HEADING',
@@ -94,7 +99,7 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem do Meio (se enviada)
+    // Imagem do Meio
     if (middleImageUrl) {
       nodes.push({
         type: 'IMAGE',
@@ -112,7 +117,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // BLOCO COMERCIAL ISOLADO: Inovimpress (Renderizado uma única vez)
+    // Bloco Comercial Isolado: Inovimpress
     nodes.push({
       type: 'PARAGRAPH',
       id: 'node-inovimpress-ad',
@@ -143,7 +148,7 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem de Fim (se enviada)
+    // Imagem de Fim
     if (endImageUrl) {
       nodes.push({
         type: 'IMAGE',
@@ -178,7 +183,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    // 4. Estruturação do Payload para a Wix Blog v3 API
+    // 4. Estruturação do Payload Wix
     const draftPayload = {
       draftPost: {
         title: headline,
@@ -205,7 +210,6 @@ export default async function handler(req, res) {
       }
     };
 
-    // Imagem de Capa principal (se disponível)
     if (coverImageUrl) {
       draftPayload.draftPost.media = {
         displayed: true,
@@ -218,7 +222,7 @@ export default async function handler(req, res) {
       };
     }
 
-    // 5. Disparo para o endpoint da Wix com todos os Headers Obrigatórios
+    // 5. Requisição para a Wix API com Headers
     const wixResponse = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
       method: 'POST',
       headers: {
@@ -233,7 +237,6 @@ export default async function handler(req, res) {
     const responseData = await wixResponse.json();
 
     if (!wixResponse.ok) {
-      console.error('Erro Wix API:', responseData);
       return res.status(wixResponse.status).json({
         success: false,
         error: responseData.message || `Erro Wix (${wixResponse.status})`,
@@ -241,7 +244,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // 6. Retorno com sucesso
     return res.status(200).json({
       success: true,
       message: 'Rascunho criado com sucesso no Wix Blog!',
@@ -250,7 +252,6 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error('Erro interno na rota Wix:', error);
     return res.status(500).json({
       success: false,
       error: 'Erro interno no servidor ao processar rascunho.',
