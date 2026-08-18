@@ -16,11 +16,14 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    // Mapeamento universal de campos (aceita qualquer variação enviada pelo formulário)
+    // Mapeamento de todas as possibilidades de campos vindos da tela
     const title = body.headline || body.title || body.titulo || 'Matéria Portal Pista Verde';
     const subtitle = body.subtitle || body.subtitulo || body.lead || '';
     const leadText = body.lead || body.subtitle || body.subtitulo || '';
-    const rawContent = body.editorialBody || body.content || body.corpo || body.release || '';
+    
+    // Captura qualquer texto presente (seja matéria gerada, release ou texto solto)
+    const rawContent = body.editorialBody || body.content || body.corpo || body.release || body.rawText || body.text || subtitle || title;
+    
     const categoryId = body.categoryId || body.categoriaId || '';
     const photoCredits = body.photoCredits || body.fotografo || 'Divulgação';
     const sourceCredits = body.sourceCredits || body.fonte || 'Assessoria de Imprensa';
@@ -29,17 +32,9 @@ export default async function handler(req, res) {
     const endImageUrl = body.endImageUrl || body.fimUrl || '';
     const seoData = body.seoData || {};
 
-    // Validação básica do texto
-    if (!rawContent && !subtitle) {
-      return res.status(400).json({
-        success: false,
-        error: 'O conteúdo da matéria está vazio. Preencha o corpo da matéria ou clique em Gerar Matéria primeiro.'
-      });
-    }
-
     const nodes = [];
 
-    // 1. Lide Editorial em destaque
+    // 1. Lide Editorial (se houver)
     if (leadText) {
       nodes.push({
         type: 'PARAGRAPH',
@@ -54,12 +49,11 @@ export default async function handler(req, res) {
       });
     }
 
-    // 2. Quebra e montagem dos parágrafos
-    const textToProcess = rawContent || leadText;
+    // 2. Parágrafos do texto
+    const textToProcess = rawContent || 'Matéria em edição pela redação do Portal Pista Verde.';
     const paragraphs = textToProcess.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
     const midIndex = Math.max(1, Math.ceil(paragraphs.length / 2));
 
-    // Parágrafos da primeira parte
     paragraphs.slice(0, midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
@@ -131,7 +125,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Rodapé de Créditos e Redação
+    // Rodapé de Créditos
     const rodapeTexto = `Créditos Fotográficos: ${photoCredits} | Fonte: ${sourceCredits} | Redação Portal Pista Verde`;
     nodes.push({
       type: 'PARAGRAPH',
@@ -145,7 +139,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    // 3. Montagem da estrutura do rascunho
+    // 3. Montagem do Rascunho Wix
     const draftPayload = {
       draftPost: {
         title: title,
