@@ -10,67 +10,56 @@ const WIX_ACCOUNT_ID_VAL = '74713a6e-e007-4df9-8cc4-a1058c55d05d';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Método não permitido.' });
+    return res.status(405).json({ success: false, error: 'Método não permitido. Utilize POST.' });
   }
 
   try {
-    const {
-      headline,
-      subtitle,
-      lead,
-      sectionHeading,
-      editorialBody,
-      coverImageUrl,
-      middleImageUrl,
-      endImageUrl,
-      photoCredits,
-      sourceCredits,
-      categoryId,
-      seoData
-    } = req.body || {};
+    const body = req.body || {};
 
-    if (!headline || !lead || !editorialBody) {
+    // Mapeamento universal de campos (aceita qualquer variação enviada pelo formulário)
+    const title = body.headline || body.title || body.titulo || 'Matéria Portal Pista Verde';
+    const subtitle = body.subtitle || body.subtitulo || body.lead || '';
+    const leadText = body.lead || body.subtitle || body.subtitulo || '';
+    const rawContent = body.editorialBody || body.content || body.corpo || body.release || '';
+    const categoryId = body.categoryId || body.categoriaId || '';
+    const photoCredits = body.photoCredits || body.fotografo || 'Divulgação';
+    const sourceCredits = body.sourceCredits || body.fonte || 'Assessoria de Imprensa';
+    const coverImageUrl = body.coverImageUrl || body.capaUrl || '';
+    const middleImageUrl = body.middleImageUrl || body.meioUrl || '';
+    const endImageUrl = body.endImageUrl || body.fimUrl || '';
+    const seoData = body.seoData || {};
+
+    // Validação básica do texto
+    if (!rawContent && !subtitle) {
       return res.status(400).json({
         success: false,
-        error: 'Campos obrigatórios ausentes: headline, lead ou editorialBody.'
+        error: 'O conteúdo da matéria está vazio. Preencha o corpo da matéria ou clique em Gerar Matéria primeiro.'
       });
     }
 
     const nodes = [];
 
-    // Lide
-    nodes.push({
-      type: 'PARAGRAPH',
-      id: 'node-lead',
-      nodes: [
-        {
-          type: 'TEXT',
-          id: 'text-lead',
-          textData: { text: lead, decorations: [{ type: 'BOLD' }] }
-        }
-      ]
-    });
-
-    // Intertítulo
-    if (sectionHeading) {
+    // 1. Lide Editorial em destaque
+    if (leadText) {
       nodes.push({
-        type: 'HEADING',
-        id: 'node-heading',
-        headingData: { level: 2 },
+        type: 'PARAGRAPH',
+        id: 'node-lead',
         nodes: [
           {
             type: 'TEXT',
-            id: 'text-heading',
-            textData: { text: sectionHeading, decorations: [] }
+            id: 'text-lead',
+            textData: { text: leadText, decorations: [{ type: 'BOLD' }] }
           }
         ]
       });
     }
 
-    const paragraphs = editorialBody.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
-    const midIndex = Math.ceil(paragraphs.length / 2);
+    // 2. Quebra e montagem dos parágrafos
+    const textToProcess = rawContent || leadText;
+    const paragraphs = textToProcess.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
+    const midIndex = Math.max(1, Math.ceil(paragraphs.length / 2));
 
-    // Parágrafos 1ª Parte
+    // Parágrafos da primeira parte
     paragraphs.slice(0, midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
@@ -85,20 +74,20 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem do Meio
+    // Imagem do Meio (se houver)
     if (middleImageUrl) {
       nodes.push({
         type: 'IMAGE',
         id: 'node-mid-img',
         imageData: {
           image: { src: { url: middleImageUrl } },
-          altText: headline,
+          altText: title,
           containerData: { alignment: 'CENTER', width: { size: 'ORIGINAL' } }
         }
       });
     }
 
-    // Publicidade Inovimpress
+    // Bloco Comercial Isolado: Inovimpress
     nodes.push({
       type: 'PARAGRAPH',
       id: 'node-inovimpress',
@@ -114,7 +103,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Parágrafos 2ª Parte
+    // Parágrafos da segunda parte
     paragraphs.slice(midIndex).forEach((paragraph, idx) => {
       nodes.push({
         type: 'PARAGRAPH',
@@ -129,21 +118,21 @@ export default async function handler(req, res) {
       });
     });
 
-    // Imagem do Fim
+    // Imagem do Fim (se houver)
     if (endImageUrl) {
       nodes.push({
         type: 'IMAGE',
         id: 'node-end-img',
         imageData: {
           image: { src: { url: endImageUrl } },
-          altText: `${headline} - Final`,
+          altText: `${title} - Final`,
           containerData: { alignment: 'CENTER', width: { size: 'ORIGINAL' } }
         }
       });
     }
 
-    // Rodapé de Créditos
-    const rodapeTexto = `Créditos Fotográficos: ${photoCredits || 'Divulgação'} | Fonte: ${sourceCredits || 'Assessoria de Imprensa'} | Redação Portal Pista Verde`;
+    // Rodapé de Créditos e Redação
+    const rodapeTexto = `Créditos Fotográficos: ${photoCredits} | Fonte: ${sourceCredits} | Redação Portal Pista Verde`;
     nodes.push({
       type: 'PARAGRAPH',
       id: 'node-footer',
@@ -156,21 +145,21 @@ export default async function handler(req, res) {
       ]
     });
 
-    // Montagem Payload Wix
+    // 3. Montagem da estrutura do rascunho
     const draftPayload = {
       draftPost: {
-        title: headline,
-        excerpt: subtitle || lead.substring(0, 160),
+        title: title,
+        excerpt: subtitle || leadText.substring(0, 160) || title,
         richContent: { nodes: nodes },
         categoryIds: categoryId ? [categoryId] : [],
         seoData: {
           tags: [
-            { type: 'title', children: seoData?.title || `${headline} | Portal Pista Verde` },
+            { type: 'title', children: seoData?.title || `${title} | Portal Pista Verde` },
             {
               type: 'meta',
               props: {
                 name: 'description',
-                content: seoData?.description || subtitle || lead.substring(0, 160)
+                content: seoData?.description || subtitle || leadText.substring(0, 160) || title
               }
             }
           ]
@@ -186,7 +175,7 @@ export default async function handler(req, res) {
       };
     }
 
-    // Requisição com headers obrigatórios
+    // 4. Envio direto para o Wix Blog
     const wixResponse = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
       method: 'POST',
       headers: {
