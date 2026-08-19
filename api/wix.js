@@ -5,24 +5,18 @@ export default async function handler(req, res) {
 
   const { headline, subtitle, editorialBody, paragraphs, photographer, source } = req.body;
 
-  const WIX_API_KEY = process.env.WIX_API_KEY;
-  const WIX_SITE_ID = process.env.WIX_SITE_ID;
+  // 1. CHAVES DIRETAS NO CÓDIGO (NÃO DEPENDE DE NADA DA VERCEL)
+  const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjJlYjI5MmIyLWU2NGUtNGQ3Yy1hYzMwLTQyMzVhMDYzMWNiNFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImJmY2M1NzBmLTQ3MDUtNDI0MC1iOTliLTQ2Njg3NjQ3MGRlNVwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MDkyMzQ1fQ.MPXDGKra6zYTBVTzNWqSWvOxGMdLFAzoaBf9d5jOLNw5bi-pjo4JUOqIKcC0Rs2B1pN7WIdbVgeRXZTDtvejRQZ_L2qwcclVj2pXjXFUOWYOybBHEjC3WwqjwYoISaCkgdoHlhczRMrEmM8I7xYk8z00NgqKcul4_re2sDZdBkc9MHsv83Hy7aEEzx7D_ELDbS1jPYxPcD3Hv6ph1arfsUBJWNL_-2r8lkFmFyJfM8ckhnWUd4uwOoOrQ_9Q7V7Xe7RsYoTCTETy7nvXMGqZfT1dncMiWhdEb2vURgftrXXK9lJuqrsVNwOmuCekja0AjAHeC68inNcH1PdRgyxd4Q";
+  const siteIdRaw = "901207ba-a8ff-4df3-8260-72fee498ef22";
 
-  if (!WIX_API_KEY || !WIX_SITE_ID) {
-    return res.status(500).json({ 
-      error: "Chaves WIX_API_KEY ou WIX_SITE_ID ausentes no ambiente da Vercel." 
-    });
-  }
+  const cleanApiKey = apiKeyRaw.replace(/^Bearer\s+/i, '').trim();
+  const cleanSiteId = siteIdRaw.trim();
 
-  // Limpeza de token e site ID
-  const cleanApiKey = WIX_API_KEY.replace(/^Bearer\s+/i, '').trim();
-  const cleanSiteId = WIX_SITE_ID.trim();
-
-  // Tratamento de parágrafos isolados
+  // 2. TRATAMENTO DE PARÁGRAFOS E NÓS INDEPENDENTES DO WIX
   const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
   const nodes = [];
 
-  // Linha Fina / Subtítulo no topo
+  // Linha Fina / Subtítulo no topo em itálico
   if (subtitle) {
     nodes.push({
       type: "PARAGRAPH",
@@ -30,7 +24,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // Parágrafos independentes com Lide e Intertítulo H2
+  // Distribuição dos parágrafos com Lide em negrito e Intertítulo H2 no meio
   rawParagraphs.forEach((p, idx) => {
     nodes.push({
       type: "PARAGRAPH",
@@ -73,6 +67,7 @@ export default async function handler(req, res) {
     }
   };
 
+  // 3. ENVIO COM OS CABEÇALHOS OFICIAIS DO WIX BLOG V3
   try {
     const wixResponse = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
