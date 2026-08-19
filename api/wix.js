@@ -5,14 +5,8 @@ export default async function handler(req, res) {
 
   const { headline, subtitle, editorialBody, paragraphs, photographer, source, category } = req.body;
 
-  const WIX_API_KEY = process.env.WIX_API_KEY || process.env.NEXT_PUBLIC_WIX_API_KEY;
-  const WIX_SITE_ID = process.env.WIX_SITE_ID || process.env.NEXT_PUBLIC_WIX_SITE_ID;
-
-  if (!WIX_API_KEY || !WIX_SITE_ID) {
-    return res.status(500).json({ 
-      error: "Configuração da API Wix ausente no backend. Adicione as variáveis WIX_API_KEY e WIX_SITE_ID nas configurações da Vercel." 
-    });
-  }
+  const apiKey = process.env.WIX_API_KEY;
+  const siteId = process.env.WIX_SITE_ID;
 
   const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
   const nodes = [];
@@ -69,8 +63,8 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": WIX_API_KEY,
-        "wix-site-id": WIX_SITE_ID
+        "Authorization": apiKey,
+        "wix-site-id": siteId
       },
       body: JSON.stringify(payload)
     });
