@@ -5,43 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PV ONE v3.0 - Central Editorial Portal Pista Verde</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800;900&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <style>
-    body { background-color: #080c14; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+    body { background-color: #080c14; color: #e2e8f0; font-family: 'Poppins', sans-serif; }
     .custom-scroll::-webkit-scrollbar { width: 6px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     
-    .ppv-materia { font-family: "Poppins", "Inter", sans-serif; color: #21300c; background: #ffffff; line-height: 1.75; border-radius: 12px; overflow: hidden; }
-    .ppv-hero { min-height: 420px; display: flex; align-items: flex-end; padding: 36px 24px; position: relative; background-size: cover; background-position: center; }
+    .ppv-materia { font-family: "Poppins", "Inter", sans-serif; color: #21300C; background: #ffffff; line-height: 1.75; border-radius: 12px; overflow: hidden; }
+    .ppv-hero { min-height: 380px; display: flex; align-items: flex-end; padding: 36px 24px; position: relative; background-size: cover; background-position: center; }
     .ppv-hero-content { position: relative; z-index: 2; width: 100%; max-width: 920px; margin: 0 auto; }
-    .ppv-label { display: inline-block; margin-bottom: 12px; padding: 6px 14px; border-radius: 999px; background: #00ae35; color: #ffffff; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
-    .ppv-hero-title { margin: 0 0 12px; color: #ffffff; font-size: clamp(24px, 3.5vw, 42px); font-weight: 900; line-height: 1.1; text-transform: uppercase; font-family: "Anton", sans-serif; }
-    .ppv-underline { width: 70px; height: 4px; margin: 0 0 14px; border-radius: 999px; background: #00ae35; }
-    .ppv-subtitle { margin: 0; color: #f3f3f3; font-size: clamp(14px, 1.5vw, 18px); font-weight: 500; line-height: 1.45; }
+    .ppv-label { display: inline-block; margin-bottom: 12px; padding: 6px 14px; border-radius: 999px; background: #00AE35; color: #ffffff; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .ppv-hero-title { margin: 0 0 12px; color: #ffffff; font-size: clamp(22px, 3.2vw, 38px); font-weight: 900; line-height: 1.15; text-transform: uppercase; font-family: "Poppins", sans-serif; }
+    .ppv-underline { width: 70px; height: 4px; margin: 0 0 14px; border-radius: 999px; background: #00AE35; }
+    .ppv-subtitle { margin: 0; color: #f3f3f3; font-size: clamp(13px, 1.4vw, 17px); font-weight: 500; line-height: 1.45; }
     .ppv-container { max-width: 860px; margin: 0 auto; padding: 30px 20px 50px; }
+    
+    .ppv-infobox { background: #fff; border-top: 6px solid #00AE35; box-shadow: 0 16px 42px rgba(0,0,0,.11); border-radius: 18px; padding: 22px; margin: -50px auto 32px; position: relative; z-index: 3; }
     
     .ppv-ad { margin: 34px 0; border: 1px solid rgba(0,174,53,.35); border-radius: 16px; background: #101510; color: #ffffff; overflow: hidden; }
     .ppv-ad-inner { display: grid; grid-template-columns: 140px 1fr; gap: 18px; align-items: center; padding: 18px; }
     .ppv-ad img { width: 100%; height: 80px; border-radius: 10px; background: #fff; object-fit: contain; padding: 4px; }
-    .ppv-ad-tag { display: inline-block; margin-bottom: 6px; padding: 4px 8px; border-radius: 999px; background: #00ae35; color: #fff; font-size: 10px; font-weight: 900; text-transform: uppercase; }
-    .ppv-ad h3 { margin: 0 0 6px; color: #fff; font-size: 20px; font-weight: 900; }
-    .ppv-ad p { margin: 0 0 12px; color: #dfe7dc; font-size: 13px; line-height: 1.45; }
-    .ppv-ad-button, .ppv-sponsor-btn { display: inline-block; padding: 8px 16px; border-radius: 999px; background: #00ae35; color: #fff !important; font-size: 11px; font-weight: 900; text-transform: uppercase; text-decoration: none; }
+    .ppv-ad-tag { display: inline-block; margin-bottom: 6px; padding: 4px 8px; border-radius: 999px; background: #00AE35; color: #fff; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+    .ppv-ad h3 { margin: 0 0 6px; color: #fff; font-size: 18px; font-weight: 900; }
+    .ppv-ad p { margin: 0 0 12px; color: #dfe7dc; font-size: 12px; line-height: 1.45; }
+    .ppv-ad-button, .ppv-sponsor-btn { display: inline-block; padding: 8px 16px; border-radius: 999px; background: #00AE35; color: #fff !important; font-size: 11px; font-weight: 900; text-transform: uppercase; text-decoration: none; }
     
     .ppv-apoio { margin-top: 38px; padding: 24px; border: 1px solid #e3eadf; border-radius: 18px; background: #f7f9f6; }
     .ppv-sponsor-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; margin-top: 16px; }
-    .ppv-sponsor-card { display: flex; flex-direction: column; justify-content: space-between; padding: 16px; border-left: 4px solid #00ae35; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,.05); }
-    .ppv-sponsor-card img { width: 100%; height: 60px; object-fit: contain; margin-bottom: 12px; }
-    .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300c; font-size: 15px; font-weight: 800; }
+    .ppv-sponsor-card { display: flex; flex-direction: column; justify-content: space-between; padding: 16px; border-left: 4px solid #00AE35; border-radius: 12px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,.05); }
+    .ppv-sponsor-card img { width: 100%; height: 65px; object-fit: contain; margin-bottom: 12px; }
+    .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300C; font-size: 15px; font-weight: 800; }
     .ppv-sponsor-card p { margin: 0 0 12px; font-size: 12px; color: #4d5b43; line-height: 1.5; }
 
-    .ppv-institucional { margin-top: 30px; padding: 20px; background: #101510; border-radius: 16px; color: #ffffff; text-align: center; border: 1px solid #00ae35; }
-    .ppv-institucional h4 { font-family: "Anton", sans-serif; font-size: 22px; color: #00ae35; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
-    .ppv-institucional p { font-size: 12px; color: #cbd5e1; line-height: 1.6; max-width: 650px; margin: 0 auto; }
+    .ppv-portal-footer { margin-top: 30px; padding: 24px; background: #071007; border-radius: 16px; color: #ffffff; text-align: center; border-top: 6px solid #00AE35; }
+    .ppv-portal-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+    .ppv-portal-mark { background: #00AE35; color: #101510; font-family: "Poppins", sans-serif; font-size: 16px; font-weight: 900; padding: 4px 10px; border-radius: 6px; }
+    .ppv-portal-name strong { display: block; font-family: "Poppins", sans-serif; font-size: 18px; color: #ffffff; letter-spacing: 1px; line-height: 1; }
+    .ppv-portal-name span { font-size: 11px; color: #00AE35; font-weight: 700; text-transform: uppercase; }
+    .ppv-portal-footer p { font-size: 12px; color: #cbd5e1; line-height: 1.6; max-width: 680px; margin: 0 auto 14px; }
+    .ppv-portal-footer a { display: inline-block; padding: 8px 18px; border-radius: 999px; background: #00AE35; color: #ffffff; font-size: 11px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
     
     .view-pc { width: 100%; max-width: 1000px; }
     .view-tablet { width: 768px; margin: 0 auto; }
@@ -51,37 +57,38 @@
 <body class="p-3 md:p-6">
   <div class="max-w-[1750px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
     
+    <!-- COLUNA ESQUERDA: PÁGINA 1 (ENTRADA DE DADOS) -->
     <div class="lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 custom-scroll max-h-[95vh] overflow-y-auto space-y-4">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center gap-2">
-          <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse"></div>
-          <h2 class="text-base font-black tracking-wider text-white">PV ONE <span class="text-xs text-emerald-400 font-normal">v3.0 Pista</span></h2>
+          <div class="w-3.5 h-3.5 rounded-full bg-[#00AE35]"></div>
+          <h2 class="text-base font-black tracking-wider text-white">PV ONE <span class="text-xs text-[#00AE35] font-normal">v3.0 Pista</span></h2>
         </div>
-        <span class="text-[10px] font-mono bg-slate-800 text-emerald-400 px-2 py-1 rounded border border-emerald-500/20">Bloco 1 Oficial</span>
+        <span class="text-[10px] font-mono bg-slate-800 text-[#00AE35] px-2 py-1 rounded border border-[#00AE35]/20">Central Editorial</span>
       </div>
 
       <div class="flex rounded-xl overflow-hidden p-1 bg-slate-950 border border-slate-800">
-        <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950">1- Release Recebido</button>
+        <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950">1- Release Recebido</button>
         <button id="tab-propria" onclick="trocarOrigem('propria')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400">2- Matéria Própria</button>
       </div>
 
       <div class="space-y-3">
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Título Principal (H1)</label>
-          <input type="text" id="input-h1" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-emerald-500 outline-none font-bold" value="Rafael Kerkoff encara 7ª e 8ª etapas do Capixaba de Kart em busca da liderança">
+          <input type="text" id="input-h1" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-[#00AE35] outline-none font-bold" value="27ª COPA BRASIL DE KART: IRMÃOS EMERICK CHEGAM AO MARANHÃO E BUSCAM TÍTULOS">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Subtítulo / Linha Fina</label>
-          <input type="text" id="input-subtitulo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-emerald-500 outline-none" value="Piloto capixaba ocupa a 3ª colocação da sua categoria e quer somar pontos decisivos no Kartódromo da Serra.">
+          <input type="text" id="input-subtitulo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-[#00AE35] outline-none" value="Os pilotos do Espírito Santo, Miguel e Joaquim Emerick, desembarcam no Nordeste com o objetivo de conquistar títulos em suas categorias.">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria Oficial Wix</label>
-            <select id="input-categoria" onchange="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-bold focus:border-emerald-500 outline-none">
+            <select id="input-categoria" onchange="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-[#00AE35] font-bold focus:border-[#00AE35] outline-none">
+              <option value="COPA DO BRASIL">COPA DO BRASIL</option>
               <option value="Kartismo">Kartismo</option>
-              <option value="Copa do Brasil de Kart">Copa do Brasil de Kart</option>
               <option value="Automobilismo">Automobilismo</option>
               <option value="Sustentabilidade">Sustentabilidade</option>
               <option value="KIG RJ 2026">KIG RJ 2026</option>
@@ -90,89 +97,175 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">Fotógrafo / Imagem</label>
-            <input type="text" id="input-fotografo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="DarkSide Karts">
+            <input type="text" id="input-fotografo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="DARKSIDE KARTS / CASAL MOTORSPORT">
           </div>
         </div>
 
         <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-          <label class="block text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
+          <label class="block text-[11px] font-bold text-[#00AE35] flex items-center gap-1.5">
             <i class="fa-solid fa-camera"></i> Fotos da Matéria (1ª Capa | 2ª Meio | 3ª Fim)
           </label>
-          <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-[11px] text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-500 file:text-slate-950 hover:file:bg-emerald-400 cursor-pointer">
+          <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-[11px] text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-[#00AE35] file:text-slate-950 hover:file:bg-[#00AE35]/90 cursor-pointer">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Release / Corpo da Matéria</label>
-          <textarea id="input-release" oninput="processarMateria()" rows="8" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-emerald-500 outline-none leading-relaxed">A programação do Campeonato Capixaba de Kart 2026 começa nesta sexta-feira (7), às 13h, com treinos livres. A tomada de tempo e as provas das 7ª e 8ª etapas, para todas as categorias, estão programadas para o sábado (8), no Kartódromo da Serra. As corridas e a disputa pelos pontos da rodada poderão ser acompanhadas ao vivo pelo público, no canal Kart Capixaba, no YouTube.
+          <textarea id="input-release" oninput="processarMateria()" rows="8" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-[#00AE35] outline-none leading-relaxed">A programação da 27ª Copa Brasil de Kart 2026 entra em fase decisiva com a chegada dos pilotos ao circuito de Imperatriz, no Maranhão. Representando o Espírito Santo, os irmãos Miguel e Joaquim Emerick iniciam os treinos oficiais focados na briga direta pelas primeiras posições da tabela.
 
-O piloto Rafael Kerkoff vem focado para manter a regularidade na temporada. Com treinos intensivos ao longo da semana, o competidor busca acertar a regulagem do chassis para extrair o máximo rendimento nas duas baterias decisivas.
+Com histórico positivo nas competições regionais e nacionais, a dupla trabalhou intensamente na preparação dos motores e no acerto de chassis para garantir máxima aderência e estabilidade no traçado maranhense.
 
-A expectativa para o final de semana é de grid cheio e disputas acirradas curva a curva. A equipe trabalha no acerto final para garantir velocidade de reta e estabilidade nos trechos de mola do circuito da Serra.</textarea>
+A expectativa para as baterias classificatórias e finais é de alto nível técnico e disputas intensas curva a curva. A equipe técnica ajusta os últimos detalhes para assegurar velocidade constante nas tomadas de tempo.</textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">Fonte / Assessoria</label>
-            <input type="text" id="input-creditos" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="Kako Marques / KMCom Assessoria">
+            <input type="text" id="input-creditos" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="Comunicação Oficial">
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">@ do Piloto (Instagram)</label>
-            <input type="text" id="input-piloto-insta" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="@rafaelkerkoff_107">
+            <input type="text" id="input-piloto-insta" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="@emerick_racing">
           </div>
         </div>
       </div>
 
-      <button onclick="processarMateria()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 uppercase tracking-wider">
-        <i class="fa-solid fa-rotate"></i> Gerar Matéria PV & Redes Sociais
+      <button onclick="processarMateria()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 uppercase tracking-wider">
+        <i class="fa-solid fa-arrows-rotate"></i> Processar Matéria, SEO e Rodízio
       </button>
     </div>
 
+    <!-- COLUNA DIREITA: PÁGINA 2 E PÁGINA 3 -->
     <div class="lg:col-span-7 space-y-5 custom-scroll max-h-[95vh] overflow-y-auto pr-1">
       
-      <div class="bg-slate-900 p-4 rounded-2xl border border-emerald-500/30 space-y-3">
+      <!-- MÓDULO 1: DISPARO DIRETO WIX BLOG API -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-[#00AE35]/30 space-y-3">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-          <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+          <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2">
             <i class="fa-solid fa-cloud-arrow-up"></i> Integração Direta Wix Blog API
           </h3>
-          <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-mono">Conectado (Vercel Backend)</span>
+          <span class="text-[10px] bg-[#00AE35]/10 text-[#00AE35] border border-[#00AE35]/20 px-2 py-0.5 rounded font-mono">Conectado (Vercel Backend)</span>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-3">
-          <button id="btn-enviar-wix" onclick="enviarParaWixDraft()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase tracking-wider shadow-lg shadow-emerald-500/10">
-            <i class="fa-solid fa-paper-plane"></i> 🚀 Enviar Rascunho com SEO para o Wix
+          <button id="btn-enviar-wix" onclick="enviarParaWixDraft()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase tracking-wider shadow-lg shadow-[#00AE35]/10">
+            <i class="fa-solid fa-paper-plane"></i> Enviar Rascunho com SEO Completo para o Wix
           </button>
         </div>
         <div id="status-wix-envio" class="hidden p-2.5 rounded-lg text-xs font-mono border"></div>
       </div>
 
+      <!-- MÓDULO 2: CAPAS GRÁFICAS (MATRIZ EMERICK) -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-        <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-          <i class="fa-solid fa-image"></i> Capa Gráfica Proporcional (1080p)
-        </h3>
-        <div class="flex flex-col md:flex-row items-center gap-5 justify-center">
-          <div class="relative shadow-2xl rounded-xl overflow-hidden border border-slate-700 bg-black">
-            <canvas id="canvas-capa-oficial" width="270" height="480" class="block"></canvas>
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-image"></i> Capas Geradas Proporcionais (Padrão Emerick)
+          </h3>
+          <span class="text-[10px] text-slate-400 font-mono">Wix (1200x675) | Redes (1080x1350)</span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <!-- Canvas Horizontal Wix 1200x675 -->
+          <div class="space-y-2 text-center">
+            <span class="text-[11px] font-bold text-slate-300 block">Capa Matéria Wix (1200x675 px - 16:9)</span>
+            <div class="relative shadow-xl rounded-lg overflow-hidden border border-slate-700 bg-black mx-auto">
+              <canvas id="canvas-capa-wix" width="320" height="180" class="block w-full"></canvas>
+            </div>
+            <a id="link-download-wix" download="capa-materia-wix.png" class="w-full bg-slate-800 hover:bg-slate-700 text-[#00AE35] border border-[#00AE35]/30 font-bold py-1.5 px-3 rounded-lg text-xs flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-download"></i> Baixar Capa Wix (1200x675)
+            </a>
           </div>
-          <div class="space-y-2 w-full md:w-64">
-            <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-full bg-emerald-500 text-slate-950 font-extrabold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-download"></i> Download Stories (1080x1920)
-            </a>
-            <a id="link-download-feed" download="capa-feed-pistaverde.png" class="w-full bg-slate-800 text-emerald-400 border border-emerald-500/30 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-download"></i> Download Feed (1080x1350)
-            </a>
-            <button id="btn-download-mp4" onclick="gerarVideoTikTok()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition">
-              <i class="fa-solid fa-video"></i> Gerar Vídeo TikTok (MP4/WebM)
-            </button>
+
+          <!-- Canvas Vertical Feed 1080x1350 (4:5) -->
+          <div class="space-y-2 text-center">
+            <span class="text-[11px] font-bold text-slate-300 block">Capa Redes Sociais (1080x1350 px)</span>
+            <div class="relative shadow-xl rounded-lg overflow-hidden border border-slate-700 bg-black mx-auto w-[144px]">
+              <canvas id="canvas-capa-oficial" width="144" height="180" class="block w-full"></canvas>
+            </div>
+            <div class="flex gap-2">
+              <a id="link-download-feed" download="capa-feed-pistaverde.png" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-1.5 px-2 rounded-lg text-[10px] flex items-center justify-center gap-1 cursor-pointer">
+                Feed (4:5)
+              </a>
+              <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-1/2 bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-1.5 px-2 rounded-lg text-[10px] flex items-center justify-center gap-1 cursor-pointer">
+                Stories (9:16)
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- MÓDULO 3: BLOCOS DE CÓDIGO HTML PARA IFRAMES NO WIX -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+        <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+          <i class="fa-solid fa-code"></i> Códigos HTML para iFrames no Wix Studio
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-slate-300">Publicidade (Meio):</span>
+              <button onclick="copiarTexto('code-publicidade')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-0.5 rounded hover:bg-[#00AE35]/90">
+                <i class="fa-regular fa-copy"></i> Copiar HTML
+              </button>
+            </div>
+            <textarea id="code-publicidade" rows="3" readonly class="w-full bg-slate-950 text-slate-400 border border-slate-800 rounded-lg p-2 text-[10px] font-mono"></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-slate-300">Apoiadores (Final):</span>
+              <button onclick="copiarTexto('code-apoiadores')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-0.5 rounded hover:bg-[#00AE35]/90">
+                <i class="fa-regular fa-copy"></i> Copiar HTML
+              </button>
+            </div>
+            <textarea id="code-apoiadores" rows="3" readonly class="w-full bg-slate-950 text-slate-400 border border-slate-800 rounded-lg p-2 text-[10px] font-mono"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 4: PAINEL DE CONFERÊNCIA DE SEO AUTOMÁTICO -->
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+        <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+          <i class="fa-solid fa-magnifying-glass-chart"></i> Painel de SEO Obrigatório (Search Console)
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <span class="text-slate-400 font-semibold block mb-0.5">1. Palavra-chave Foco:</span>
+            <input type="text" id="seo-foco" readonly class="w-full bg-slate-950 text-[#00AE35] font-bold p-1.5 rounded border border-slate-800 text-xs">
+          </div>
+          <div>
+            <span class="text-slate-400 font-semibold block mb-0.5">2. Tag de Título (Title Tag):</span>
+            <input type="text" id="seo-title" readonly class="w-full bg-slate-950 text-slate-200 p-1.5 rounded border border-slate-800 text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div>
+            <span class="text-slate-400 font-semibold block mb-0.5">3. Meta Descrição (até 150 caracteres):</span>
+            <input type="text" id="seo-desc" readonly class="w-full bg-slate-950 text-slate-200 p-1.5 rounded border border-slate-800 text-xs">
+          </div>
+          <div>
+            <span class="text-slate-400 font-semibold block mb-0.5">4. Slug / URL Amigável:</span>
+            <input type="text" id="seo-slug" readonly class="w-full bg-slate-950 text-[#00AE35] p-1.5 rounded border border-slate-800 text-xs">
+          </div>
+        </div>
+
+        <div class="text-xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 font-semibold">9. 28 Tags Oficiais (separadas por vírgula):</span>
+            <button onclick="copiarTexto('seo-tags')" class="text-[10px] text-[#00AE35] hover:underline font-bold">Copiar 28 Tags</button>
+          </div>
+          <textarea id="seo-tags" rows="2" readonly class="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded-lg p-1.5 text-[11px] font-mono leading-relaxed"></textarea>
+        </div>
+      </div>
+
+      <!-- MÓDULO 5: SIMULADOR RESPONSIVO DA MATÉRIA (PÁGINA 2) -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
         <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-          <h3 class="text-xs font-black text-slate-300 uppercase tracking-wider">Simulador Responsivo da Matéria</h3>
+          <h3 class="text-xs font-black text-slate-300 uppercase tracking-wider">Simulador da Matéria (Página 2)</h3>
           <div class="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
             <button onclick="mudarView('pc')" class="px-2 py-1 text-[10px] font-bold rounded text-slate-300">PC</button>
-            <button onclick="mudarView('tablet')" class="px-2 py-1 text-[10px] font-bold rounded bg-emerald-500 text-slate-950">Tablet</button>
+            <button onclick="mudarView('tablet')" class="px-2 py-1 text-[10px] font-bold rounded bg-[#00AE35] text-slate-950">Tablet</button>
             <button onclick="mudarView('mobile')" class="px-2 py-1 text-[10px] font-bold rounded text-slate-300">Celular</button>
           </div>
         </div>
@@ -183,47 +276,79 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         </div>
       </div>
 
+      <!-- PÁGINA 3: CENTRAL DE CONTEÚDO PARA REDES SOCIAIS (SEM EMOJIS) -->
       <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-4">
-        <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-          <i class="fa-share-nodes fa-solid"></i> Central de Conteúdo para Redes Sociais
+        <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+          <i class="fa-solid fa-share-nodes"></i> Central de Conteúdo para Redes Sociais (Página 3)
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Instagram Post -->
           <div class="space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-bold text-pink-400 flex items-center gap-1">
-                <i class="fa-brands fa-instagram"></i> Legenda Instagram:
+                <i class="fa-brands fa-instagram"></i> Instagram Post (Feed):
               </span>
-              <button onclick="copiarTexto('text-insta')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">
+              <button onclick="copiarTexto('text-insta')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-[#00AE35] px-2 py-0.5 rounded border border-[#00AE35]/20 font-bold">
                 <i class="fa-regular fa-copy"></i> Copiar
               </button>
             </div>
-            <textarea id="text-insta" rows="6" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
+            <textarea id="text-insta" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
           </div>
 
+          <!-- Facebook -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-blue-400 flex items-center gap-1">
+                <i class="fa-brands fa-facebook"></i> Facebook:
+              </span>
+              <button onclick="copiarTexto('text-fb')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 font-bold">
+                <i class="fa-regular fa-copy"></i> Copiar
+              </button>
+            </div>
+            <textarea id="text-fb" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <!-- LinkedIn -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-bold text-sky-400 flex items-center gap-1">
+                <i class="fa-brands fa-linkedin"></i> LinkedIn Corporativo:
+              </span>
+              <button onclick="copiarTexto('text-linkedin')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-sky-400 px-2 py-0.5 rounded border border-sky-500/20 font-bold">
+                <i class="fa-regular fa-copy"></i> Copiar
+              </button>
+            </div>
+            <textarea id="text-linkedin" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
+          </div>
+
+          <!-- TikTok Legenda -->
           <div class="space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="text-[11px] font-bold text-cyan-400 flex items-center gap-1">
-                <i class="fa-brands fa-tiktok"></i> Legenda TikTok:
+                <i class="fa-brands fa-tiktok"></i> TikTok Legenda:
               </span>
               <button onclick="copiarTexto('text-tiktok')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20 font-bold">
                 <i class="fa-regular fa-copy"></i> Copiar
               </button>
             </div>
-            <textarea id="text-tiktok" rows="6" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
+            <textarea id="text-tiktok" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
           </div>
         </div>
 
+        <!-- YouTube / Roteiro TTS -->
         <div class="space-y-1.5 border-t border-slate-800 pt-3">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
-              <i class="fa-solid fa-microphone"></i> TikTok - Roteiro para Narração / Voz (TTS):
+            <span class="text-[11px] font-bold text-[#00AE35] flex items-center gap-1">
+              <i class="fa-brands fa-youtube"></i> YouTube Descrição & Roteiro de Áudio:
             </span>
-            <button onclick="copiarTexto('text-tts')" class="text-[10px] bg-emerald-500 text-slate-950 px-2 py-0.5 rounded font-black hover:bg-emerald-400">
-              <i class="fa-regular fa-copy"></i> Copiar Roteiro
+            <button onclick="copiarTexto('text-yt')" class="text-[10px] bg-[#00AE35] text-slate-950 px-2 py-0.5 rounded font-black hover:bg-[#00AE35]/90">
+              <i class="fa-regular fa-copy"></i> Copiar YouTube
             </button>
           </div>
-          <textarea id="text-tts" rows="4" readonly class="w-full bg-slate-950 text-emerald-300 border border-emerald-500/30 rounded-lg p-2 text-xs font-mono leading-relaxed"></textarea>
+          <textarea id="text-yt" rows="4" readonly class="w-full bg-slate-950 text-emerald-300 border border-[#00AE35]/30 rounded-lg p-2 text-xs font-mono leading-relaxed"></textarea>
         </div>
       </div>
 
@@ -231,19 +356,137 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
   </div>
 
   <script>
-    const PUBLICIDADE_ROTACAO = [
-      { nome: "Inovimpress", logo: "https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg", url: "https://anovimpress.com.br/", desc: "Soluções em impressão para empresas, locação e suporte técnico.", btn: "Acessar Inovimpress" },
-      { nome: "Casa das Cópias", logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp", url: "https://cdcj.shop/", desc: "Sua gráfica digital rápida e moderna para impressões corporativas.", btn: "Acessar Casa das Cópias" }
+    // 1. PUBLICIDADE EM RODÍZIO (1X1)
+    const PUBLICIDADES = [
+      {
+        nome: "Inovimpress",
+        logo: "https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg",
+        url: "https://anovimpress.com.br/",
+        desc: "Soluções em impressão para empresas, com venda e locação de impressoras e multifuncionais, suprimentos e suporte técnico.",
+        btn: "Acessar Inovimpress"
+      },
+      {
+        nome: "Casa das Cópias",
+        logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp",
+        url: "https://cdcj.shop/",
+        desc: "Sua gráfica digital rápida e moderna. Da impressão de pequenos projetos a grandes tiragens corporativas com agilidade e qualidade.",
+        btn: "Acessar Casa das Cópias"
+      }
     ];
 
-    const APOIADORES_FIXO = { nome: "Mega Kart", logo: "https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp", url: "https://www.megakart.com.br/", desc: "Projeto de alta performance em chassis e componentes de kartismo.", btn: "Acessar Mega Kart" };
-    
-    const APOIADORES_ROTATIVO = [
-      { nome: "Paralego Racing", logo: "https://static.wixstatic.com/media/74713a_c2a31e7ef0e948d48509688f39df0428~mv2.webp", url: "https://www.paralegoracing.com.br/", desc: "Variedade e qualidade em equipamentos para kartismo profissional.", btn: "Acessar Paralego" },
-      { nome: "Krona Brasil", logo: "https://static.wixstatic.com/media/74713a_cefb94e3ec62450c9ef6ee52757e90e4~mv2.png", url: "https://www.instagram.com/krona_brasil/", desc: "Tubos e conexões de alta resistência e qualidade.", btn: "Acessar Krona" }
+    // 2. EMPRESAS QUE APOIAM O KARTISMO (SLOT 1: MEGA KART FIXA)
+    const APOIADOR_FIXO = {
+      nome: "Mega Kart",
+      logo: "https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp",
+      url: "https://www.megakart.com.br/",
+      desc: "O Projeto Mega é totalmente brasileiro, com primeira homologação CBA/CIK-FIA em 1997. A Mega Kart é a maior fabricante latino-americana de karts, peças e acessórios.",
+      btn: "Acessar Mega Kart"
+    };
+
+    // 3. EMPRESAS QUE APOIAM O KARTISMO (SLOT 2: RODÍZIO DOS 11 APOIADORES OFICIAIS)
+    const APOIADORES_ROTATIVOS = [
+      {
+        nome: "Casa das Cópias",
+        logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp",
+        url: "https://cdcj.shop/",
+        desc: "Sua gráfica digital rápida e moderna. Da impressão de pequenos projetos a grandes tiragens corporativas com agilidade e qualidade.",
+        btn: "Acessar Casa das Cópias"
+      },
+      {
+        nome: "Paralego Racing",
+        logo: "https://static.wixstatic.com/media/74713a_c2a31e7ef0e948d48509688f39df0428~mv2.webp",
+        url: "https://www.paralegoracing.com.br",
+        desc: "A Paralego Racing reúne experiência, qualidade e variedade de produtos, acompanhando as tendências nacionais e internacionais do mercado.",
+        btn: "Acessar Paralego Racing"
+      },
+      {
+        nome: "Krona Brasil",
+        logo: "https://static.wixstatic.com/media/74713a_cefb94e3ec62450c9ef6ee52757e90e4~mv2.png",
+        url: "https://www.instagram.com/krona_brasil/",
+        desc: "Tubos e conexões. A Krona é show! Uma marca do Grupo Krona que apoia o fortalecimento do esporte a motor nacional.",
+        btn: "Instagram Krona"
+      },
+      {
+        nome: "Parque Kartódromo Joinville",
+        logo: "https://static.wixstatic.com/media/67ee14_f99a22c74516489e926c13d31e2554b5~mv2.jpeg",
+        url: "https://wa.me/5547988282163?text=cliente%20Portal%20kartweb",
+        desc: "O espaço ideal para experiências únicas! Kart, eventos, esportes e lazer. Aluguel de pista, karts, quadras e infraestrutura completa.",
+        btn: "WhatsApp Kartódromo"
+      },
+      {
+        nome: "Instituto Atenas",
+        logo: "https://static.wixstatic.com/media/74713a_956fb3cc7d9e448383c6cfca36ad1966~mv2.png",
+        url: "https://www.instagram.com/iatenas/",
+        desc: "Referência em Medicina Integrada do Esporte e Saúde. Diretor Técnico: Dr. André Vilela CRM/SC 8815. Rua Camboriú, 175, Joinville - SC.",
+        btn: "Instagram Instituto Atenas"
+      },
+      {
+        nome: "Gatti FX Pirotecnia",
+        logo: "https://static.wixstatic.com/media/74713a_4d7cb3fbe19b4013aaaa878ef9b41da3~mv2.jpeg",
+        url: "https://wa.me/5511999403894",
+        desc: "Know-how, inovação e arte na criação de efeitos especiais e pirotecnia para shows, cinema, TV, teatro e grandes eventos esportivos.",
+        btn: "WhatsApp Gatti FX"
+      },
+      {
+        nome: "RBC MotorSport",
+        logo: "https://static.wixstatic.com/media/74713a_59409fee566a4c33b01f0589c053e4fd~mv2.jpg",
+        url: "https://www.instagram.com/rbcmotorsport/",
+        desc: "Há trinta anos fazendo campeões. Referência nacional em preparação de motores e carburadores, locação e suporte técnico em pista.",
+        btn: "Instagram RBC MotorSport"
+      },
+      {
+        nome: "Massagem Coradelli",
+        logo: "https://static.wixstatic.com/media/74713a_9e14db73dbc94f818a4e5f5b9abd4ede~mv2.jpg",
+        url: "https://www.instagram.com/massagemcoradelli/",
+        desc: "Quiropraxia e massoterapia focadas na preparação, recuperação física e alto rendimento de atletas e pilotos em Joinville - SC.",
+        btn: "Instagram Massagem Coradelli"
+      },
+      {
+        nome: "Formas Comunicação Visual",
+        logo: "https://static.wixstatic.com/media/74713a_e9b6f001ce98428e98e9ffda55a1aa18~mv2.png",
+        url: "https://www.instagram.com/formascomvisual/",
+        desc: "25 anos de tradição e referência nacional em projetos especiais, comunicação visual e envelopamento automotivo.",
+        btn: "Instagram Formas Visual"
+      },
+      {
+        nome: "Clínica Cães & Gatos",
+        logo: "https://static.wixstatic.com/media/74713a_cd90ff47c9cf42d5b6d5d6839cb5228a~mv2.webp",
+        url: "https://clinicacaesegatos.com.br/",
+        desc: "Dedicação e profissionalismo. Corpo clínico completo e infraestrutura de ponta com dedicação integral à saúde animal.",
+        btn: "Acessar Cães & Gatos"
+      },
+      {
+        nome: "Paragon Ergonomics",
+        logo: "https://static.wixstatic.com/media/74713a_a555ee351a4d42d1bce1e33ee7fad659~mv2.avif",
+        url: "https://paragonergonomics.wixsite.com/paragon/blank",
+        desc: "Assentos esportivos de alta precisão para kart de competição das linhas Conforto e Agressiva, com cinco níveis de rigidez torsional.",
+        btn: "Acessar Paragon Ergonomics"
+      }
     ];
 
     let fotosCarregadas = [];
+
+    function obterPublicidadeDaVez() {
+      const STORAGE_KEY = "pv_ad_idx_v3";
+      let idx = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10);
+      if (idx >= PUBLICIDADES.length) idx = 0;
+      return { ad: PUBLICIDADES[idx], idx };
+    }
+
+    function obterApoiadorDaVez() {
+      const STORAGE_KEY = "pv_sponsor_idx_v3";
+      let idx = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10);
+      if (idx >= APOIADORES_ROTATIVOS.length) idx = 0;
+      return { apoiador: APOIADORES_ROTATIVOS[idx], idx };
+    }
+
+    function avancarRodizios() {
+      const { idx: adIdx } = obterPublicidadeDaVez();
+      localStorage.setItem("pv_ad_idx_v3", ((adIdx + 1) % PUBLICIDADES.length).toString());
+
+      const { idx: spIdx } = obterApoiadorDaVez();
+      localStorage.setItem("pv_sponsor_idx_v3", ((spIdx + 1) % APOIADORES_ROTATIVOS.length).toString());
+    }
 
     function carregarFotos(e) {
       const files = Array.from(e.target.files);
@@ -264,8 +507,8 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
     }
 
     function trocarOrigem(tipo) {
-      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
-      document.getElementById('tab-propria').className = tipo === 'propria' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
+      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
+      document.getElementById('tab-propria').className = tipo === 'propria' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
     }
 
     function mudarView(modo) {
@@ -277,24 +520,93 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       const field = document.getElementById(id);
       field.select();
       navigator.clipboard.writeText(field.value);
-      alert('Texto copiado com sucesso!');
     }
 
     function processarMateria() {
       const h1 = document.getElementById('input-h1').value || 'TÍTULO DA MATÉRIA';
       const subtitulo = document.getElementById('input-subtitulo').value || '';
       const categoria = document.getElementById('input-categoria').value;
-      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
-      const creditos = document.getElementById('input-creditos').value || 'Comunicação Oficial';
+      const fotografo = document.getElementById('input-fotografo').value || 'DARKSIDE KARTS';
+      const creditos = document.getElementById('input-creditos').value || 'Assessoria de Imprensa';
       const release = document.getElementById('input-release').value || '';
       const pilotoInsta = document.getElementById('input-piloto-insta').value || '';
       
       const fotoCapa = fotosCarregadas.length > 0 ? fotosCarregadas[0].src : 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
-      const adAtual = PUBLICIDADE_ROTACAO[0];
-      const apoiaRotativo = APOIADORES_ROTATIVO[0];
+      const { ad: adAtual } = obterPublicidadeDaVez();
+      const { apoiador: rotativoAtual } = obterApoiadorDaVez();
 
+      // CÁLCULO DE SEO OBRIGATÓRIO (MANUAL OFICIAL)
+      const palavraChave = categoria === "Kartismo" ? "kart" : categoria.toLowerCase();
+      const seoTitle = `${h1} | Portal Pista Verde`;
+      const metaDescricao = subtitulo.length > 150 ? subtitulo.substring(0, 147) + "..." : subtitulo;
+      const slugLimpo = h1.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .substring(0, 60);
+
+      const tagsArray = [
+        "kart", "kartismo", "campeonato de kart", "automobilismo", "portal pista verde",
+        "pista verde", "grid aquecido com responsabilidade", categoria.toLowerCase(),
+        "piloto", "velocidade", "kartodromo", "cba", "kart brasil", "motorsport",
+        "corrida de kart", "treinos livres", "tomada de tempo", "vitoria", "podio",
+        "chassis", "motor", "preparacao", "noticias de kart", "esporte a motor",
+        "brasil", "etapa", "f-open", "leo-almeida"
+      ];
+      const tags28Str = tagsArray.slice(0, 28).join(", ");
+
+      // Preenchimento dos campos de SEO na tela
+      document.getElementById('seo-foco').value = palavraChave;
+      document.getElementById('seo-title').value = seoTitle;
+      document.getElementById('seo-desc').value = metaDescricao;
+      document.getElementById('seo-slug').value = `/${slugLimpo}`;
+      document.getElementById('seo-tags').value = tags28Str;
+
+      // GERAÇÃO DOS CÓDIGOS HTML PARA IFRAMES
+      const htmlAdIframe = `<aside class="ppv-ad" aria-label="Publicidade da ${adAtual.nome}">
+  <a class="ppv-ad-click" href="${adAtual.url}" target="_blank" rel="noopener noreferrer sponsored" title="Conheça ${adAtual.nome}">
+    <div class="ppv-ad-inner">
+      <img src="${adAtual.logo}" alt="${adAtual.nome}, anunciante do Portal Pista Verde" loading="lazy">
+      <div>
+        <span class="ppv-ad-tag">Publicidade</span>
+        <h3>${adAtual.nome}</h3>
+        <p>${adAtual.desc}</p>
+        <span class="ppv-ad-button">${adAtual.btn}</span>
+      </div>
+    </div>
+  </a>
+</aside>`;
+
+      const htmlApoioIframe = `<section class="ppv-apoio" aria-label="Empresas que apoiam o kartismo">
+  <h2>Empresas que apoiam o kartismo</h2>
+  <p>O Portal Pista Verde valoriza as empresas que acreditam no kartismo e ajudam a fortalecer a base do automobilismo nacional.</p>
+  <div class="ppv-sponsor-grid">
+    <article class="ppv-sponsor-card">
+      <a href="${APOIADOR_FIXO.url}" target="_blank" rel="noopener noreferrer" title="Acessar o site da ${APOIADOR_FIXO.nome}">
+        <img src="${APOIADOR_FIXO.logo}" alt="${APOIADOR_FIXO.nome}, empresa apoiadora do kartismo" loading="lazy">
+      </a>
+      <h3>${APOIADOR_FIXO.nome}</h3>
+      <p>${APOIADOR_FIXO.desc}</p>
+      <a class="ppv-sponsor-btn" href="${APOIADOR_FIXO.url}" target="_blank" rel="noopener noreferrer">${APOIADOR_FIXO.btn}</a>
+    </article>
+    <article class="ppv-sponsor-card">
+      <a href="${rotativoAtual.url}" target="_blank" rel="noopener noreferrer" title="Acessar o site da ${rotativoAtual.nome}">
+        <img src="${rotativoAtual.logo}" alt="${rotativoAtual.nome}, empresa apoiadora do kartismo" loading="lazy">
+      </a>
+      <h3>${rotativoAtual.nome}</h3>
+      <p>${rotativoAtual.desc}</p>
+      <a class="ppv-sponsor-btn" href="${rotativoAtual.url}" target="_blank" rel="noopener noreferrer">${rotativoAtual.btn}</a>
+    </article>
+  </div>
+</section>`;
+
+      document.getElementById('code-publicidade').value = htmlAdIframe;
+      document.getElementById('code-apoiadores').value = htmlApoioIframe;
+
+      // RENDERIZAÇÃO DO SIMULADOR (PÁGINA 2)
       let htmlCorpo = `<div class="ppv-materia">
-        <header class="ppv-hero" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.85) 100%), url('${fotoCapa}');">
+        <header class="ppv-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.18) 100%), url('${fotoCapa}');">
           <div class="ppv-hero-content">
             <span class="ppv-label">${categoria}</span>
             <h1 class="ppv-hero-title">${h1}</h1>
@@ -302,43 +614,42 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
             <p class="ppv-subtitle">${subtitulo}</p>
           </div>
         </header>
-        <main class="ppv-container">`;
+        <main class="ppv-container">
+          <section class="ppv-infobox">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div><strong class="block text-[#21300C] text-[11px] uppercase tracking-wider">Evento</strong><span class="text-xs font-bold text-slate-800">${categoria}</span></div>
+              <div><strong class="block text-[#21300C] text-[11px] uppercase tracking-wider">Local</strong><span class="text-xs font-bold text-slate-800">Kartódromo Oficial</span></div>
+              <div><strong class="block text-[#21300C] text-[11px] uppercase tracking-wider">Fotógrafo</strong><span class="text-xs font-bold text-slate-800">${fotografo}</span></div>
+              <div><strong class="block text-[#21300C] text-[11px] uppercase tracking-wider">Fonte</strong><span class="text-xs font-bold text-slate-800">${creditos}</span></div>
+            </div>
+          </section>`;
 
       const paragrafos = release.split('\n').filter(p => p.trim() !== '');
       const meioIndice = Math.floor(paragrafos.length / 2);
 
       paragrafos.forEach((p, idx) => {
-        htmlCorpo += `<p class="my-4 text-slate-800 text-base leading-relaxed">${p}</p>`;
+        if (idx === 0) {
+          htmlCorpo += `<p class="text-base font-bold text-[#21300C] leading-relaxed my-4">${p}</p>`;
+        } else {
+          htmlCorpo += `<p class="my-4 text-slate-700 text-sm leading-relaxed">${p}</p>`;
+        }
 
         if (fotosCarregadas.length > 1 && idx === 0) {
           htmlCorpo += `
             <figure class="my-6">
-              <img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[450px] object-cover border border-slate-200 shadow-md">
+              <img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[420px] object-cover border border-slate-200 shadow-md">
               <figcaption class="text-xs text-slate-500 mt-1.5 italic text-right">Foto: ${fotografo}</figcaption>
             </figure>`;
         }
 
         if (idx === meioIndice) {
-          htmlCorpo += `
-            <aside class="ppv-ad">
-              <a class="block" href="${adAtual.url}" target="_blank">
-                <div class="ppv-ad-inner">
-                  <img src="${adAtual.logo}" alt="${adAtual.nome}">
-                  <div>
-                    <span class="ppv-ad-tag">Publicidade</span>
-                    <h3>${adAtual.nome}</h3>
-                    <p>${adAtual.desc}</p>
-                    <span class="ppv-ad-button">${adAtual.btn}</span>
-                  </div>
-                </div>
-              </a>
-            </aside>`;
+          htmlCorpo += htmlAdIframe;
         }
 
         if (fotosCarregadas.length > 2 && idx === paragrafos.length - 1) {
           htmlCorpo += `
             <figure class="my-6">
-              <img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[450px] object-cover border border-slate-200 shadow-md">
+              <img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[420px] object-cover border border-slate-200 shadow-md">
               <figcaption class="text-xs text-slate-500 mt-1.5 italic text-right">Foto: ${fotografo}</figcaption>
             </figure>`;
         }
@@ -346,55 +657,161 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
 
       htmlCorpo += `
         <div class="ppv-creditos text-xs text-slate-500 my-6 pt-4 border-t border-slate-200">
-          <p><strong>Texto/Fonte:</strong> ${creditos}</p>
-          <p><strong>Fotos:</strong> ${fotografo}</p>
+          <p><strong>Texto/Fonte:</strong> ${creditos} | <strong>Fotos:</strong> ${fotografo} | Redação Portal Pista Verde</p>
         </div>
 
-        <section class="ppv-apoio">
-          <h2 class="text-xl font-black text-slate-900 mb-1">Empresas que apoiam o kartismo</h2>
-          <p class="text-xs text-slate-600">O Portal Pista Verde valoriza e incentiva as marcas que fortalecem o esporte a motor no Brasil.</p>
-          <div class="ppv-sponsor-grid">
-            <article class="ppv-sponsor-card">
-              <img src="${APOIADORES_FIXO.logo}" alt="${APOIADORES_FIXO.nome}">
-              <div>
-                <h3>${APOIADORES_FIXO.nome}</h3>
-                <p>${APOIADORES_FIXO.desc}</p>
-              </div>
-              <a class="ppv-sponsor-btn" href="${APOIADORES_FIXO.url}" target="_blank">${APOIADORES_FIXO.btn}</a>
-            </article>
-            <article class="ppv-sponsor-card">
-              <img src="${apoiaRotativo.logo}" alt="${apoiaRotativo.nome}">
-              <div>
-                <h3>${apoiaRotativo.nome}</h3>
-                <p>${apoiaRotativo.desc}</p>
-              </div>
-              <a class="ppv-sponsor-btn" href="${apoiaRotativo.url}" target="_blank">${apoiaRotativo.btn}</a>
-            </article>
-          </div>
-        </section>
+        ${htmlApoioIframe}
 
-        <section class="ppv-institucional">
-          <h4>Portal Pista Verde</h4>
-          <p>Acompanhe a cobertura jornalística completa do kartismo e automobilismo brasileiro. Notícias atualizadas, coberturas de etapas e valorização dos pilotos da nossa pista.</p>
-        </section>
+        <footer class="ppv-portal-footer" aria-label="Portal Pista Verde">
+          <div class="ppv-portal-brand">
+            <span class="ppv-portal-mark">PV</span>
+            <div class="ppv-portal-name">
+              <strong>PISTA VERDE</strong>
+              <span>Grid aquecido com responsabilidade</span>
+            </div>
+          </div>
+          <p>O Portal Pista Verde produz jornalismo especializado sobre kartismo e automobilismo, valorizando pilotos, equipes, campeonatos e as empresas que fortalecem o esporte a motor brasileiro.</p>
+          <a href="https://www.pistaverde.com.br/" target="_blank">Conheça o Portal Pista Verde</a>
+        </footer>
         </main></div>`;
 
       document.getElementById('leitor-materia-html').innerHTML = htmlCorpo;
 
-      document.getElementById('text-insta').value = `🏁 ${h1}\n\n${subtitulo}\n\n${paragrafos.slice(0, 2).join('\n\n')}\n\n📲 Leia a matéria completa no Portal Pista Verde!\n\n📷 Foto: ${fotografo}\n✍️ Fonte: ${creditos}${pilotoInsta ? '\n🏎️ Piloto: ' + pilotoInsta : ''}\n\n#pistaverde #kartismo #${categoria.toLowerCase().replace(/\s+/g, '')} #automobilismo`;
-      document.getElementById('text-tiktok').value = `🚨 ${h1}\n\n${subtitulo}\n\nConfira todos os detalhes e a cobertura completa no Portal Pista Verde! 🏁🔥\n\n#pistaverde #kartismo #automobilismo #karting #${categoria.toLowerCase().replace(/\s+/g, '')}`;
-      document.getElementById('text-tts').value = `Atenção apaixonados por velocidade! ${h1}. ${subtitulo} Acompanhe todos os detalhes e notícias completas no Portal Pista Verde. Acesse o link da bio e fique por dentro!`;
+      // PÁGINA 3: REDES SOCIAIS (SEM EMOJIS)
+      document.getElementById('text-insta').value = `${h1.toUpperCase()}\n\n${subtitulo}\n\n${paragrafos.slice(0, 2).join('\n\n')}\n\nConfira a matéria completa no Portal Pista Verde (link na bio).\n\nFoto: ${fotografo}\nFonte: ${creditos}${pilotoInsta ? '\nPiloto: ' + pilotoInsta : ''}\n\n#pistaverde #kartismo #${categoria.toLowerCase().replace(/\s+/g, '')} #automobilismo #kart`;
+      document.getElementById('text-fb').value = `${h1}\n\n${subtitulo}\n\nLeia a matéria completa no Portal Pista Verde:\nhttps://www.pistaverde.com.br\n\nCréditos Fotográficos: ${fotografo} | Fonte: ${creditos}`;
+      document.getElementById('text-linkedin').value = `${h1}\n\n${subtitulo}\n\nAcompanhe a cobertura editorial completa do automobilismo e kartismo brasileiro no Portal Pista Verde.\n\nMais detalhes em: https://www.pistaverde.com.br\n\nAssessoria: ${creditos}`;
+      document.getElementById('text-tiktok').value = `${h1}\n\n${subtitulo}\n\nConfira todos os detalhes e a matéria completa no Portal Pista Verde.\n\n#pistaverde #kartismo #automobilismo #${categoria.toLowerCase().replace(/\s+/g, '')}`;
+      document.getElementById('text-yt').value = `${h1}\n\n${subtitulo}\n\nCobertura oficial da categoria ${categoria}. Acompanhe todas as informações, tabelas e resultados no Portal Pista Verde:\nhttps://www.pistaverde.com.br\n\nCréditos Fotográficos: ${fotografo}\nFonte: ${creditos}`;
 
-      renderizarCapaCanvas(h1, categoria, fotografo, fotoCapa);
+      renderizarCapaWix(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
+      renderizarCapaRedes(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
     }
 
-    function renderizarCapaCanvas(titulo, cat, fotografo, srcCapa) {
+    // CAPA HORIZONTAL WIX (1200x675 px - PADRÃO EMERICK)
+    function renderizarCapaWix(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
+      const canvas = document.getElementById('canvas-capa-wix');
+      const ctx = canvas.getContext('2d');
+      const w = 320;
+      const h = 180;
+
+      ctx.fillStyle = '#080c14';
+      ctx.fillRect(0, 0, w, h);
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = function() {
+        const scale = Math.max(w / img.width, h / img.height);
+        const x = (w / 2) - (img.width / 2) * scale;
+        const y = (h / 2) - (img.height / 2) * scale;
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+        // Degradê da esquerda para a direita + vinheta na base
+        const grad = ctx.createLinearGradient(0, 0, w, 0);
+        grad.addColorStop(0, 'rgba(0,0,0,0.92)');
+        grad.addColorStop(0.65, 'rgba(0,0,0,0.50)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.15)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // 1. Filete Verde no Topo
+        ctx.fillStyle = '#00AE35';
+        ctx.fillRect(12, 6, w - 24, 2.5);
+
+        // 2. Badge de Categoria em Pílula
+        ctx.fillStyle = '#00AE35';
+        ctx.beginPath();
+        ctx.roundRect(12, 16, 75, 13, 4);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 6.5px Poppins, sans-serif';
+        ctx.fillText(cat.toUpperCase(), 16, 25);
+
+        // 3. Título Principal em Caixa Alta com Sombra
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 10.5px "Anton", "Poppins", sans-serif';
+        ctx.shadowColor = 'rgba(0,0,0,0.95)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+
+        const palavras = titulo.toUpperCase().split(' ');
+        let linha = '';
+        let posY = 44;
+        for (let n = 0; n < palavras.length; n++) {
+          let test = linha + palavras[n] + ' ';
+          if (ctx.measureText(test).width > (w * 0.68) && n > 0) {
+            ctx.fillText(linha, 12, posY);
+            linha = palavras[n] + ' ';
+            posY += 12;
+          } else {
+            linha = test;
+          }
+        }
+        ctx.fillText(linha, 12, posY);
+
+        // Reset Sombra
+        ctx.shadowColor = 'transparent';
+
+        // 4. Traço Separador Verde
+        posY += 3;
+        ctx.fillStyle = '#00AE35';
+        ctx.fillRect(12, posY, 26, 1.8);
+
+        // 5. Linha Fina / Subtítulo
+        posY += 8;
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '500 5.5px Poppins, sans-serif';
+        ctx.fillText(subtitulo.substring(0, 75) + '...', 12, posY);
+
+        // 6. Barra Inferior de Apoiadores
+        ctx.fillStyle = 'rgba(7, 16, 7, 0.95)';
+        ctx.fillRect(0, h - 26, w, 26);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '800 4px Poppins, sans-serif';
+        ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 10, h - 18);
+
+        const logo1 = new Image();
+        logo1.crossOrigin = "anonymous";
+        logo1.onload = function() {
+          // Card Branco 1
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.roundRect(10, h - 15, 34, 11, 2);
+          ctx.fill();
+          ctx.drawImage(logo1, 11, h - 14, 32, 9);
+          
+          const logo2 = new Image();
+          logo2.crossOrigin = "anonymous";
+          logo2.onload = function() {
+            // Card Branco 2
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.roundRect(48, h - 15, 34, 11, 2);
+            ctx.fill();
+            ctx.drawImage(logo2, 49, h - 14, 32, 9);
+
+            // Créditos Fotográficos
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 4px Poppins, sans-serif';
+            ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 88, h - 7);
+
+            document.getElementById('link-download-wix').href = canvas.toDataURL('image/png');
+          };
+          logo2.src = rotativoAtual.logo;
+        };
+        logo1.src = APOIADOR_FIXO.logo;
+      };
+      img.src = srcCapa;
+    }
+
+    // CAPA VERTICAL REDES SOCIAIS (1080x1350 px - PADRÃO EMERICK FEED 4:5)
+    function renderizarCapaRedes(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
       const canvas = document.getElementById('canvas-capa-oficial');
       const ctx = canvas.getContext('2d');
-      const w = 270;
-      const h = 480;
-
-      const subtitulo = document.getElementById('input-subtitulo').value || '';
+      const w = 144;
+      const h = 180;
 
       ctx.fillStyle = '#0a0e17';
       ctx.fillRect(0, 0, w, h);
@@ -407,138 +824,182 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         const y = (h / 2) - (img.height / 2) * scale;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        const grad = ctx.createLinearGradient(0, h * 0.25, 0, h);
-        grad.addColorStop(0, 'rgba(0,0,0,0)');
-        grad.addColorStop(0.5, 'rgba(0,0,0,0.75)');
+        // Degradê Suave + Escurecimento
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, 'rgba(0,0,0,0.3)');
+        grad.addColorStop(0.35, 'rgba(0,0,0,0.2)');
+        grad.addColorStop(0.65, 'rgba(0,0,0,0.7)');
         grad.addColorStop(1, 'rgba(0,0,0,0.98)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
 
-        ctx.fillStyle = '#00ae35';
-        ctx.fillRect(15, 12, w - 30, 4);
+        // 1. Filete Verde Topo
+        ctx.fillStyle = '#00AE35';
+        ctx.fillRect(8, 4, w - 16, 2);
 
-        ctx.fillStyle = '#00ae35';
-        ctx.fillRect(15, h - 235, 95, 18);
+        // 2. Badge de Categoria em Pílula
+        ctx.fillStyle = '#00AE35';
+        ctx.beginPath();
+        ctx.roundRect(8, 62, 54, 10, 3);
+        ctx.fill();
         ctx.fillStyle = '#ffffff';
-        ctx.font = '800 9px sans-serif';
-        ctx.fillText(cat.toUpperCase(), 20, h - 223);
+        ctx.font = '900 5px Poppins, sans-serif';
+        ctx.fillText(cat.toUpperCase(), 11, 69);
 
+        // 3. Título Principal em Caixa Alta com Sombra
         ctx.fillStyle = '#ffffff';
-        ctx.font = '900 15px "Anton", sans-serif';
+        ctx.font = '900 8.5px "Anton", "Poppins", sans-serif';
+        ctx.shadowColor = 'rgba(0,0,0,0.95)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
         
         const palavras = titulo.toUpperCase().split(' ');
         let linha = '';
-        let posY = h - 200;
+        let posY = 82;
         
         for (let n = 0; n < palavras.length; n++) {
           let test = linha + palavras[n] + ' ';
-          if (ctx.measureText(test).width > (w - 30) && n > 0) {
-            ctx.fillText(linha, 15, posY);
+          if (ctx.measureText(test).width > (w - 16) && n > 0) {
+            ctx.fillText(linha, 8, posY);
             linha = palavras[n] + ' ';
-            posY += 17;
+            posY += 10;
           } else {
             linha = test;
           }
         }
-        ctx.fillText(linha, 15, posY);
+        ctx.fillText(linha, 8, posY);
 
-        posY += 5;
-        ctx.fillStyle = '#00ae35';
-        ctx.fillRect(15, posY, 40, 2);
+        // Reset Sombra
+        ctx.shadowColor = 'transparent';
 
-        posY += 12;
+        // 4. Traço Separador Verde
+        posY += 3;
+        ctx.fillStyle = '#00AE35';
+        ctx.fillRect(8, posY, 22, 1.5);
+
+        // 5. Linha Fina / Subtítulo
+        posY += 7;
         ctx.fillStyle = '#e2e8f0';
-        ctx.font = '500 8px sans-serif';
-        
-        const palavrasSub = subtitulo.split(' ');
-        let linhaSub = '';
-        
-        for (let m = 0; m < palavrasSub.length; m++) {
-          let testSub = linhaSub + palavrasSub[m] + ' ';
-          if (ctx.measureText(testSub).width > (w - 30) && m > 0) {
-            ctx.fillText(linhaSub, 15, posY);
-            linhaSub = palavrasSub[m] + ' ';
-            posY += 10;
-          } else {
-            linhaSub = testSub;
-          }
-        }
-        ctx.fillText(linhaSub, 15, posY);
+        ctx.font = '500 4.5px Poppins, sans-serif';
+        ctx.fillText(subtitulo.substring(0, 52) + '...', 8, posY);
 
-        ctx.fillStyle = '#05080d';
-        ctx.fillRect(0, h - 35, w, 35);
+        // 6. Barra Inferior de Apoiadores
+        ctx.fillStyle = 'rgba(7, 16, 7, 0.98)';
+        ctx.fillRect(0, h - 22, w, 22);
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = '800 6px sans-serif';
-        ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 10, h - 24);
+        ctx.font = '800 3.5px Poppins, sans-serif';
+        ctx.fillText('ESSAS EMPRESAS APOIAM O ESPORTE', 6, h - 15);
 
         const logo1 = new Image();
         logo1.crossOrigin = "anonymous";
         logo1.onload = function() {
+          // Card Branco 1
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(10, h - 20, 52, 14);
-          ctx.drawImage(logo1, 12, h - 18, 48, 10);
+          ctx.beginPath();
+          ctx.roundRect(6, h - 13, 26, 9, 2);
+          ctx.fill();
+          ctx.drawImage(logo1, 7, h - 12.5, 24, 8);
           
           const logo2 = new Image();
           logo2.crossOrigin = "anonymous";
           logo2.onload = function() {
+            // Card Branco 2
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(66, h - 20, 52, 14);
-            ctx.drawImage(logo2, 68, h - 18, 48, 10);
+            ctx.beginPath();
+            ctx.roundRect(35, h - 13, 26, 9, 2);
+            ctx.fill();
+            ctx.drawImage(logo2, 36, h - 12.5, 24, 8);
 
+            // Créditos Fotográficos
             ctx.fillStyle = '#94a3b8';
-            ctx.font = '600 6px sans-serif';
-            ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 122, h - 11);
+            ctx.font = '700 3.5px Poppins, sans-serif';
+            ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 64, h - 6);
 
             document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
             document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
           };
-          logo2.src = APOIADORES_ROTATIVO[0].logo;
+          logo2.src = rotativoAtual.logo;
         };
-        logo1.src = APOIADORES_FIXO.logo;
+        logo1.src = APOIADOR_FIXO.logo;
       };
       img.src = srcCapa;
     }
 
+    // DISPARO OFICIAL PARA O WIX BLOG COM PACOTE DE SEO COMPLETO
     async function enviarParaWixDraft() {
       const btn = document.getElementById('btn-enviar-wix');
       const status = document.getElementById('status-wix-envio');
 
-      status.classList.remove('hidden', 'bg-red-500/10', 'text-red-400', 'border-red-500/20', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
+      status.classList.remove('hidden', 'bg-red-500/10', 'text-red-400', 'border-red-500/20', 'bg-emerald-500/10', 'text-[#00AE35]', 'border-[#00AE35]/20');
       status.classList.add('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
-      status.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Enviando rascunho para o Wix...';
+      status.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Enviando rascunho com SEO completo para o Wix...';
 
       btn.disabled = true;
 
       const h1 = document.getElementById('input-h1').value || 'Sem título';
       const subtitulo = document.getElementById('input-subtitulo').value || '';
       const releaseText = document.getElementById('input-release').value || '';
+      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
+      const creditos = document.getElementById('input-creditos').value || 'Assessoria de Imprensa';
+      const categoria = document.getElementById('input-categoria').value;
+      const slug = document.getElementById('seo-slug').value;
+      const metaDesc = document.getElementById('seo-desc').value;
+      const tagsArray = document.getElementById('seo-tags').value.split(',').map(t => t.trim());
 
       const paragrafos = releaseText.split('\n').filter(p => p.trim() !== '');
-      const richNodes = paragrafos.map(p => ({
+      const richNodes = [];
+
+      if (subtitulo) {
+        richNodes.push({
+          type: "PARAGRAPH",
+          nodes: [{ type: "TEXT", textData: { text: subtitulo, decorations: [{ type: "ITALIC" }] } }]
+        });
+      }
+
+      paragrafos.forEach((p, idx) => {
+        richNodes.push({
+          type: "PARAGRAPH",
+          nodes: [{ type: "TEXT", textData: { text: p, decorations: [] } }]
+        });
+
+        if (idx === Math.floor(paragrafos.length / 2)) {
+          richNodes.push({
+            type: "PARAGRAPH",
+            nodes: [{ type: "TEXT", textData: { text: "\n[ --- INSERIR AQUI O IFRAME DE PUBLICIDADE --- ]\n", decorations: [{ type: "BOLD" }] } }]
+          });
+        }
+      });
+
+      richNodes.push({
         type: "PARAGRAPH",
-        nodes: [
-          {
-            type: "TEXT",
-            textData: {
-              text: p,
-              decorations: []
-            }
-          }
-        ]
-      }));
+        nodes: [{ type: "TEXT", textData: { text: "\n[ --- INSERIR AQUI O IFRAME DE APOIADORES DO KARTISMO --- ]\n", decorations: [{ type: "BOLD" }] } }]
+      });
+
+      richNodes.push({
+        type: "PARAGRAPH",
+        nodes: [{ type: "TEXT", textData: { text: `\nCréditos Fotográficos: ${fotografo} | Fonte: ${creditos} | Redação Portal Pista Verde`, decorations: [] } }]
+      });
 
       const payload = {
+        headline: h1,
+        subtitle: subtitulo,
+        editorialBody: releaseText,
+        photographer: fotografo,
+        source: creditos,
+        category: categoria,
+        seo: {
+          title: `${h1} | Portal Pista Verde`,
+          description: metaDesc,
+          slug: slug,
+          tags: tagsArray
+        },
         draftPost: {
           title: h1,
-          excerpt: subtitulo,
+          excerpt: metaDesc,
           richContent: {
-            nodes: richNodes.length > 0 ? richNodes : [
-              {
-                type: "PARAGRAPH",
-                nodes: [{ type: "TEXT", textData: { text: h1, decorations: [] } }]
-              }
-            ]
+            nodes: richNodes
           }
         }
       };
@@ -546,9 +1007,7 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
       try {
         const response = await fetch("/api/wix", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
 
@@ -562,8 +1021,10 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
 
         if (response.ok) {
           status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
-          status.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
-          status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> Abra o painel do seu Wix Blog para publicar.';
+          status.classList.add('bg-emerald-500/10', 'text-[#00AE35]', 'border-[#00AE35]/20');
+          status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> SEO e marcadores enviados com sucesso.';
+          
+          avancarRodizios();
         } else {
           const msgErro = data.message || data.details || JSON.stringify(data);
           throw new Error(`Erro Wix (${response.status}): ${msgErro}`);
@@ -573,50 +1034,6 @@ A expectativa para o final de semana é de grid cheio e disputas acirradas curva
         status.classList.add('bg-red-500/10', 'text-red-400', 'border-red-500/20');
         status.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <strong>Falha no Envio:</strong> ' + err.message;
       } finally {
-        btn.disabled = false;
-      }
-    }
-
-    function gerarVideoTikTok() {
-      const canvas = document.getElementById('canvas-capa-oficial');
-      const btn = document.getElementById('btn-download-mp4');
-      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Gerando Vídeo (3s)...';
-      btn.disabled = true;
-
-      try {
-        const stream = canvas.captureStream(30);
-        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-        const chunks = [];
-
-        mediaRecorder.ondataavailable = function(e) {
-          if (e.data.size > 0) chunks.push(e.data);
-        };
-
-        mediaRecorder.onstop = function() {
-          const blob = new Blob(chunks, { type: 'video/webm' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = 'video-tiktok-pistaverde.webm';
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-          }, 100);
-
-          btn.innerHTML = '<i class="fa-solid fa-video"></i> Gerar Vídeo TikTok (MP4/WebM)';
-          btn.disabled = false;
-        };
-
-        mediaRecorder.start();
-        setTimeout(() => {
-          mediaRecorder.stop();
-        }, 3000);
-      } catch (err) {
-        alert('Seu navegador bloqueou a gravação direta. A imagem estática 1080p pode ser usada como vinheta.');
-        btn.innerHTML = '<i class="fa-solid fa-video"></i> Gerar Vídeo TikTok (MP4/WebM)';
         btn.disabled = false;
       }
     }
