@@ -40,14 +40,6 @@
     .ppv-sponsor-card img { width: 100%; height: 70px; object-fit: contain; margin-bottom: 14px; }
     .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300C; font-size: 16px; font-weight: 800; }
     .ppv-sponsor-card p { margin: 0 0 14px; font-size: 13px; color: #374151; line-height: 1.55; }
-
-    .ppv-portal-footer { margin-top: 36px; padding: 28px; background: #071007; border-radius: 16px; color: #ffffff; text-align: center; border-top: 6px solid #00AE35; }
-    .ppv-portal-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
-    .ppv-portal-mark { background: #00AE35; color: #101510; font-family: "Poppins", sans-serif; font-size: 18px; font-weight: 900; padding: 5px 12px; border-radius: 8px; }
-    .ppv-portal-name strong { display: block; font-family: "Poppins", sans-serif; font-size: 20px; color: #ffffff; letter-spacing: 1px; line-height: 1; }
-    .ppv-portal-name span { font-size: 12px; color: #00AE35; font-weight: 700; text-transform: uppercase; }
-    .ppv-portal-footer p { font-size: 13px; color: #cbd5e1; line-height: 1.65; max-width: 700px; margin: 0 auto 16px; }
-    .ppv-portal-footer a { display: inline-block; padding: 10px 22px; border-radius: 999px; background: #00AE35; color: #ffffff; font-size: 12px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
   </style>
 </head>
 <body class="p-3 md:p-6 bg-[#f4f7f4] min-h-screen text-slate-900">
@@ -73,16 +65,23 @@
       </nav>
     </header>
 
-    <!-- PÁGINA 1: ENTRADA -->
+    <!-- ========================================== -->
+    <!-- PÁGINA 1: ENTRADA (TOTALMENTE LIMPA)      -->
+    <!-- ========================================== -->
     <main id="pagina-1" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 gap-3">
         <div>
           <h2 class="text-lg font-bold text-slate-900">Passo 1: Ingestão de Conteúdo</h2>
-          <p class="text-sm text-slate-600 mt-0.5">Preencha o release e anexe as fotos para gerar o rascunho com SEO.</p>
+          <p class="text-sm text-slate-600 mt-0.5">Insira os dados do release e fotos para iniciar a matéria.</p>
         </div>
-        <div class="flex rounded-lg overflow-hidden p-1 bg-slate-100 border border-slate-300">
-          <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="px-4 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-white shadow-sm">Release Recebido</button>
-          <button id="tab-propria" onclick="trocarOrigem('propria')" class="px-4 py-1.5 text-xs font-bold rounded text-slate-600">Matéria Própria</button>
+        <div class="flex items-center gap-2">
+          <button onclick="limparTudoComConfirmacao()" class="px-4 py-2 text-xs font-bold rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1.5 transition">
+            <i class="fa-regular fa-trash-can"></i> Limpar Tudo / Nova Matéria
+          </button>
+          <div class="flex rounded-lg overflow-hidden p-1 bg-slate-100 border border-slate-300">
+            <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="px-4 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-white shadow-sm">Release</button>
+            <button id="tab-propria" onclick="trocarOrigem('propria')" class="px-4 py-1.5 text-xs font-bold rounded text-slate-600">Própria</button>
+          </div>
         </div>
       </div>
 
@@ -90,25 +89,17 @@
         <div class="md:col-span-8 space-y-5">
           <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">Título Principal (H1)</label>
-            <input type="text" id="input-h1" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-base text-slate-900 focus:border-[#00AE35] outline-none font-bold shadow-sm" value="Campeonato Paranaense de Kart supera a casa das 100 inscrições uma semana após o início do processo; confira a lista">
+            <input type="text" id="input-h1" placeholder="Digite ou cole o título da matéria aqui..." class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-base text-slate-900 focus:border-[#00AE35] outline-none font-bold shadow-sm">
           </div>
 
           <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">Subtítulo / Linha Fina</label>
-            <input type="text" id="input-subtitulo" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-800 focus:border-[#00AE35] outline-none shadow-sm" value="Primeiro lote será encerrado na próxima sexta-feira, dia 21, com expectativa de grid histórico em Pato Branco.">
+            <input type="text" id="input-subtitulo" placeholder="Digite o resumo ou linha fina da matéria..." class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-800 focus:border-[#00AE35] outline-none shadow-sm">
           </div>
 
           <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">Corpo da Matéria / Release Bruto</label>
-            <textarea id="input-release" rows="11" class="w-full bg-white border-2 border-slate-300 rounded-xl p-4 text-sm text-slate-800 focus:border-[#00AE35] outline-none leading-relaxed shadow-sm">O Campeonato Paranaense de Kart, por si só uma competição que faz parte da história de cada ano no kartismo no Paraná, tem outro motivo importante para ser lembrado ao longo dos próximos anos.
-
-Apenas uma semana após a abertura do processo, a 62ª edição – que será disputada no Kartódromo Ayrton Senna, em Pato Branco, entre os dias 10 e 12 de setembro – superou a casa das 100 inscrições.
-
-"Será, sem dúvida alguma, o maior Campeonato Paranaense da história", vibra Lucian Brandalize, presidente do Kart Clube de Pato Branco. "O número de inscritos ainda vai aumentar bastante. Queremos chegar a 150", aposta.
-
-Na próxima sexta-feira, dia 21, será encerrado o primeiro lote de inscrições, que tem seus preços definidos em R$ 800,00 (Mirim / Cadete), R$ 1000,00 (F4) e R$ 1000,00 (125cc). A partir do dia 22 passarão a valer os valores do 2º lote, que terá um aumento de R$ 200,00 em cada categoria.
-
-Encaminhe sua inscrição acessando o site oficial da competição e garanta vaga neste grande encontro do kartismo paranaense.</textarea>
+            <textarea id="input-release" rows="11" placeholder="Cole o texto completo do release aqui..." class="w-full bg-white border-2 border-slate-300 rounded-xl p-4 text-sm text-slate-800 focus:border-[#00AE35] outline-none leading-relaxed shadow-sm"></textarea>
           </div>
         </div>
 
@@ -127,37 +118,42 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
 
           <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">Fotógrafo / Crédito de Imagem</label>
-            <input type="text" id="input-fotografo" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm" value="Divulgação Oficial">
+            <input type="text" id="input-fotografo" placeholder="Ex: Divulgação / Nome do Fotógrafo" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm">
           </div>
 
           <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">Fonte / Assessoria de Imprensa</label>
-            <input type="text" id="input-creditos" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm" value="Assessoria de Imprensa / Kart Clube de Pato Branco">
+            <input type="text" id="input-creditos" placeholder="Ex: Assessoria de Imprensa" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm">
           </div>
 
           <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">@ do Piloto / Evento (Instagram)</label>
-            <input type="text" id="input-piloto-insta" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm" value="@kartclubepatobranco">
+            <input type="text" id="input-piloto-insta" placeholder="Ex: @nomedoperfil" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm">
           </div>
 
           <div class="p-4 bg-slate-50 border-2 border-slate-300 rounded-xl space-y-2.5">
-            <label class="block text-sm font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid fa-camera text-[#00AE35]"></i> Fotos da Matéria (1ª Capa | 2ª Meio | 3ª Fim)
-            </label>
+            <div class="flex items-center justify-between">
+              <label class="block text-sm font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-camera text-[#00AE35]"></i> Fotos da Matéria
+              </label>
+              <button id="btn-limpar-fotos" onclick="limparFotosMemoria()" class="hidden text-[11px] text-red-600 font-bold hover:underline">Remover fotos</button>
+            </div>
             <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00AE35] file:text-white hover:file:bg-[#00AE35]/90 cursor-pointer">
-            <span id="status-fotos-qtd" class="text-xs text-slate-500 font-medium block">Nenhuma foto selecionada (usando padrão).</span>
+            <span id="status-fotos-qtd" class="text-xs text-slate-500 font-medium block">Nenhuma foto selecionada.</span>
           </div>
         </div>
       </div>
 
-      <div class="border-t border-slate-200 pt-5">
+      <div class="border-t border-slate-200 pt-5 flex items-center gap-4">
         <button onclick="gerarMateriaEAvancar()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-white font-black py-4 rounded-xl text-base transition flex items-center justify-center gap-3 uppercase tracking-wider shadow-md">
           <i class="fa-solid fa-bolt"></i> Gerar Matéria e Ir para o Passo 2
         </button>
       </div>
     </main>
 
-    <!-- PÁGINA 2: REVISÃO & IFRAMES -->
+    <!-- ========================================== -->
+    <!-- PÁGINA 2: REVISÃO & IFRAMES                -->
+    <!-- ========================================== -->
     <main id="pagina-2" class="hidden space-y-6">
       <section class="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
@@ -220,22 +216,24 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
       </section>
     </main>
 
-    <!-- PÁGINA 3: REDES SOCIAIS & CAPA PNG -->
+    <!-- ========================================== -->
+    <!-- PÁGINA 3: REDES SOCIAIS & CAPA PNG        -->
+    <!-- ========================================== -->
     <main id="pagina-3" class="hidden space-y-6">
       <section class="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm flex items-center justify-between">
         <div>
           <h2 class="text-base font-black text-slate-900 flex items-center gap-2">
             <i class="fa-solid fa-circle-check text-[#00AE35] text-lg"></i> Matéria Enviada ao Wix com Sucesso!
           </h2>
-          <p class="text-sm text-slate-600 mt-0.5">Baixe a capa oficial do post e as artes finais geradas no padrão dos Irmãos Emerick.</p>
+          <p class="text-sm text-slate-600 mt-0.5">Baixe a capa oficial e as artes geradas no padrão dos Irmãos Emerick.</p>
         </div>
-        <button onclick="irParaPagina(1)" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-sm flex items-center gap-2 transition">
-          <i class="fa-solid fa-rotate-left"></i> Criar Nova Matéria
+        <button onclick="novaMateriaELimpar()" class="px-5 py-2.5 bg-[#00AE35] hover:bg-[#00AE35]/90 text-white font-bold rounded-xl text-sm flex items-center gap-2 transition shadow-sm">
+          <i class="fa-solid fa-plus"></i> Criar Nova Matéria (Limpar Tudo)
         </button>
       </section>
 
       <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- CARD 1: CAPA WIX (1200x675 PNG OFICIAL) -->
+        <!-- CARD 1: CAPA WIX -->
         <article class="bg-white p-5 rounded-2xl border-2 border-[#00AE35] shadow-sm flex flex-col justify-between space-y-3">
           <div class="space-y-2.5">
             <span class="text-sm font-bold text-[#00AE35] flex items-center gap-1.5">
@@ -428,6 +426,7 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
 
     let fotosCarregadas = [];
 
+    // CONTROLE DE NAVEGAÇÃO
     function irParaPagina(num) {
       document.getElementById('pagina-1').classList.add('hidden');
       document.getElementById('pagina-2').classList.add('hidden');
@@ -440,6 +439,49 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
       document.getElementById(`pagina-${num}`).classList.remove('hidden');
       document.getElementById(`nav-btn-${num}`).className = "flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition bg-[#00AE35] text-white shadow-sm flex items-center justify-center gap-2";
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // LIMPEZA COMPLETA DE MEMÓRIA E CAMPOS
+    function limparFormularioCompleto() {
+      document.getElementById('input-h1').value = '';
+      document.getElementById('input-subtitulo').value = '';
+      document.getElementById('input-release').value = '';
+      document.getElementById('input-fotografo').value = '';
+      document.getElementById('input-creditos').value = '';
+      document.getElementById('input-piloto-insta').value = '';
+      document.getElementById('input-categoria').selectedIndex = 0;
+      
+      limparFotosMemoria();
+
+      document.getElementById('code-publicidade').value = '';
+      document.getElementById('code-apoiadores').value = '';
+      document.getElementById('leitor-materia-html').innerHTML = '';
+
+      document.getElementById('text-insta').value = '';
+      document.getElementById('text-stories').value = '';
+      document.getElementById('text-yt').value = '';
+
+      const status = document.getElementById('status-wix-envio');
+      status.classList.add('hidden');
+      status.innerHTML = '';
+    }
+
+    function limparTudoComConfirmacao() {
+      if (confirm("Deseja realmente limpar todos os campos e fotos para iniciar uma nova matéria?")) {
+        limparFormularioCompleto();
+      }
+    }
+
+    function novaMateriaELimpar() {
+      limparFormularioCompleto();
+      irParaPagina(1);
+    }
+
+    function limparFotosMemoria() {
+      fotosCarregadas = [];
+      document.getElementById('input-fotos').value = '';
+      document.getElementById('status-fotos-qtd').innerText = 'Nenhuma foto selecionada.';
+      document.getElementById('btn-limpar-fotos').classList.add('hidden');
     }
 
     function obterPublicidadeDaVez() {
@@ -476,6 +518,7 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
           if (lidos === files.length) {
             fotosCarregadas.sort((a, b) => a.ordem - b.ordem);
             document.getElementById('status-fotos-qtd').innerText = `${files.length} foto(s) carregada(s) com sucesso.`;
+            document.getElementById('btn-limpar-fotos').classList.remove('hidden');
           }
         };
         reader.readAsDataURL(file);
@@ -494,13 +537,13 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
     }
 
     function gerarMateriaEAvancar() {
-      const h1 = document.getElementById('input-h1').value || 'TÍTULO DA MATÉRIA';
-      const subtitulo = document.getElementById('input-subtitulo').value || '';
+      const h1 = document.getElementById('input-h1').value.trim() || 'SEM TÍTULO INFORMADO';
+      const subtitulo = document.getElementById('input-subtitulo').value.trim() || '';
       const categoria = document.getElementById('input-categoria').value;
-      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
-      const creditos = document.getElementById('input-creditos').value || 'Assessoria de Imprensa';
-      const release = document.getElementById('input-release').value || '';
-      const pilotoInsta = document.getElementById('input-piloto-insta').value || '';
+      const fotografo = document.getElementById('input-fotografo').value.trim() || 'Divulgação';
+      const creditos = document.getElementById('input-creditos').value.trim() || 'Assessoria de Imprensa';
+      const release = document.getElementById('input-release').value.trim() || 'Sem conteúdo de matéria.';
+      const pilotoInsta = document.getElementById('input-piloto-insta').value.trim() || '';
       
       const fotoCapa = fotosCarregadas.length > 0 ? fotosCarregadas[0].src : 'https://static.wixstatic.com/media/74713a_3ba8ef02dac74c569b45af06d857ef29~mv2.jpeg';
       const { ad: adAtual } = obterPublicidadeDaVez();
@@ -616,7 +659,6 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
       irParaPagina(2);
     }
 
-    // GERAÇÃO DA CAPA PNG NO PADRÃO EMERICK
     function renderizarCanvasWix(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
       const canvas = document.getElementById('canvas-wix');
       const ctx = canvas.getContext('2d');
@@ -682,7 +724,7 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
         posY += 8;
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '500 5.5px Poppins, sans-serif';
-        ctx.fillText(subtitulo.substring(0, 75) + '...', 12, posY);
+        ctx.fillText(subtitulo ? subtitulo.substring(0, 75) + '...' : '', 12, posY);
 
         ctx.fillStyle = 'rgba(7, 16, 7, 0.95)';
         ctx.fillRect(0, h - 26, w, 26);
@@ -789,7 +831,7 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
         posY += 7;
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '500 4.5px Poppins, sans-serif';
-        ctx.fillText(subtitulo.substring(0, 52) + '...', 8, posY);
+        ctx.fillText(subtitulo ? subtitulo.substring(0, 52) + '...' : '', 8, posY);
 
         ctx.fillStyle = 'rgba(7, 16, 7, 0.98)';
         ctx.fillRect(0, h - 22, w, 22);
@@ -930,11 +972,11 @@ Encaminhe sua inscrição acessando o site oficial da competição e garanta vag
 
       btn.disabled = true;
 
-      const h1 = document.getElementById('input-h1').value || 'Sem título';
-      const subtitulo = document.getElementById('input-subtitulo').value || '';
-      const releaseText = document.getElementById('input-release').value || '';
-      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
-      const creditos = document.getElementById('input-creditos').value || 'Assessoria de Imprensa';
+      const h1 = document.getElementById('input-h1').value.trim() || 'Sem título';
+      const subtitulo = document.getElementById('input-subtitulo').value.trim() || '';
+      const releaseText = document.getElementById('input-release').value.trim() || '';
+      const fotografo = document.getElementById('input-fotografo').value.trim() || 'Divulgação';
+      const creditos = document.getElementById('input-creditos').value.trim() || 'Assessoria de Imprensa';
       const categoria = document.getElementById('input-categoria').value;
 
       const slugLimpo = h1.toLowerCase()
