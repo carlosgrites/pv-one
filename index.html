@@ -48,6 +48,11 @@
     .ppv-portal-name span { font-size: 12px; color: #00AE35; font-weight: 700; text-transform: uppercase; }
     .ppv-portal-footer p { font-size: 13px; color: #cbd5e1; line-height: 1.65; max-width: 700px; margin: 0 auto 16px; }
     .ppv-portal-footer a { display: inline-block; padding: 10px 22px; border-radius: 999px; background: #00AE35; color: #ffffff; font-size: 12px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
+    
+    .ppv-gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 24px 0; }
+    .ppv-gallery-item { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+    .ppv-gallery-item img { width: 100%; height: 180px; object-fit: cover; }
+    .ppv-gallery-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.75); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
   </style>
 </head>
 <body class="p-3 md:p-6 bg-[#f4f7f4] min-h-screen text-slate-900">
@@ -73,12 +78,14 @@
       </nav>
     </header>
 
-    <!-- PÁGINA 1: ENTRADA -->
+    <!-- ========================================== -->
+    <!-- PÁGINA 1: ENTRADA (TOTALMENTE LIMPA)      -->
+    <!-- ========================================== -->
     <main id="pagina-1" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 gap-3">
         <div>
           <h2 class="text-lg font-bold text-slate-900">Passo 1: Ingestão de Conteúdo</h2>
-          <p class="text-sm text-slate-600 mt-0.5">Insira os dados do release e fotos para iniciar a matéria.</p>
+          <p class="text-sm text-slate-600 mt-0.5">Insira os dados do release e selecione até várias fotos para distribuição automática.</p>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="limparTudoComConfirmacao()" class="px-4 py-2 text-xs font-bold rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1.5 transition">
@@ -142,15 +149,25 @@
             <input type="text" id="input-piloto-insta" placeholder="Ex: @nomedoperfil" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm">
           </div>
 
-          <div class="p-4 bg-slate-50 border-2 border-slate-300 rounded-xl space-y-2.5">
+          <!-- CONTAINER MULTI-FOTOS INTELIGENTE -->
+          <div class="p-4 bg-slate-50 border-2 border-slate-300 rounded-xl space-y-3">
             <div class="flex items-center justify-between">
               <label class="block text-sm font-bold text-slate-800 flex items-center gap-2">
-                <i class="fa-solid fa-camera text-[#00AE35]"></i> Fotos da Matéria
+                <i class="fa-solid fa-images text-[#00AE35]"></i> Fotos da Matéria (Múltiplas)
               </label>
-              <button id="btn-limpar-fotos" onclick="limparFotosMemoria()" class="hidden text-[11px] text-red-600 font-bold hover:underline">Remover fotos</button>
+              <button id="btn-limpar-fotos" onclick="limparFotosMemoria()" class="hidden text-xs text-red-600 font-bold hover:underline">Remover todas</button>
             </div>
+            
+            <p class="text-[11px] text-slate-500 leading-snug">
+              Selecione de 1 a várias imagens segurando <strong>CTRL</strong> (1ª Capa | 2ª Meio | 3ª Fim | 4ª+ Galeria).
+            </p>
+
             <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-xs text-slate-600 file:mr-3 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00AE35] file:text-white hover:file:bg-[#00AE35]/90 cursor-pointer">
-            <span id="status-fotos-qtd" class="text-xs text-slate-500 font-medium block">Nenhuma foto selecionada.</span>
+            
+            <span id="status-fotos-qtd" class="text-xs text-slate-600 font-medium block">Nenhuma foto selecionada.</span>
+            
+            <!-- Grid de Pré-visualização das miniaturas carregadas -->
+            <div id="preview-miniaturas-grid" class="grid grid-cols-3 gap-2 pt-2 hidden"></div>
           </div>
         </div>
       </div>
@@ -162,7 +179,9 @@
       </div>
     </main>
 
-    <!-- PÁGINA 2: REVISÃO & IFRAMES -->
+    <!-- ========================================== -->
+    <!-- PÁGINA 2: REVISÃO & IFRAMES                -->
+    <!-- ========================================== -->
     <main id="pagina-2" class="hidden space-y-6">
       <section class="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
@@ -211,7 +230,7 @@
         </div>
       </section>
 
-      <!-- PREVIEW DA MATÉRIA -->
+      <!-- PREVIEW DA MATÉRIA COM DISTRIBUIÇÃO DAS FOTOS -->
       <section class="bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-3">
           <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider">Simulador da Matéria Diagramada</h3>
@@ -225,7 +244,9 @@
       </section>
     </main>
 
-    <!-- PÁGINA 3: REDES SOCIAIS & CAPA PNG -->
+    <!-- ========================================== -->
+    <!-- PÁGINA 3: REDES SOCIAIS & CAPA PNG        -->
+    <!-- ========================================== -->
     <main id="pagina-3" class="hidden space-y-6">
       <section class="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm flex items-center justify-between">
         <div>
@@ -488,6 +509,10 @@
       document.getElementById('input-fotos').value = '';
       document.getElementById('status-fotos-qtd').innerText = 'Nenhuma foto selecionada.';
       document.getElementById('btn-limpar-fotos').classList.add('hidden');
+      
+      const grid = document.getElementById('preview-miniaturas-grid');
+      grid.innerHTML = '';
+      grid.classList.add('hidden');
     }
 
     function obterPublicidadeDaVez() {
@@ -512,19 +537,40 @@
       localStorage.setItem("pv_sponsor_idx_v3", ((spIdx + 1) % APOIADORES_ROTATIVOS.length).toString());
     }
 
+    // CARREGAMENTO MULTI-FOTOS
     function carregarFotos(e) {
       const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+
       fotosCarregadas = [];
       let lidos = 0;
+
       files.forEach((file, idx) => {
         const reader = new FileReader();
         reader.onload = function(evt) {
-          fotosCarregadas.push({ src: evt.target.result, ordem: idx });
+          fotosCarregadas.push({ src: evt.target.result, ordem: idx, nome: file.name });
           lidos++;
           if (lidos === files.length) {
             fotosCarregadas.sort((a, b) => a.ordem - b.ordem);
+            
             document.getElementById('status-fotos-qtd').innerText = `${files.length} foto(s) carregada(s) com sucesso.`;
             document.getElementById('btn-limpar-fotos').classList.remove('hidden');
+            
+            // Monta miniaturas visuais
+            const grid = document.getElementById('preview-miniaturas-grid');
+            grid.innerHTML = '';
+            grid.classList.remove('hidden');
+
+            fotosCarregadas.forEach((f, i) => {
+              const label = i === 0 ? '1ª Capa' : i === 1 ? '2ª Meio' : i === 2 ? '3ª Fim' : `${i+1}ª Galeria`;
+              const box = document.createElement('div');
+              box.className = 'relative rounded-lg overflow-hidden border border-slate-300 bg-black aspect-video';
+              box.innerHTML = `
+                <img src="${f.src}" class="w-full h-full object-cover">
+                <span class="absolute bottom-1 left-1 bg-[#00AE35] text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow">${label}</span>
+              `;
+              grid.appendChild(box);
+            });
           }
         };
         reader.readAsDataURL(file);
@@ -542,6 +588,7 @@
       navigator.clipboard.writeText(field.value);
     }
 
+    // PROCESSAMENTO E DISTRIBUIÇÃO INTELIGENTE DAS FOTOS
     function gerarMateriaEAvancar() {
       const h1 = document.getElementById('input-h1').value.trim() || 'SEM TÍTULO INFORMADO';
       const subtitulo = document.getElementById('input-subtitulo').value.trim() || '';
@@ -608,6 +655,7 @@
       document.getElementById('code-publicidade').value = htmlAdIframe;
       document.getElementById('code-apoiadores').value = htmlApoioIframe;
 
+      // MONTAGEM DO HTML COM DISTRIBUIÇÃO DAS FOTOS
       let htmlCorpo = `<div class="ppv-materia">
         <header class="ppv-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.18) 100%), url('${fotoCapa}');">
           <div class="ppv-hero-content">
@@ -637,26 +685,54 @@
           htmlCorpo += `<p class="my-4 text-slate-800 text-base leading-relaxed">${p}</p>`;
         }
 
-        if (fotosCarregadas.length > 1 && idx === 0) {
-          htmlCorpo += `
-            <figure class="my-6 text-center">
-              <img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md mx-auto">
-              <figcaption class="text-xs text-slate-600 mt-2 font-medium text-center">${legendaFoto ? legendaFoto + ' | ' : ''}Foto: ${fotografo}</figcaption>
-            </figure>`;
+        // REGRA DE DISTRIBUIÇÃO DAS FOTOS:
+        // Caso tenhamos 2 ou 3 fotos: distribui no meio e fim
+        if (fotosCarregadas.length >= 2 && fotosCarregadas.length <= 3) {
+          if (idx === 0 && fotosCarregadas[1]) {
+            htmlCorpo += `
+              <figure class="my-6 text-center">
+                <img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md mx-auto">
+                <figcaption class="text-xs text-slate-600 mt-2 font-medium text-center">${legendaFoto ? legendaFoto + ' | ' : ''}Foto: ${fotografo}</figcaption>
+              </figure>`;
+          }
+
+          if (idx === paragrafos.length - 1 && fotosCarregadas[2]) {
+            htmlCorpo += `
+              <figure class="my-6 text-center">
+                <img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md mx-auto">
+                <figcaption class="text-xs text-slate-600 mt-2 font-medium text-center">Foto: ${fotografo}</figcaption>
+              </figure>`;
+          }
         }
 
+        // Inserção da Publicidade no Meio
         if (idx === meioIndice) {
           htmlCorpo += htmlAdIframe;
         }
-
-        if (fotosCarregadas.length > 2 && idx === paragrafos.length - 1) {
-          htmlCorpo += `
-            <figure class="my-6 text-center">
-              <img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md mx-auto">
-              <figcaption class="text-xs text-slate-600 mt-2 font-medium text-center">Foto: ${fotografo}</figcaption>
-            </figure>`;
-        }
       });
+
+      // Caso tenhamos MAIS DE 3 FOTOS (4 ou mais): Gera a Galeria Grid Carrossel
+      if (fotosCarregadas.length > 3) {
+        htmlCorpo += `
+          <div class="my-8 pt-4 border-t border-slate-200">
+            <h3 class="text-base font-black text-[#21300C] uppercase tracking-wider mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-images text-[#00AE35]"></i> Galeria de Fotos da Cobertura (${fotosCarregadas.length} Imagens)
+            </h3>
+            <div class="ppv-gallery-grid">`;
+        
+        fotosCarregadas.slice(1).forEach((f, i) => {
+          htmlCorpo += `
+            <div class="ppv-gallery-item">
+              <img src="${f.src}" alt="Foto da Cobertura ${i+2}">
+              <span class="ppv-gallery-badge">Foto ${i+2}</span>
+            </div>`;
+        });
+
+        htmlCorpo += `
+            </div>
+            <p class="text-xs text-slate-500 text-center font-medium mt-1">Fotos: ${fotografo}</p>
+          </div>`;
+      }
 
       htmlCorpo += `
         <div class="ppv-creditos text-xs text-slate-600 my-6 pt-4 border-t border-slate-300 font-medium">
