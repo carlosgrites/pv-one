@@ -1,207 +1,96 @@
-// api/wix.js - DISPARO DIRETO PV ONE v3.0
-
-// =========================================================================
-// 1. COLE SUAS CHAVES DENTRO DAS ASPAS ABAIXO:
-// =========================================================================
-const WIX_API_KEY_VAL = 'IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjJlYjI5MmIyLWU2NGUtNGQ3Yy1hYzMwLTQyMzVhMDYzMWNiNFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImJmY2M1NzBmLTQ3MDUtNDI0MC1iOTliLTQ2Njg3NjQ3MGRlNVwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MDkyMzQ1fQ.MPXDGKra6zYTBVTzNWqSWvOxGMdLFAzoaBf9d5jOLNw5bi-pjo4JUOqIKcC0Rs2B1pN7WIdbVgeRXZTDtvejRQZ_L2qwcclVj2pXjXFUOWYOybBHEjC3WwqjwYoISaCkgdoHlhczRMrEmM8I7xYk8z00NgqKcul4_re2sDZdBkc9MHsv83Hy7aEEzx7D_ELDbS1jPYxPcD3Hv6ph1arfsUBJWNL_-2r8lkFmFyJfM8ckhnWUd4uwOoOrQ_9Q7V7Xe7RsYoTCTETy7nvXMGqZfT1dncMiWhdEb2vURgftrXXK9lJuqrsVNwOmuCekja0AjAHeC68inNcH1PdRgyxd4Q';
-const WIX_SITE_ID_VAL = '50bca98c-31f2-4172-a19d-c3abf3dd9dd7';
-const WIX_ACCOUNT_ID_VAL = '74713a6e-e007-4df9-8cc4-a1058c55d05d';
-// =========================================================================
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, error: 'Método não permitido. Utilize POST.' });
+    return res.status(405).json({ error: 'Método não permitido.' });
   }
 
-  try {
-    const body = req.body || {};
+  const { headline, subtitle, editorialBody, paragraphs, photographer, source, category, seo } = req.body;
 
-    // Mapeamento dos campos do formulário
-    const title = body.headline || body.title || body.titulo || 'Matéria Portal Pista Verde';
-    const subtitle = body.subtitle || body.subtitulo || body.lead || '';
-    const leadText = body.lead || body.subtitle || body.subtitulo || '';
-    const rawContent = body.editorialBody || body.content || body.corpo || body.release || body.rawText || body.text || subtitle || title;
-    
-    const categoryId = body.categoryId || body.categoriaId || '';
-    const photoCredits = body.photoCredits || body.fotografo || 'Divulgação';
-    const sourceCredits = body.sourceCredits || body.fonte || 'Assessoria de Imprensa';
-    const coverImageUrl = body.coverImageUrl || body.capaUrl || '';
-    const middleImageUrl = body.middleImageUrl || body.meioUrl || '';
-    const endImageUrl = body.endImageUrl || body.fimUrl || '';
-    const seoData = body.seoData || {};
+  const WIX_API_KEY = process.env.WIX_API_KEY;
+  const WIX_SITE_ID = process.env.WIX_SITE_ID;
 
-    const nodes = [];
+  if (!WIX_API_KEY || !WIX_SITE_ID) {
+    return res.status(500).json({ error: 'Configuração da API Wix ausente no backend.' });
+  }
 
-    // 1. Lide Editorial
-    if (leadText) {
-      nodes.push({
-        type: 'PARAGRAPH',
-        id: 'node-lead',
-        nodes: [
-          {
-            type: 'TEXT',
-            id: 'text-lead',
-            textData: { text: leadText, decorations: [{ type: 'BOLD' }] }
-          }
-        ]
-      });
-    }
+  // Divide o texto em parágrafos reais
+  const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
+  
+  const nodes = [];
 
-    // 2. Parágrafos do texto
-    const textToProcess = rawContent || 'Matéria em edição pela redação do Portal Pista Verde.';
-    const paragraphs = textToProcess.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
-    const midIndex = Math.max(1, Math.ceil(paragraphs.length / 2));
-
-    paragraphs.slice(0, midIndex).forEach((paragraph, idx) => {
-      nodes.push({
-        type: 'PARAGRAPH',
-        id: `node-p1-${idx}`,
-        nodes: [
-          {
-            type: 'TEXT',
-            id: `text-p1-${idx}`,
-            textData: { text: paragraph, decorations: [] }
-          }
-        ]
-      });
-    });
-
-    // Imagem do Meio (se houver)
-    if (middleImageUrl) {
-      nodes.push({
-        type: 'IMAGE',
-        id: 'node-mid-img',
-        imageData: {
-          image: { src: { url: middleImageUrl } },
-          altText: title,
-          containerData: { alignment: 'CENTER', width: { size: 'ORIGINAL' } }
-        }
-      });
-    }
-
-    // Bloco Comercial Isolado: Inovimpress
+  // Linha Fina no topo em itálico
+  if (subtitle) {
     nodes.push({
-      type: 'PARAGRAPH',
-      id: 'node-inovimpress',
-      nodes: [
-        {
-          type: 'TEXT',
-          id: 'text-inovimpress',
-          textData: {
-            text: '— Publicidade —\nInovimpress: Soluções completas em comunicação visual e materiais gráficos para o automobilismo.',
-            decorations: [{ type: 'ITALIC' }]
-          }
-        }
-      ]
+      type: "PARAGRAPH",
+      nodes: [{ type: "TEXT", textData: { text: subtitle, decorations: [{ type: "ITALIC" }] } }]
+    });
+  }
+
+  // Parágrafos independentes com espaçamento
+  rawParagraphs.forEach((p, idx) => {
+    nodes.push({
+      type: "PARAGRAPH",
+      nodes: [{ type: "TEXT", textData: { text: p, decorations: idx === 0 ? [{ type: "BOLD" }] : [] } }]
     });
 
-    // Parágrafos 2ª Parte
-    paragraphs.slice(midIndex).forEach((paragraph, idx) => {
+    // Marcador da Publicidade no meio
+    if (idx === Math.floor(rawParagraphs.length / 2)) {
       nodes.push({
-        type: 'PARAGRAPH',
-        id: `node-p2-${idx}`,
-        nodes: [
-          {
-            type: 'TEXT',
-            id: `text-p2-${idx}`,
-            textData: { text: paragraph, decorations: [] }
-          }
-        ]
+        type: "HEADING",
+        headingData: { level: 2 },
+        nodes: [{ type: "TEXT", textData: { text: "Disputas e Preparação na Pista", decorations: [] } }]
       });
-    });
 
-    // Imagem do Fim (se houver)
-    if (endImageUrl) {
       nodes.push({
-        type: 'IMAGE',
-        id: 'node-end-img',
-        imageData: {
-          image: { src: { url: endImageUrl } },
-          altText: `${title} - Final`,
-          containerData: { alignment: 'CENTER', width: { size: 'ORIGINAL' } }
-        }
+        type: "PARAGRAPH",
+        nodes: [{ type: "TEXT", textData: { text: "[ --- INSERIR AQUI O IFRAME DA PUBLICIDADE --- ]", decorations: [{ type: "BOLD" }] } }]
       });
     }
+  });
 
-    // Rodapé de Créditos
-    const rodapeTexto = `Créditos Fotográficos: ${photoCredits} | Fonte: ${sourceCredits} | Redação Portal Pista Verde`;
-    nodes.push({
-      type: 'PARAGRAPH',
-      id: 'node-footer',
-      nodes: [
-        {
-          type: 'TEXT',
-          id: 'text-footer',
-          textData: { text: rodapeTexto, decorations: [{ type: 'ITALIC' }] }
-        }
-      ]
-    });
+  // Marcador dos Apoiadores no final
+  nodes.push({
+    type: "PARAGRAPH",
+    nodes: [{ type: "TEXT", textData: { text: "[ --- INSERIR AQUI O IFRAME DOS APOIADORES DO KARTISMO --- ]", decorations: [{ type: "BOLD" }] } }]
+  });
 
-    // 3. Montagem do Payload COM memberId OBRIGATÓRIO
-    const draftPayload = {
-      draftPost: {
-        title: title,
-        memberId: WIX_ACCOUNT_ID_VAL,
-        excerpt: subtitle || leadText.substring(0, 160) || title,
-        richContent: { nodes: nodes },
-        categoryIds: categoryId ? [categoryId] : [],
-        seoData: {
-          tags: [
-            { type: 'title', children: seoData?.title || `${title} | Portal Pista Verde` },
-            {
-              type: 'meta',
-              props: {
-                name: 'description',
-                content: seoData?.description || subtitle || leadText.substring(0, 160) || title
-              }
-            }
-          ]
-        }
+  // Créditos
+  nodes.push({
+    type: "PARAGRAPH",
+    nodes: [{ type: "TEXT", textData: { text: `Fotos: ${photographer || 'Divulgação'} | Fonte: ${source || 'Redação'} | Redação Portal Pista Verde`, decorations: [{ type: "ITALIC" }] } }]
+  });
+
+  const payload = {
+    draftPost: {
+      title: headline || "Sem título",
+      excerpt: subtitle ? (subtitle.length > 150 ? subtitle.substring(0, 147) + "..." : subtitle) : "",
+      richContent: {
+        nodes: nodes
       }
-    };
-
-    if (coverImageUrl) {
-      draftPayload.draftPost.media = {
-        displayed: true,
-        custom: true,
-        mainMedia: { image: { url: coverImageUrl } }
-      };
     }
+  };
 
-    // 4. Envio para a API do Wix
-    const wixResponse = await fetch('https://www.wixapis.com/blog/v3/draft-posts', {
-      method: 'POST',
+  try {
+    const wixResponse = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': WIX_API_KEY_VAL,
-        'wix-site-id': WIX_SITE_ID_VAL,
-        'wix-account-id': WIX_ACCOUNT_ID_VAL
+        "Content-Type": "application/json",
+        "Authorization": WIX_API_KEY,
+        "wix-site-id": WIX_SITE_ID
       },
-      body: JSON.stringify(draftPayload)
+      body: JSON.stringify(payload)
     });
 
-    const dataRetorno = await wixResponse.json();
+    const data = await wixResponse.json();
 
     if (!wixResponse.ok) {
       return res.status(wixResponse.status).json({
-        success: false,
-        error: dataRetorno.message || `Erro Wix (${wixResponse.status})`,
-        detalhes: dataRetorno
+        error: data.message || "Erro retornado pela API do Wix.",
+        details: data
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      message: 'Rascunho criado com sucesso no Wix Blog!',
-      draftPostId: dataRetorno.draftPost?.id,
-      data: dataRetorno
-    });
-
+    return res.status(200).json({ success: true, post: data.draftPost });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      error: 'Erro interno no servidor ao processar o rascunho.',
-      detalhes: error.message
-    });
+    return res.status(500).json({ error: "Falha de conexão com a API Wix.", details: error.message });
   }
 }
