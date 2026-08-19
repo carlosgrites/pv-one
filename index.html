@@ -40,6 +40,14 @@
     .ppv-sponsor-card img { width: 100%; height: 70px; object-fit: contain; margin-bottom: 14px; }
     .ppv-sponsor-card h3 { margin: 0 0 6px; color: #21300C; font-size: 16px; font-weight: 800; }
     .ppv-sponsor-card p { margin: 0 0 14px; font-size: 13px; color: #374151; line-height: 1.55; }
+
+    .ppv-portal-footer { margin-top: 36px; padding: 28px; background: #071007; border-radius: 16px; color: #ffffff; text-align: center; border-top: 6px solid #00AE35; }
+    .ppv-portal-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; }
+    .ppv-portal-mark { background: #00AE35; color: #101510; font-family: "Poppins", sans-serif; font-size: 18px; font-weight: 900; padding: 5px 12px; border-radius: 8px; }
+    .ppv-portal-name strong { display: block; font-family: "Poppins", sans-serif; font-size: 20px; color: #ffffff; letter-spacing: 1px; line-height: 1; }
+    .ppv-portal-name span { font-size: 12px; color: #00AE35; font-weight: 700; text-transform: uppercase; }
+    .ppv-portal-footer p { font-size: 13px; color: #cbd5e1; line-height: 1.65; max-width: 700px; margin: 0 auto 16px; }
+    .ppv-portal-footer a { display: inline-block; padding: 10px 22px; border-radius: 999px; background: #00AE35; color: #ffffff; font-size: 12px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
   </style>
 </head>
 <body class="p-3 md:p-6 bg-[#f4f7f4] min-h-screen text-slate-900">
@@ -65,9 +73,7 @@
       </nav>
     </header>
 
-    <!-- ========================================== -->
-    <!-- PÁGINA 1: ENTRADA (TOTALMENTE LIMPA)      -->
-    <!-- ========================================== -->
+    <!-- PÁGINA 1: ENTRADA -->
     <main id="pagina-1" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 gap-3">
         <div>
@@ -122,6 +128,11 @@
           </div>
 
           <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">Legenda da Foto Interna (Texto Curto)</label>
+            <input type="text" id="input-legenda-foto" placeholder="Ex: Piloto acelerando nos treinos livres da categoria." class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm">
+          </div>
+
+          <div>
             <label class="block text-sm font-bold text-slate-800 mb-1.5">Fonte / Assessoria de Imprensa</label>
             <input type="text" id="input-creditos" placeholder="Ex: Assessoria de Imprensa" class="w-full bg-white border-2 border-slate-300 rounded-xl p-3 text-sm text-slate-900 outline-none shadow-sm">
           </div>
@@ -144,16 +155,14 @@
         </div>
       </div>
 
-      <div class="border-t border-slate-200 pt-5 flex items-center gap-4">
+      <div class="border-t border-slate-200 pt-5">
         <button onclick="gerarMateriaEAvancar()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-white font-black py-4 rounded-xl text-base transition flex items-center justify-center gap-3 uppercase tracking-wider shadow-md">
           <i class="fa-solid fa-bolt"></i> Gerar Matéria e Ir para o Passo 2
         </button>
       </div>
     </main>
 
-    <!-- ========================================== -->
-    <!-- PÁGINA 2: REVISÃO & IFRAMES                -->
-    <!-- ========================================== -->
+    <!-- PÁGINA 2: REVISÃO & IFRAMES -->
     <main id="pagina-2" class="hidden space-y-6">
       <section class="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
@@ -216,9 +225,7 @@
       </section>
     </main>
 
-    <!-- ========================================== -->
-    <!-- PÁGINA 3: REDES SOCIAIS & CAPA PNG        -->
-    <!-- ========================================== -->
+    <!-- PÁGINA 3: REDES SOCIAIS & CAPA PNG -->
     <main id="pagina-3" class="hidden space-y-6">
       <section class="bg-white p-6 rounded-2xl border border-slate-300 shadow-sm flex items-center justify-between">
         <div>
@@ -282,7 +289,7 @@
             <div class="bg-black rounded-lg overflow-hidden border border-slate-300 mx-auto w-[101px] shadow-sm">
               <canvas id="canvas-stories" width="101" height="180" class="block w-full"></canvas>
             </div>
-            <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-white font-bold py-2.5 rounded-lg text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+            <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-white font-bold py-2.5 rounded-lg text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
               <i class="fa-solid fa-download"></i> Baixar Stories (1080x1920)
             </a>
           </div>
@@ -426,7 +433,6 @@
 
     let fotosCarregadas = [];
 
-    // CONTROLE DE NAVEGAÇÃO
     function irParaPagina(num) {
       document.getElementById('pagina-1').classList.add('hidden');
       document.getElementById('pagina-2').classList.add('hidden');
@@ -441,12 +447,12 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // LIMPEZA COMPLETA DE MEMÓRIA E CAMPOS
     function limparFormularioCompleto() {
       document.getElementById('input-h1').value = '';
       document.getElementById('input-subtitulo').value = '';
       document.getElementById('input-release').value = '';
       document.getElementById('input-fotografo').value = '';
+      document.getElementById('input-legenda-foto').value = '';
       document.getElementById('input-creditos').value = '';
       document.getElementById('input-piloto-insta').value = '';
       document.getElementById('input-categoria').selectedIndex = 0;
@@ -541,6 +547,7 @@
       const subtitulo = document.getElementById('input-subtitulo').value.trim() || '';
       const categoria = document.getElementById('input-categoria').value;
       const fotografo = document.getElementById('input-fotografo').value.trim() || 'Divulgação';
+      const legendaFoto = document.getElementById('input-legenda-foto').value.trim() || '';
       const creditos = document.getElementById('input-creditos').value.trim() || 'Assessoria de Imprensa';
       const release = document.getElementById('input-release').value.trim() || 'Sem conteúdo de matéria.';
       const pilotoInsta = document.getElementById('input-piloto-insta').value.trim() || '';
@@ -584,7 +591,19 @@
       <a class="ppv-sponsor-btn" href="${rotativoAtual.url}" target="_blank" rel="noopener noreferrer">${rotativoAtual.btn}</a>
     </article>
   </div>
-</section>`;
+</section>
+
+<footer class="ppv-portal-footer" aria-label="Portal Pista Verde">
+  <div class="ppv-portal-brand">
+    <span class="ppv-portal-mark">PV</span>
+    <div class="ppv-portal-name">
+      <strong>PISTA VERDE</strong>
+      <span>Grid aquecido com responsabilidade</span>
+    </div>
+  </div>
+  <p>O Portal Pista Verde produz jornalismo especializado sobre kartismo e automobilismo, valorizando pilotos, equipes, campeonatos e as empresas que fortalecem o esporte a motor brasileiro.</p>
+  <a href="https://www.pistaverde.com.br/" target="_blank">Conheça o Portal Pista Verde</a>
+</footer>`;
 
       document.getElementById('code-publicidade').value = htmlAdIframe;
       document.getElementById('code-apoiadores').value = htmlApoioIframe;
@@ -620,9 +639,9 @@
 
         if (fotosCarregadas.length > 1 && idx === 0) {
           htmlCorpo += `
-            <figure class="my-6">
-              <img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md">
-              <figcaption class="text-xs text-slate-600 mt-2 italic text-right font-medium">Foto: ${fotografo}</figcaption>
+            <figure class="my-6 text-center">
+              <img src="${fotosCarregadas[1].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md mx-auto">
+              <figcaption class="text-xs text-slate-600 mt-2 font-medium text-center">${legendaFoto ? legendaFoto + ' | ' : ''}Foto: ${fotografo}</figcaption>
             </figure>`;
         }
 
@@ -632,9 +651,9 @@
 
         if (fotosCarregadas.length > 2 && idx === paragrafos.length - 1) {
           htmlCorpo += `
-            <figure class="my-6">
-              <img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md">
-              <figcaption class="text-xs text-slate-600 mt-2 italic text-right font-medium">Foto: ${fotografo}</figcaption>
+            <figure class="my-6 text-center">
+              <img src="${fotosCarregadas[2].src}" class="w-full rounded-xl max-h-[440px] object-cover border border-slate-300 shadow-md mx-auto">
+              <figcaption class="text-xs text-slate-600 mt-2 font-medium text-center">Foto: ${fotografo}</figcaption>
             </figure>`;
         }
       });
@@ -1039,7 +1058,7 @@
             irParaPagina(3);
           }, 1500);
         } else {
-          const msgErro = data.message || data.details || JSON.stringify(data);
+          const msgErro = data.error || data.message || data.details || JSON.stringify(data);
           throw new Error(`Erro Wix (${response.status}): ${msgErro}`);
         }
       } catch (err) {
