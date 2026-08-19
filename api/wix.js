@@ -3,21 +3,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido.' });
   }
 
-  const { headline, subtitle, editorialBody, paragraphs, photographer, source, category, seo } = req.body;
+  const { headline, subtitle, editorialBody, paragraphs, photographer, source, category } = req.body;
 
-  const WIX_API_KEY = process.env.WIX_API_KEY;
-  const WIX_SITE_ID = process.env.WIX_SITE_ID;
+  const WIX_API_KEY = process.env.WIX_API_KEY || process.env.NEXT_PUBLIC_WIX_API_KEY;
+  const WIX_SITE_ID = process.env.WIX_SITE_ID || process.env.NEXT_PUBLIC_WIX_SITE_ID;
 
   if (!WIX_API_KEY || !WIX_SITE_ID) {
-    return res.status(500).json({ error: 'Configuração da API Wix ausente no backend.' });
+    return res.status(500).json({ 
+      error: "Configuração da API Wix ausente no backend. Adicione as variáveis WIX_API_KEY e WIX_SITE_ID nas configurações da Vercel." 
+    });
   }
 
-  // Divide o texto em parágrafos reais
   const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
-  
   const nodes = [];
 
-  // Linha Fina no topo em itálico
   if (subtitle) {
     nodes.push({
       type: "PARAGRAPH",
@@ -25,14 +24,12 @@ export default async function handler(req, res) {
     });
   }
 
-  // Parágrafos independentes com espaçamento
   rawParagraphs.forEach((p, idx) => {
     nodes.push({
       type: "PARAGRAPH",
       nodes: [{ type: "TEXT", textData: { text: p, decorations: idx === 0 ? [{ type: "BOLD" }] : [] } }]
     });
 
-    // Marcador da Publicidade no meio
     if (idx === Math.floor(rawParagraphs.length / 2)) {
       nodes.push({
         type: "HEADING",
@@ -47,13 +44,11 @@ export default async function handler(req, res) {
     }
   });
 
-  // Marcador dos Apoiadores no final
   nodes.push({
     type: "PARAGRAPH",
     nodes: [{ type: "TEXT", textData: { text: "[ --- INSERIR AQUI O IFRAME DOS APOIADORES DO KARTISMO --- ]", decorations: [{ type: "BOLD" }] } }]
   });
 
-  // Créditos
   nodes.push({
     type: "PARAGRAPH",
     nodes: [{ type: "TEXT", textData: { text: `Fotos: ${photographer || 'Divulgação'} | Fonte: ${source || 'Redação'} | Redação Portal Pista Verde`, decorations: [{ type: "ITALIC" }] } }]
