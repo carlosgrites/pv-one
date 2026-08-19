@@ -3,14 +3,26 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método não permitido.' });
   }
 
-  const { headline, subtitle, editorialBody, paragraphs, photographer, source, category } = req.body;
+  const { headline, subtitle, editorialBody, paragraphs, photographer, source } = req.body;
 
-  const apiKey = process.env.WIX_API_KEY;
-  const siteId = process.env.WIX_SITE_ID;
+  const WIX_API_KEY = process.env.WIX_API_KEY;
+  const WIX_SITE_ID = process.env.WIX_SITE_ID;
 
+  if (!WIX_API_KEY || !WIX_SITE_ID) {
+    return res.status(500).json({ 
+      error: "Chaves WIX_API_KEY ou WIX_SITE_ID ausentes no ambiente da Vercel." 
+    });
+  }
+
+  // Limpeza de token e site ID
+  const cleanApiKey = WIX_API_KEY.replace(/^Bearer\s+/i, '').trim();
+  const cleanSiteId = WIX_SITE_ID.trim();
+
+  // Tratamento de parágrafos isolados
   const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
   const nodes = [];
 
+  // Linha Fina / Subtítulo no topo
   if (subtitle) {
     nodes.push({
       type: "PARAGRAPH",
@@ -18,6 +30,7 @@ export default async function handler(req, res) {
     });
   }
 
+  // Parágrafos independentes com Lide e Intertítulo H2
   rawParagraphs.forEach((p, idx) => {
     nodes.push({
       type: "PARAGRAPH",
@@ -38,11 +51,13 @@ export default async function handler(req, res) {
     }
   });
 
+  // Marcador dos Apoiadores
   nodes.push({
     type: "PARAGRAPH",
     nodes: [{ type: "TEXT", textData: { text: "[ --- INSERIR AQUI O IFRAME DOS APOIADORES DO KARTISMO --- ]", decorations: [{ type: "BOLD" }] } }]
   });
 
+  // Créditos Finais
   nodes.push({
     type: "PARAGRAPH",
     nodes: [{ type: "TEXT", textData: { text: `Fotos: ${photographer || 'Divulgação'} | Fonte: ${source || 'Redação'} | Redação Portal Pista Verde`, decorations: [{ type: "ITALIC" }] } }]
@@ -63,8 +78,8 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": apiKey,
-        "wix-site-id": siteId
+        "Authorization": cleanApiKey,
+        "wix-site-id": cleanSiteId
       },
       body: JSON.stringify(payload)
     });
