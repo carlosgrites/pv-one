@@ -48,45 +48,72 @@
     .ppv-portal-name span { font-size: 11px; color: #00AE35; font-weight: 700; text-transform: uppercase; }
     .ppv-portal-footer p { font-size: 12px; color: #cbd5e1; line-height: 1.6; max-width: 680px; margin: 0 auto 14px; }
     .ppv-portal-footer a { display: inline-block; padding: 8px 18px; border-radius: 999px; background: #00AE35; color: #ffffff; font-size: 11px; font-weight: 800; text-decoration: none; text-transform: uppercase; }
-    
-    .view-pc { width: 100%; max-width: 1000px; }
-    .view-tablet { width: 768px; margin: 0 auto; }
-    .view-mobile { width: 375px; margin: 0 auto; }
   </style>
 </head>
-<body class="p-3 md:p-6">
-  <div class="max-w-[1750px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+<body class="p-3 md:p-6 bg-[#080c14] min-h-screen">
+  <div class="max-w-[1400px] mx-auto space-y-6">
     
-    <!-- COLUNA ESQUERDA: PÁGINA 1 (ENTRADA DE DADOS) -->
-    <div class="lg:col-span-5 bg-slate-900 p-5 rounded-2xl border border-slate-800 custom-scroll max-h-[95vh] overflow-y-auto space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-3.5 h-3.5 rounded-full bg-[#00AE35]"></div>
-          <h2 class="text-base font-black tracking-wider text-white">PV ONE <span class="text-xs text-[#00AE35] font-normal">v3.0 Pista</span></h2>
-        </div>
-        <span class="text-[10px] font-mono bg-slate-800 text-[#00AE35] px-2 py-1 rounded border border-[#00AE35]/20">Central Editorial</span>
+    <!-- BARRA SUPERIOR DE ETAPAS (WIZARD) -->
+    <header class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 rounded-full bg-[#00AE35] animate-pulse"></div>
+        <h1 class="text-lg font-black tracking-wider text-white">PV ONE <span class="text-xs text-[#00AE35] font-normal">v3.0 Central Editorial</span></h1>
       </div>
 
-      <div class="flex rounded-xl overflow-hidden p-1 bg-slate-950 border border-slate-800">
-        <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950">1- Release Recebido</button>
-        <button id="tab-propria" onclick="trocarOrigem('propria')" class="w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400">2- Matéria Própria</button>
+      <nav class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 w-full md:w-auto">
+        <button id="nav-btn-1" onclick="irParaPagina(1)" class="flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950 flex items-center justify-center gap-2">
+          <span>1</span> Entrada da Matéria
+        </button>
+        <button id="nav-btn-2" onclick="irParaPagina(2)" class="flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white flex items-center justify-center gap-2">
+          <span>2</span> Revisão & iFrames
+        </button>
+        <button id="nav-btn-3" onclick="irParaPagina(3)" class="flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white flex items-center justify-center gap-2">
+          <span>3</span> Redes Sociais & Mídia
+        </button>
+      </nav>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 1: ENTRADA DE DADOS E GERAÇÃO      -->
+    <!-- ========================================== -->
+    <main id="pagina-1" class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div>
+          <h2 class="text-base font-bold text-white">Passo 1: Ingestão de Conteúdo</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Preencha o release, selecione a categoria e anexe as fotos da cobertura.</p>
+        </div>
+        <div class="flex rounded-lg overflow-hidden p-1 bg-slate-950 border border-slate-800">
+          <button id="tab-recebida" onclick="trocarOrigem('recebida')" class="px-3 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-slate-950">Release Recebido</button>
+          <button id="tab-propria" onclick="trocarOrigem('propria')" class="px-3 py-1.5 text-xs font-bold rounded text-slate-400">Matéria Própria</button>
+        </div>
       </div>
 
-      <div class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Título Principal (H1)</label>
-          <input type="text" id="input-h1" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-[#00AE35] outline-none font-bold" value="27ª COPA BRASIL DE KART: IRMÃOS EMERICK CHEGAM AO MARANHÃO E BUSCAM TÍTULOS">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+        <div class="md:col-span-8 space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Título Principal (H1)</label>
+            <input type="text" id="input-h1" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-[#00AE35] outline-none font-bold" value="27ª COPA BRASIL DE KART: IRMÃOS EMERICK CHEGAM AO MARANHÃO E BUSCAM TÍTULOS">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Subtítulo / Linha Fina</label>
+            <input type="text" id="input-subtitulo" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 focus:border-[#00AE35] outline-none" value="Os pilotos do Espírito Santo, Miguel e Joaquim Emerick, desembarcam no Nordeste com o objetivo de conquistar títulos em suas categorias.">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Corpo da Matéria / Release Bruto</label>
+            <textarea id="input-release" rows="10" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-xs text-slate-200 focus:border-[#00AE35] outline-none leading-relaxed">A programação da 27ª Copa Brasil de Kart 2026 entra em fase decisiva com a chegada dos pilotos ao circuito de Imperatriz, no Maranhão. Representando o Espírito Santo, os irmãos Miguel e Joaquim Emerick iniciam os treinos oficiais focados na briga direta pelas primeiras posições da tabela.
+
+Com histórico positivo nas competições regionais e nacionais, a dupla trabalhou intensamente na preparação dos motores e no acerto de chassis para garantir máxima aderência e estabilidade no traçado maranhense.
+
+A expectativa para as baterias classificatórias e finais é de alto nível técnico e disputas intensas curva a curva. A equipe técnica ajusta os últimos detalhes para assegurar velocidade constante nas tomadas de tempo.</textarea>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Subtítulo / Linha Fina</label>
-          <input type="text" id="input-subtitulo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-[#00AE35] outline-none" value="Os pilotos do Espírito Santo, Miguel e Joaquim Emerick, desembarcam no Nordeste com o objetivo de conquistar títulos em suas categorias.">
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
+        <div class="md:col-span-4 space-y-4">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">Categoria Oficial Wix</label>
-            <select id="input-categoria" onchange="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-[#00AE35] font-bold focus:border-[#00AE35] outline-none">
+            <select id="input-categoria" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-[#00AE35] font-bold focus:border-[#00AE35] outline-none">
               <option value="COPA DO BRASIL">COPA DO BRASIL</option>
               <option value="Kartismo">Kartismo</option>
               <option value="Automobilismo">Automobilismo</option>
@@ -95,264 +122,237 @@
               <option value="Copa São Paulo Light">Copa São Paulo Light</option>
             </select>
           </div>
+
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Fotógrafo / Imagem</label>
-            <input type="text" id="input-fotografo" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="DARKSIDE KARTS / CASAL MOTORSPORT">
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Fotógrafo / Crédito de Imagem</label>
+            <input type="text" id="input-fotografo" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white outline-none" value="DARKSIDE KARTS / CASAL MOTORSPORT">
           </div>
-        </div>
 
-        <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-          <label class="block text-[11px] font-bold text-[#00AE35] flex items-center gap-1.5">
-            <i class="fa-solid fa-camera"></i> Fotos da Matéria (1ª Capa | 2ª Meio | 3ª Fim)
-          </label>
-          <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-[11px] text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[11px] file:font-semibold file:bg-[#00AE35] file:text-slate-950 hover:file:bg-[#00AE35]/90 cursor-pointer">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Release / Corpo da Matéria</label>
-          <textarea id="input-release" oninput="processarMateria()" rows="8" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 focus:border-[#00AE35] outline-none leading-relaxed">A programação da 27ª Copa Brasil de Kart 2026 entra em fase decisiva com a chegada dos pilotos ao circuito de Imperatriz, no Maranhão. Representando o Espírito Santo, os irmãos Miguel e Joaquim Emerick iniciam os treinos oficiais focados na briga direta pelas primeiras posições da tabela.
-
-Com histórico positivo nas competições regionais e nacionais, a dupla trabalhou intensamente na preparação dos motores e no acerto de chassis para garantir máxima aderência e estabilidade no traçado maranhense.
-
-A expectativa para as baterias classificatórias e finais é de alto nível técnico e disputas intensas curva a curva. A equipe técnica ajusta os últimos detalhes para assegurar velocidade constante nas tomadas de tempo.</textarea>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Fonte / Assessoria</label>
-            <input type="text" id="input-creditos" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="Comunicação Oficial">
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Fonte / Assessoria de Imprensa</label>
+            <input type="text" id="input-creditos" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white outline-none" value="Comunicação Oficial">
           </div>
+
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1">@ do Piloto (Instagram)</label>
-            <input type="text" id="input-piloto-insta" oninput="processarMateria()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none" value="@emerick_racing">
+            <input type="text" id="input-piloto-insta" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-xs text-white outline-none" value="@emerick_racing">
+          </div>
+
+          <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+            <label class="block text-xs font-bold text-[#00AE35] flex items-center gap-2">
+              <i class="fa-solid fa-camera"></i> Fotos da Matéria (1ª Capa | 2ª Meio | 3ª Fim)
+            </label>
+            <input type="file" id="input-fotos" accept="image/*" multiple onchange="carregarFotos(event)" class="w-full text-xs text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00AE35] file:text-slate-950 hover:file:bg-[#00AE35]/90 cursor-pointer">
+            <span id="status-fotos-qtd" class="text-[11px] text-slate-500 block">Nenhuma foto selecionada (usando padrão).</span>
           </div>
         </div>
       </div>
 
-      <button onclick="processarMateria()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 uppercase tracking-wider">
-        <i class="fa-solid fa-arrows-rotate"></i> Processar Matéria, SEO e Rodízio
-      </button>
-    </div>
+      <div class="border-t border-slate-800 pt-4">
+        <button onclick="gerarMateriaEAvancar()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-4 rounded-xl text-sm transition flex items-center justify-center gap-3 uppercase tracking-wider shadow-lg shadow-[#00AE35]/10">
+          <i class="fa-solid fa-bolt"></i> Gerar Matéria e Ir para o Passo 2
+        </button>
+      </div>
+    </main>
 
-    <!-- COLUNA DIREITA: PÁGINA 2 E PÁGINA 3 -->
-    <div class="lg:col-span-7 space-y-5 custom-scroll max-h-[95vh] overflow-y-auto pr-1">
+    <!-- ========================================== -->
+    <!-- PÁGINA 2: REVISÃO, IFRAMES E ENVIO WIX    -->
+    <!-- ========================================== -->
+    <main id="pagina-2" class="hidden space-y-6">
       
-      <!-- MÓDULO 1: DISPARO DIRETO WIX BLOG API -->
-      <div class="bg-slate-900 p-4 rounded-2xl border border-[#00AE35]/30 space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-          <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Integração Direta Wix Blog API
-          </h3>
-          <span class="text-[10px] bg-[#00AE35]/10 text-[#00AE35] border border-[#00AE35]/20 px-2 py-0.5 rounded font-mono">Conectado (Vercel Backend)</span>
+      <!-- CARD DE DISPARO WIX -->
+      <section class="bg-slate-900 p-5 rounded-2xl border border-[#00AE35]/30 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+          <h2 class="text-sm font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up text-[#00AE35]"></i> Pronto para Enviar ao Wix Blog
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">O rascunho será enviado com o texto jornalístico puro e todo o SEO já estruturado.</p>
         </div>
-
-        <div class="flex flex-col sm:flex-row items-center gap-3">
-          <button id="btn-enviar-wix" onclick="enviarParaWixDraft()" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition uppercase tracking-wider shadow-lg shadow-[#00AE35]/10">
-            <i class="fa-solid fa-paper-plane"></i> Enviar Rascunho com SEO Completo para o Wix
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <button onclick="irParaPagina(1)" class="w-1/3 md:w-auto px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+          </button>
+          <button id="btn-enviar-wix" onclick="enviarParaWixDraft()" class="w-2/3 md:w-auto px-6 py-3 bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-[#00AE35]/20">
+            <i class="fa-solid fa-paper-plane"></i> Enviar Rascunho para o Wix
           </button>
         </div>
-        <div id="status-wix-envio" class="hidden p-2.5 rounded-lg text-xs font-mono border"></div>
-      </div>
+      </section>
 
-      <!-- MÓDULO 2: CAPAS GRÁFICAS (MATRIZ EMERICK) -->
-      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-          <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-image"></i> Capas Geradas Proporcionais (Padrão Emerick)
+      <div id="status-wix-envio" class="hidden p-3 rounded-xl text-xs font-mono border"></div>
+
+      <!-- OS 4 BLOCOS DE IFRAME COM BOTÃO DE COPIAR -->
+      <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div>
+          <h3 class="text-sm font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-code"></i> 4 Blocos de Código HTML para os iFrames do Wix
           </h3>
-          <span class="text-[10px] text-slate-400 font-mono">Wix (1200x675) | Redes (1080x1350)</span>
+          <p class="text-xs text-slate-400 mt-1">Copie e cole nos blocos de código do seu editor Wix no local indicado de cada marcador.</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-          <!-- Canvas Horizontal Wix 1200x675 -->
-          <div class="space-y-2 text-center">
-            <span class="text-[11px] font-bold text-slate-300 block">Capa Matéria Wix (1200x675 px - 16:9)</span>
-            <div class="relative shadow-xl rounded-lg overflow-hidden border border-slate-700 bg-black mx-auto">
-              <canvas id="canvas-capa-wix" width="320" height="180" class="block w-full"></canvas>
-            </div>
-            <a id="link-download-wix" download="capa-materia-wix.png" class="w-full bg-slate-800 hover:bg-slate-700 text-[#00AE35] border border-[#00AE35]/30 font-bold py-1.5 px-3 rounded-lg text-xs flex items-center justify-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-download"></i> Baixar Capa Wix (1200x675)
-            </a>
-          </div>
 
-          <!-- Canvas Vertical Feed 1080x1350 (4:5) -->
-          <div class="space-y-2 text-center">
-            <span class="text-[11px] font-bold text-slate-300 block">Capa Redes Sociais (1080x1350 px)</span>
-            <div class="relative shadow-xl rounded-lg overflow-hidden border border-slate-700 bg-black mx-auto w-[144px]">
-              <canvas id="canvas-capa-oficial" width="144" height="180" class="block w-full"></canvas>
-            </div>
-            <div class="flex gap-2">
-              <a id="link-download-feed" download="capa-feed-pistaverde.png" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold py-1.5 px-2 rounded-lg text-[10px] flex items-center justify-center gap-1 cursor-pointer">
-                Feed (4:5)
-              </a>
-              <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-1/2 bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-1.5 px-2 rounded-lg text-[10px] flex items-center justify-center gap-1 cursor-pointer">
-                Stories (9:16)
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- MÓDULO 3: BLOCOS DE CÓDIGO HTML PARA IFRAMES NO WIX -->
-      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-        <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-          <i class="fa-solid fa-code"></i> Códigos HTML para iFrames no Wix Studio
-        </h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div class="space-y-1.5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- 1. Capa -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-slate-300">Publicidade (Meio):</span>
-              <button onclick="copiarTexto('code-publicidade')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-0.5 rounded hover:bg-[#00AE35]/90">
-                <i class="fa-regular fa-copy"></i> Copiar HTML
-              </button>
+              <span class="text-xs font-bold text-white">1. iFrame Capa Topo</span>
+              <button onclick="copiarTexto('code-capa')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-1 rounded hover:bg-[#00AE35]/90">Copiar</button>
             </div>
-            <textarea id="code-publicidade" rows="3" readonly class="w-full bg-slate-950 text-slate-400 border border-slate-800 rounded-lg p-2 text-[10px] font-mono"></textarea>
+            <textarea id="code-capa" rows="4" readonly class="w-full bg-slate-900 text-slate-400 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
           </div>
 
-          <div class="space-y-1.5">
+          <!-- 2. Publicidade -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-slate-300">Apoiadores (Final):</span>
-              <button onclick="copiarTexto('code-apoiadores')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-0.5 rounded hover:bg-[#00AE35]/90">
-                <i class="fa-regular fa-copy"></i> Copiar HTML
-              </button>
+              <span class="text-xs font-bold text-white">2. iFrame Publicidade</span>
+              <button onclick="copiarTexto('code-publicidade')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-1 rounded hover:bg-[#00AE35]/90">Copiar</button>
             </div>
-            <textarea id="code-apoiadores" rows="3" readonly class="w-full bg-slate-950 text-slate-400 border border-slate-800 rounded-lg p-2 text-[10px] font-mono"></textarea>
+            <textarea id="code-publicidade" rows="4" readonly class="w-full bg-slate-900 text-slate-400 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
+          </div>
+
+          <!-- 3. Apoiadores -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-white">3. iFrame Apoiadores</span>
+              <button onclick="copiarTexto('code-apoiadores')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-1 rounded hover:bg-[#00AE35]/90">Copiar</button>
+            </div>
+            <textarea id="code-apoiadores" rows="4" readonly class="w-full bg-slate-900 text-slate-400 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
+          </div>
+
+          <!-- 4. Institucional -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-white">4. iFrame Institucional</span>
+              <button onclick="copiarTexto('code-institucional')" class="text-[10px] bg-[#00AE35] text-slate-950 font-black px-2 py-1 rounded hover:bg-[#00AE35]/90">Copiar</button>
+            </div>
+            <textarea id="code-institucional" rows="4" readonly class="w-full bg-slate-900 text-slate-400 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- MÓDULO 4: PAINEL DE CONFERÊNCIA DE SEO AUTOMÁTICO -->
-      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-        <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-          <i class="fa-solid fa-magnifying-glass-chart"></i> Painel de SEO Obrigatório (Search Console)
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div>
-            <span class="text-slate-400 font-semibold block mb-0.5">1. Palavra-chave Foco:</span>
-            <input type="text" id="seo-foco" readonly class="w-full bg-slate-950 text-[#00AE35] font-bold p-1.5 rounded border border-slate-800 text-xs">
-          </div>
-          <div>
-            <span class="text-slate-400 font-semibold block mb-0.5">2. Tag de Título (Title Tag):</span>
-            <input type="text" id="seo-title" readonly class="w-full bg-slate-950 text-slate-200 p-1.5 rounded border border-slate-800 text-xs">
-          </div>
+      <!-- PREVIEW VISUAL DA MATÉRIA -->
+      <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-xs font-black text-slate-300 uppercase tracking-wider">Simulador da Matéria Diagramada</h3>
+          <span class="text-xs text-[#00AE35] font-mono">Visual Idêntico ao Publicado</span>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div>
-            <span class="text-slate-400 font-semibold block mb-0.5">3. Meta Descrição (até 150 caracteres):</span>
-            <input type="text" id="seo-desc" readonly class="w-full bg-slate-950 text-slate-200 p-1.5 rounded border border-slate-800 text-xs">
-          </div>
-          <div>
-            <span class="text-slate-400 font-semibold block mb-0.5">4. Slug / URL Amigável:</span>
-            <input type="text" id="seo-slug" readonly class="w-full bg-slate-950 text-[#00AE35] p-1.5 rounded border border-slate-800 text-xs">
-          </div>
-        </div>
-
-        <div class="text-xs space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="text-slate-400 font-semibold">9. 28 Tags Oficiais (separadas por vírgula):</span>
-            <button onclick="copiarTexto('seo-tags')" class="text-[10px] text-[#00AE35] hover:underline font-bold">Copiar 28 Tags</button>
-          </div>
-          <textarea id="seo-tags" rows="2" readonly class="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded-lg p-1.5 text-[11px] font-mono leading-relaxed"></textarea>
-        </div>
-      </div>
-
-      <!-- MÓDULO 5: SIMULADOR RESPONSIVO DA MATÉRIA (PÁGINA 2) -->
-      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-          <h3 class="text-xs font-black text-slate-300 uppercase tracking-wider">Simulador da Matéria (Página 2)</h3>
-          <div class="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
-            <button onclick="mudarView('pc')" class="px-2 py-1 text-[10px] font-bold rounded text-slate-300">PC</button>
-            <button onclick="mudarView('tablet')" class="px-2 py-1 text-[10px] font-bold rounded bg-[#00AE35] text-slate-950">Tablet</button>
-            <button onclick="mudarView('mobile')" class="px-2 py-1 text-[10px] font-bold rounded text-slate-300">Celular</button>
-          </div>
-        </div>
-        <div class="bg-slate-950 p-3 rounded-xl overflow-x-auto">
-          <div id="leitor-container" class="view-tablet transition-all duration-300">
+        <div class="bg-slate-950 p-4 rounded-xl overflow-x-auto">
+          <div class="max-w-[860px] mx-auto">
             <div id="leitor-materia-html"></div>
           </div>
         </div>
-      </div>
+      </section>
+    </main>
 
-      <!-- PÁGINA 3: CENTRAL DE CONTEÚDO PARA REDES SOCIAIS (SEM EMOJIS) -->
-      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-4">
-        <h3 class="text-xs font-black text-[#00AE35] uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-          <i class="fa-solid fa-share-nodes"></i> Central de Conteúdo para Redes Sociais (Página 3)
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Instagram Post -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-pink-400 flex items-center gap-1">
-                <i class="fa-brands fa-instagram"></i> Instagram Post (Feed):
-              </span>
-              <button onclick="copiarTexto('text-insta')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-[#00AE35] px-2 py-0.5 rounded border border-[#00AE35]/20 font-bold">
-                <i class="fa-regular fa-copy"></i> Copiar
-              </button>
-            </div>
-            <textarea id="text-insta" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
-          </div>
-
-          <!-- Facebook -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-blue-400 flex items-center gap-1">
-                <i class="fa-brands fa-facebook"></i> Facebook:
-              </span>
-              <button onclick="copiarTexto('text-fb')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 font-bold">
-                <i class="fa-regular fa-copy"></i> Copiar
-              </button>
-            </div>
-            <textarea id="text-fb" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
-          </div>
+    <!-- ========================================== -->
+    <!-- PÁGINA 3: REDES SOCIAIS E MÍDIAS          -->
+    <!-- ========================================== -->
+    <main id="pagina-3" class="hidden space-y-6">
+      
+      <section class="bg-slate-900 p-5 rounded-2xl border border-[#00AE35]/30 flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-[#00AE35]"></i> Matéria Enviada ao Wix com Sucesso!
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Baixe as artes finais geradas no padrão oficial e copie os textos para as redes.</p>
         </div>
+        <button onclick="irParaPagina(1)" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs flex items-center gap-2">
+          <i class="fa-solid fa-rotate-left"></i> Criar Nova Matéria
+        </button>
+      </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <!-- LinkedIn -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-sky-400 flex items-center gap-1">
-                <i class="fa-brands fa-linkedin"></i> LinkedIn Corporativo:
-              </span>
-              <button onclick="copiarTexto('text-linkedin')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-sky-400 px-2 py-0.5 rounded border border-sky-500/20 font-bold">
-                <i class="fa-regular fa-copy"></i> Copiar
-              </button>
-            </div>
-            <textarea id="text-linkedin" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
-          </div>
-
-          <!-- TikTok Legenda -->
-          <div class="space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-cyan-400 flex items-center gap-1">
-                <i class="fa-brands fa-tiktok"></i> TikTok Legenda:
-              </span>
-              <button onclick="copiarTexto('text-tiktok')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20 font-bold">
-                <i class="fa-regular fa-copy"></i> Copiar
-              </button>
-            </div>
-            <textarea id="text-tiktok" rows="5" readonly class="w-full bg-slate-950 text-slate-200 border border-slate-800 rounded-lg p-2 text-xs font-mono"></textarea>
-          </div>
-        </div>
-
-        <!-- YouTube / Roteiro TTS -->
-        <div class="space-y-1.5 border-t border-slate-800 pt-3">
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold text-[#00AE35] flex items-center gap-1">
-              <i class="fa-brands fa-youtube"></i> YouTube Descrição & Roteiro de Áudio:
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- CARD 1: INSTAGRAM FEED -->
+        <article class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="text-xs font-bold text-pink-400 flex items-center gap-1.5">
+              <i class="fa-brands fa-instagram"></i> Instagram Feed (4:5)
             </span>
-            <button onclick="copiarTexto('text-yt')" class="text-[10px] bg-[#00AE35] text-slate-950 px-2 py-0.5 rounded font-black hover:bg-[#00AE35]/90">
-              <i class="fa-regular fa-copy"></i> Copiar YouTube
+            <div class="bg-black rounded-lg overflow-hidden border border-slate-700 mx-auto w-[144px]">
+              <canvas id="canvas-feed" width="144" height="180" class="block w-full"></canvas>
+            </div>
+            <a id="link-download-feed" download="capa-feed-pistaverde.png" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 cursor-pointer border border-slate-700">
+              <i class="fa-solid fa-download"></i> Baixar Feed (1080x1350)
+            </a>
+          </div>
+          <div class="space-y-1.5 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400">Texto Legenda:</span>
+              <button onclick="copiarTexto('text-insta')" class="text-[10px] bg-[#00AE35] text-slate-950 font-bold px-2 py-0.5 rounded">Copiar</button>
+            </div>
+            <textarea id="text-insta" rows="5" readonly class="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
+          </div>
+        </article>
+
+        <!-- CARD 2: INSTAGRAM STORIES -->
+        <article class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="text-xs font-bold text-purple-400 flex items-center gap-1.5">
+              <i class="fa-brands fa-instagram"></i> Instagram Stories (9:16)
+            </span>
+            <div class="bg-black rounded-lg overflow-hidden border border-slate-700 mx-auto w-[101px]">
+              <canvas id="canvas-stories" width="101" height="180" class="block w-full"></canvas>
+            </div>
+            <a id="link-download-stories" download="capa-stories-pistaverde.png" class="w-full bg-[#00AE35] hover:bg-[#00AE35]/90 text-slate-950 font-black py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-download"></i> Baixar Stories (1080x1920)
+            </a>
+          </div>
+          <div class="space-y-1.5 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400">Chamada Rápida:</span>
+              <button onclick="copiarTexto('text-stories')" class="text-[10px] bg-[#00AE35] text-slate-950 font-bold px-2 py-0.5 rounded">Copiar</button>
+            </div>
+            <textarea id="text-stories" rows="5" readonly class="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
+          </div>
+        </article>
+
+        <!-- CARD 3: TIKTOK & SHORTS (VÍDEO MP4/WEBM) -->
+        <article class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+              <i class="fa-brands fa-tiktok"></i> TikTok / Shorts Vídeo
+            </span>
+            <div class="bg-slate-950 rounded-lg p-3 text-center border border-slate-800 h-[180px] flex flex-col justify-center items-center">
+              <i class="fa-solid fa-video text-3xl text-cyan-400 mb-2"></i>
+              <span class="text-[11px] text-slate-400">Vídeo vinheta gerado automaticamente em 1080p.</span>
+            </div>
+            <button id="btn-video-tiktok" onclick="gerarVideoTikTok()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-2 rounded-lg text-xs flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-film"></i> Gerar Vídeo TikTok
             </button>
           </div>
-          <textarea id="text-yt" rows="4" readonly class="w-full bg-slate-950 text-emerald-300 border border-[#00AE35]/30 rounded-lg p-2 text-xs font-mono leading-relaxed"></textarea>
-        </div>
-      </div>
+          <div class="space-y-1.5 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400">Roteiro TTS / Voz:</span>
+              <button onclick="copiarTexto('text-tiktok')" class="text-[10px] bg-cyan-400 text-slate-950 font-bold px-2 py-0.5 rounded">Copiar</button>
+            </div>
+            <textarea id="text-tiktok" rows="5" readonly class="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
+          </div>
+        </article>
 
-    </div>
+        <!-- CARD 4: YOUTUBE & SITE WIX -->
+        <article class="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-3">
+          <div class="space-y-2">
+            <span class="text-xs font-bold text-red-500 flex items-center gap-1.5">
+              <i class="fa-brands fa-youtube"></i> Capa Wix / YouTube (16:9)
+            </span>
+            <div class="bg-black rounded-lg overflow-hidden border border-slate-700 mx-auto w-full">
+              <canvas id="canvas-wix" width="320" height="180" class="block w-full"></canvas>
+            </div>
+            <a id="link-download-wix" download="capa-materia-wix.png" class="w-full bg-slate-800 hover:bg-slate-700 text-[#00AE35] border border-[#00AE35]/30 font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-download"></i> Baixar Capa 1200x675
+            </a>
+          </div>
+          <div class="space-y-1.5 pt-2 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-semibold text-slate-400">Descrição YouTube:</span>
+              <button onclick="copiarTexto('text-yt')" class="text-[10px] bg-[#00AE35] text-slate-950 font-bold px-2 py-0.5 rounded">Copiar</button>
+            </div>
+            <textarea id="text-yt" rows="5" readonly class="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded p-2 text-[10px] font-mono"></textarea>
+          </div>
+        </article>
+
+      </section>
+    </main>
+
   </div>
 
   <script>
@@ -374,7 +374,7 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       }
     ];
 
-    // 2. EMPRESAS QUE APOIAM O KARTISMO (SLOT 1: MEGA KART FIXA)
+    // 2. APOIADOR FIXO (SLOT 1)
     const APOIADOR_FIXO = {
       nome: "Mega Kart",
       logo: "https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp",
@@ -383,7 +383,7 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       btn: "Acessar Mega Kart"
     };
 
-    // 3. EMPRESAS QUE APOIAM O KARTISMO (SLOT 2: RODÍZIO DOS 11 APOIADORES OFICIAIS)
+    // 3. APOIADORES EM RODÍZIO (SLOT 2 - 11 CLIENTES)
     const APOIADORES_ROTATIVOS = [
       {
         nome: "Casa das Cópias",
@@ -466,6 +466,21 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
 
     let fotosCarregadas = [];
 
+    // CONTROLE DE NAVEGAÇÃO ENTRE AS 3 PÁGINAS
+    function irParaPagina(num) {
+      document.getElementById('pagina-1').classList.add('hidden');
+      document.getElementById('pagina-2').classList.add('hidden');
+      document.getElementById('pagina-3').classList.add('hidden');
+
+      document.getElementById('nav-btn-1').className = "flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white flex items-center justify-center gap-2";
+      document.getElementById('nav-btn-2').className = "flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white flex items-center justify-center gap-2";
+      document.getElementById('nav-btn-3').className = "flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white flex items-center justify-center gap-2";
+
+      document.getElementById(`pagina-${num}`).classList.remove('hidden');
+      document.getElementById(`nav-btn-${num}`).className = "flex-1 md:flex-none px-5 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950 flex items-center justify-center gap-2";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function obterPublicidadeDaVez() {
       const STORAGE_KEY = "pv_ad_idx_v3";
       let idx = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10);
@@ -499,7 +514,7 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
           lidos++;
           if (lidos === files.length) {
             fotosCarregadas.sort((a, b) => a.ordem - b.ordem);
-            processarMateria();
+            document.getElementById('status-fotos-qtd').innerText = `${files.length} foto(s) carregada(s) com sucesso.`;
           }
         };
         reader.readAsDataURL(file);
@@ -507,13 +522,8 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
     }
 
     function trocarOrigem(tipo) {
-      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
-      document.getElementById('tab-propria').className = tipo === 'propria' ? 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-[#00AE35] text-slate-950' : 'w-1/2 py-2 text-xs font-bold rounded-lg transition bg-slate-800 text-slate-400';
-    }
-
-    function mudarView(modo) {
-      const el = document.getElementById('leitor-container');
-      el.className = modo === 'pc' ? 'view-pc transition-all duration-300' : modo === 'tablet' ? 'view-tablet transition-all duration-300' : 'view-mobile transition-all duration-300';
+      document.getElementById('tab-recebida').className = tipo === 'recebida' ? 'px-3 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-slate-950' : 'px-3 py-1.5 text-xs font-bold rounded text-slate-400';
+      document.getElementById('tab-propria').className = tipo === 'propria' ? 'px-3 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-slate-950' : 'px-3 py-1.5 text-xs font-bold rounded text-slate-400';
     }
 
     function copiarTexto(id) {
@@ -522,7 +532,8 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       navigator.clipboard.writeText(field.value);
     }
 
-    function processarMateria() {
+    // PROCESSAMENTO E TRANSIÇÃO 1 -> 2
+    function gerarMateriaEAvancar() {
       const h1 = document.getElementById('input-h1').value || 'TÍTULO DA MATÉRIA';
       const subtitulo = document.getElementById('input-subtitulo').value || '';
       const categoria = document.getElementById('input-categoria').value;
@@ -535,35 +546,16 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       const { ad: adAtual } = obterPublicidadeDaVez();
       const { apoiador: rotativoAtual } = obterApoiadorDaVez();
 
-      // CÁLCULO DE SEO OBRIGATÓRIO (MANUAL OFICIAL)
-      const palavraChave = categoria === "Kartismo" ? "kart" : categoria.toLowerCase();
-      const seoTitle = `${h1} | Portal Pista Verde`;
-      const metaDescricao = subtitulo.length > 150 ? subtitulo.substring(0, 147) + "..." : subtitulo;
-      const slugLimpo = h1.toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9\s-]/g, "")
-        .trim()
-        .replace(/\s+/g, "-")
-        .substring(0, 60);
+      // OS 4 BLOCOS HTML
+      const htmlCapaIframe = `<header class="ppv-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.18) 100%), url('${fotoCapa}');">
+  <div class="ppv-hero-content">
+    <span class="ppv-label">${categoria}</span>
+    <h1 class="ppv-hero-title">${h1}</h1>
+    <div class="ppv-underline"></div>
+    <p class="ppv-subtitle">${subtitulo}</p>
+  </div>
+</header>`;
 
-      const tagsArray = [
-        "kart", "kartismo", "campeonato de kart", "automobilismo", "portal pista verde",
-        "pista verde", "grid aquecido com responsabilidade", categoria.toLowerCase(),
-        "piloto", "velocidade", "kartodromo", "cba", "kart brasil", "motorsport",
-        "corrida de kart", "treinos livres", "tomada de tempo", "vitoria", "podio",
-        "chassis", "motor", "preparacao", "noticias de kart", "esporte a motor",
-        "brasil", "etapa", "f-open", "leo-almeida"
-      ];
-      const tags28Str = tagsArray.slice(0, 28).join(", ");
-
-      // Preenchimento dos campos de SEO na tela
-      document.getElementById('seo-foco').value = palavraChave;
-      document.getElementById('seo-title').value = seoTitle;
-      document.getElementById('seo-desc').value = metaDescricao;
-      document.getElementById('seo-slug').value = `/${slugLimpo}`;
-      document.getElementById('seo-tags').value = tags28Str;
-
-      // GERAÇÃO DOS CÓDIGOS HTML PARA IFRAMES
       const htmlAdIframe = `<aside class="ppv-ad" aria-label="Publicidade da ${adAtual.nome}">
   <a class="ppv-ad-click" href="${adAtual.url}" target="_blank" rel="noopener noreferrer sponsored" title="Conheça ${adAtual.nome}">
     <div class="ppv-ad-inner">
@@ -583,7 +575,7 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
   <p>O Portal Pista Verde valoriza as empresas que acreditam no kartismo e ajudam a fortalecer a base do automobilismo nacional.</p>
   <div class="ppv-sponsor-grid">
     <article class="ppv-sponsor-card">
-      <a href="${APOIADOR_FIXO.url}" target="_blank" rel="noopener noreferrer" title="Acessar o site da ${APOIADOR_FIXO.nome}">
+      <a href="${APOIADOR_FIXO.url}" target="_blank" rel="noopener noreferrer" title="Acessar ${APOIADOR_FIXO.nome}">
         <img src="${APOIADOR_FIXO.logo}" alt="${APOIADOR_FIXO.nome}, empresa apoiadora do kartismo" loading="lazy">
       </a>
       <h3>${APOIADOR_FIXO.nome}</h3>
@@ -591,7 +583,7 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       <a class="ppv-sponsor-btn" href="${APOIADOR_FIXO.url}" target="_blank" rel="noopener noreferrer">${APOIADOR_FIXO.btn}</a>
     </article>
     <article class="ppv-sponsor-card">
-      <a href="${rotativoAtual.url}" target="_blank" rel="noopener noreferrer" title="Acessar o site da ${rotativoAtual.nome}">
+      <a href="${rotativoAtual.url}" target="_blank" rel="noopener noreferrer" title="Acessar ${rotativoAtual.nome}">
         <img src="${rotativoAtual.logo}" alt="${rotativoAtual.nome}, empresa apoiadora do kartismo" loading="lazy">
       </a>
       <h3>${rotativoAtual.nome}</h3>
@@ -601,19 +593,26 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
   </div>
 </section>`;
 
+      const htmlInstitucionalIframe = `<footer class="ppv-portal-footer" aria-label="Portal Pista Verde">
+  <div class="ppv-portal-brand">
+    <span class="ppv-portal-mark">PV</span>
+    <div class="ppv-portal-name">
+      <strong>PISTA VERDE</strong>
+      <span>Grid aquecido com responsabilidade</span>
+    </div>
+  </div>
+  <p>O Portal Pista Verde produz jornalismo especializado sobre kartismo e automobilismo, valorizando pilotos, equipes, campeonatos e as empresas que fortalecem o esporte a motor brasileiro.</p>
+  <a href="https://www.pistaverde.com.br/" target="_blank">Conheça o Portal Pista Verde</a>
+</footer>`;
+
+      document.getElementById('code-capa').value = htmlCapaIframe;
       document.getElementById('code-publicidade').value = htmlAdIframe;
       document.getElementById('code-apoiadores').value = htmlApoioIframe;
+      document.getElementById('code-institucional').value = htmlInstitucionalIframe;
 
-      // RENDERIZAÇÃO DO SIMULADOR (PÁGINA 2)
+      // MONTAGEM DO SIMULADOR NA PÁGINA 2
       let htmlCorpo = `<div class="ppv-materia">
-        <header class="ppv-hero" style="background-image: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.18) 100%), url('${fotoCapa}');">
-          <div class="ppv-hero-content">
-            <span class="ppv-label">${categoria}</span>
-            <h1 class="ppv-hero-title">${h1}</h1>
-            <div class="ppv-underline"></div>
-            <p class="ppv-subtitle">${subtitulo}</p>
-          </div>
-        </header>
+        ${htmlCapaIframe}
         <main class="ppv-container">
           <section class="ppv-infobox">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -659,38 +658,30 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         <div class="ppv-creditos text-xs text-slate-500 my-6 pt-4 border-t border-slate-200">
           <p><strong>Texto/Fonte:</strong> ${creditos} | <strong>Fotos:</strong> ${fotografo} | Redação Portal Pista Verde</p>
         </div>
-
         ${htmlApoioIframe}
-
-        <footer class="ppv-portal-footer" aria-label="Portal Pista Verde">
-          <div class="ppv-portal-brand">
-            <span class="ppv-portal-mark">PV</span>
-            <div class="ppv-portal-name">
-              <strong>PISTA VERDE</strong>
-              <span>Grid aquecido com responsabilidade</span>
-            </div>
-          </div>
-          <p>O Portal Pista Verde produz jornalismo especializado sobre kartismo e automobilismo, valorizando pilotos, equipes, campeonatos e as empresas que fortalecem o esporte a motor brasileiro.</p>
-          <a href="https://www.pistaverde.com.br/" target="_blank">Conheça o Portal Pista Verde</a>
-        </footer>
+        ${htmlInstitucionalIframe}
         </main></div>`;
 
       document.getElementById('leitor-materia-html').innerHTML = htmlCorpo;
 
-      // PÁGINA 3: REDES SOCIAIS (SEM EMOJIS)
+      // REDES SOCIAIS NA PÁGINA 3
       document.getElementById('text-insta').value = `${h1.toUpperCase()}\n\n${subtitulo}\n\n${paragrafos.slice(0, 2).join('\n\n')}\n\nConfira a matéria completa no Portal Pista Verde (link na bio).\n\nFoto: ${fotografo}\nFonte: ${creditos}${pilotoInsta ? '\nPiloto: ' + pilotoInsta : ''}\n\n#pistaverde #kartismo #${categoria.toLowerCase().replace(/\s+/g, '')} #automobilismo #kart`;
-      document.getElementById('text-fb').value = `${h1}\n\n${subtitulo}\n\nLeia a matéria completa no Portal Pista Verde:\nhttps://www.pistaverde.com.br\n\nCréditos Fotográficos: ${fotografo} | Fonte: ${creditos}`;
-      document.getElementById('text-linkedin').value = `${h1}\n\n${subtitulo}\n\nAcompanhe a cobertura editorial completa do automobilismo e kartismo brasileiro no Portal Pista Verde.\n\nMais detalhes em: https://www.pistaverde.com.br\n\nAssessoria: ${creditos}`;
-      document.getElementById('text-tiktok').value = `${h1}\n\n${subtitulo}\n\nConfira todos os detalhes e a matéria completa no Portal Pista Verde.\n\n#pistaverde #kartismo #automobilismo #${categoria.toLowerCase().replace(/\s+/g, '')}`;
+      document.getElementById('text-stories').value = `Matéria completa no Portal Pista Verde!\n\n${h1}\n\nArraste para cima ou clique no link da bio para conferir todos os detalhes.`;
+      document.getElementById('text-tiktok').value = `Atenção fãs do automobilismo! ${h1}. ${subtitulo} Confira a matéria completa no Portal Pista Verde. Link na bio! #pistaverde #kartismo`;
       document.getElementById('text-yt').value = `${h1}\n\n${subtitulo}\n\nCobertura oficial da categoria ${categoria}. Acompanhe todas as informações, tabelas e resultados no Portal Pista Verde:\nhttps://www.pistaverde.com.br\n\nCréditos Fotográficos: ${fotografo}\nFonte: ${creditos}`;
 
-      renderizarCapaWix(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
-      renderizarCapaRedes(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
+      // RENDERIZAR AS CAPAS GRÁFICAS NO PADRÃO EMERICK
+      renderizarCanvasWix(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
+      renderizarCanvasFeed(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
+      renderizarCanvasStories(h1, categoria, subtitulo, fotografo, fotoCapa, rotativoAtual);
+
+      // Avança para a Página 2
+      irParaPagina(2);
     }
 
-    // CAPA HORIZONTAL WIX (1200x675 px - PADRÃO EMERICK)
-    function renderizarCapaWix(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
-      const canvas = document.getElementById('canvas-capa-wix');
+    // CAPA WIX 16:9
+    function renderizarCanvasWix(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
+      const canvas = document.getElementById('canvas-wix');
       const ctx = canvas.getContext('2d');
       const w = 320;
       const h = 180;
@@ -706,7 +697,6 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         const y = (h / 2) - (img.height / 2) * scale;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        // Degradê da esquerda para a direita + vinheta na base
         const grad = ctx.createLinearGradient(0, 0, w, 0);
         grad.addColorStop(0, 'rgba(0,0,0,0.92)');
         grad.addColorStop(0.65, 'rgba(0,0,0,0.50)');
@@ -714,11 +704,9 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
 
-        // 1. Filete Verde no Topo
         ctx.fillStyle = '#00AE35';
         ctx.fillRect(12, 6, w - 24, 2.5);
 
-        // 2. Badge de Categoria em Pílula
         ctx.fillStyle = '#00AE35';
         ctx.beginPath();
         ctx.roundRect(12, 16, 75, 13, 4);
@@ -727,7 +715,6 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         ctx.font = '900 6.5px Poppins, sans-serif';
         ctx.fillText(cat.toUpperCase(), 16, 25);
 
-        // 3. Título Principal em Caixa Alta com Sombra
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 10.5px "Anton", "Poppins", sans-serif';
         ctx.shadowColor = 'rgba(0,0,0,0.95)';
@@ -749,22 +736,17 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
           }
         }
         ctx.fillText(linha, 12, posY);
-
-        // Reset Sombra
         ctx.shadowColor = 'transparent';
 
-        // 4. Traço Separador Verde
         posY += 3;
         ctx.fillStyle = '#00AE35';
         ctx.fillRect(12, posY, 26, 1.8);
 
-        // 5. Linha Fina / Subtítulo
         posY += 8;
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '500 5.5px Poppins, sans-serif';
         ctx.fillText(subtitulo.substring(0, 75) + '...', 12, posY);
 
-        // 6. Barra Inferior de Apoiadores
         ctx.fillStyle = 'rgba(7, 16, 7, 0.95)';
         ctx.fillRect(0, h - 26, w, 26);
 
@@ -775,7 +757,6 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         const logo1 = new Image();
         logo1.crossOrigin = "anonymous";
         logo1.onload = function() {
-          // Card Branco 1
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
           ctx.roundRect(10, h - 15, 34, 11, 2);
@@ -785,14 +766,12 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
           const logo2 = new Image();
           logo2.crossOrigin = "anonymous";
           logo2.onload = function() {
-            // Card Branco 2
             ctx.fillStyle = '#ffffff';
             ctx.beginPath();
             ctx.roundRect(48, h - 15, 34, 11, 2);
             ctx.fill();
             ctx.drawImage(logo2, 49, h - 14, 32, 9);
 
-            // Créditos Fotográficos
             ctx.fillStyle = '#94a3b8';
             ctx.font = '700 4px Poppins, sans-serif';
             ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 88, h - 7);
@@ -806,9 +785,9 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       img.src = srcCapa;
     }
 
-    // CAPA VERTICAL REDES SOCIAIS (1080x1350 px - PADRÃO EMERICK FEED 4:5)
-    function renderizarCapaRedes(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
-      const canvas = document.getElementById('canvas-capa-oficial');
+    // CAPA FEED 4:5
+    function renderizarCanvasFeed(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
+      const canvas = document.getElementById('canvas-feed');
       const ctx = canvas.getContext('2d');
       const w = 144;
       const h = 180;
@@ -824,7 +803,6 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         const y = (h / 2) - (img.height / 2) * scale;
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
 
-        // Degradê Suave + Escurecimento
         const grad = ctx.createLinearGradient(0, 0, 0, h);
         grad.addColorStop(0, 'rgba(0,0,0,0.3)');
         grad.addColorStop(0.35, 'rgba(0,0,0,0.2)');
@@ -833,11 +811,9 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, w, h);
 
-        // 1. Filete Verde Topo
         ctx.fillStyle = '#00AE35';
         ctx.fillRect(8, 4, w - 16, 2);
 
-        // 2. Badge de Categoria em Pílula
         ctx.fillStyle = '#00AE35';
         ctx.beginPath();
         ctx.roundRect(8, 62, 54, 10, 3);
@@ -846,7 +822,6 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         ctx.font = '900 5px Poppins, sans-serif';
         ctx.fillText(cat.toUpperCase(), 11, 69);
 
-        // 3. Título Principal em Caixa Alta com Sombra
         ctx.fillStyle = '#ffffff';
         ctx.font = '900 8.5px "Anton", "Poppins", sans-serif';
         ctx.shadowColor = 'rgba(0,0,0,0.95)';
@@ -869,22 +844,17 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
           }
         }
         ctx.fillText(linha, 8, posY);
-
-        // Reset Sombra
         ctx.shadowColor = 'transparent';
 
-        // 4. Traço Separador Verde
         posY += 3;
         ctx.fillStyle = '#00AE35';
         ctx.fillRect(8, posY, 22, 1.5);
 
-        // 5. Linha Fina / Subtítulo
         posY += 7;
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '500 4.5px Poppins, sans-serif';
         ctx.fillText(subtitulo.substring(0, 52) + '...', 8, posY);
 
-        // 6. Barra Inferior de Apoiadores
         ctx.fillStyle = 'rgba(7, 16, 7, 0.98)';
         ctx.fillRect(0, h - 22, w, 22);
 
@@ -895,7 +865,6 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         const logo1 = new Image();
         logo1.crossOrigin = "anonymous";
         logo1.onload = function() {
-          // Card Branco 1
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
           ctx.roundRect(6, h - 13, 26, 9, 2);
@@ -905,19 +874,16 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
           const logo2 = new Image();
           logo2.crossOrigin = "anonymous";
           logo2.onload = function() {
-            // Card Branco 2
             ctx.fillStyle = '#ffffff';
             ctx.beginPath();
             ctx.roundRect(35, h - 13, 26, 9, 2);
             ctx.fill();
             ctx.drawImage(logo2, 36, h - 12.5, 24, 8);
 
-            // Créditos Fotográficos
             ctx.fillStyle = '#94a3b8';
             ctx.font = '700 3.5px Poppins, sans-serif';
             ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 64, h - 6);
 
-            document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
             document.getElementById('link-download-feed').href = canvas.toDataURL('image/png');
           };
           logo2.src = rotativoAtual.logo;
@@ -927,7 +893,99 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       img.src = srcCapa;
     }
 
-    // DISPARO OFICIAL PARA O WIX BLOG COM PACOTE DE SEO COMPLETO
+    // CAPA STORIES 9:16
+    function renderizarCanvasStories(titulo, cat, subtitulo, fotografo, srcCapa, rotativoAtual) {
+      const canvas = document.getElementById('canvas-stories');
+      const ctx = canvas.getContext('2d');
+      const w = 101;
+      const h = 180;
+
+      ctx.fillStyle = '#0a0e17';
+      ctx.fillRect(0, 0, w, h);
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = function() {
+        const scale = Math.max(w / img.width, h / img.height);
+        const x = (w / 2) - (img.width / 2) * scale;
+        const y = (h / 2) - (img.height / 2) * scale;
+        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, 'rgba(0,0,0,0.3)');
+        grad.addColorStop(0.5, 'rgba(0,0,0,0.4)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.98)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.fillStyle = '#00AE35';
+        ctx.fillRect(6, 4, w - 12, 1.5);
+
+        ctx.fillStyle = '#00AE35';
+        ctx.beginPath();
+        ctx.roundRect(6, 75, 45, 8, 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 4px Poppins, sans-serif';
+        ctx.fillText(cat.toUpperCase(), 8, 81);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 7px "Anton", "Poppins", sans-serif';
+        ctx.shadowColor = 'rgba(0,0,0,0.95)';
+        ctx.shadowBlur = 4;
+        
+        const palavras = titulo.toUpperCase().split(' ');
+        let linha = '';
+        let posY = 94;
+        
+        for (let n = 0; n < palavras.length; n++) {
+          let test = linha + palavras[n] + ' ';
+          if (ctx.measureText(test).width > (w - 12) && n > 0) {
+            ctx.fillText(linha, 6, posY);
+            linha = palavras[n] + ' ';
+            posY += 8;
+          } else {
+            linha = test;
+          }
+        }
+        ctx.fillText(linha, 6, posY);
+        ctx.shadowColor = 'transparent';
+
+        ctx.fillStyle = 'rgba(7, 16, 7, 0.98)';
+        ctx.fillRect(0, h - 20, w, 20);
+
+        const logo1 = new Image();
+        logo1.crossOrigin = "anonymous";
+        logo1.onload = function() {
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.roundRect(5, h - 14, 22, 8, 2);
+          ctx.fill();
+          ctx.drawImage(logo1, 6, h - 13.5, 20, 7);
+          
+          const logo2 = new Image();
+          logo2.crossOrigin = "anonymous";
+          logo2.onload = function() {
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.roundRect(29, h - 14, 22, 8, 2);
+            ctx.fill();
+            ctx.drawImage(logo2, 30, h - 13.5, 20, 7);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 3px Poppins, sans-serif';
+            ctx.fillText('FOTO: ' + fotografo.toUpperCase(), 53, h - 8);
+
+            document.getElementById('link-download-stories').href = canvas.toDataURL('image/png');
+          };
+          logo2.src = rotativoAtual.logo;
+        };
+        logo1.src = APOIADOR_FIXO.logo;
+      };
+      img.src = srcCapa;
+    }
+
+    // DISPARO WIX E TRANSIÇÃO 2 -> 3
     async function enviarParaWixDraft() {
       const btn = document.getElementById('btn-enviar-wix');
       const status = document.getElementById('status-wix-envio');
@@ -941,12 +999,25 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       const h1 = document.getElementById('input-h1').value || 'Sem título';
       const subtitulo = document.getElementById('input-subtitulo').value || '';
       const releaseText = document.getElementById('input-release').value || '';
-      const fotografo = document.getElementById('input-fotografo').value || 'Divulgação';
+      const fotografo = document.getElementById('input-fotografo').value || 'DARKSIDE KARTS';
       const creditos = document.getElementById('input-creditos').value || 'Assessoria de Imprensa';
       const categoria = document.getElementById('input-categoria').value;
-      const slug = document.getElementById('seo-slug').value;
-      const metaDesc = document.getElementById('seo-desc').value;
-      const tagsArray = document.getElementById('seo-tags').value.split(',').map(t => t.trim());
+
+      const slugLimpo = h1.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .substring(0, 60);
+
+      const tagsArray = [
+        "kart", "kartismo", "campeonato de kart", "automobilismo", "portal pista verde",
+        "pista verde", "grid aquecido com responsabilidade", categoria.toLowerCase(),
+        "piloto", "velocidade", "kartodromo", "cba", "kart brasil", "motorsport",
+        "corrida de kart", "treinos livres", "tomada de tempo", "vitoria", "podio",
+        "chassis", "motor", "preparacao", "noticias de kart", "esporte a motor",
+        "brasil", "etapa", "f-open", "leo-almeida"
+      ];
 
       const paragrafos = releaseText.split('\n').filter(p => p.trim() !== '');
       const richNodes = [];
@@ -991,13 +1062,13 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         category: categoria,
         seo: {
           title: `${h1} | Portal Pista Verde`,
-          description: metaDesc,
-          slug: slug,
+          description: subtitulo.length > 150 ? subtitulo.substring(0, 147) + "..." : subtitulo,
+          slug: `/${slugLimpo}`,
           tags: tagsArray
         },
         draftPost: {
           title: h1,
-          excerpt: metaDesc,
+          excerpt: subtitulo.length > 150 ? subtitulo.substring(0, 147) + "..." : subtitulo,
           richContent: {
             nodes: richNodes
           }
@@ -1022,9 +1093,14 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
         if (response.ok) {
           status.classList.remove('bg-cyan-500/10', 'text-cyan-400', 'border-cyan-500/20');
           status.classList.add('bg-emerald-500/10', 'text-[#00AE35]', 'border-[#00AE35]/20');
-          status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> SEO e marcadores enviados com sucesso.';
+          status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado no Wix!</strong> Abrindo Central de Mídias...';
           
           avancarRodizios();
+
+          // Abre automaticamente a Página 3 após 1.5s
+          setTimeout(() => {
+            irParaPagina(3);
+          }, 1500);
         } else {
           const msgErro = data.message || data.details || JSON.stringify(data);
           throw new Error(`Erro Wix (${response.status}): ${msgErro}`);
@@ -1038,7 +1114,50 @@ A expectativa para as baterias classificatórias e finais é de alto nível téc
       }
     }
 
-    window.onload = function() { processarMateria(); };
+    // GERADOR DE VÍDEO TIKTOK
+    function gerarVideoTikTok() {
+      const canvas = document.getElementById('canvas-stories');
+      const btn = document.getElementById('btn-video-tiktok');
+      btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Gerando Vídeo (3s)...';
+      btn.disabled = true;
+
+      try {
+        const stream = canvas.captureStream(30);
+        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        const chunks = [];
+
+        mediaRecorder.ondataavailable = function(e) {
+          if (e.data.size > 0) chunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = function() {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'video-tiktok-pistaverde.webm';
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 100);
+
+          btn.innerHTML = '<i class="fa-solid fa-film"></i> Gerar Vídeo TikTok';
+          btn.disabled = false;
+        };
+
+        mediaRecorder.start();
+        setTimeout(() => {
+          mediaRecorder.stop();
+        }, 3000);
+      } catch (err) {
+        alert('Seu navegador bloqueou a gravação direta. Use a capa Stories como imagem estática.');
+        btn.innerHTML = '<i class="fa-solid fa-film"></i> Gerar Vídeo TikTok';
+        btn.disabled = false;
+      }
+    }
   </script>
 </body>
 </html>
