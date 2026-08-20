@@ -254,41 +254,52 @@ export default async function handler(req, res) {
   // 5. RICH CONTENT
   // ============================================================
 
-  const nodes = [];
+ const nodes = [];
 
-  if (cleanSubtitle) {
-    nodes.push({
-      type: "PARAGRAPH",
-      nodes: [
-        {
-          type: "TEXT",
-          textData: {
-            text: cleanSubtitle,
-            decorations: [
-              {
-                type: "ITALIC"
-              }
-            ]
-          }
+let nodeCounter = 0;
+
+function createParagraph(text, decorations = []) {
+  nodeCounter += 1;
+
+  return {
+    type: "PARAGRAPH",
+    id: `pv_p_${nodeCounter}`,
+    nodes: [
+      {
+        type: "TEXT",
+        id: "",
+        nodes: [],
+        textData: {
+          text: String(text || "").trim(),
+          decorations: decorations
         }
-      ]
-    });
+      }
+    ],
+    paragraphData: {
+      textStyle: {
+        textAlignment: "AUTO"
+      },
+      indentation: 0
+    }
+  };
+}
+
+if (cleanSubtitle) {
+  nodes.push(
+    createParagraph(
+      cleanSubtitle,
+      [{ type: "ITALIC" }]
+    )
+  );
+}
+
+rawParagraphs.forEach((paragraph) => {
+  const text = String(paragraph || "").trim();
+
+  if (text) {
+    nodes.push(createParagraph(text));
   }
-
-  rawParagraphs.forEach((paragraph) => {
-    nodes.push({
-      type: "PARAGRAPH",
-      nodes: [
-        {
-          type: "TEXT",
-          textData: {
-            text: paragraph,
-            decorations: []
-          }
-        }
-      ]
-    });
-  });
+});
 
   // ============================================================
   // 6. CRÉDITOS
