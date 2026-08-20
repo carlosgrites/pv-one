@@ -7,18 +7,20 @@ export default async function handler(req, res) {
   }
 
   // ============================================================
-  // 1. CREDENCIAIS WIX
+  // 1. CONFIGURAÇÃO WIX
   // ============================================================
 
-  // COLE SUA NOVA CHAVE DA API WIX ENTRE AS ASPAS ABAIXO:
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // COLE SUA NOVA CHAVE DA API WIX ENTRE AS ASPAS ABAIXO
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImQ2MWZhMTE0LWY2YWItNDBiYy1hNzdjLTVjODUzNGNiNWJmOVwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImEyNTM5M2Q0LTgxOTQtNDdkZi04ZDBlLTMzY2FhN2ExYzkxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MjY1NTg4fQ.ZmRwqkfXkdY2z-PTbNpjzQWZXAVBdMj3_SCJ6cgvcfgaS2KWG31MLgjwM4kKv0bY8uT5lCZ93cx13dWqPdYel4vDZL8kCVwqFV5a9A7oftLBV6IO7kvuwW6hLaR4YbXch4LPSSELUhWVsXzrbzCZJXk-pmFnLUs58TUydiRxgZDZXmZmyoRhPC8KiSMiMRMr71mjzFs2gB8ifHDG6TZOsQeEPR3HsGZ_f_trXqaV0iuXXnLp07PkxYfem6ZyMhlJF9nKvnJnrGc70sS1ZJeBTiDyLxJsY_xgWSsvuQ3YkqATKYQn6YSUasncCQN7a3yU-BB4ojOgr6twqhKojw7VOQ";
 
   const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
 
-  // IMPORTANTE:
-  // Para integração de terceiros, o Wix exige memberId no Draft Post.
-  // Coloque aqui o ID CORRETO do autor/blog writer do Portal Pista Verde.
-  const wixMemberId = "76233c36-475b-4ea3-9317-363ee57c8de2";
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // COLOQUE AQUI O E-MAIL USADO COMO MEMBRO DO SITE WIX
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  const authorEmail = "portalpistaverde@gmail.com";
 
   const cleanApiKey = String(apiKeyRaw || "")
     .replace(/^Bearer\s+/i, "")
@@ -26,11 +28,13 @@ export default async function handler(req, res) {
 
   const cleanSiteId = String(siteIdRaw || "").trim();
 
-  const cleanMemberId = String(wixMemberId || "").trim();
+  const cleanAuthorEmail = String(authorEmail || "")
+    .trim()
+    .toLowerCase();
 
   if (
     !cleanApiKey ||
-    cleanApiKey === "COLE_AQUI_SUA_NOVA_CHAVE_API_WIX"
+    cleanApiKey === "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImQ2MWZhMTE0LWY2YWItNDBiYy1hNzdjLTVjODUzNGNiNWJmOVwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImEyNTM5M2Q0LTgxOTQtNDdkZi04ZDBlLTMzY2FhN2ExYzkxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MjY1NTg4fQ.ZmRwqkfXkdY2z-PTbNpjzQWZXAVBdMj3_SCJ6cgvcfgaS2KWG31MLgjwM4kKv0bY8uT5lCZ93cx13dWqPdYel4vDZL8kCVwqFV5a9A7oftLBV6IO7kvuwW6hLaR4YbXch4LPSSELUhWVsXzrbzCZJXk-pmFnLUs58TUydiRxgZDZXmZmyoRhPC8KiSMiMRMr71mjzFs2gB8ifHDG6TZOsQeEPR3HsGZ_f_trXqaV0iuXXnLp07PkxYfem6ZyMhlJF9nKvnJnrGc70sS1ZJeBTiDyLxJsY_xgWSsvuQ3YkqATKYQn6YSUasncCQN7a3yU-BB4ojOgr6twqhKojw7VOQ";
   ) {
     return res.status(500).json({
       success: false,
@@ -46,12 +50,12 @@ export default async function handler(req, res) {
   }
 
   if (
-    !cleanMemberId ||
-    cleanMemberId === "COLE_AQUI_O_MEMBER_ID_CORRETO_DO_AUTOR"
+    !cleanAuthorEmail ||
+    cleanAuthorEmail === "portalpistaverde@gmail.com"
   ) {
     return res.status(500).json({
       success: false,
-      error: "memberId do autor Wix não configurado."
+      error: "E-mail do autor Wix não configurado."
     });
   }
 
@@ -72,8 +76,6 @@ export default async function handler(req, res) {
     paragraphs,
     photographer,
     source,
-
-    // OPCIONAIS
     coverImageUrl,
     coverImageAlt,
     categoryIds,
@@ -91,7 +93,135 @@ export default async function handler(req, res) {
   }
 
   // ============================================================
-  // 3. NORMALIZAÇÃO DOS PARÁGRAFOS
+  // 3. BUSCAR AUTOMATICAMENTE O MEMBER ID CORRETO
+  // ============================================================
+
+  let memberId = null;
+  let memberInfo = null;
+
+  try {
+    const memberQueryPayload = {
+      query: {
+        filter: {
+          loginEmail: cleanAuthorEmail
+        },
+        paging: {
+          limit: 1
+        }
+      }
+    };
+
+    console.log(
+      "[PV ONE] BUSCANDO MEMBRO WIX:",
+      cleanAuthorEmail
+    );
+
+    console.log(
+      "[PV ONE] MEMBER QUERY PAYLOAD:",
+      JSON.stringify(memberQueryPayload, null, 2)
+    );
+
+    const memberResponse = await fetch(
+      "https://www.wixapis.com/members/v1/members/query",
+      {
+        method: "POST",
+        headers: authHeaders,
+        body: JSON.stringify(memberQueryPayload)
+      }
+    );
+
+    const memberText = await memberResponse.text();
+
+    let memberData;
+
+    try {
+      memberData = memberText
+        ? JSON.parse(memberText)
+        : {};
+    } catch {
+      memberData = {
+        raw: memberText
+      };
+    }
+
+    console.log(
+      "[PV ONE] MEMBER STATUS:",
+      memberResponse.status
+    );
+
+    console.log(
+      "[PV ONE] MEMBER RESPONSE:",
+      JSON.stringify(memberData, null, 2)
+    );
+
+    if (!memberResponse.ok) {
+      return res.status(memberResponse.status || 500).json({
+        success: false,
+        error: "Não foi possível consultar os membros do Wix.",
+        wixStatus: memberResponse.status,
+        details: memberData
+      });
+    }
+
+    if (
+      !Array.isArray(memberData.members) ||
+      memberData.members.length === 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        error:
+          "Autor não encontrado como membro do site Wix.",
+        authorEmail: cleanAuthorEmail,
+        instruction:
+          "Este e-mail precisa existir como membro do site, não apenas como contato ou administrador do painel Wix."
+      });
+    }
+
+    memberInfo = memberData.members[0];
+
+    memberId =
+      memberInfo.id ||
+      memberInfo._id ||
+      null;
+
+    if (!memberId) {
+      return res.status(500).json({
+        success: false,
+        error:
+          "O Wix encontrou o membro, mas não retornou um Member ID válido.",
+        details: memberInfo
+      });
+    }
+
+    console.log(
+      "[PV ONE] MEMBER ID CORRETO ENCONTRADO:",
+      memberId
+    );
+
+    console.log(
+      "[PV ONE] MEMBER NICKNAME:",
+      memberInfo?.profile?.nickname || null
+    );
+
+  } catch (memberError) {
+    console.error(
+      "[PV ONE] ERRO AO BUSCAR MEMBRO:",
+      memberError
+    );
+
+    return res.status(500).json({
+      success: false,
+      error:
+        "Falha de conexão ao consultar o membro do Wix.",
+      details:
+        memberError instanceof Error
+          ? memberError.message
+          : String(memberError)
+    });
+  }
+
+  // ============================================================
+  // 4. NORMALIZAÇÃO DOS PARÁGRAFOS
   // ============================================================
 
   let rawParagraphs = [];
@@ -100,12 +230,20 @@ export default async function handler(req, res) {
     rawParagraphs = paragraphs
       .map((p) => String(p || "").trim())
       .filter(Boolean);
-  } else if (typeof paragraphs === "string" && paragraphs.trim()) {
+
+  } else if (
+    typeof paragraphs === "string" &&
+    paragraphs.trim()
+  ) {
     rawParagraphs = paragraphs
       .split(/\n+/)
       .map((p) => p.trim())
       .filter(Boolean);
-  } else if (typeof editorialBody === "string" && editorialBody.trim()) {
+
+  } else if (
+    typeof editorialBody === "string" &&
+    editorialBody.trim()
+  ) {
     rawParagraphs = editorialBody
       .split(/\n+/)
       .map((p) => p.trim())
@@ -113,12 +251,11 @@ export default async function handler(req, res) {
   }
 
   // ============================================================
-  // 4. RICH CONTENT
+  // 5. RICH CONTENT
   // ============================================================
 
   const nodes = [];
 
-  // Subtítulo no corpo, caso exista
   if (cleanSubtitle) {
     nodes.push({
       type: "PARAGRAPH",
@@ -138,7 +275,6 @@ export default async function handler(req, res) {
     });
   }
 
-  // Corpo principal
   rawParagraphs.forEach((paragraph) => {
     nodes.push({
       type: "PARAGRAPH",
@@ -154,7 +290,10 @@ export default async function handler(req, res) {
     });
   });
 
-  // Créditos finais
+  // ============================================================
+  // 6. CRÉDITOS
+  // ============================================================
+
   const photographerText = String(
     photographer || "Divulgação"
   ).trim();
@@ -184,7 +323,7 @@ export default async function handler(req, res) {
   });
 
   // ============================================================
-  // 5. EXCERPT
+  // 7. EXCERPT
   // ============================================================
 
   const excerpt = cleanSubtitle
@@ -194,51 +333,42 @@ export default async function handler(req, res) {
     : "";
 
   // ============================================================
-  // 6. OBJETO DO DRAFT POST
+  // 8. OBJETO DO DRAFT
   // ============================================================
 
   const draftPostObj = {
     title: cleanHeadline,
     excerpt,
-
-    memberId: cleanMemberId,
-
+    memberId,
     richContent: {
       nodes
     }
   };
 
-  // Categorias opcionais
-  if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+  if (
+    Array.isArray(categoryIds) &&
+    categoryIds.length > 0
+  ) {
     draftPostObj.categoryIds = categoryIds
       .map((id) => String(id || "").trim())
       .filter(Boolean);
   }
 
-  // Tags opcionais
-  if (Array.isArray(tagIds) && tagIds.length > 0) {
+  if (
+    Array.isArray(tagIds) &&
+    tagIds.length > 0
+  ) {
     draftPostObj.tagIds = tagIds
       .map((id) => String(id || "").trim())
       .filter(Boolean);
   }
 
   // ============================================================
-  // 7. CAPA
-  // ============================================================
-  //
-  // NÃO enviamos URL externa diretamente no coverMedia.
-  //
-  // Primeiro a imagem precisa ser importada no Media Manager.
-  // O endpoint atual do Wix para importação é:
-  // POST https://www.wixapis.com/site-media/v1/files/import
-  //
-  // Como o arquivo importado não fica necessariamente disponível
-  // imediatamente, não vamos criar um coverMedia inválido.
-  //
-  // Se coverImageUrl vier preenchida, tentamos importar.
+  // 9. IMPORTAÇÃO DA CAPA
   // ============================================================
 
   let importedCover = null;
+  let nativeCoverId = null;
 
   if (
     typeof coverImageUrl === "string" &&
@@ -268,7 +398,7 @@ export default async function handler(req, res) {
 
       const importText = await importResponse.text();
 
-      let importData = null;
+      let importData;
 
       try {
         importData = importText
@@ -292,65 +422,47 @@ export default async function handler(req, res) {
 
       if (importResponse.ok) {
         importedCover = importData;
-      } else {
-        console.error(
-          "[PV ONE] Falha ao importar capa no Media Manager."
-        );
+
+        nativeCoverId =
+          importData?.file?.id ||
+          importData?.file?.fileId ||
+          importData?.fileDescriptor?.id ||
+          importData?.fileDescriptor?.fileId ||
+          importData?.id ||
+          null;
       }
+
     } catch (coverError) {
       console.error(
-        "[PV ONE] Erro de conexão na importação da capa:",
+        "[PV ONE] ERRO NA IMPORTAÇÃO DA CAPA:",
         coverError
       );
     }
   }
 
   // ============================================================
-  // 8. TENTATIVA DE EXTRAIR ID NATIVO DA CAPA
+  // 10. COVER MEDIA
   // ============================================================
 
-  let nativeCoverId = null;
-
-  if (importedCover) {
-    nativeCoverId =
-      importedCover?.file?.id ||
-      importedCover?.file?.fileId ||
-      importedCover?.fileDescriptor?.id ||
-      importedCover?.fileDescriptor?.fileId ||
-      importedCover?.id ||
-      null;
-  }
-
-  /*
-    ATENÇÃO:
-
-    O Wix informa que arquivos importados podem não ficar disponíveis
-    imediatamente após o POST de importação.
-
-    Portanto, somente colocamos coverMedia se o retorno trouxer um
-    identificador nativo utilizável.
-
-    Caso contrário, o Draft Post ainda é criado normalmente, e o log
-    mostrará exatamente o que o Wix devolveu.
-  */
-
   if (nativeCoverId) {
-    draftPostObj.coverMedia = {
+    draftPostObj.media = {
       displayed: true,
       custom: true,
       wixMedia: {
         image: {
-          id: nativeCoverId,
-          altText:
-            String(coverImageAlt || "").trim() ||
-            cleanHeadline
+          id: nativeCoverId
         }
       }
     };
+
+    console.log(
+      "[PV ONE] CAPA ANEXADA AO DRAFT:",
+      nativeCoverId
+    );
   }
 
   // ============================================================
-  // 9. PAYLOAD FINAL
+  // 11. PAYLOAD FINAL
   // ============================================================
 
   const wixPayload = {
@@ -358,7 +470,17 @@ export default async function handler(req, res) {
   };
 
   console.log(
-    "[PV ONE] ==============================================="
+    "[PV ONE] ========================================"
+  );
+
+  console.log(
+    "[PV ONE] AUTOR:",
+    cleanAuthorEmail
+  );
+
+  console.log(
+    "[PV ONE] MEMBER ID:",
+    memberId
   );
 
   console.log(
@@ -371,7 +493,7 @@ export default async function handler(req, res) {
   );
 
   console.log(
-    "[PV ONE] PAYLOAD ENVIADO:",
+    "[PV ONE] PAYLOAD:",
     JSON.stringify(wixPayload, null, 2)
   );
 
@@ -381,16 +503,16 @@ export default async function handler(req, res) {
   );
 
   console.log(
-    "[PV ONE] CAPA NATIVA ID:",
+    "[PV ONE] CAPA ID:",
     nativeCoverId || null
   );
 
   console.log(
-    "[PV ONE] ==============================================="
+    "[PV ONE] ========================================"
   );
 
   // ============================================================
-  // 10. ENVIO DO RASCUNHO PARA O WIX
+  // 12. ENVIO PARA BLOG V3
   // ============================================================
 
   try {
@@ -405,7 +527,7 @@ export default async function handler(req, res) {
 
     const responseText = await wixResponse.text();
 
-    let data = null;
+    let data;
 
     try {
       data = responseText
@@ -423,19 +545,12 @@ export default async function handler(req, res) {
     );
 
     console.log(
-      "[PV ONE] WIX OK:",
-      wixResponse.ok
-    );
-
-    console.log(
-      "[PV ONE] WIX BODY:",
+      "[PV ONE] WIX RESPONSE:",
       JSON.stringify(data, null, 2)
     );
 
-    // ----------------------------------------------------------
     // REGRA PV ONE:
-    // 200 ou 201 = SUCESSO
-    // ----------------------------------------------------------
+    // 200 OU 201 = SUCESSO
 
     if (
       wixResponse.status !== 200 &&
@@ -456,20 +571,21 @@ export default async function handler(req, res) {
           details: data,
 
           debug: {
+            authorEmail: cleanAuthorEmail,
+            memberId,
             headline: cleanHeadline,
-            memberId: cleanMemberId,
-            coverImageReceived: Boolean(coverImageUrl),
+            coverImageReceived:
+              Boolean(coverImageUrl),
             nativeCoverId,
-            coverAttached: Boolean(
-              draftPostObj.coverMedia
-            )
+            coverAttached:
+              Boolean(draftPostObj.media)
           }
         });
     }
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // SUCESSO
-    // ----------------------------------------------------------
+    // ==========================================================
 
     return res.status(200).json({
       success: true,
@@ -479,19 +595,32 @@ export default async function handler(req, res) {
       message:
         "Rascunho enviado com sucesso ao Wix.",
 
+      author: {
+        email: cleanAuthorEmail,
+        memberId,
+        nickname:
+          memberInfo?.profile?.nickname || null
+      },
+
       post:
         data?.draftPost ||
         data,
 
       cover: {
-        urlReceived: Boolean(coverImageUrl),
-        imported: Boolean(importedCover),
-        nativeId: nativeCoverId,
-        attachedToDraft: Boolean(
-          draftPostObj.coverMedia
-        )
+        urlReceived:
+          Boolean(coverImageUrl),
+
+        imported:
+          Boolean(importedCover),
+
+        nativeId:
+          nativeCoverId,
+
+        attachedToDraft:
+          Boolean(draftPostObj.media)
       }
     });
+
   } catch (error) {
     console.error(
       "[PV ONE] ERRO DE CONEXÃO:",
