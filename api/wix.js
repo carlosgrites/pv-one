@@ -6,8 +6,8 @@ export default async function handler(req, res) {
   const { headline, subtitle, editorialBody, paragraphs, photographer, source } = req.body;
 
   // 1. CREDENCIAIS DIRETAS
-  const apiKeyRaw = "SUA_WIX_API_KEY_AQUI"; // <-- Cole aqui a sua API Key do Wix
-  const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7"; // <-- SEU SITE ID CORRETO
+  const apiKeyRaw = "SUA_WIX_API_KEY_AQUI"; // <-- Cole sua API Key aqui dentro das aspas
+  const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7"; // <-- Seu ID correto já inserido
 
   const cleanApiKey = apiKeyRaw.replace(/^Bearer\s+/i, '').trim();
   const cleanSiteId = siteIdRaw.trim();
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     }
   };
 
-  // 3. DISPARO PARA A API OFICIAL DO WIX BLOG
+  // 3. ENVIO PARA O WIX BLOG
   try {
     const wixResponse = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
