@@ -5,18 +5,17 @@ export default async function handler(req, res) {
 
   const { headline, subtitle, editorialBody, paragraphs, photographer, source } = req.body;
 
-  // 1. CHAVES DIRETAS NO CÓDIGO (NÃO DEPENDE DE NADA DA VERCEL)
-  const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjJlYjI5MmIyLWU2NGUtNGQ3Yy1hYzMwLTQyMzVhMDYzMWNiNFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImJmY2M1NzBmLTQ3MDUtNDI0MC1iOTliLTQ2Njg3NjQ3MGRlNVwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MDkyMzQ1fQ.MPXDGKra6zYTBVTzNWqSWvOxGMdLFAzoaBf9d5jOLNw5bi-pjo4JUOqIKcC0Rs2B1pN7WIdbVgeRXZTDtvejRQZ_L2qwcclVj2pXjXFUOWYOybBHEjC3WwqjwYoISaCkgdoHlhczRMrEmM8I7xYk8z00NgqKcul4_re2sDZdBkc9MHsv83Hy7aEEzx7D_ELDbS1jPYxPcD3Hv6ph1arfsUBJWNL_-2r8lkFmFyJfM8ckhnWUd4uwOoOrQ_9Q7V7Xe7RsYoTCTETy7nvXMGqZfT1dncMiWhdEb2vURgftrXXK9lJuqrsVNwOmuCekja0AjAHeC68inNcH1PdRgyxd4Q";
-  const siteIdRaw = "901207ba-a8ff-4df3-8260-72fee498ef22";
+  // 1. CREDENCIAIS DIRETAS
+  const apiKeyRaw = "SUA_WIX_API_KEY_AQUI"; // <-- Cole aqui a sua API Key do Wix
+  const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7"; // <-- SEU SITE ID CORRETO
 
   const cleanApiKey = apiKeyRaw.replace(/^Bearer\s+/i, '').trim();
   const cleanSiteId = siteIdRaw.trim();
 
-  // 2. TRATAMENTO DE PARÁGRAFOS E NÓS INDEPENDENTES DO WIX
+  // 2. PARÁGRAFOS E NÓS INDEPENDENTES DO WIX
   const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
   const nodes = [];
 
-  // Linha Fina / Subtítulo no topo em itálico
   if (subtitle) {
     nodes.push({
       type: "PARAGRAPH",
@@ -24,7 +23,6 @@ export default async function handler(req, res) {
     });
   }
 
-  // Distribuição dos parágrafos com Lide em negrito e Intertítulo H2 no meio
   rawParagraphs.forEach((p, idx) => {
     nodes.push({
       type: "PARAGRAPH",
@@ -45,13 +43,11 @@ export default async function handler(req, res) {
     }
   });
 
-  // Marcador dos Apoiadores
   nodes.push({
     type: "PARAGRAPH",
     nodes: [{ type: "TEXT", textData: { text: "[ --- INSERIR AQUI O IFRAME DOS APOIADORES DO KARTISMO --- ]", decorations: [{ type: "BOLD" }] } }]
   });
 
-  // Créditos Finais
   nodes.push({
     type: "PARAGRAPH",
     nodes: [{ type: "TEXT", textData: { text: `Fotos: ${photographer || 'Divulgação'} | Fonte: ${source || 'Redação'} | Redação Portal Pista Verde`, decorations: [{ type: "ITALIC" }] } }]
@@ -67,7 +63,7 @@ export default async function handler(req, res) {
     }
   };
 
-  // 3. ENVIO COM OS CABEÇALHOS OFICIAIS DO WIX BLOG V3
+  // 3. DISPARO PARA A API OFICIAL DO WIX BLOG
   try {
     const wixResponse = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
