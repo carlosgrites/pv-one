@@ -7,12 +7,33 @@ export default async function handler(req, res) {
 
   // 1. CREDENCIAIS DIRETAS
   const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImQ2MWZhMTE0LWY2YWItNDBiYy1hNzdjLTVjODUzNGNiNWJmOVwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImEyNTM5M2Q0LTgxOTQtNDdkZi04ZDBlLTMzY2FhN2ExYzkxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MjY1NTg4fQ.ZmRwqkfXkdY2z-PTbNpjzQWZXAVBdMj3_SCJ6cgvcfgaS2KWG31MLgjwM4kKv0bY8uT5lCZ93cx13dWqPdYel4vDZL8kCVwqFV5a9A7oftLBV6IO7kvuwW6hLaR4YbXch4LPSSELUhWVsXzrbzCZJXk-pmFnLUs58TUydiRxgZDZXmZmyoRhPC8KiSMiMRMr71mjzFs2gB8ifHDG6TZOsQeEPR3HsGZ_f_trXqaV0iuXXnLp07PkxYfem6ZyMhlJF9nKvnJnrGc70sS1ZJeBTiDyLxJsY_xgWSsvuQ3YkqATKYQn6YSUasncCQN7a3yU-BB4ojOgr6twqhKojw7VOQ"; 
-  const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7"; // <-- Seu ID correto já inserido
+  const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
 
   const cleanApiKey = apiKeyRaw.replace(/^Bearer\s+/i, '').trim();
   const cleanSiteId = siteIdRaw.trim();
 
-  // 2. PARÁGRAFOS E NÓS INDEPENDENTES DO WIX
+  const authHeaders = {
+    "Content-Type": "application/json",
+    "Authorization": cleanApiKey,
+    "wix-site-id": cleanSiteId
+  };
+
+  // 2. RECUPERAÇÃO DO AUTOR (OBRIGATÓRIO PELO WIX)
+  let memberId = null;
+  try {
+    const memberRes = await fetch("https://www.wixapis.com/members/v1/members?paging.limit=1", {
+      method: "GET",
+      headers: authHeaders
+    });
+    const memberData = await memberRes.json();
+    if (memberData && memberData.members && memberData.members.length > 0) {
+      memberId = memberData.members[0].id;
+    }
+  } catch (e) {
+    console.error("Erro na busca de membros:", e);
+  }
+
+  // 3. ESTRUTURAÇÃO DO CONTEÚDO
   const rawParagraphs = paragraphs || (editorialBody ? editorialBody.split('\n').map(p => p.trim()).filter(p => p.length > 0) : []);
   const nodes = [];
 
@@ -53,26 +74,24 @@ export default async function handler(req, res) {
     nodes: [{ type: "TEXT", textData: { text: `Fotos: ${photographer || 'Divulgação'} | Fonte: ${source || 'Redação'} | Redação Portal Pista Verde`, decorations: [{ type: "ITALIC" }] } }]
   });
 
-  const payload = {
-    draftPost: {
-      title: headline || "Sem título",
-      excerpt: subtitle ? (subtitle.length > 150 ? subtitle.substring(0, 147) + "..." : subtitle) : "",
-      richContent: {
-        nodes: nodes
-      }
+  const draftPostObj = {
+    title: headline || "Sem título",
+    excerpt: subtitle ? (subtitle.length > 150 ? subtitle.substring(0, 147) + "..." : subtitle) : "",
+    richContent: {
+      nodes: nodes
     }
   };
 
-  // 3. ENVIO PARA O WIX BLOG
+  if (memberId) {
+    draftPostObj.memberId = memberId;
+  }
+
+  // 4. DISPARO PARA A API
   try {
     const wixResponse = await fetch("https://www.wixapis.com/blog/v3/draft-posts", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": cleanApiKey,
-        "wix-site-id": cleanSiteId
-      },
-      body: JSON.stringify(payload)
+      headers: authHeaders,
+      body: JSON.stringify({ draftPost: draftPostObj })
     });
 
     const data = await wixResponse.json();
