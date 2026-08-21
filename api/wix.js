@@ -20,33 +20,24 @@ export default async function handler(req, res) {
   // 2. CONFIGURAÇÃO WIX
   // ============================================================
 
-  // ============================================================
-  // COLE SUA CHAVE WIX SOMENTE AQUI
-  // ============================================================
-
   const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImQ2MWZhMTE0LWY2YWItNDBiYy1hNzdjLTVjODUzNGNiNWJmOVwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImEyNTM5M2Q0LTgxOTQtNDdkZi04ZDBlLTMzY2FhN2ExYzkxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MjY1NTg4fQ.ZmRwqkfXkdY2z-PTbNpjzQWZXAVBdMj3_SCJ6cgvcfgaS2KWG31MLgjwM4kKv0bY8uT5lCZ93cx13dWqPdYel4vDZL8kCVwqFV5a9A7oftLBV6IO7kvuwW6hLaR4YbXch4LPSSELUhWVsXzrbzCZJXk-pmFnLUs58TUydiRxgZDZXmZmyoRhPC8KiSMiMRMr71mjzFs2gB8ifHDG6TZOsQeEPR3HsGZ_f_trXqaV0iuXXnLp07PkxYfem6ZyMhlJF9nKvnJnrGc70sS1ZJeBTiDyLxJsY_xgWSsvuQ3YkqATKYQn6YSUasncCQN7a3yU-BB4ojOgr6twqhKojw7VOQ";
 
-  const siteIdRaw =
-    "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
+  const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
 
-  const authorEmail =
-    "portalpistaverde@gmail.com";
+  const authorEmail = "portalpistaverde@gmail.com";
 
-  const cleanApiKey =
-    String(apiKeyRaw || "")
-      .replace(/^Bearer\s+/i, "")
-      .trim();
+  // ID do autor padrão (Carlos Grites)
+  const defaultMemberId = "76233c36-475b-4ea3-9317-363ee57c8de2";
 
-  const cleanSiteId =
-    String(siteIdRaw || "").trim();
+  const cleanApiKey = String(apiKeyRaw || "")
+    .replace(/^Bearer\s+/i, "")
+    .trim();
 
-  if (
-    !cleanApiKey ||
-    cleanApiKey === "COLE_SUA_CHAVE_WIX_AQUI"
-  ) {
+  const cleanSiteId = String(siteIdRaw || "").trim();
+
+  if (!cleanApiKey) {
     return res.status(500).json({
-      error:
-        "A chave da API Wix ainda não foi configurada."
+      error: "A chave da API Wix ainda não foi configurada."
     });
   }
 
@@ -76,20 +67,11 @@ export default async function handler(req, res) {
     structuredData = null
   } = req.body || {};
 
-  const cleanHeadline =
-    String(headline || "Sem título").trim();
-
-  const cleanSubtitle =
-    String(subtitle || "").trim();
-
-  const photographerText =
-    String(photographer || "Divulgação").trim();
-
-  const sourceText =
-    String(source || "Redação").trim();
-
-  const cleanCategory =
-    String(category || "").trim();
+  const cleanHeadline = String(headline || "Sem título").trim();
+  const cleanSubtitle = String(subtitle || "").trim();
+  const photographerText = String(photographer || "Divulgação").trim();
+  const sourceText = String(source || "Redação").trim();
+  const cleanCategory = String(category || "").trim();
 
   // ============================================================
   // 4. FUNÇÕES AUXILIARES
@@ -118,164 +100,45 @@ export default async function handler(req, res) {
     return [
       ...new Set(
         (Array.isArray(values) ? values : [])
-          .map(item =>
-            String(item || "").trim()
-          )
+          .map(item => String(item || "").trim())
           .filter(Boolean)
       )
     ];
   }
 
   // ============================================================
-  // 5. BUSCA DO AUTOR
+  // 5. AUTOR (MEMBER ID)
   // ============================================================
 
-  let memberId = null;
-
-  try {
-
-    const encodedEmail =
-      encodeURIComponent(authorEmail);
-
-    const memberUrl =
-      `https://www.wixapis.com/members/v1/members` +
-      `?fieldsets=FULL&query.fieldName=loginEmail` +
-      `&query.eq=${encodedEmail}`;
-
-    const memberResponse =
-      await fetch(memberUrl, {
-        method: "GET",
-        headers: authHeaders
-      });
-
-    const memberData =
-      await memberResponse
-        .json()
-        .catch(() => ({}));
-
-    if (
-      memberResponse.ok &&
-      Array.isArray(memberData.members) &&
-      memberData.members.length > 0
-    ) {
-      memberId =
-        memberData.members[0].id;
-    }
-
-  } catch (error) {
-    console.error(
-      "Erro procurando autor:",
-      error
-    );
-  }
-
-  // SEGUNDA TENTATIVA
-  if (!memberId) {
-
-    try {
-
-      const memberResponse =
-        await fetch(
-          "https://www.wixapis.com/members/v1/members?paging.limit=100",
-          {
-            method: "GET",
-            headers: authHeaders
-          }
-        );
-
-      const memberData =
-        await memberResponse
-          .json()
-          .catch(() => ({}));
-
-      if (
-        memberResponse.ok &&
-        Array.isArray(memberData.members)
-      ) {
-
-        const foundMember =
-          memberData.members.find(member => {
-
-            const loginEmail =
-              String(
-                member.loginEmail ||
-                member.contact?.emails?.[0]?.email ||
-                ""
-              ).toLowerCase();
-
-            return (
-              loginEmail ===
-              authorEmail.toLowerCase()
-            );
-          });
-
-        if (foundMember) {
-          memberId =
-            foundMember.id;
-        }
-      }
-
-    } catch (error) {
-      console.error(
-        "Erro na segunda busca do autor:",
-        error
-      );
-    }
-  }
-
-  if (!memberId) {
-    return res.status(400).json({
-      error:
-        `Não foi possível localizar no Wix o autor ${authorEmail}.`
-    });
-  }
+  let memberId = defaultMemberId;
 
   // ============================================================
   // 6. CORPO EDITORIAL
   // ============================================================
 
-  const normalizedEditorialBody =
-    normalizeText(editorialBody);
-
+  const normalizedEditorialBody = normalizeText(editorialBody);
   let rawParagraphs = [];
 
-  if (
-    Array.isArray(paragraphs) &&
-    paragraphs.length
-  ) {
-
-    rawParagraphs =
-      paragraphs
-        .map(item =>
-          normalizeText(item)
-        )
-        .filter(Boolean);
-
+  if (Array.isArray(paragraphs) && paragraphs.length) {
+    rawParagraphs = paragraphs
+      .map(item => normalizeText(item))
+      .filter(Boolean);
   } else if (normalizedEditorialBody) {
-
-    rawParagraphs =
-      normalizedEditorialBody
-        .split(/\n+/)
-        .map(item =>
-          item.trim()
-        )
-        .filter(Boolean);
+    rawParagraphs = normalizedEditorialBody
+      .split(/\n+/)
+      .map(item => item.trim())
+      .filter(Boolean);
   }
 
   // ============================================================
   // 7. LINKS INTERNOS
   // ============================================================
 
-  const cleanInternalLinks =
-    Array.isArray(internalLinks)
-      ? internalLinks
-          .filter(link =>
-            link &&
-            link.url &&
-            link.text
-          )
-          .slice(0, 3)
-      : [];
+  const cleanInternalLinks = Array.isArray(internalLinks)
+    ? internalLinks
+        .filter(link => link && link.url && link.text)
+        .slice(0, 3)
+    : [];
 
   // ============================================================
   // 8. RICH CONTENT NATIVO
@@ -285,79 +148,55 @@ export default async function handler(req, res) {
 
   function newNodeId(prefix = "node") {
     nodeCounter += 1;
-
-    return (
-      prefix +
-      "_" +
-      Date.now() +
-      "_" +
-      nodeCounter
-    );
+    return prefix + "_" + Date.now() + "_" + nodeCounter;
   }
 
-  function textNode(
-    text,
-    decorations = []
-  ) {
-
+  function textNode(text, decorations = []) {
     return {
       type: "TEXT",
       id: newNodeId("txt"),
       nodes: [],
       textData: {
-        text:
-          String(text || ""),
+        text: String(text || ""),
         decorations
       }
     };
   }
 
-  function paragraphNode(
-    text,
-    options = {}
-  ) {
-
+  function paragraphNode(text, options = {}) {
     const decorations = [];
 
     if (options.bold) {
       decorations.push({
         type: "BOLD",
-        boldData: {}
+        fontWeightValue: 700
       });
     }
 
     if (options.italic) {
       decorations.push({
         type: "ITALIC",
-        italicData: {}
+        italicData: true
       });
     }
 
     return {
       type: "PARAGRAPH",
       id: newNodeId("p"),
-
       nodes: [
-        textNode(
-          text,
-          decorations
-        )
+        textNode(text, decorations)
       ],
-
       paragraphData: {}
     };
   }
 
   function headingNode(text) {
-
     return {
       type: "HEADING",
       id: newNodeId("h2"),
-
       nodes: [
         textNode(text)
       ],
-
       headingData: {
         level: 2
       }
@@ -366,726 +205,142 @@ export default async function handler(req, res) {
 
   const richNodes = [];
 
-  // ============================================================
-  // SUBTÍTULO
-  // ============================================================
-
+  // Subtítulo
   if (cleanSubtitle) {
-
     richNodes.push(
-      paragraphNode(
-        cleanSubtitle,
-        {
-          italic: true
-        }
-      )
+      paragraphNode(cleanSubtitle, { italic: true })
     );
   }
 
-  // ============================================================
-  // PARÁGRAFOS
-  // ============================================================
+  // Parágrafos da matéria
+  rawParagraphs.forEach((paragraph, index) => {
+    const text = String(paragraph || "").trim();
+    if (!text) return;
 
-  rawParagraphs.forEach(
-    (paragraph, index) => {
-
-      const text =
-        String(
-          paragraph || ""
-        ).trim();
-
-      if (!text) {
-        return;
-      }
-
-      // H2 NO FORMATO ## TÍTULO
-      if (
-        /^##\s+/.test(text)
-      ) {
-
-        const heading =
-          text
-            .replace(
-              /^##\s+/,
-              ""
-            )
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading
-            )
-          );
-        }
-
-        return;
-      }
-
-      // H2 NO FORMATO H2: TÍTULO
-      if (
-        /^H2:\s*/i.test(text)
-      ) {
-
-        const heading =
-          text
-            .replace(
-              /^H2:\s*/i,
-              ""
-            )
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading
-            )
-          );
-        }
-
-        return;
-      }
-
-      richNodes.push(
-        paragraphNode(
-          text,
-          {
-            bold:
-              index === 0
-          }
-        )
-      );
+    // H2 no formato ## TÍTULO
+    if (/^##\s+/.test(text)) {
+      const heading = text.replace(/^##\s+/, "").trim();
+      if (heading) richNodes.push(headingNode(heading));
+      return;
     }
-  );
 
-  // ============================================================
-  // CRÉDITO FINAL
-  // ============================================================
+    // H2 no formato H2: TÍTULO
+    if (/^H2:\s*/i.test(text)) {
+      const heading = text.replace(/^H2:\s*/i, "").trim();
+      if (heading) richNodes.push(headingNode(heading));
+      return;
+    }
 
+    richNodes.push(
+      paragraphNode(text, { bold: index === 0 })
+    );
+  });
+
+  // Crédito final
   richNodes.push(
     paragraphNode(
       `Texto/Fonte: ${sourceText} | Fotos: ${photographerText} | Redação: José Carlos Grites — Jornalista | Portal Pista Verde`,
-      {
-        italic: true
-      }
+      { italic: true }
     )
   );
 
   const richContent = {
     nodes: richNodes,
-
     metadata: {
       version: 1,
-      id:
-        newNodeId(
-          "document"
-        )
-    },
-
-    documentStyle: {}
+      id: newNodeId("document")
+    }
   };
 
   // ============================================================
-  // 9. SEO
+  // 9. SEO & METADADOS
   // ============================================================
 
-  const seoTitle =
-    String(
-      seo.title ||
-      `${cleanHeadline} | Portal Pista Verde`
-    )
-      .trim()
-      .substring(
-        0,
-        70
-      );
+  const seoTitle = String(
+    seo.title || `${cleanHeadline} | Portal Pista Verde`
+  ).trim().substring(0, 70);
 
-  const seoDescription =
-    String(
-      seo.description ||
-      cleanSubtitle ||
-      rawParagraphs[0] ||
-      ""
-    )
-      .trim()
-      .substring(
-        0,
-        160
-      );
+  const seoDescription = String(
+    seo.description || cleanSubtitle || rawParagraphs[0] || ""
+  ).trim().substring(0, 160);
 
-  const seoSlug =
-    slugify(
-      seo.slug ||
-      cleanHeadline
-    );
+  const seoSlug = slugify(seo.slug || cleanHeadline);
+  const focusKeyword = String(seo.focusKeyword || "").trim();
 
-  const focusKeyword =
-    String(
-      seo.focusKeyword ||
-      ""
-    ).trim();
-
-  const excerpt =
-    String(
-      seo.excerpt ||
-      cleanSubtitle ||
-      rawParagraphs[0] ||
-      ""
-    )
-      .trim()
-      .substring(
-        0,
-        500
-      );
+  const excerpt = String(
+    seo.excerpt || cleanSubtitle || rawParagraphs[0] || ""
+  ).trim().substring(0, 500);
 
   // ============================================================
-  // 10. SEO DATA
+  // 10. CATEGORIAS & TAGS
   // ============================================================
 
-  const seoTags = [
-
-    {
-      type: "title",
-      children:
-        seoTitle
-    },
-
-    {
-      type: "meta",
-      props: {
-        name:
-          "description",
-        content:
-          seoDescription
-      }
-    },
-
-    {
-      type: "meta",
-      props: {
-        property:
-          "og:title",
-        content:
-          seoTitle
-      }
-    },
-
-    {
-      type: "meta",
-      props: {
-        property:
-          "og:description",
-        content:
-          seoDescription
-      }
-    },
-
-    {
-      type: "meta",
-      props: {
-        name:
-          "twitter:title",
-        content:
-          seoTitle
-      }
-    },
-
-    {
-      type: "meta",
-      props: {
-        name:
-          "twitter:description",
-        content:
-          seoDescription
-      }
-    }
-  ];
+  let resolvedCategoryIds = uniqueStrings(categoryIds).slice(0, 10);
+  let resolvedTagIds = uniqueStrings(tagIds).slice(0, 30);
 
   // ============================================================
-  // 11. CATEGORIA
-  // ============================================================
-
-  let resolvedCategoryIds =
-    uniqueStrings(
-      categoryIds
-    );
-
-  if (
-    resolvedCategoryIds.length === 0 &&
-    cleanCategory
-  ) {
-
-    try {
-
-      const categoryResponse =
-        await fetch(
-          "https://www.wixapis.com/blog/v3/categories?paging.limit=100",
-          {
-            method: "GET",
-            headers:
-              authHeaders
-          }
-        );
-
-      const categoryData =
-        await categoryResponse
-          .json()
-          .catch(
-            () => ({})
-          );
-
-      if (
-        categoryResponse.ok &&
-        Array.isArray(
-          categoryData.categories
-        )
-      ) {
-
-        const wanted =
-          cleanCategory
-            .toLowerCase();
-
-        const found =
-          categoryData
-            .categories
-            .find(cat => {
-
-              const label =
-                String(
-                  cat.label ||
-                  cat.name ||
-                  cat.title ||
-                  ""
-                )
-                  .trim()
-                  .toLowerCase();
-
-              return (
-                label ===
-                wanted
-              );
-            });
-
-        if (found?.id) {
-          resolvedCategoryIds =
-            [found.id];
-        }
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Erro resolvendo categoria:",
-        error
-      );
-    }
-  }
-
-  resolvedCategoryIds =
-    resolvedCategoryIds
-      .slice(
-        0,
-        10
-      );
-
-  // ============================================================
-  // 12. TAGS
-  // ============================================================
-
-  let resolvedTagIds =
-    uniqueStrings(
-      tagIds
-    );
-
-  const requestedTagNames =
-    uniqueStrings(
-      Array.isArray(
-        seo.tags
-      )
-        ? seo.tags
-        : []
-    )
-      .slice(
-        0,
-        30
-      );
-
-  if (
-    resolvedTagIds.length === 0 &&
-    requestedTagNames.length > 0
-  ) {
-
-    try {
-
-      const tagsResponse =
-        await fetch(
-          "https://www.wixapis.com/blog/v3/tags?paging.limit=100",
-          {
-            method: "GET",
-            headers:
-              authHeaders
-          }
-        );
-
-      const tagsData =
-        await tagsResponse
-          .json()
-          .catch(
-            () => ({})
-          );
-
-      const existingTags =
-        tagsResponse.ok &&
-        Array.isArray(
-          tagsData.tags
-        )
-          ? tagsData.tags
-          : [];
-
-      const tagMap =
-        new Map();
-
-      existingTags
-        .forEach(tag => {
-
-          const label =
-            String(
-              tag.label ||
-              tag.name ||
-              ""
-            )
-              .trim()
-              .toLowerCase();
-
-          if (
-            label &&
-            tag.id
-          ) {
-            tagMap.set(
-              label,
-              tag.id
-            );
-          }
-        });
-
-      for (
-        const requestedName
-        of requestedTagNames
-      ) {
-
-        const normalizedName =
-          requestedName
-            .toLowerCase();
-
-        if (
-          tagMap.has(
-            normalizedName
-          )
-        ) {
-
-          resolvedTagIds.push(
-            tagMap.get(
-              normalizedName
-            )
-          );
-
-          continue;
-        }
-
-        // ========================================================
-        // CRIAR TAG CASO NÃO EXISTA
-        // ========================================================
-
-        try {
-
-          const createTagResponse =
-            await fetch(
-              "https://www.wixapis.com/blog/v3/tags",
-              {
-                method:
-                  "POST",
-
-                headers:
-                  authHeaders,
-
-                body:
-                  JSON.stringify({
-                    tag: {
-                      label:
-                        requestedName
-                    }
-                  })
-              }
-            );
-
-          const createTagData =
-            await createTagResponse
-              .json()
-              .catch(
-                () => ({})
-              );
-
-          const createdTag =
-            createTagData.tag;
-
-          if (
-            createTagResponse.ok &&
-            createdTag?.id
-          ) {
-
-            resolvedTagIds.push(
-              createdTag.id
-            );
-          }
-
-        } catch (error) {
-
-          console.error(
-            `Erro criando tag ${requestedName}:`,
-            error
-          );
-        }
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Erro resolvendo tags:",
-        error
-      );
-    }
-  }
-
-  resolvedTagIds =
-    uniqueStrings(
-      resolvedTagIds
-    )
-      .slice(
-        0,
-        30
-      );
-
-  // ============================================================
-  // 13. DADOS ESTRUTURADOS
-  // ============================================================
-
-  let structuredDataMarkup =
-    null;
-
-  if (
-    structuredData &&
-    typeof structuredData ===
-      "object"
-  ) {
-
-    structuredDataMarkup =
-      structuredData;
-
-  } else {
-
-    structuredDataMarkup = {
-
-      "@context":
-        "https://schema.org",
-
-      "@type":
-        "NewsArticle",
-
-      "headline":
-        cleanHeadline,
-
-      "description":
-        seoDescription,
-
-      "author": {
-        "@type":
-          "Person",
-
-        "name":
-          "José Carlos Grites"
-      },
-
-      "publisher": {
-        "@type":
-          "Organization",
-
-        "name":
-          "Portal Pista Verde",
-
-        "url":
-          "https://www.pistaverde.com.br/"
-      }
-    };
-  }
-
-  seoTags.push({
-
-    type:
-      "script",
-
-    props: {
-      type:
-        "application/ld+json"
-    },
-
-    children:
-      JSON.stringify(
-        structuredDataMarkup
-      )
-  });
-
-  // ============================================================
-  // 14. OBJETO FINAL DO RASCUNHO
+  // 11. OBJETO FINAL DO DRAFT POST
   // ============================================================
 
   const draftPostObj = {
-
-    title:
-      cleanHeadline,
-
+    title: cleanHeadline,
     excerpt,
-
     memberId,
-
     richContent,
-
-    seoSlug,
-
-    seoData: {
-      tags:
-        seoTags
-    }
+    seoSlug
   };
 
-  if (
-    resolvedCategoryIds.length
-  ) {
-
-    draftPostObj.categoryIds =
-      resolvedCategoryIds;
+  if (resolvedCategoryIds.length) {
+    draftPostObj.categoryIds = resolvedCategoryIds;
   }
 
-  if (
-    resolvedTagIds.length
-  ) {
-
-    draftPostObj.tagIds =
-      resolvedTagIds;
+  if (resolvedTagIds.length) {
+    draftPostObj.tagIds = resolvedTagIds;
   }
 
   // ============================================================
-  // 15. CRIAÇÃO DO RASCUNHO NO WIX
+  // 12. ENVIO PARA O WIX BLOG API
   // ============================================================
 
   try {
-
-    const wixResponse =
-      await fetch(
-        "https://www.wixapis.com/blog/v3/draft-posts",
-        {
-          method:
-            "POST",
-
-          headers:
-            authHeaders,
-
-          body:
-            JSON.stringify({
-              draftPost:
-                draftPostObj
-            })
-        }
-      );
-
-    const data =
-      await wixResponse
-        .json()
-        .catch(
-          () => ({})
-        );
-
-    if (
-      !wixResponse.ok
-    ) {
-
-      console.error(
-        "Erro Wix:",
-        data
-      );
-
-      return res
-        .status(
-          wixResponse.status
-        )
-        .json({
-
-          error:
-            data.message ||
-            "Erro retornado pela API do Wix.",
-
-          details:
-            data
-        });
-    }
-
-    // ==========================================================
-    // SUCESSO
-    // ==========================================================
-
-    return res
-      .status(200)
-      .json({
-
-        success:
-          true,
-
-        message:
-          "Rascunho criado com sucesso no Wix.",
-
-        post:
-          data.draftPost ||
-          data,
-
-        seo: {
-
-          focusKeyword,
-
-          title:
-            seoTitle,
-
-          description:
-            seoDescription,
-
-          slug:
-            seoSlug
-        },
-
-        categoryIds:
-          resolvedCategoryIds,
-
-        tagIds:
-          resolvedTagIds,
-
-        internalLinks:
-          cleanInternalLinks.length
-      });
-
-  } catch (error) {
-
-    console.error(
-      "Falha de conexão Wix:",
-      error
+    const wixResponse = await fetch(
+      "https://www.wixapis.com/blog/v3/draft-posts",
+      {
+        method: "POST",
+        headers: authHeaders,
+        body: JSON.stringify({
+          draftPost: draftPostObj
+        })
+      }
     );
 
-    return res
-      .status(500)
-      .json({
+    const data = await wixResponse.json().catch(() => ({}));
 
-        error:
-          "Falha de conexão com a API Wix.",
-
-        details:
-          error.message
+    if (!wixResponse.ok) {
+      console.error("Erro Wix:", data);
+      return res.status(wixResponse.status).json({
+        error: data.message || "Erro retornado pela API do Wix.",
+        details: data
       });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Rascunho criado com sucesso no Wix.",
+      post: data.draftPost || data,
+      seo: {
+        focusKeyword,
+        title: seoTitle,
+        description: seoDescription,
+        slug: seoSlug
+      }
+    });
+
+  } catch (error) {
+    console.error("Falha de conexão Wix:", error);
+    return res.status(500).json({
+      error: "Falha de conexão com a API Wix.",
+      details: error.message
+    });
   }
 }
