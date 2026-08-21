@@ -348,6 +348,24 @@ export default async function handler(req, res) {
     };
   }
 
+  // ============================================================
+  // PARÁGRAFO VAZIO NATIVO PARA ESPAÇAMENTO NO WIX
+  // ============================================================
+
+  function spacerParagraphNode() {
+
+    return {
+      type: "PARAGRAPH",
+      id: newNodeId("space"),
+
+      nodes: [
+        textNode("")
+      ],
+
+      paragraphData: {}
+    };
+  }
+
   function headingNode(text) {
 
     return {
@@ -379,6 +397,11 @@ export default async function handler(req, res) {
           italic: true
         }
       )
+    );
+
+    // ESPAÇO DEPOIS DO SUBTÍTULO
+    richNodes.push(
+      spacerParagraphNode()
     );
   }
 
@@ -412,10 +435,16 @@ export default async function handler(req, res) {
             .trim();
 
         if (heading) {
+
           richNodes.push(
             headingNode(
               heading
             )
+          );
+
+          // ESPAÇO DEPOIS DO H2
+          richNodes.push(
+            spacerParagraphNode()
           );
         }
 
@@ -436,16 +465,23 @@ export default async function handler(req, res) {
             .trim();
 
         if (heading) {
+
           richNodes.push(
             headingNode(
               heading
             )
+          );
+
+          // ESPAÇO DEPOIS DO H2
+          richNodes.push(
+            spacerParagraphNode()
           );
         }
 
         return;
       }
 
+      // PARÁGRAFO NORMAL
       richNodes.push(
         paragraphNode(
           text,
@@ -454,6 +490,14 @@ export default async function handler(req, res) {
               index === 0
           }
         )
+      );
+
+      // ========================================================
+      // ESPAÇAMENTO NATIVO ENTRE PARÁGRAFOS
+      // ========================================================
+
+      richNodes.push(
+        spacerParagraphNode()
       );
     }
   );
