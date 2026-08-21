@@ -1,25 +1,36 @@
+// ============================================================
+// PORTAL PISTA VERDE — PV ONE
+// api/wix.js
+// Integração Wix Blog V3
+// ============================================================
+
 export default async function handler(req, res) {
+
+  // ============================================================
+  // 1. MÉTODO
+  // ============================================================
+
   if (req.method !== "POST") {
     return res.status(405).json({
-      success: false,
       error: "Método não permitido."
     });
   }
 
   // ============================================================
-  // 1. CONFIGURAÇÃO WIX
+  // 2. CONFIGURAÇÃO WIX
   // ============================================================
 
-  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  // COLE SUA NOVA CHAVE DA API WIX ENTRE AS ASPAS ABAIXO
-  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImQ2MWZhMTE0LWY2YWItNDBiYy1hNzdjLTVjODUzNGNiNWJmOVwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImEyNTM5M2Q0LTgxOTQtNDdkZi04ZDBlLTMzY2FhN2ExYzkxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MjY1NTg4fQ.ZmRwqkfXkdY2z-PTbNpjzQWZXAVBdMj3_SCJ6cgvcfgaS2KWG31MLgjwM4kKv0bY8uT5lCZ93cx13dWqPdYel4vDZL8kCVwqFV5a9A7oftLBV6IO7kvuwW6hLaR4YbXch4LPSSELUhWVsXzrbzCZJXk-pmFnLUs58TUydiRxgZDZXmZmyoRhPC8KiSMiMRMr71mjzFs2gB8ifHDG6TZOsQeEPR3HsGZ_f_trXqaV0iuXXnLp07PkxYfem6ZyMhlJF9nKvnJnrGc70sS1ZJeBTiDyLxJsY_xgWSsvuQ3YkqATKYQn6YSUasncCQN7a3yU-BB4ojOgr6twqhKojw7VOQ";
+  // ============================================================
+  // COLE SUA NOVA CHAVE WIX SOMENTE AQUI
+  // NÃO COLOQUE "Bearer" ANTES DA CHAVE
+  // ============================================================
 
+  const apiKeyRaw = "COLE_SUA_CHAVE_WIX_AQUI";
+
+  // SITE ID DO PORTAL PISTA VERDE
   const siteIdRaw = "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
 
-  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  // COLOQUE AQUI O E-MAIL USADO COMO MEMBRO DO SITE WIX
-  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // E-MAIL DO AUTOR
   const authorEmail = "portalpistaverde@gmail.com";
 
   const cleanApiKey = String(apiKeyRaw || "")
@@ -28,45 +39,23 @@ export default async function handler(req, res) {
 
   const cleanSiteId = String(siteIdRaw || "").trim();
 
-  const cleanAuthorEmail = String(authorEmail || "")
-    .trim()
-    .toLowerCase();
-
   if (
     !cleanApiKey ||
-    cleanApiKey === "COLE_AQUI_SUA_NOVA_CHAVE_API_WIX"
+    cleanApiKey === "COLE_SUA_CHAVE_WIX_AQUI"
   ) {
     return res.status(500).json({
-      success: false,
-      error: "Chave da API Wix não configurada."
-    });
-  }
-
-  if (!cleanSiteId) {
-    return res.status(500).json({
-      success: false,
-      error: "Site ID do Wix não configurado."
-    });
-  }
-
-  if (
-    !cleanAuthorEmail ||
-    cleanAuthorEmail === "cole_aqui_o_email_do_membro_wix"
-  ) {
-    return res.status(500).json({
-      success: false,
-      error: "E-mail do autor Wix não configurado."
+      error: "A chave da API Wix ainda não foi configurada."
     });
   }
 
   const authHeaders = {
     "Content-Type": "application/json",
-    Authorization: cleanApiKey,
+    "Authorization": cleanApiKey,
     "wix-site-id": cleanSiteId
   };
 
   // ============================================================
-  // 2. DADOS RECEBIDOS DO PV ONE
+  // 3. DADOS RECEBIDOS DO PV ONE
   // ============================================================
 
   const {
@@ -76,578 +65,822 @@ export default async function handler(req, res) {
     paragraphs,
     photographer,
     source,
-    coverImageUrl,
-    coverImageAlt,
+    category,
     categoryIds,
-    tagIds
+    tagIds,
+    coverImageAlt,
+    seo = {},
+    internalLinks = [],
+    structuredData = null
   } = req.body || {};
 
-  const cleanHeadline = String(headline || "").trim();
-  const cleanSubtitle = String(subtitle || "").trim();
+  const cleanHeadline =
+    String(headline || "Sem título").trim();
 
-  if (!cleanHeadline) {
-    return res.status(400).json({
-      success: false,
-      error: "Título da matéria não informado."
-    });
+  const cleanSubtitle =
+    String(subtitle || "").trim();
+
+  const photographerText =
+    String(photographer || "Divulgação").trim();
+
+  const sourceText =
+    String(source || "Redação").trim();
+
+  const cleanCategory =
+    String(category || "").trim();
+
+  // ============================================================
+  // 4. FUNÇÕES AUXILIARES
+  // ============================================================
+
+  function normalizeText(value) {
+    return String(value || "")
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      .trim();
+  }
+
+  function slugify(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .substring(0, 100);
+  }
+
+  function uniqueStrings(values) {
+    return [
+      ...new Set(
+        (Array.isArray(values) ? values : [])
+          .map(item => String(item || "").trim())
+          .filter(Boolean)
+      )
+    ];
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   // ============================================================
-  // 3. BUSCAR AUTOMATICAMENTE O MEMBER ID CORRETO
+  // 5. BUSCA DO AUTOR
   // ============================================================
 
   let memberId = null;
-  let memberInfo = null;
 
   try {
-    const memberQueryPayload = {
-      query: {
-        filter: {
-          loginEmail: cleanAuthorEmail
-        },
-        paging: {
-          limit: 1
-        }
-      }
-    };
 
-    console.log(
-      "[PV ONE] BUSCANDO MEMBRO WIX:",
-      cleanAuthorEmail
-    );
+    const encodedEmail =
+      encodeURIComponent(authorEmail);
 
-    console.log(
-      "[PV ONE] MEMBER QUERY PAYLOAD:",
-      JSON.stringify(memberQueryPayload, null, 2)
-    );
+    const memberUrl =
+      `https://www.wixapis.com/members/v1/members` +
+      `?fieldsets=FULL&query.fieldName=loginEmail` +
+      `&query.eq=${encodedEmail}`;
 
-    const memberResponse = await fetch(
-      "https://www.wixapis.com/members/v1/members/query",
-      {
-        method: "POST",
-        headers: authHeaders,
-        body: JSON.stringify(memberQueryPayload)
-      }
-    );
+    const memberResponse = await fetch(memberUrl, {
+      method: "GET",
+      headers: authHeaders
+    });
 
-    const memberText = await memberResponse.text();
-
-    let memberData;
-
-    try {
-      memberData = memberText
-        ? JSON.parse(memberText)
-        : {};
-    } catch {
-      memberData = {
-        raw: memberText
-      };
-    }
-
-    console.log(
-      "[PV ONE] MEMBER STATUS:",
-      memberResponse.status
-    );
-
-    console.log(
-      "[PV ONE] MEMBER RESPONSE:",
-      JSON.stringify(memberData, null, 2)
-    );
-
-    if (!memberResponse.ok) {
-      return res.status(memberResponse.status || 500).json({
-        success: false,
-        error: "Não foi possível consultar os membros do Wix.",
-        wixStatus: memberResponse.status,
-        details: memberData
-      });
-    }
+    const memberData =
+      await memberResponse.json().catch(() => ({}));
 
     if (
-      !Array.isArray(memberData.members) ||
-      memberData.members.length === 0
+      memberResponse.ok &&
+      Array.isArray(memberData.members) &&
+      memberData.members.length > 0
     ) {
-      return res.status(400).json({
-        success: false,
-        error:
-          "Autor não encontrado como membro do site Wix.",
-        authorEmail: cleanAuthorEmail,
-        instruction:
-          "Este e-mail precisa existir como membro do site, não apenas como contato ou administrador do painel Wix."
-      });
+      memberId = memberData.members[0].id;
     }
 
-    memberInfo = memberData.members[0];
-
-    memberId =
-      memberInfo.id ||
-      memberInfo._id ||
-      null;
-
-    if (!memberId) {
-      return res.status(500).json({
-        success: false,
-        error:
-          "O Wix encontrou o membro, mas não retornou um Member ID válido.",
-        details: memberInfo
-      });
-    }
-
-    console.log(
-      "[PV ONE] MEMBER ID CORRETO ENCONTRADO:",
-      memberId
-    );
-
-    console.log(
-      "[PV ONE] MEMBER NICKNAME:",
-      memberInfo?.profile?.nickname || null
-    );
-
-  } catch (memberError) {
+  } catch (error) {
     console.error(
-      "[PV ONE] ERRO AO BUSCAR MEMBRO:",
-      memberError
+      "Erro procurando autor pelo e-mail:",
+      error
     );
+  }
 
-    return res.status(500).json({
-      success: false,
+  // PLANO B — BUSCA PRIMEIRO MEMBRO
+  if (!memberId) {
+
+    try {
+
+      const memberResponse = await fetch(
+        "https://www.wixapis.com/members/v1/members?paging.limit=100",
+        {
+          method: "GET",
+          headers: authHeaders
+        }
+      );
+
+      const memberData =
+        await memberResponse.json().catch(() => ({}));
+
+      if (
+        memberResponse.ok &&
+        Array.isArray(memberData.members)
+      ) {
+
+        const foundMember =
+          memberData.members.find(member => {
+
+            const loginEmail =
+              String(
+                member.loginEmail ||
+                member.contact?.emails?.[0]?.email ||
+                ""
+              ).toLowerCase();
+
+            return (
+              loginEmail ===
+              authorEmail.toLowerCase()
+            );
+          });
+
+        if (foundMember) {
+          memberId = foundMember.id;
+        }
+      }
+
+    } catch (error) {
+      console.error(
+        "Erro na segunda busca do autor:",
+        error
+      );
+    }
+  }
+
+  if (!memberId) {
+    return res.status(400).json({
       error:
-        "Falha de conexão ao consultar o membro do Wix.",
-      details:
-        memberError instanceof Error
-          ? memberError.message
-          : String(memberError)
+        `Não foi possível localizar no Wix o autor ${authorEmail}.`
     });
   }
 
   // ============================================================
-  // 4. NORMALIZAÇÃO DOS PARÁGRAFOS
+  // 6. PREPARAÇÃO DO CORPO EDITORIAL
   // ============================================================
+
+  const normalizedEditorialBody =
+    normalizeText(editorialBody);
 
   let rawParagraphs = [];
 
-  if (Array.isArray(paragraphs)) {
+  if (
+    Array.isArray(paragraphs) &&
+    paragraphs.length
+  ) {
+
     rawParagraphs = paragraphs
-      .map((p) => String(p || "").trim())
+      .map(item => normalizeText(item))
       .filter(Boolean);
 
-  } else if (
-    typeof paragraphs === "string" &&
-    paragraphs.trim()
-  ) {
-    rawParagraphs = paragraphs
-      .split(/\n+/)
-      .map((p) => p.trim())
-      .filter(Boolean);
+  } else if (normalizedEditorialBody) {
 
-  } else if (
-    typeof editorialBody === "string" &&
-    editorialBody.trim()
-  ) {
-    rawParagraphs = editorialBody
+    rawParagraphs = normalizedEditorialBody
       .split(/\n+/)
-      .map((p) => p.trim())
+      .map(item => item.trim())
       .filter(Boolean);
   }
 
   // ============================================================
-  // 5. RICH CONTENT
+  // 7. LINKS INTERNOS
   // ============================================================
 
- const nodes = [];
+  const cleanInternalLinks =
+    Array.isArray(internalLinks)
+      ? internalLinks
+          .filter(link =>
+            link &&
+            link.url &&
+            link.text
+          )
+          .slice(0, 3)
+      : [];
 
-let nodeCounter = 0;
+  function insertInternalLinks(text) {
 
-function createParagraph(text, decorations = []) {
-  nodeCounter += 1;
+    let output = escapeHtml(text);
 
-  return {
-    type: "PARAGRAPH",
-    id: `pv_p_${nodeCounter}`,
-    nodes: [
-      {
-        type: "TEXT",
-        id: "",
-        nodes: [],
-        textData: {
-          text: String(text || "").trim(),
-          decorations: decorations
-        }
+    cleanInternalLinks.forEach(link => {
+
+      const anchorText =
+        String(link.text || "").trim();
+
+      const url =
+        String(link.url || "").trim();
+
+      if (!anchorText || !url) {
+        return;
       }
-    ],
-    paragraphData: {
-      textStyle: {
-        textAlignment: "AUTO"
-      },
-      indentation: 0
+
+      const escapedAnchor =
+        escapeHtml(anchorText);
+
+      const position =
+        output
+          .toLowerCase()
+          .indexOf(
+            escapedAnchor.toLowerCase()
+          );
+
+      if (position === -1) {
+        return;
+      }
+
+      const before =
+        output.substring(0, position);
+
+      const matched =
+        output.substring(
+          position,
+          position + escapedAnchor.length
+        );
+
+      const after =
+        output.substring(
+          position + escapedAnchor.length
+        );
+
+      output =
+        `${before}<a href="${escapeHtml(url)}">${matched}</a>${after}`;
+    });
+
+    return output;
+  }
+
+  // ============================================================
+  // 8. HTML EDITORIAL LIMPO
+  // ============================================================
+
+  let editorialHtml = "";
+
+  if (cleanSubtitle) {
+    editorialHtml +=
+      `<p><em>${escapeHtml(cleanSubtitle)}</em></p>`;
+  }
+
+  rawParagraphs.forEach((paragraph, index) => {
+
+    const text =
+      String(paragraph || "").trim();
+
+    if (!text) {
+      return;
     }
-  };
-}
 
-if (cleanSubtitle) {
-  nodes.push(
-    createParagraph(
-      cleanSubtitle,
-      [{ type: "ITALIC" }]
-    )
-  );
-}
+    // INTERTÍTULOS REAIS
+    if (
+      /^##\s+/.test(text)
+    ) {
 
-rawParagraphs.forEach((paragraph) => {
-  const text = String(paragraph || "").trim();
+      const heading =
+        text.replace(/^##\s+/, "").trim();
 
-  if (text) {
-    nodes.push(createParagraph(text));
-  }
-});
+      editorialHtml +=
+        `<h2>${escapeHtml(heading)}</h2>`;
 
-  // ============================================================
-  // 6. CRÉDITOS
-  // ============================================================
+      return;
+    }
 
-  const photographerText = String(
-    photographer || "Divulgação"
-  ).trim();
+    if (
+      /^H2:\s*/i.test(text)
+    ) {
 
-  const sourceText = String(
-    source || "Redação"
-  ).trim();
+      const heading =
+        text.replace(/^H2:\s*/i, "").trim();
 
-  nodes.push({
-    type: "PARAGRAPH",
-    nodes: [
-      {
-        type: "TEXT",
-        textData: {
-          text:
-            `Fotos: ${photographerText} | ` +
-            `Fonte: ${sourceText} | ` +
-            `Redação Portal Pista Verde`,
-          decorations: [
-            {
-              type: "ITALIC"
-            }
-          ]
-        }
-      }
-    ]
+      editorialHtml +=
+        `<h2>${escapeHtml(heading)}</h2>`;
+
+      return;
+    }
+
+    const paragraphWithLinks =
+      insertInternalLinks(text);
+
+    if (index === 0) {
+      editorialHtml +=
+        `<p><strong>${paragraphWithLinks}</strong></p>`;
+    } else {
+      editorialHtml +=
+        `<p>${paragraphWithLinks}</p>`;
+    }
   });
 
   // ============================================================
-  // 7. EXCERPT
+  // 9. CRÉDITO JORNALÍSTICO
   // ============================================================
 
-  const excerpt = cleanSubtitle
-    ? cleanSubtitle.length > 150
-      ? cleanSubtitle.substring(0, 147).trim() + "..."
-      : cleanSubtitle
-    : "";
+  editorialHtml += `
+    <p>
+      <em>
+        Texto/Fonte: ${escapeHtml(sourceText)} |
+        Fotos: ${escapeHtml(photographerText)} |
+        Redação: José Carlos Grites — Jornalista |
+        Portal Pista Verde
+      </em>
+    </p>
+  `;
 
   // ============================================================
-  // 8. OBJETO DO DRAFT
+  // 10. CONVERTER HTML PARA RICH CONTENT NATIVO WIX
+  // ============================================================
+
+  let richContent = null;
+
+  try {
+
+    const convertResponse = await fetch(
+      "https://www.wixapis.com/ricos/v1/convert",
+      {
+        method: "POST",
+        headers: authHeaders,
+        body: JSON.stringify({
+          html: editorialHtml
+        })
+      }
+    );
+
+    const convertData =
+      await convertResponse.json().catch(() => ({}));
+
+    if (!convertResponse.ok) {
+
+      console.error(
+        "Erro Ricos:",
+        convertData
+      );
+
+      throw new Error(
+        convertData.message ||
+        "Falha ao converter matéria para Rich Content."
+      );
+    }
+
+    richContent =
+      convertData.richContent ||
+      convertData.document ||
+      convertData;
+
+  } catch (error) {
+
+    console.error(
+      "Erro na conversão Ricos:",
+      error
+    );
+
+    return res.status(500).json({
+      error:
+        "Não foi possível converter a matéria para o formato nativo do Wix.",
+      details: error.message
+    });
+  }
+
+  // ============================================================
+  // 11. SEO
+  // ============================================================
+
+  const seoTitle =
+    String(
+      seo.title ||
+      `${cleanHeadline} | Portal Pista Verde`
+    )
+      .trim()
+      .substring(0, 70);
+
+  const seoDescription =
+    String(
+      seo.description ||
+      cleanSubtitle ||
+      rawParagraphs[0] ||
+      ""
+    )
+      .trim()
+      .substring(0, 160);
+
+  const seoSlug =
+    slugify(
+      seo.slug ||
+      cleanHeadline
+    );
+
+  const focusKeyword =
+    String(
+      seo.focusKeyword ||
+      ""
+    ).trim();
+
+  const excerpt =
+    String(
+      seo.excerpt ||
+      cleanSubtitle ||
+      rawParagraphs[0] ||
+      ""
+    )
+      .trim()
+      .substring(0, 500);
+
+  // ============================================================
+  // 12. SEO DATA
+  // ============================================================
+
+  const seoTags = [
+    {
+      type: "title",
+      children: seoTitle
+    },
+    {
+      type: "meta",
+      props: {
+        name: "description",
+        content: seoDescription
+      }
+    },
+    {
+      type: "meta",
+      props: {
+        property: "og:title",
+        content: seoTitle
+      }
+    },
+    {
+      type: "meta",
+      props: {
+        property: "og:description",
+        content: seoDescription
+      }
+    },
+    {
+      type: "meta",
+      props: {
+        name: "twitter:title",
+        content: seoTitle
+      }
+    },
+    {
+      type: "meta",
+      props: {
+        name: "twitter:description",
+        content: seoDescription
+      }
+    }
+  ];
+
+  // ============================================================
+  // 13. CATEGORIA
+  // ============================================================
+
+  let resolvedCategoryIds =
+    uniqueStrings(categoryIds);
+
+  if (
+    resolvedCategoryIds.length === 0 &&
+    cleanCategory
+  ) {
+
+    try {
+
+      const categoryResponse =
+        await fetch(
+          "https://www.wixapis.com/blog/v3/categories?paging.limit=100",
+          {
+            method: "GET",
+            headers: authHeaders
+          }
+        );
+
+      const categoryData =
+        await categoryResponse
+          .json()
+          .catch(() => ({}));
+
+      if (
+        categoryResponse.ok &&
+        Array.isArray(categoryData.categories)
+      ) {
+
+        const wanted =
+          cleanCategory.toLowerCase();
+
+        const found =
+          categoryData.categories.find(cat => {
+
+            const label =
+              String(
+                cat.label ||
+                cat.name ||
+                cat.title ||
+                ""
+              ).trim().toLowerCase();
+
+            return label === wanted;
+          });
+
+        if (found?.id) {
+          resolvedCategoryIds = [found.id];
+        }
+      }
+
+    } catch (error) {
+      console.error(
+        "Erro resolvendo categoria:",
+        error
+      );
+    }
+  }
+
+  resolvedCategoryIds =
+    resolvedCategoryIds.slice(0, 10);
+
+  // ============================================================
+  // 14. TAGS
+  // ============================================================
+
+  let resolvedTagIds =
+    uniqueStrings(tagIds);
+
+  const requestedTagNames =
+    uniqueStrings(
+      Array.isArray(seo.tags)
+        ? seo.tags
+        : []
+    ).slice(0, 30);
+
+  if (
+    resolvedTagIds.length === 0 &&
+    requestedTagNames.length > 0
+  ) {
+
+    try {
+
+      const tagsResponse =
+        await fetch(
+          "https://www.wixapis.com/blog/v3/tags?paging.limit=100",
+          {
+            method: "GET",
+            headers: authHeaders
+          }
+        );
+
+      const tagsData =
+        await tagsResponse
+          .json()
+          .catch(() => ({}));
+
+      const existingTags =
+        tagsResponse.ok &&
+        Array.isArray(tagsData.tags)
+          ? tagsData.tags
+          : [];
+
+      const tagMap = new Map();
+
+      existingTags.forEach(tag => {
+
+        const label =
+          String(
+            tag.label ||
+            tag.name ||
+            ""
+          ).trim().toLowerCase();
+
+        if (label && tag.id) {
+          tagMap.set(label, tag.id);
+        }
+      });
+
+      for (
+        const requestedName
+        of requestedTagNames
+      ) {
+
+        const normalizedName =
+          requestedName.toLowerCase();
+
+        if (tagMap.has(normalizedName)) {
+
+          resolvedTagIds.push(
+            tagMap.get(normalizedName)
+          );
+
+          continue;
+        }
+
+        // CRIA TAG SE AINDA NÃO EXISTIR
+        try {
+
+          const createTagResponse =
+            await fetch(
+              "https://www.wixapis.com/blog/v3/tags",
+              {
+                method: "POST",
+                headers: authHeaders,
+                body: JSON.stringify({
+                  tag: {
+                    label: requestedName
+                  }
+                })
+              }
+            );
+
+          const createTagData =
+            await createTagResponse
+              .json()
+              .catch(() => ({}));
+
+          const createdTag =
+            createTagData.tag;
+
+          if (
+            createTagResponse.ok &&
+            createdTag?.id
+          ) {
+            resolvedTagIds.push(
+              createdTag.id
+            );
+          }
+
+        } catch (error) {
+
+          console.error(
+            `Erro criando tag ${requestedName}:`,
+            error
+          );
+        }
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Erro resolvendo tags:",
+        error
+      );
+    }
+  }
+
+  resolvedTagIds =
+    uniqueStrings(resolvedTagIds)
+      .slice(0, 30);
+
+  // ============================================================
+  // 15. DADOS ESTRUTURADOS
+  // ============================================================
+
+  let structuredDataMarkup = null;
+
+  if (
+    structuredData &&
+    typeof structuredData === "object"
+  ) {
+
+    structuredDataMarkup =
+      structuredData;
+
+  } else {
+
+    structuredDataMarkup = {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": cleanHeadline,
+      "description": seoDescription,
+      "author": {
+        "@type": "Person",
+        "name": "José Carlos Grites"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Portal Pista Verde",
+        "url": "https://www.pistaverde.com.br/"
+      }
+    };
+  }
+
+  seoTags.push({
+    type: "script",
+    props: {
+      type: "application/ld+json"
+    },
+    children:
+      JSON.stringify(structuredDataMarkup)
+  });
+
+  // ============================================================
+  // 16. OBJETO FINAL DO DRAFT
   // ============================================================
 
   const draftPostObj = {
     title: cleanHeadline,
     excerpt,
     memberId,
-    richContent: {
-      nodes
+    richContent,
+    seoSlug,
+    seoData: {
+      tags: seoTags
     }
   };
 
-  if (
-    Array.isArray(categoryIds) &&
-    categoryIds.length > 0
-  ) {
-    draftPostObj.categoryIds = categoryIds
-      .map((id) => String(id || "").trim())
-      .filter(Boolean);
+  if (resolvedCategoryIds.length) {
+    draftPostObj.categoryIds =
+      resolvedCategoryIds;
   }
 
-  if (
-    Array.isArray(tagIds) &&
-    tagIds.length > 0
-  ) {
-    draftPostObj.tagIds = tagIds
-      .map((id) => String(id || "").trim())
-      .filter(Boolean);
+  if (resolvedTagIds.length) {
+    draftPostObj.tagIds =
+      resolvedTagIds;
   }
 
   // ============================================================
-  // 9. IMPORTAÇÃO DA CAPA
-  // ============================================================
-
-  let importedCover = null;
-  let nativeCoverId = null;
-
-  if (
-    typeof coverImageUrl === "string" &&
-    coverImageUrl.trim()
-  ) {
-    const cleanCoverUrl = coverImageUrl.trim();
-
-    const importPayload = {
-      url: cleanCoverUrl,
-      mediaType: "IMAGE"
-    };
-
-    console.log(
-      "[PV ONE] IMPORTAÇÃO CAPA - PAYLOAD:",
-      JSON.stringify(importPayload, null, 2)
-    );
-
-    try {
-      const importResponse = await fetch(
-        "https://www.wixapis.com/site-media/v1/files/import",
-        {
-          method: "POST",
-          headers: authHeaders,
-          body: JSON.stringify(importPayload)
-        }
-      );
-
-      const importText = await importResponse.text();
-
-      let importData;
-
-      try {
-        importData = importText
-          ? JSON.parse(importText)
-          : {};
-      } catch {
-        importData = {
-          raw: importText
-        };
-      }
-
-      console.log(
-        "[PV ONE] IMPORTAÇÃO CAPA - STATUS:",
-        importResponse.status
-      );
-
-      console.log(
-        "[PV ONE] IMPORTAÇÃO CAPA - RESPOSTA:",
-        JSON.stringify(importData, null, 2)
-      );
-
-      if (importResponse.ok) {
-        importedCover = importData;
-
-        nativeCoverId =
-          importData?.file?.id ||
-          importData?.file?.fileId ||
-          importData?.fileDescriptor?.id ||
-          importData?.fileDescriptor?.fileId ||
-          importData?.id ||
-          null;
-      }
-
-    } catch (coverError) {
-      console.error(
-        "[PV ONE] ERRO NA IMPORTAÇÃO DA CAPA:",
-        coverError
-      );
-    }
-  }
-
-  // ============================================================
-  // 10. COVER MEDIA
-  // ============================================================
-
-  if (nativeCoverId) {
-    draftPostObj.media = {
-      displayed: true,
-      custom: true,
-      wixMedia: {
-        image: {
-          id: nativeCoverId
-        }
-      }
-    };
-
-    console.log(
-      "[PV ONE] CAPA ANEXADA AO DRAFT:",
-      nativeCoverId
-    );
-  }
-
-  // ============================================================
-  // 11. PAYLOAD FINAL
-  // ============================================================
-
-  const wixPayload = {
-    draftPost: draftPostObj
-  };
-
-  console.log(
-    "[PV ONE] ========================================"
-  );
-
-  console.log(
-    "[PV ONE] AUTOR:",
-    cleanAuthorEmail
-  );
-
-  console.log(
-    "[PV ONE] MEMBER ID:",
-    memberId
-  );
-
-  console.log(
-    "[PV ONE] ENDPOINT:",
-    "https://www.wixapis.com/blog/v3/draft-posts"
-  );
-
-  console.log(
-    "[PV ONE] METHOD: POST"
-  );
-
-  console.log(
-    "[PV ONE] PAYLOAD:",
-    JSON.stringify(wixPayload, null, 2)
-  );
-
-  console.log(
-    "[PV ONE] CAPA URL RECEBIDA:",
-    coverImageUrl || null
-  );
-
-  console.log(
-    "[PV ONE] CAPA ID:",
-    nativeCoverId || null
-  );
-
-  console.log(
-    "[PV ONE] ========================================"
-  );
-
-  // ============================================================
-  // 12. ENVIO PARA BLOG V3
+  // 17. CRIAÇÃO DO RASCUNHO
   // ============================================================
 
   try {
+
     const wixResponse = await fetch(
       "https://www.wixapis.com/blog/v3/draft-posts",
       {
         method: "POST",
         headers: authHeaders,
-        body: JSON.stringify(wixPayload)
+        body: JSON.stringify({
+          draftPost: draftPostObj
+        })
       }
     );
 
-    const responseText = await wixResponse.text();
+    const data =
+      await wixResponse
+        .json()
+        .catch(() => ({}));
 
-    let data;
+    if (!wixResponse.ok) {
 
-    try {
-      data = responseText
-        ? JSON.parse(responseText)
-        : {};
-    } catch {
-      data = {
-        raw: responseText
-      };
-    }
+      console.error(
+        "Erro Wix:",
+        data
+      );
 
-    console.log(
-      "[PV ONE] WIX STATUS:",
-      wixResponse.status
-    );
-
-    console.log(
-      "[PV ONE] WIX RESPONSE:",
-      JSON.stringify(data, null, 2)
-    );
-
-    // REGRA PV ONE:
-    // 200 OU 201 = SUCESSO
-
-    if (
-      wixResponse.status !== 200 &&
-      wixResponse.status !== 201
-    ) {
       return res
-        .status(wixResponse.status || 500)
+        .status(wixResponse.status)
         .json({
-          success: false,
-
           error:
-            data?.message ||
-            data?.error ||
+            data.message ||
             "Erro retornado pela API do Wix.",
-
-          wixStatus: wixResponse.status,
-
-          details: data,
-
-          debug: {
-            authorEmail: cleanAuthorEmail,
-            memberId,
-            headline: cleanHeadline,
-            coverImageReceived:
-              Boolean(coverImageUrl),
-            nativeCoverId,
-            coverAttached:
-              Boolean(draftPostObj.media)
-          }
+          details: data
         });
     }
 
-    // ==========================================================
-    // SUCESSO
-    // ==========================================================
+    // ============================================================
+    // 18. SUCESSO
+    // ============================================================
 
     return res.status(200).json({
       success: true,
 
-      wixStatus: wixResponse.status,
-
       message:
-        "Rascunho enviado com sucesso ao Wix.",
-
-      author: {
-        email: cleanAuthorEmail,
-        memberId,
-        nickname:
-          memberInfo?.profile?.nickname || null
-      },
+        "Rascunho criado com sucesso no Wix.",
 
       post:
-        data?.draftPost ||
-        data,
+        data.draftPost || data,
 
-      cover: {
-        urlReceived:
-          Boolean(coverImageUrl),
+      seo: {
+        focusKeyword,
+        title: seoTitle,
+        description: seoDescription,
+        slug: seoSlug
+      },
 
-        imported:
-          Boolean(importedCover),
+      categoryIds:
+        resolvedCategoryIds,
 
-        nativeId:
-          nativeCoverId,
+      tagIds:
+        resolvedTagIds,
 
-        attachedToDraft:
-          Boolean(draftPostObj.media)
-      }
+      internalLinks:
+        cleanInternalLinks.length
     });
 
   } catch (error) {
+
     console.error(
-      "[PV ONE] ERRO DE CONEXÃO:",
+      "Falha de conexão Wix:",
       error
     );
 
     return res.status(500).json({
-      success: false,
-
       error:
         "Falha de conexão com a API Wix.",
-
       details:
-        error instanceof Error
-          ? error.message
-          : String(error)
+        error.message
     });
   }
 }
