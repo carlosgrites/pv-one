@@ -20,10 +20,6 @@ export default async function handler(req, res) {
   // 2. CONFIGURAÇÃO WIX
   // ============================================================
 
-  // ============================================================
-  // COLE SUA CHAVE WIX SOMENTE AQUI
-  // ============================================================
-
   const apiKeyRaw = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcImQ2MWZhMTE0LWY2YWItNDBiYy1hNzdjLTVjODUzNGNiNWJmOVwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImEyNTM5M2Q0LTgxOTQtNDdkZi04ZDBlLTMzY2FhN2ExYzkxOFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI3NDcxM2E2ZS1lMDA3LTRkZjktOGNjNC1hMTA1OGM1NWQwNWRcIn19IiwiaWF0IjoxNzg3MjY1NTg4fQ.ZmRwqkfXkdY2z-PTbNpjzQWZXAVBdMj3_SCJ6cgvcfgaS2KWG31MLgjwM4kKv0bY8uT5lCZ93cx13dWqPdYel4vDZL8kCVwqFV5a9A7oftLBV6IO7kvuwW6hLaR4YbXch4LPSSELUhWVsXzrbzCZJXk-pmFnLUs58TUydiRxgZDZXmZmyoRhPC8KiSMiMRMr71mjzFs2gB8ifHDG6TZOsQeEPR3HsGZ_f_trXqaV0iuXXnLp07PkxYfem6ZyMhlJF9nKvnJnrGc70sS1ZJeBTiDyLxJsY_xgWSsvuQ3YkqATKYQn6YSUasncCQN7a3yU-BB4ojOgr6twqhKojw7VOQ";
 
   const siteIdRaw =
@@ -45,8 +41,7 @@ export default async function handler(req, res) {
     cleanApiKey === "COLE_SUA_CHAVE_WIX_AQUI"
   ) {
     return res.status(500).json({
-      error:
-        "A chave da API Wix ainda não foi configurada."
+      error: "A chave da API Wix ainda não foi configurada."
     });
   }
 
@@ -118,9 +113,7 @@ export default async function handler(req, res) {
     return [
       ...new Set(
         (Array.isArray(values) ? values : [])
-          .map(item =>
-            String(item || "").trim()
-          )
+          .map(item => String(item || "").trim())
           .filter(Boolean)
       )
     ];
@@ -158,8 +151,7 @@ export default async function handler(req, res) {
       Array.isArray(memberData.members) &&
       memberData.members.length > 0
     ) {
-      memberId =
-        memberData.members[0].id;
+      memberId = memberData.members[0].id;
     }
 
   } catch (error) {
@@ -170,6 +162,7 @@ export default async function handler(req, res) {
   }
 
   // SEGUNDA TENTATIVA
+
   if (!memberId) {
 
     try {
@@ -210,8 +203,7 @@ export default async function handler(req, res) {
           });
 
         if (foundMember) {
-          memberId =
-            foundMember.id;
+          memberId = foundMember.id;
         }
       }
 
@@ -246,9 +238,7 @@ export default async function handler(req, res) {
 
     rawParagraphs =
       paragraphs
-        .map(item =>
-          normalizeText(item)
-        )
+        .map(item => normalizeText(item))
         .filter(Boolean);
 
   } else if (normalizedEditorialBody) {
@@ -256,9 +246,7 @@ export default async function handler(req, res) {
     rawParagraphs =
       normalizedEditorialBody
         .split(/\n+/)
-        .map(item =>
-          item.trim()
-        )
+        .map(item => item.trim())
         .filter(Boolean);
   }
 
@@ -278,7 +266,7 @@ export default async function handler(req, res) {
       : [];
 
   // ============================================================
-  // 8. RICH CONTENT NATIVO
+  // 8. RICH CONTENT NATIVO WIX / RICOS
   // ============================================================
 
   let nodeCounter = 0;
@@ -305,12 +293,18 @@ export default async function handler(req, res) {
       id: newNodeId("txt"),
       nodes: [],
       textData: {
-        text:
-          String(text || ""),
+        text: String(text || ""),
         decorations
       }
     };
   }
+
+  // ============================================================
+  // PARÁGRAFO NATIVO
+  //
+  // lineHeight controla a distância ENTRE AS LINHAS.
+  // paddingBottom controla a distância ENTRE PARÁGRAFOS.
+  // ============================================================
 
   function paragraphNode(
     text,
@@ -344,27 +338,23 @@ export default async function handler(req, res) {
         )
       ],
 
-      paragraphData: {}
+      style: {
+        paddingBottom: "16px"
+      },
+
+      paragraphData: {
+        textStyle: {
+          textAlignment: "AUTO",
+          lineHeight: "1.6"
+        },
+        indentation: 0
+      }
     };
   }
 
   // ============================================================
-  // PARÁGRAFO VAZIO NATIVO PARA ESPAÇAMENTO NO WIX
+  // H2 NATIVO
   // ============================================================
-
-  function spacerParagraphNode() {
-
-    return {
-      type: "PARAGRAPH",
-      id: newNodeId("space"),
-
-      nodes: [
-        textNode("")
-      ],
-
-      paragraphData: {}
-    };
-  }
 
   function headingNode(text) {
 
@@ -376,8 +366,17 @@ export default async function handler(req, res) {
         textNode(text)
       ],
 
+      style: {
+        paddingTop: "12px",
+        paddingBottom: "8px"
+      },
+
       headingData: {
-        level: 2
+        level: 2,
+        textStyle: {
+          textAlignment: "AUTO",
+          lineHeight: "1.3"
+        }
       }
     };
   }
@@ -398,11 +397,6 @@ export default async function handler(req, res) {
         }
       )
     );
-
-    // ESPAÇO DEPOIS DO SUBTÍTULO
-    richNodes.push(
-      spacerParagraphNode()
-    );
   }
 
   // ============================================================
@@ -422,6 +416,7 @@ export default async function handler(req, res) {
       }
 
       // H2 NO FORMATO ## TÍTULO
+
       if (
         /^##\s+/.test(text)
       ) {
@@ -435,16 +430,10 @@ export default async function handler(req, res) {
             .trim();
 
         if (heading) {
-
           richNodes.push(
             headingNode(
               heading
             )
-          );
-
-          // ESPAÇO DEPOIS DO H2
-          richNodes.push(
-            spacerParagraphNode()
           );
         }
 
@@ -452,6 +441,7 @@ export default async function handler(req, res) {
       }
 
       // H2 NO FORMATO H2: TÍTULO
+
       if (
         /^H2:\s*/i.test(text)
       ) {
@@ -465,23 +455,16 @@ export default async function handler(req, res) {
             .trim();
 
         if (heading) {
-
           richNodes.push(
             headingNode(
               heading
             )
-          );
-
-          // ESPAÇO DEPOIS DO H2
-          richNodes.push(
-            spacerParagraphNode()
           );
         }
 
         return;
       }
 
-      // PARÁGRAFO NORMAL
       richNodes.push(
         paragraphNode(
           text,
@@ -490,14 +473,6 @@ export default async function handler(req, res) {
               index === 0
           }
         )
-      );
-
-      // ========================================================
-      // ESPAÇAMENTO NATIVO ENTRE PARÁGRAFOS
-      // ========================================================
-
-      richNodes.push(
-        spacerParagraphNode()
       );
     }
   );
