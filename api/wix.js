@@ -161,8 +161,6 @@ export default async function handler(req, res) {
     );
   }
 
-  // SEGUNDA TENTATIVA
-
   if (!memberId) {
 
     try {
@@ -299,13 +297,6 @@ export default async function handler(req, res) {
     };
   }
 
-  // ============================================================
-  // PARÁGRAFO NATIVO
-  //
-  // lineHeight controla a distância ENTRE AS LINHAS.
-  // paddingBottom controla a distância ENTRE PARÁGRAFOS.
-  // ============================================================
-
   function paragraphNode(
     text,
     options = {}
@@ -338,23 +329,15 @@ export default async function handler(req, res) {
         )
       ],
 
-      style: {
-        paddingBottom: "16px"
-      },
-
       paragraphData: {
         textStyle: {
-          textAlignment: "AUTO",
-          lineHeight: "1.6"
+          textAlignment: "AUTO"
         },
-        indentation: 0
+        indentation: 0,
+        lineSpacing: 2.0
       }
     };
   }
-
-  // ============================================================
-  // H2 NATIVO
-  // ============================================================
 
   function headingNode(text) {
 
@@ -366,16 +349,10 @@ export default async function handler(req, res) {
         textNode(text)
       ],
 
-      style: {
-        paddingTop: "12px",
-        paddingBottom: "8px"
-      },
-
       headingData: {
         level: 2,
         textStyle: {
-          textAlignment: "AUTO",
-          lineHeight: "1.3"
+          textAlignment: "AUTO"
         }
       }
     };
@@ -415,8 +392,6 @@ export default async function handler(req, res) {
         return;
       }
 
-      // H2 NO FORMATO ## TÍTULO
-
       if (
         /^##\s+/.test(text)
       ) {
@@ -439,8 +414,6 @@ export default async function handler(req, res) {
 
         return;
       }
-
-      // H2 NO FORMATO H2: TÍTULO
 
       if (
         /^H2:\s*/i.test(text)
@@ -478,6 +451,50 @@ export default async function handler(req, res) {
   );
 
   // ============================================================
+  // LINKS INTERNOS NATIVOS
+  // ============================================================
+
+  if (cleanInternalLinks.length) {
+
+    richNodes.push(
+      headingNode("Leia também")
+    );
+
+    cleanInternalLinks.forEach(link => {
+
+      richNodes.push({
+        type: "PARAGRAPH",
+        id: newNodeId("p_link"),
+
+        nodes: [
+          textNode(
+            String(link.text || "").trim(),
+            [
+              {
+                type: "LINK",
+                linkData: {
+                  link: {
+                    url: String(link.url || "").trim(),
+                    target: "_blank"
+                  }
+                }
+              }
+            ]
+          )
+        ],
+
+        paragraphData: {
+          textStyle: {
+            textAlignment: "AUTO"
+          },
+          indentation: 0,
+          lineSpacing: 2.0
+        }
+      });
+    });
+  }
+
+  // ============================================================
   // CRÉDITO FINAL
   // ============================================================
 
@@ -503,8 +520,7 @@ export default async function handler(req, res) {
 
     documentStyle: {}
   };
-
-  // ============================================================
+    // ============================================================
   // 9. SEO
   // ============================================================
 
@@ -971,6 +987,10 @@ export default async function handler(req, res) {
     seoSlug,
 
     seoData: {
+      settings: {
+        preventAutoRedirect: false
+      },
+
       tags:
         seoTags
     }
@@ -1048,6 +1068,111 @@ export default async function handler(req, res) {
     }
 
     // ==========================================================
+    // AUDITORIA DO QUE O WIX REALMENTE PERSISTIU
+    // ==========================================================
+
+    const createdDraft =
+      data.draftPost ||
+      data;
+
+    const createdDraftId =
+      createdDraft?.id ||
+      createdDraft?._id ||
+      null;
+
+    let persistedDraft =
+      createdDraft;
+
+    if (createdDraftId) {
+
+      try {
+
+        const auditResponse =
+          await fetch(
+            `https://www.wixapis.com/blog/v3/draft-posts/${createdDraftId}`,
+            {
+              method:
+                "GET",
+
+              headers:
+                authHeaders
+            }
+          );
+
+        const auditData =
+          await auditResponse
+            .json()
+            .catch(
+              () => ({})
+            );
+
+        if (
+          auditResponse.ok &&
+          auditData?.draftPost
+        ) {
+
+          persistedDraft =
+            auditData.draftPost;
+        }
+
+      } catch (auditError) {
+
+        console.error(
+          "Falha na auditoria do rascunho Wix:",
+          auditError
+        );
+      }
+    }
+
+    const persistedSeoTags =
+      Array.isArray(
+        persistedDraft?.seoData?.tags
+      )
+        ? persistedDraft.seoData.tags
+        : [];
+
+    const audit = {
+
+      draftId:
+        createdDraftId,
+
+      titlePersisted:
+        persistedDraft?.title ===
+        cleanHeadline,
+
+      excerptPersisted:
+        persistedDraft?.excerpt ===
+        excerpt,
+
+      seoSlugPersisted:
+        persistedDraft?.seoSlug ===
+        seoSlug,
+
+      richContentNodes:
+        Array.isArray(
+          persistedDraft?.richContent?.nodes
+        )
+          ? persistedDraft.richContent.nodes.length
+          : 0,
+
+      seoTagsPersisted:
+        persistedSeoTags.length,
+
+      categoryIdsPersisted:
+        Array.isArray(
+          persistedDraft?.categoryIds
+        )
+          ? persistedDraft.categoryIds
+          : [],
+
+      tagIdsPersisted:
+        Array.isArray(
+          persistedDraft?.tagIds
+        )
+          ? persistedDraft.tagIds
+          : []
+    };
+        // ==========================================================
     // SUCESSO
     // ==========================================================
 
@@ -1062,8 +1187,9 @@ export default async function handler(req, res) {
           "Rascunho criado com sucesso no Wix.",
 
         post:
-          data.draftPost ||
-          data,
+          persistedDraft,
+
+        audit,
 
         seo: {
 
@@ -1076,7 +1202,10 @@ export default async function handler(req, res) {
             seoDescription,
 
           slug:
-            seoSlug
+            seoSlug,
+
+          note:
+            "A palavra-chave foco é mantida pelo PV ONE para controle editorial; o Blog v3 não expõe um campo público focusKeyword no Draft Post."
         },
 
         categoryIds:
