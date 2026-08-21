@@ -475,7 +475,7 @@ export default async function handler(req, res) {
                 linkData: {
                   link: {
                     url: String(link.url || "").trim(),
-                    target: "_blank"
+                    target: "BLANK"
                   }
                 }
               }
