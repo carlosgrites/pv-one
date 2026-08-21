@@ -265,49 +265,44 @@ export default async function handler(req, res) {
 
   // ============================================================
   // 8. RICH CONTENT NATIVO WIX / RICOS
+  // PADRÃO OFICIAL PORTAL PISTA VERDE
   // ============================================================
 
   let nodeCounter = 0;
 
   function newNodeId(prefix = "node") {
     nodeCounter += 1;
-
-    return (
-      prefix +
-      "_" +
-      Date.now() +
-      "_" +
-      nodeCounter
-    );
+    return `${prefix}_${Date.now()}_${nodeCounter}`;
   }
 
-  function textNode(
-    text,
-    decorations = []
-  ) {
-
+  function decorationFontSize(size) {
     return {
-      type: "TEXT",
-      id: newNodeId("txt"),
-      nodes: [],
-      textData: {
-        text: String(text || ""),
-        decorations
+      type: "FONT_SIZE",
+      fontSizeData: {
+        unit: "PX",
+        value: size
       }
     };
   }
 
-  function paragraphNode(
-    text,
-    options = {}
-  ) {
+  function decorationColor(color) {
+    return {
+      type: "COLOR",
+      colorData: {
+        foreground: color
+      }
+    };
+  }
+
+  function textNode(text, options = {}) {
 
     const decorations = [];
 
     if (options.bold) {
       decorations.push({
         type: "BOLD",
-        fontWeightValue: 700
+        fontWeightValue:
+          options.fontWeight || 700
       });
     }
 
@@ -318,45 +313,686 @@ export default async function handler(req, res) {
       });
     }
 
+    if (options.underline) {
+      decorations.push({
+        type: "UNDERLINE",
+        underlineData: true
+      });
+    }
+
+    if (options.color) {
+      decorations.push(
+        decorationColor(
+          options.color
+        )
+      );
+    }
+
+    if (options.fontSize) {
+      decorations.push(
+        decorationFontSize(
+          options.fontSize
+        )
+      );
+    }
+
+    if (options.linkUrl) {
+      decorations.push({
+        type: "LINK",
+        linkData: {
+          link: {
+            url:
+              String(
+                options.linkUrl
+              ).trim(),
+            target:
+              "BLANK",
+            rel: {
+              noreferrer:
+                true
+            }
+          }
+        }
+      });
+    }
+
     return {
-      type: "PARAGRAPH",
-      id: newNodeId("p"),
+      type:
+        "TEXT",
+
+      id:
+        newNodeId(
+          "txt"
+        ),
+
+      nodes:
+        [],
+
+      textData: {
+        text:
+          String(
+            text || ""
+          ),
+
+        decorations
+      }
+    };
+  }
+
+  function paragraphNode(
+    text,
+    options = {}
+  ) {
+
+    return {
+      type:
+        "PARAGRAPH",
+
+      id:
+        newNodeId(
+          "p"
+        ),
 
       nodes: [
         textNode(
           text,
-          decorations
+          {
+            bold:
+              !!options.bold,
+
+            italic:
+              !!options.italic,
+
+            underline:
+              !!options.underline,
+
+            color:
+              options.color ||
+              "#333333",
+
+            fontSize:
+              options.fontSize ||
+              18,
+
+            fontWeight:
+              options.fontWeight ||
+              700,
+
+            linkUrl:
+              options.linkUrl ||
+              ""
+          }
         )
       ],
 
+      style: {
+        paddingTop:
+          options.paddingTop ||
+          "0px",
+
+        paddingBottom:
+          options.paddingBottom ||
+          "25px"
+      },
+
       paragraphData: {
         textStyle: {
-          textAlignment: "AUTO"
+          textAlignment:
+            options.textAlignment ||
+            "AUTO",
+
+          lineHeight:
+            options.lineHeight ||
+            "1.78"
         },
-        indentation: 0,
-        lineSpacing: 2.0
+
+        indentation:
+          0
       }
     };
   }
 
-  function headingNode(text) {
+  function headingNode(
+    text,
+    level = 2
+  ) {
+
+    const isH2 =
+      level === 2;
 
     return {
-      type: "HEADING",
-      id: newNodeId("h2"),
+      type:
+        "HEADING",
+
+      id:
+        newNodeId(
+          `h${level}`
+        ),
 
       nodes: [
-        textNode(text)
+        textNode(
+          text,
+          {
+            bold:
+              true,
+
+            fontWeight:
+              900,
+
+            color:
+              isH2
+                ? "#00AE35"
+                : "#21300C",
+
+            fontSize:
+              isH2
+                ? 32
+                : 22
+          }
+        )
       ],
 
+      style: {
+        paddingTop:
+          isH2
+            ? "23px"
+            : "12px",
+
+        paddingBottom:
+          isH2
+            ? "18px"
+            : "10px"
+      },
+
       headingData: {
-        level: 2,
+        level,
+
         textStyle: {
-          textAlignment: "AUTO"
-        }
+          textAlignment:
+            "AUTO",
+
+          lineHeight:
+            isH2
+              ? "1.25"
+              : "1.35"
+        },
+
+        indentation:
+          0
       }
     };
   }
+
+  function htmlNode(
+    html,
+    height = "280",
+    width = "860"
+  ) {
+
+    return {
+      type:
+        "HTML",
+
+      id:
+        newNodeId(
+          "html"
+        ),
+
+      nodes:
+        [],
+
+      htmlData: {
+        containerData: {
+          textWrap:
+            false,
+
+          height: {
+            custom:
+              String(
+                height
+              )
+          },
+
+          alignment:
+            "CENTER",
+
+          width: {
+            custom:
+              String(
+                width
+              )
+          }
+        },
+
+        source:
+          "HTML",
+
+        html:
+          String(
+            html || ""
+          )
+      }
+    };
+  }
+
+  // ============================================================
+  // PUBLICIDADE — BLOCO HTML / IFRAME
+  // ============================================================
+
+  const publicidadeHtml = `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{
+  box-sizing:border-box
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#fff;
+  font-family:Poppins,Inter,Arial,sans-serif;
+  color:#fff
+}
+
+.ppv-ad{
+  width:100%;
+  margin:0;
+  padding:0;
+  border:1px solid rgba(0,174,53,.40);
+  border-top:5px solid #00AE35;
+  border-radius:16px;
+  background:#101510;
+  overflow:hidden
+}
+
+.ppv-ad-inner{
+  display:grid;
+  grid-template-columns:150px minmax(0,1fr);
+  gap:20px;
+  align-items:center;
+  padding:20px
+}
+
+.ppv-ad img{
+  display:block;
+  width:100%;
+  height:85px;
+  border-radius:10px;
+  background:#fff;
+  object-fit:contain;
+  padding:4px
+}
+
+.ppv-ad-tag{
+  display:inline-block;
+  margin-bottom:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  text-transform:uppercase
+}
+
+.ppv-ad h3{
+  margin:0 0 6px;
+  color:#fff;
+  font-size:20px;
+  line-height:1.2;
+  font-weight:900
+}
+
+.ppv-ad p{
+  margin:0 0 14px;
+  color:#dfe7dc;
+  font-size:14px;
+  line-height:1.5
+}
+
+.ppv-ad a{
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#fff;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase
+}
+
+@media(max-width:600px){
+  .ppv-ad-inner{
+    grid-template-columns:1fr
+  }
+
+  .ppv-ad img{
+    max-width:180px
+  }
+
+  .ppv-ad h3{
+    font-size:19px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="ppv-ad">
+
+  <div class="ppv-ad-inner">
+
+    <div>
+      <img
+        src="https://static.wixstatic.com/media/74713a_047159b52f354bf58867c3b705e82fa8~mv2.png"
+        alt="Inovimpress"
+      >
+    </div>
+
+    <div>
+
+      <span class="ppv-ad-tag">
+        Parceiro do Kartismo
+      </span>
+
+      <h3>
+        Inovimpress
+      </h3>
+
+      <p>
+        Comunicação visual e soluções para quem vive a velocidade.
+      </p>
+
+      <a
+        href="https://www.instagram.com/inovimpress/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Conheça
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>`;
+
+  // ============================================================
+  // FINAL DA MATÉRIA
+  // APOIADORES + INSTITUCIONAL
+  // ============================================================
+
+  const finalMateriaHtml = `<!doctype html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<style>
+
+*{
+  box-sizing:border-box
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#fff;
+  font-family:Poppins,Inter,Arial,sans-serif;
+  color:#21300C
+}
+
+.ppv-wrap{
+  width:100%;
+  margin:0;
+  padding:0
+}
+
+.ppv-apoio{
+  padding:26px;
+  border:1px solid #d1dbcd;
+  border-radius:18px;
+  background:#f2f6f1
+}
+
+.ppv-apoio h2{
+  margin:0;
+  color:#21300C;
+  font-size:22px;
+  line-height:1.25;
+  font-weight:900
+}
+
+.ppv-apoio>p{
+  margin:6px 0 0;
+  color:#5b6558;
+  font-size:13px;
+  line-height:1.6
+}
+
+.ppv-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap:20px;
+  margin-top:18px
+}
+
+.ppv-card{
+  padding:18px;
+  border-left:5px solid #00AE35;
+  border-radius:14px;
+  background:#fff;
+  border-top:1px solid #e2e8f0;
+  border-right:1px solid #e2e8f0;
+  border-bottom:1px solid #e2e8f0
+}
+
+.ppv-card h3{
+  margin:0 0 6px;
+  color:#21300C;
+  font-size:16px;
+  font-weight:800
+}
+
+.ppv-card p{
+  margin:0;
+  color:#374151;
+  font-size:13px;
+  line-height:1.55
+}
+
+.ppv-footer{
+  margin-top:28px;
+  padding:28px;
+  background:#071007;
+  border-top:6px solid #00AE35;
+  border-radius:16px;
+  color:#fff;
+  text-align:center
+}
+
+.ppv-brand{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:12px
+}
+
+.ppv-mark{
+  padding:5px 12px;
+  border-radius:8px;
+  background:#00AE35;
+  color:#101510;
+  font-size:18px;
+  font-weight:900
+}
+
+.ppv-name strong{
+  display:block;
+  color:#fff;
+  font-size:20px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:1px
+}
+
+.ppv-name span{
+  font-size:12px;
+  color:#00AE35;
+  font-weight:700;
+  text-transform:uppercase
+}
+
+.ppv-footer p{
+  max-width:700px;
+  margin:0 auto 16px;
+  color:#cbd5e1;
+  font-size:13px;
+  line-height:1.65
+}
+
+.ppv-footer a{
+  display:inline-block;
+  padding:10px 22px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#fff;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase
+}
+
+@media(max-width:600px){
+
+  .ppv-grid{
+    grid-template-columns:1fr
+  }
+
+  .ppv-brand{
+    align-items:flex-start
+  }
+
+  .ppv-footer{
+    padding:24px 18px
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="ppv-wrap">
+
+  <section class="ppv-apoio">
+
+    <h2>
+      Empresas que apoiam o kartismo
+    </h2>
+
+    <p>
+      Marcas que ajudam a manter o esporte em movimento.
+    </p>
+
+    <div class="ppv-grid">
+
+      <div class="ppv-card">
+
+        <h3>
+          Mega Kart
+        </h3>
+
+        <p>
+          Empresa parceira e apoiadora do kartismo brasileiro.
+        </p>
+
+      </div>
+
+      <div class="ppv-card">
+
+        <h3>
+          Paralego
+        </h3>
+
+        <p>
+          Empresa parceira e apoiadora do esporte a motor.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="ppv-footer">
+
+    <div class="ppv-brand">
+
+      <div class="ppv-mark">
+        PV
+      </div>
+
+      <div class="ppv-name">
+
+        <strong>
+          PORTAL PISTA VERDE
+        </strong>
+
+        <span>
+          Grid aquecido com responsabilidade
+        </span>
+
+      </div>
+
+    </div>
+
+    <p>
+      O Portal Pista Verde é uma startup brasileira especializada
+      no ecossistema do kartismo e automobilismo e desenvolve o
+      Programa ESG/ODS Pista Verde para kartódromos e autódromos,
+      com referências internacionais adaptadas à realidade brasileira.
+    </p>
+
+    <a
+      href="https://www.pistaverde.com.br/programa-esg-automobilismo"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Conheça o Programa ESG/ODS
+    </a>
+
+  </section>
+
+</div>
+
+</body>
+</html>`;
 
   const richNodes = [];
 
@@ -370,18 +1006,68 @@ export default async function handler(req, res) {
       paragraphNode(
         cleanSubtitle,
         {
-          italic: true
+          italic:
+            true,
+
+          color:
+            "#333333",
+
+          fontSize:
+            18,
+
+          lineHeight:
+            "1.65",
+
+          paddingBottom:
+            "26px"
         }
       )
     );
   }
 
   // ============================================================
-  // PARÁGRAFOS
+  // LOCALIZA O MEIO DO CORPO PARA PUBLICIDADE
+  // ============================================================
+
+  const editorialCount =
+    rawParagraphs
+      .filter(item => {
+
+        const t =
+          String(
+            item || ""
+          ).trim();
+
+        return (
+          t &&
+          !/^##\s+/.test(t) &&
+          !/^H2:\s*/i.test(t) &&
+          !/^###\s+/.test(t) &&
+          !/^H3:\s*/i.test(t)
+        );
+      })
+      .length;
+
+  const adAfterParagraph =
+    Math.max(
+      2,
+      Math.ceil(
+        editorialCount / 2
+      )
+    );
+
+  let editorialParagraphIndex =
+    0;
+
+  let adInserted =
+    false;
+
+  // ============================================================
+  // CORPO DA MATÉRIA
   // ============================================================
 
   rawParagraphs.forEach(
-    (paragraph, index) => {
+    paragraph => {
 
       const text =
         String(
@@ -392,8 +1078,11 @@ export default async function handler(req, res) {
         return;
       }
 
+      // H2
+
       if (
-        /^##\s+/.test(text)
+        /^##\s+/.test(text) ||
+        /^H2:\s*/i.test(text)
       ) {
 
         const heading =
@@ -402,25 +1091,6 @@ export default async function handler(req, res) {
               /^##\s+/,
               ""
             )
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading
-            )
-          );
-        }
-
-        return;
-      }
-
-      if (
-        /^H2:\s*/i.test(text)
-      ) {
-
-        const heading =
-          text
             .replace(
               /^H2:\s*/i,
               ""
@@ -430,7 +1100,8 @@ export default async function handler(req, res) {
         if (heading) {
           richNodes.push(
             headingNode(
-              heading
+              heading,
+              2
             )
           );
         }
@@ -438,60 +1109,164 @@ export default async function handler(req, res) {
         return;
       }
 
+      // H3
+
+      if (
+        /^###\s+/.test(text) ||
+        /^H3:\s*/i.test(text)
+      ) {
+
+        const heading =
+          text
+            .replace(
+              /^###\s+/,
+              ""
+            )
+            .replace(
+              /^H3:\s*/i,
+              ""
+            )
+            .trim();
+
+        if (heading) {
+          richNodes.push(
+            headingNode(
+              heading,
+              3
+            )
+          );
+        }
+
+        return;
+      }
+
+      editorialParagraphIndex += 1;
+
+      const isLead =
+        editorialParagraphIndex === 1;
+
       richNodes.push(
         paragraphNode(
           text,
           {
             bold:
-              index === 0
+              isLead,
+
+            fontWeight:
+              isLead
+                ? 600
+                : 400,
+
+            color:
+              isLead
+                ? "#21300C"
+                : "#333333",
+
+            fontSize:
+              isLead
+                ? 21
+                : 18,
+
+            lineHeight:
+              isLead
+                ? "1.62"
+                : "1.78",
+
+            paddingBottom:
+              isLead
+                ? "30px"
+                : "25px"
           }
         )
       );
+
+      // PUBLICIDADE NO MEIO DA MATÉRIA
+
+      if (
+        !adInserted &&
+        editorialParagraphIndex >=
+          adAfterParagraph
+      ) {
+
+        richNodes.push(
+          htmlNode(
+            publicidadeHtml,
+            "250",
+            "860"
+          )
+        );
+
+        adInserted =
+          true;
+      }
     }
   );
 
-  // ============================================================
-  // LINKS INTERNOS NATIVOS
-  // ============================================================
+  // MATÉRIA MUITO CURTA
 
-  if (cleanInternalLinks.length) {
+  if (
+    !adInserted &&
+    editorialParagraphIndex > 0
+  ) {
 
     richNodes.push(
-      headingNode("Leia também")
+      htmlNode(
+        publicidadeHtml,
+        "250",
+        "860"
+      )
+    );
+  }
+
+  // ============================================================
+  // LINKS INTERNOS
+  // ============================================================
+
+  if (
+    cleanInternalLinks.length
+  ) {
+
+    richNodes.push(
+      headingNode(
+        "Leia também",
+        2
+      )
     );
 
-    cleanInternalLinks.forEach(link => {
+    cleanInternalLinks
+      .forEach(link => {
 
-      richNodes.push({
-        type: "PARAGRAPH",
-        id: newNodeId("p_link"),
+        richNodes.push(
+          paragraphNode(
+            String(
+              link.text ||
+              ""
+            ).trim(),
+            {
+              color:
+                "#00AE35",
 
-        nodes: [
-          textNode(
-            String(link.text || "").trim(),
-            [
-              {
-                type: "LINK",
-                linkData: {
-                  link: {
-                    url: String(link.url || "").trim(),
-                    target: "BLANK"
-                  }
-                }
-              }
-            ]
+              fontSize:
+                18,
+
+              lineHeight:
+                "1.6",
+
+              paddingBottom:
+                "12px",
+
+              underline:
+                true,
+
+              linkUrl:
+                String(
+                  link.url ||
+                  ""
+                ).trim()
+            }
           )
-        ],
-
-        paragraphData: {
-          textStyle: {
-            textAlignment: "AUTO"
-          },
-          indentation: 0,
-          lineSpacing: 2.0
-        }
+        );
       });
-    });
   }
 
   // ============================================================
@@ -502,25 +1277,151 @@ export default async function handler(req, res) {
     paragraphNode(
       `Texto/Fonte: ${sourceText} | Fotos: ${photographerText} | Redação: José Carlos Grites — Jornalista | Portal Pista Verde`,
       {
-        italic: true
+        italic:
+          true,
+
+        color:
+          "#626B5D",
+
+        fontSize:
+          13,
+
+        lineHeight:
+          "1.7",
+
+        paddingTop:
+          "18px",
+
+        paddingBottom:
+          "20px"
       }
     )
   );
 
+  // ============================================================
+  // FINAL DA MATÉRIA — HTML / IFRAME
+  // ============================================================
+
+  richNodes.push(
+    htmlNode(
+      finalMateriaHtml,
+      "620",
+      "860"
+    )
+  );
+
+  // ============================================================
+  // DOCUMENTO RICOS
+  // ============================================================
+
   const richContent = {
-    nodes: richNodes,
+
+    nodes:
+      richNodes,
 
     metadata: {
-      version: 1,
+      version:
+        1,
+
       id:
         newNodeId(
           "document"
         )
     },
 
-    documentStyle: {}
+    documentStyle: {
+
+      paragraph: {
+
+        decorations: [
+          decorationColor(
+            "#333333"
+          ),
+
+          decorationFontSize(
+            18
+          )
+        ],
+
+        nodeStyle: {
+          paddingTop:
+            "0px",
+
+          paddingBottom:
+            "25px"
+        },
+
+        lineHeight:
+          "1.78"
+      },
+
+      headerTwo: {
+
+        decorations: [
+          {
+            type:
+              "BOLD",
+
+            fontWeightValue:
+              900
+          },
+
+          decorationColor(
+            "#00AE35"
+          ),
+
+          decorationFontSize(
+            32
+          )
+        ],
+
+        nodeStyle: {
+          paddingTop:
+            "23px",
+
+          paddingBottom:
+            "18px"
+        },
+
+        lineHeight:
+          "1.25"
+      },
+
+      headerThree: {
+
+        decorations: [
+          {
+            type:
+              "BOLD",
+
+            fontWeightValue:
+              800
+          },
+
+          decorationColor(
+            "#21300C"
+          ),
+
+          decorationFontSize(
+            22
+          )
+        ],
+
+        nodeStyle: {
+          paddingTop:
+            "12px",
+
+          paddingBottom:
+            "10px"
+        },
+
+        lineHeight:
+          "1.35"
+      }
+    }
   };
-    // ============================================================
+
+  // ============================================================
   // 9. SEO
   // ============================================================
 
@@ -580,56 +1481,73 @@ export default async function handler(req, res) {
   const seoTags = [
 
     {
-      type: "title",
+      type:
+        "title",
+
       children:
         seoTitle
     },
 
     {
-      type: "meta",
+      type:
+        "meta",
+
       props: {
         name:
           "description",
+
         content:
           seoDescription
       }
     },
 
     {
-      type: "meta",
+      type:
+        "meta",
+
       props: {
         property:
           "og:title",
+
         content:
           seoTitle
       }
     },
 
     {
-      type: "meta",
+      type:
+        "meta",
+
       props: {
         property:
           "og:description",
+
         content:
           seoDescription
       }
     },
 
     {
-      type: "meta",
+      type:
+        "meta",
+
       props: {
         name:
           "twitter:title",
+
         content:
           seoTitle
       }
     },
 
     {
-      type: "meta",
+      type:
+        "meta",
+
       props: {
         name:
           "twitter:description",
+
         content:
           seoDescription
       }
@@ -656,7 +1574,9 @@ export default async function handler(req, res) {
         await fetch(
           "https://www.wixapis.com/blog/v3/categories?paging.limit=100",
           {
-            method: "GET",
+            method:
+              "GET",
+
             headers:
               authHeaders
           }
@@ -701,9 +1621,14 @@ export default async function handler(req, res) {
               );
             });
 
-        if (found?.id) {
+        if (
+          found?.id
+        ) {
+
           resolvedCategoryIds =
-            [found.id];
+            [
+              found.id
+            ];
         }
       }
 
@@ -756,7 +1681,9 @@ export default async function handler(req, res) {
         await fetch(
           "https://www.wixapis.com/blog/v3/tags?paging.limit=100",
           {
-            method: "GET",
+            method:
+              "GET",
+
             headers:
               authHeaders
           }
@@ -796,6 +1723,7 @@ export default async function handler(req, res) {
             label &&
             tag.id
           ) {
+
             tagMap.set(
               label,
               tag.id
@@ -826,10 +1754,6 @@ export default async function handler(req, res) {
 
           continue;
         }
-
-        // ========================================================
-        // CRIAR TAG CASO NÃO EXISTA
-        // ========================================================
 
         try {
 
@@ -987,8 +1911,18 @@ export default async function handler(req, res) {
     seoSlug,
 
     seoData: {
+
       settings: {
-        preventAutoRedirect: false
+
+        keywords:
+          focusKeyword
+            ? [
+                focusKeyword
+              ]
+            : [],
+
+        preventAutoRedirect:
+          false
       },
 
       tags:
@@ -1030,8 +1964,14 @@ export default async function handler(req, res) {
 
           body:
             JSON.stringify({
+
               draftPost:
-                draftPostObj
+                draftPostObj,
+
+              fieldsets: [
+                "URL",
+                "RICH_CONTENT"
+              ]
             })
         }
       );
@@ -1068,111 +2008,6 @@ export default async function handler(req, res) {
     }
 
     // ==========================================================
-    // AUDITORIA DO QUE O WIX REALMENTE PERSISTIU
-    // ==========================================================
-
-    const createdDraft =
-      data.draftPost ||
-      data;
-
-    const createdDraftId =
-      createdDraft?.id ||
-      createdDraft?._id ||
-      null;
-
-    let persistedDraft =
-      createdDraft;
-
-    if (createdDraftId) {
-
-      try {
-
-        const auditResponse =
-          await fetch(
-            `https://www.wixapis.com/blog/v3/draft-posts/${createdDraftId}`,
-            {
-              method:
-                "GET",
-
-              headers:
-                authHeaders
-            }
-          );
-
-        const auditData =
-          await auditResponse
-            .json()
-            .catch(
-              () => ({})
-            );
-
-        if (
-          auditResponse.ok &&
-          auditData?.draftPost
-        ) {
-
-          persistedDraft =
-            auditData.draftPost;
-        }
-
-      } catch (auditError) {
-
-        console.error(
-          "Falha na auditoria do rascunho Wix:",
-          auditError
-        );
-      }
-    }
-
-    const persistedSeoTags =
-      Array.isArray(
-        persistedDraft?.seoData?.tags
-      )
-        ? persistedDraft.seoData.tags
-        : [];
-
-    const audit = {
-
-      draftId:
-        createdDraftId,
-
-      titlePersisted:
-        persistedDraft?.title ===
-        cleanHeadline,
-
-      excerptPersisted:
-        persistedDraft?.excerpt ===
-        excerpt,
-
-      seoSlugPersisted:
-        persistedDraft?.seoSlug ===
-        seoSlug,
-
-      richContentNodes:
-        Array.isArray(
-          persistedDraft?.richContent?.nodes
-        )
-          ? persistedDraft.richContent.nodes.length
-          : 0,
-
-      seoTagsPersisted:
-        persistedSeoTags.length,
-
-      categoryIdsPersisted:
-        Array.isArray(
-          persistedDraft?.categoryIds
-        )
-          ? persistedDraft.categoryIds
-          : [],
-
-      tagIdsPersisted:
-        Array.isArray(
-          persistedDraft?.tagIds
-        )
-          ? persistedDraft.tagIds
-          : []
-    };
-        // ==========================================================
     // SUCESSO
     // ==========================================================
 
@@ -1187,9 +2022,8 @@ export default async function handler(req, res) {
           "Rascunho criado com sucesso no Wix.",
 
         post:
-          persistedDraft,
-
-        audit,
+          data.draftPost ||
+          data,
 
         seo: {
 
@@ -1202,10 +2036,7 @@ export default async function handler(req, res) {
             seoDescription,
 
           slug:
-            seoSlug,
-
-          note:
-            "A palavra-chave foco é mantida pelo PV ONE para controle editorial; o Blog v3 não expõe um campo público focusKeyword no Draft Post."
+            seoSlug
         },
 
         categoryIds:
