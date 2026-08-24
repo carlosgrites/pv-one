@@ -1436,7 +1436,7 @@ export default async function handler(req, res) {
             : [],
 
         preventAutoRedirect:
-          false
+  false
       },
 
       tags:
