@@ -1,24 +1,18 @@
 // ============================================================
 // PORTAL PISTA VERDE — PV ONE
-// api/wix.js
-// Integração Wix Blog V3
+// api/wix.js — Wix Blog V3
 // ============================================================
 
 export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({
+      error: "Método não permitido."
+    });
+  }
+
   try {
-    if (req.method !== "POST") {
-      return res.status(405).json({
-        error: "Método não permitido."
-      });
-    }
-
-    // ==========================================================
-    // CONFIGURAÇÃO
-    // ==========================================================
-
-    const apiKey = String(
-      process.env.WIX_API_KEY || ""
-    )
+    const apiKey = String(process.env.WIX_API_KEY || "")
       .replace(/^Bearer\s+/i, "")
       .trim();
 
@@ -31,777 +25,72 @@ export default async function handler(req, res) {
     if (!apiKey) {
       return res.status(500).json({
         error:
-          "A variável WIX_API_KEY não está configurada."
+          "A variável WIX_API_KEY não está disponível neste deployment da Vercel."
       });
     }
 
     const headers = {
-      "Content-Type": "application/json",
       Authorization: apiKey,
+      "Content-Type": "application/json",
       "wix-site-id": siteId
     };
 
-    // ==========================================================
-    // DADOS RECEBIDOS
-    // ==========================================================
-
-    const body = req.body || {};
+    const body = parseRequestBody(req.body);
 
     const headline =
-      String(
-        body.headline || "Sem título"
-      ).trim();
+      cleanText(body.headline);
 
     const subtitle =
-      String(
-        body.subtitle || ""
-      ).trim();
+      cleanText(body.subtitle);
 
     const editorialBody =
-      String(
-        body.editorialBody || ""
-      )
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
+      normalizeBody(body.editorialBody);
 
-    const photographer =
-      String(
-        body.photographer || "Divulgação"
-      ).trim();
+    const editorialBlocks =
+      normalizeEditorialBlocks(
+        body.editorialBlocks,
+        editorialBody
+      );
 
     const source =
-      String(
-        body.source || "Redação"
-      ).trim();
+      cleanText(body.source) ||
+      "Assessoria de Imprensa";
 
-    const seo =
-      body.seo &&
-      typeof body.seo === "object"
-        ? body.seo
-        : {};
-
-    const internalLinks =
-      Array.isArray(body.internalLinks)
-        ? body.internalLinks
-            .filter(item =>
-              item &&
-              item.text &&
-              item.url
-            )
-            .slice(0, 3)
-        : [];
+    const photographer =
+      cleanText(body.photographer) ||
+      "Divulgação";
 
     if (!headline) {
       return res.status(400).json({
-        error:
-          "O título da matéria está vazio."
+        error: "O título da matéria está vazio."
       });
     }
 
-    if (!editorialBody) {
+    if (!editorialBlocks.length) {
       return res.status(400).json({
-        error:
-          "O corpo da matéria está vazio."
+        error: "O corpo da matéria está vazio."
       });
     }
 
-    // ==========================================================
-    // FUNÇÕES AUXILIARES
-    // ==========================================================
-
-    async function readResponse(response) {
-      const text =
-        await response
-          .text()
-          .catch(() => "");
-
-      if (!text) {
-        return {};
-      }
-
-      try {
-        return JSON.parse(text);
-      } catch (_) {
-        return {
-          message: text
-        };
-      }
-    }
-
-    function slugify(value) {
-      return String(value || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f]/g,
-          ""
-        )
-        .replace(
-          /[^a-z0-9\s-]/g,
-          ""
-        )
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .substring(0, 100);
-    }
-
-    let nodeCounter = 0;
-
-    function nodeId(prefix) {
-      nodeCounter += 1;
-
-      return (
-        `${prefix}_` +
-        `${Date.now()}_` +
-        `${nodeCounter}`
-      );
-    }
-
-    function textNode(
-      text,
-      decorations = []
-    ) {
-      const value =
-        String(text || "").trim();
-
-      if (!value) {
-        throw new Error(
-          "Foi encontrado um texto vazio."
-        );
-      }
-
-      return {
-        type: "TEXT",
-        id: nodeId("text"),
-        nodes: [],
-        textData: {
-          text: value,
-          decorations
-        }
-      };
-    }
-
-    function paragraphNode(
-      text,
-      decorations = []
-    ) {
-      return {
-        type: "PARAGRAPH",
-        id: nodeId("paragraph"),
-        nodes: [
-          textNode(
-            text,
-            decorations
-          )
-        ],
-        paragraphData: {
-          textStyle: {
-            textAlignment: "AUTO"
-          },
-          indentation: 0
-        }
-      };
-    }
-
-    function headingNode(
-      text,
-      level = 2
-    ) {
-      return {
-        type: "HEADING",
-        id: nodeId(`heading${level}`),
-        nodes: [
-          textNode(text, [
-            {
-              type: "BOLD",
-              fontWeightValue: 700
-            }
-          ])
-        ],
-        headingData: {
-          level,
-          textStyle: {
-            textAlignment: "AUTO"
-          },
-          indentation: 0
-        }
-      };
-    }
-
-    function linkedParagraph(
-      text,
-      url
-    ) {
-      return paragraphNode(
-        text,
-        [
-          {
-            type: "LINK",
-            linkData: {
-              link: {
-                url:
-                  String(url || "").trim(),
-                target: "BLANK"
-              }
-            }
-          }
-        ]
-      );
-    }
-
-    // ==========================================================
-    // LOCALIZA O AUTOR
-    // ==========================================================
-
-    let memberId = null;
-
-    const membersResponse =
-      await fetch(
-        "https://www.wixapis.com/members/v1/members?paging.limit=100",
-        {
-          method: "GET",
-          headers
-        }
+    const memberId =
+      await findAuthorMemberId(
+        headers,
+        authorEmail
       );
 
-    const membersData =
-      await readResponse(
-        membersResponse
-      );
-
-    if (!membersResponse.ok) {
-      return res
-        .status(membersResponse.status)
-        .json({
-          error:
-            membersData.message ||
-            "Não foi possível consultar o autor no Wix.",
-
-          details:
-            membersData
-        });
-    }
-
-    const members =
-      Array.isArray(
-        membersData.members
-      )
-        ? membersData.members
-        : [];
-
-    const author =
-      members.find(member => {
-        const email =
-          String(
-            member.loginEmail ||
-            member.contact
-              ?.emails?.[0]?.email ||
-            ""
-          )
-            .trim()
-            .toLowerCase();
-
-        return (
-          email ===
-          authorEmail.toLowerCase()
-        );
+    const richContent =
+      buildRichContent({
+        subtitle,
+        editorialBlocks,
+        source,
+        photographer
       });
-
-    if (author?.id) {
-      memberId = author.id;
-    }
-
-    if (!memberId) {
-      return res.status(400).json({
-        error:
-          `Não foi possível localizar no Wix o autor ${authorEmail}.`
-      });
-    }
-
-    // ==========================================================
-    // CONVERSÃO PARA RICH CONTENT NATIVO
-    // ==========================================================
-
-    const sourceParagraphs =
-      editorialBody
-        .split(/\n+/)
-        .map(item => item.trim())
-        .filter(Boolean);
-
-    const editorialParagraphs =
-      sourceParagraphs.filter(item =>
-        !/^##\s+/.test(item) &&
-        !/^###\s+/.test(item) &&
-        !/^H2:\s*/i.test(item) &&
-        !/^H3:\s*/i.test(item)
-      );
-
-    const adPosition =
-      Math.max(
-        2,
-        Math.ceil(
-          editorialParagraphs.length / 2
-        )
-      );
-
-    const richNodes = [];
-
-    if (subtitle) {
-      richNodes.push(
-        paragraphNode(
-          subtitle,
-          [
-            {
-              type: "ITALIC",
-              italicData: true
-            }
-          ]
-        )
-      );
-    }
-
-    let paragraphCount = 0;
-    let adInserted = false;
-
-    for (
-      const item
-      of sourceParagraphs
-    ) {
-      if (
-        /^##\s+/.test(item) ||
-        /^H2:\s*/i.test(item)
-      ) {
-        const heading =
-          item
-            .replace(/^##\s+/, "")
-            .replace(/^H2:\s*/i, "")
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading,
-              2
-            )
-          );
-        }
-
-        continue;
-      }
-
-      if (
-        /^###\s+/.test(item) ||
-        /^H3:\s*/i.test(item)
-      ) {
-        const heading =
-          item
-            .replace(/^###\s+/, "")
-            .replace(/^H3:\s*/i, "")
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading,
-              3
-            )
-          );
-        }
-
-        continue;
-      }
-
-      paragraphCount += 1;
-
-      const decorations =
-        paragraphCount === 1
-          ? [
-              {
-                type: "BOLD",
-                fontWeightValue: 600
-              }
-            ]
-          : [];
-
-      richNodes.push(
-        paragraphNode(
-          item,
-          decorations
-        )
-      );
-
-      if (
-        !adInserted &&
-        paragraphCount >= adPosition
-      ) {
-        richNodes.push(
-          headingNode(
-            "Parceiro do Kartismo",
-            3
-          )
-        );
-
-        richNodes.push(
-          paragraphNode(
-            "Inovimpress",
-            [
-              {
-                type: "BOLD",
-                fontWeightValue: 700
-              }
-            ]
-          )
-        );
-
-        richNodes.push(
-          paragraphNode(
-            "Comunicação visual e soluções para quem vive a velocidade."
-          )
-        );
-
-        richNodes.push(
-          linkedParagraph(
-            "Conheça a Inovimpress",
-            "https://www.instagram.com/inovimpress/"
-          )
-        );
-
-        adInserted = true;
-      }
-    }
-
-    if (
-      !adInserted &&
-      paragraphCount > 0
-    ) {
-      richNodes.push(
-        headingNode(
-          "Parceiro do Kartismo",
-          3
-        )
-      );
-
-      richNodes.push(
-        paragraphNode(
-          "Inovimpress",
-          [
-            {
-              type: "BOLD",
-              fontWeightValue: 700
-            }
-          ]
-        )
-      );
-
-      richNodes.push(
-        paragraphNode(
-          "Comunicação visual e soluções para quem vive a velocidade."
-        )
-      );
-
-      richNodes.push(
-        linkedParagraph(
-          "Conheça a Inovimpress",
-          "https://www.instagram.com/inovimpress/"
-        )
-      );
-    }
-
-    // ==========================================================
-    // LINKS INTERNOS
-    // ==========================================================
-
-    if (internalLinks.length) {
-      richNodes.push(
-        headingNode(
-          "Leia também",
-          2
-        )
-      );
-
-      for (
-        const link
-        of internalLinks
-      ) {
-        richNodes.push(
-          linkedParagraph(
-            String(
-              link.text || ""
-            ).trim(),
-
-            String(
-              link.url || ""
-            ).trim()
-          )
-        );
-      }
-    }
-
-    // ==========================================================
-    // CRÉDITOS
-    // ==========================================================
-
-    richNodes.push(
-      paragraphNode(
-        `Texto/Fonte: ${source} | Fotos: ${photographer}`
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Reportagem/Texto: José Carlos Grites – jornalista profissional (Registro MTE nº 0007501/SC)"
-      )
-    );
-
-    // ==========================================================
-    // INSTITUCIONAL
-    // ==========================================================
-
-    richNodes.push(
-      headingNode(
-        "Portal Pista Verde",
-        2
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Portal Pista Verde é uma startup nacional dedicada exclusivamente ao ecossistema do kartismo e do automobilismo. Atua com o Programa ESG/ODS Pista Verde para kartódromos e autódromos, com base em referências internacionais traduzidas e adaptadas ao Brasil."
-      )
-    );
-
-    richNodes.push(
-      linkedParagraph(
-        "Conheça o Programa ESG/ODS Pista Verde",
-        "https://www.pistaverde.com.br/programa-esg-automobilismo"
-      )
-    );
-
-    // ==========================================================
-    // EMPRESAS APOIADORAS
-    // ==========================================================
-
-    richNodes.push(
-      headingNode(
-        "Empresas que apoiam o kartismo",
-        2
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Mega Kart — Empresa parceira e apoiadora do kartismo brasileiro."
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Paralego — Empresa parceira e apoiadora do esporte a motor."
-      )
-    );
-
-    const richContent = {
-      nodes: richNodes,
-
-      metadata: {
-        version: 1
-      },
-
-      documentStyle: {}
-    };
-
-    // ==========================================================
-    // VALIDAÇÃO DO RICH CONTENT
-    // ==========================================================
-
-    if (
-      !Array.isArray(
-        richContent.nodes
-      ) ||
-      !richContent.nodes.length
-    ) {
-      return res.status(500).json({
-        error:
-          "O Rich Content ficou vazio."
-      });
-    }
-
-    const usedIds = new Set();
-
-    for (
-      const node
-      of richContent.nodes
-    ) {
-      if (
-        !node ||
-        !node.id ||
-        !node.type
-      ) {
-        return res.status(500).json({
-          error:
-            "Foi criado um nó Rich Content inválido."
-        });
-      }
-
-      if (usedIds.has(node.id)) {
-        return res.status(500).json({
-          error:
-            `ID Rich Content duplicado: ${node.id}`
-        });
-      }
-
-      usedIds.add(node.id);
-
-      for (
-        const child
-        of node.nodes || []
-      ) {
-        if (
-          !child.id ||
-          !child.textData?.text
-        ) {
-          return res.status(500).json({
-            error:
-              "Foi criado um texto Rich Content inválido."
-          });
-        }
-
-        if (
-          usedIds.has(child.id)
-        ) {
-          return res.status(500).json({
-            error:
-              `ID Rich Content duplicado: ${child.id}`
-          });
-        }
-
-        usedIds.add(child.id);
-      }
-    }
-
-    // ==========================================================
-    // DADOS DO RASCUNHO
-    // ==========================================================
-
-    const seoTitle =
-      String(
-        seo.title ||
-        `${headline} | Portal Pista Verde`
-      )
-        .trim()
-        .substring(0, 70);
-
-    const seoDescription =
-      String(
-        seo.description ||
-        subtitle ||
-        editorialParagraphs[0] ||
-        ""
-      )
-        .trim()
-        .substring(0, 160);
-
-    const seoSlug =
-      slugify(
-        seo.slug ||
-        headline
-      );
-
-    const excerpt =
-      String(
-        seo.excerpt ||
-        subtitle ||
-        editorialParagraphs[0] ||
-        ""
-      )
-        .trim()
-        .substring(0, 500);
 
     const draftPost = {
       title: headline,
-      excerpt,
       memberId,
-      richContent,
-      seoSlug,
-
-      seoData: {
-        tags: [
-          {
-            type: "title",
-            children: seoTitle
-          },
-
-          {
-            type: "meta",
-            props: {
-              name: "description",
-              content:
-                seoDescription
-            }
-          },
-
-          {
-            type: "meta",
-            props: {
-              property: "og:title",
-              content: seoTitle
-            }
-          },
-
-          {
-            type: "meta",
-            props: {
-              property:
-                "og:description",
-              content:
-                seoDescription
-            }
-          }
-        ]
-      }
+      richContent
     };
-
-    if (
-      Array.isArray(
-        body.categoryIds
-      ) &&
-      body.categoryIds.length
-    ) {
-      draftPost.categoryIds =
-        [
-          ...new Set(
-            body.categoryIds
-              .map(item =>
-                String(item || "").trim()
-              )
-              .filter(Boolean)
-          )
-        ].slice(0, 10);
-    }
-
-    if (
-      Array.isArray(
-        body.tagIds
-      ) &&
-      body.tagIds.length
-    ) {
-      draftPost.tagIds =
-        [
-          ...new Set(
-            body.tagIds
-              .map(item =>
-                String(item || "").trim()
-              )
-              .filter(Boolean)
-          )
-        ].slice(0, 30);
-    }
-
-    // ==========================================================
-    // ENVIO AO WIX
-    // ==========================================================
 
     const wixResponse =
       await fetch(
@@ -809,70 +98,408 @@ export default async function handler(req, res) {
         {
           method: "POST",
           headers,
-
-          body:
-            JSON.stringify({
-              draftPost,
-
-              fieldsets: [
-                "URL",
-                "RICH_CONTENT"
-              ],
-
-              publish: false
-            })
+          body: JSON.stringify({
+            draftPost,
+            publish: false
+          })
         }
       );
 
     const wixData =
-      await readResponse(
-        wixResponse
-      );
+      await readResponse(wixResponse);
 
     if (!wixResponse.ok) {
+      console.error(
+        "WIX_CREATE_DRAFT_ERROR",
+        {
+          status: wixResponse.status,
+          response: wixData
+        }
+      );
+
       return res
         .status(wixResponse.status)
         .json({
-          error:
-            wixData.message ||
-            wixData.error ||
-            "Erro retornado pela API do Wix.",
-
-          details:
-            wixData
+          error: extractWixError(
+            wixData,
+            "O Wix recusou a criação do rascunho."
+          ),
+          wixStatus: wixResponse.status,
+          details: wixData
         });
     }
 
     return res.status(200).json({
       success: true,
-
       message:
-        "Rascunho criado com sucesso no Wix.",
-
-      post:
-        wixData.draftPost ||
-        wixData,
-
-      seo: {
-        title: seoTitle,
-        description:
-          seoDescription,
-        slug: seoSlug
-      },
-
-      internalLinks:
-        internalLinks.length
+        "Rascunho nativo criado com sucesso no Wix.",
+      draftPost:
+        wixData.draftPost || wixData
     });
   } catch (error) {
     console.error(
-      "ERRO GERAL API/WIX:",
+      "PV_ONE_WIX_ERROR",
       error
     );
 
-    return res.status(500).json({
+    const status =
+      Number(error?.status) || 500;
+
+    return res.status(status).json({
       error:
         error?.message ||
-        "Erro interno na integração com o Wix."
+        "Erro interno na integração com o Wix.",
+      details:
+        error?.details || undefined
     });
   }
+}
+
+function parseRequestBody(value) {
+  if (
+    value &&
+    typeof value === "object"
+  ) {
+    return value;
+  }
+
+  if (
+    typeof value === "string" &&
+    value.trim()
+  ) {
+    try {
+      return JSON.parse(value);
+    } catch (_) {
+      const error =
+        new Error(
+          "O PV ONE enviou um JSON inválido."
+        );
+
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  return {};
+}
+
+function cleanText(value) {
+  return String(value || "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .trim();
+}
+
+function normalizeBody(value) {
+  return cleanText(value)
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function normalizeEditorialBlocks(
+  blocks,
+  fallbackBody
+) {
+  if (Array.isArray(blocks)) {
+    const normalized =
+      blocks
+        .map((block) => {
+          if (
+            !block ||
+            typeof block !== "object"
+          ) {
+            return null;
+          }
+
+          const text =
+            cleanText(block.text)
+              .replace(/\n+/g, " ")
+              .trim();
+
+          if (!text) {
+            return null;
+          }
+
+          const requestedType =
+            String(
+              block.type || "paragraph"
+            ).toLowerCase();
+
+          const type =
+            requestedType === "h2"
+              ? "h2"
+              : "paragraph";
+
+          return {
+            type,
+            text
+          };
+        })
+        .filter(Boolean);
+
+    if (normalized.length) {
+      return normalized;
+    }
+  }
+
+  return fallbackBody
+    .split(/\n\s*\n+/)
+    .map((part) =>
+      cleanText(part)
+        .replace(/\n+/g, " ")
+        .trim()
+    )
+    .filter(Boolean)
+    .map((text) => {
+      if (
+        /^(?:##\s+|H2:\s*)/i.test(text)
+      ) {
+        return {
+          type: "h2",
+          text: text
+            .replace(
+              /^(?:##\s+|H2:\s*)/i,
+              ""
+            )
+            .trim()
+        };
+      }
+
+      return {
+        type: "paragraph",
+        text
+      };
+    })
+    .filter((block) => block.text);
+}
+
+async function findAuthorMemberId(
+  headers,
+  authorEmail
+) {
+  const response =
+    await fetch(
+      "https://www.wixapis.com/members/v1/members?paging.limit=100",
+      {
+        method: "GET",
+        headers
+      }
+    );
+
+  const data =
+    await readResponse(response);
+
+  if (!response.ok) {
+    const error =
+      new Error(
+        extractWixError(
+          data,
+          "Não foi possível consultar o autor no Wix."
+        )
+      );
+
+    error.status = response.status;
+    error.details = data;
+
+    throw error;
+  }
+
+  const members =
+    Array.isArray(data.members)
+      ? data.members
+      : [];
+
+  const expectedEmail =
+    authorEmail.toLowerCase();
+
+  const author =
+    members.find((member) => {
+      const emails = [
+        member?.loginEmail,
+
+        ...(Array.isArray(
+          member?.contact?.emails
+        )
+          ? member.contact.emails.map(
+              (item) => item?.email
+            )
+          : [])
+      ];
+
+      return emails.some(
+        (email) =>
+          String(email || "")
+            .trim()
+            .toLowerCase() ===
+          expectedEmail
+      );
+    });
+
+  if (!author?.id) {
+    const error =
+      new Error(
+        `Não foi possível localizar no Wix o autor ${authorEmail}.`
+      );
+
+    error.status = 400;
+    throw error;
+  }
+
+  return author.id;
+}
+
+function buildRichContent({
+  subtitle,
+  editorialBlocks,
+  source,
+  photographer
+}) {
+  let sequence = 0;
+
+  const uniquePrefix =
+    `${Date.now().toString(36)}_` +
+    `${Math.random()
+      .toString(36)
+      .slice(2, 10)}`;
+
+  function id(prefix) {
+    sequence += 1;
+
+    return (
+      `${prefix}_` +
+      `${uniquePrefix}_` +
+      `${sequence}`
+    );
+  }
+
+  function textNode(text) {
+    return {
+      type: "TEXT",
+      id: id("text"),
+      textData: {
+        text
+      }
+    };
+  }
+
+  function paragraphNode(text) {
+    return {
+      type: "PARAGRAPH",
+      id: id("paragraph"),
+      nodes: [
+        textNode(text)
+      ],
+      paragraphData: {}
+    };
+  }
+
+  function headingNode(text) {
+    return {
+      type: "HEADING",
+      id: id("heading"),
+      nodes: [
+        textNode(text)
+      ],
+      headingData: {
+        level: 2
+      }
+    };
+  }
+
+  const nodes = [];
+
+  if (subtitle) {
+    nodes.push(
+      paragraphNode(subtitle)
+    );
+  }
+
+  for (
+    const block
+    of editorialBlocks
+  ) {
+    nodes.push(
+      block.type === "h2"
+        ? headingNode(block.text)
+        : paragraphNode(block.text)
+    );
+  }
+
+  nodes.push(
+    paragraphNode(
+      `Texto/Fonte: ${source} | Fotos: ${photographer}`
+    )
+  );
+
+  nodes.push(
+    paragraphNode(
+      "Reportagem/Texto: José Carlos Grites – jornalista profissional (Registro MTE nº 0007501/SC)"
+    )
+  );
+
+  nodes.push(
+    headingNode(
+      "Portal Pista Verde"
+    )
+  );
+
+  nodes.push(
+    paragraphNode(
+      "Portal Pista Verde é uma startup nacional dedicada exclusivamente ao ecossistema do kartismo e do automobilismo. Atua com o Programa ESG/ODS Pista Verde para kartódromos e autódromos, com base em referências internacionais traduzidas e adaptadas ao Brasil."
+    )
+  );
+
+  return {
+    nodes
+  };
+}
+
+async function readResponse(response) {
+  const text =
+    await response
+      .text()
+      .catch(() => "");
+
+  if (!text) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (_) {
+    return {
+      message: text
+    };
+  }
+}
+
+function extractWixError(
+  data,
+  fallback
+) {
+  const candidates = [
+    data?.message,
+    data?.error,
+    data?.details
+      ?.applicationError
+      ?.description,
+    data?.details
+      ?.applicationError
+      ?.code,
+    data?.details
+      ?.validationError
+      ?.fieldViolations?.[0]
+      ?.description
+  ];
+
+  const message =
+    candidates.find(
+      (value) =>
+        typeof value === "string" &&
+        value.trim()
+    );
+
+  return message
+    ? message.trim()
+    : fallback;
 }
