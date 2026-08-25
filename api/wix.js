@@ -6,15 +6,17 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
+
     return res.status(405).json({
       error: "Método não permitido."
     });
   }
 
   try {
-    const apiKey = String(process.env.WIX_API_KEY || "")
-      .replace(/^Bearer\s+/i, "")
-      .trim();
+    const apiKey =
+      String(process.env.WIX_API_KEY || "")
+        .replace(/^Bearer\s+/i, "")
+        .trim();
 
     const siteId =
       "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
@@ -23,10 +25,10 @@ export default async function handler(req, res) {
       "portalpistaverde@gmail.com";
 
     if (!apiKey) {
-      return res.status(500).json({
-        error:
-          "A variável WIX_API_KEY não está disponível neste deployment da Vercel."
-      });
+      return forwardToConfiguredBackend(
+        req,
+        res
+      );
     }
 
     const headers = {
@@ -35,7 +37,8 @@ export default async function handler(req, res) {
       "wix-site-id": siteId
     };
 
-    const body = parseRequestBody(req.body);
+    const body =
+      parseRequestBody(req.body);
 
     const headline =
       cleanText(body.headline);
@@ -62,13 +65,15 @@ export default async function handler(req, res) {
 
     if (!headline) {
       return res.status(400).json({
-        error: "O título da matéria está vazio."
+        error:
+          "O título da matéria está vazio."
       });
     }
 
     if (!editorialBlocks.length) {
       return res.status(400).json({
-        error: "O corpo da matéria está vazio."
+        error:
+          "O corpo da matéria está vazio."
       });
     }
 
@@ -98,6 +103,7 @@ export default async function handler(req, res) {
         {
           method: "POST",
           headers,
+
           body: JSON.stringify({
             draftPost,
             publish: false
@@ -124,17 +130,24 @@ export default async function handler(req, res) {
             wixData,
             "O Wix recusou a criação do rascunho."
           ),
-          wixStatus: wixResponse.status,
-          details: wixData
+
+          wixStatus:
+            wixResponse.status,
+
+          details:
+            wixData
         });
     }
 
     return res.status(200).json({
       success: true,
+
       message:
         "Rascunho nativo criado com sucesso no Wix.",
+
       draftPost:
-        wixData.draftPost || wixData
+        wixData.draftPost ||
+        wixData
     });
   } catch (error) {
     console.error(
@@ -149,8 +162,87 @@ export default async function handler(req, res) {
       error:
         error?.message ||
         "Erro interno na integração com o Wix.",
+
       details:
-        error?.details || undefined
+        error?.details ||
+        undefined
+    });
+  }
+}
+
+async function forwardToConfiguredBackend(
+  req,
+  res
+) {
+  const targetUrl =
+    "https://pv-one-app.vercel.app/api/wix";
+
+  const currentHost =
+    String(
+      req.headers?.["x-forwarded-host"] ||
+      req.headers?.host ||
+      ""
+    ).toLowerCase();
+
+  if (
+    currentHost.includes(
+      "pv-one-app.vercel.app"
+    )
+  ) {
+    return res.status(500).json({
+      error:
+        "A variável WIX_API_KEY não está disponível no backend principal."
+    });
+  }
+
+  try {
+    const response =
+      await fetch(
+        targetUrl,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+
+            "x-pv-one-forwarded":
+              "1"
+          },
+
+          body: JSON.stringify(
+            parseRequestBody(req.body)
+          )
+        }
+      );
+
+    const responseText =
+      await response
+        .text()
+        .catch(() => "");
+
+    res.status(response.status);
+
+    res.setHeader(
+      "Content-Type",
+      response.headers.get(
+        "content-type"
+      ) ||
+      "application/json; charset=utf-8"
+    );
+
+    return res.send(
+      responseText || "{}"
+    );
+  } catch (error) {
+    console.error(
+      "PV_ONE_FORWARD_ERROR",
+      error
+    );
+
+    return res.status(502).json({
+      error:
+        "Não foi possível acessar o backend principal do PV ONE."
     });
   }
 }
@@ -222,7 +314,8 @@ function normalizeEditorialBlocks(
 
           const requestedType =
             String(
-              block.type || "paragraph"
+              block.type ||
+              "paragraph"
             ).toLowerCase();
 
           const type =
@@ -244,24 +337,31 @@ function normalizeEditorialBlocks(
 
   return fallbackBody
     .split(/\n\s*\n+/)
+
     .map((part) =>
       cleanText(part)
         .replace(/\n+/g, " ")
         .trim()
     )
+
     .filter(Boolean)
+
     .map((text) => {
       if (
-        /^(?:##\s+|H2:\s*)/i.test(text)
+        /^(?:##\s+|H2:\s*)/i.test(
+          text
+        )
       ) {
         return {
           type: "h2",
-          text: text
-            .replace(
-              /^(?:##\s+|H2:\s*)/i,
-              ""
-            )
-            .trim()
+
+          text:
+            text
+              .replace(
+                /^(?:##\s+|H2:\s*)/i,
+                ""
+              )
+              .trim()
         };
       }
 
@@ -270,7 +370,10 @@ function normalizeEditorialBlocks(
         text
       };
     })
-    .filter((block) => block.text);
+
+    .filter(
+      (block) => block.text
+    );
 }
 
 async function findAuthorMemberId(
@@ -298,8 +401,11 @@ async function findAuthorMemberId(
         )
       );
 
-    error.status = response.status;
-    error.details = data;
+    error.status =
+      response.status;
+
+    error.details =
+      data;
 
     throw error;
   }
@@ -321,7 +427,8 @@ async function findAuthorMemberId(
           member?.contact?.emails
         )
           ? member.contact.emails.map(
-              (item) => item?.email
+              (item) =>
+                item?.email
             )
           : [])
       ];
@@ -342,6 +449,7 @@ async function findAuthorMemberId(
       );
 
     error.status = 400;
+
     throw error;
   }
 
@@ -375,7 +483,10 @@ function buildRichContent({
   function textNode(text) {
     return {
       type: "TEXT",
-      id: id("text"),
+
+      id:
+        id("text"),
+
       textData: {
         text
       }
@@ -385,10 +496,14 @@ function buildRichContent({
   function paragraphNode(text) {
     return {
       type: "PARAGRAPH",
-      id: id("paragraph"),
+
+      id:
+        id("paragraph"),
+
       nodes: [
         textNode(text)
       ],
+
       paragraphData: {}
     };
   }
@@ -396,10 +511,14 @@ function buildRichContent({
   function headingNode(text) {
     return {
       type: "HEADING",
-      id: id("heading"),
+
+      id:
+        id("heading"),
+
       nodes: [
         textNode(text)
       ],
+
       headingData: {
         level: 2
       }
@@ -420,8 +539,12 @@ function buildRichContent({
   ) {
     nodes.push(
       block.type === "h2"
-        ? headingNode(block.text)
-        : paragraphNode(block.text)
+        ? headingNode(
+            block.text
+          )
+        : paragraphNode(
+            block.text
+          )
     );
   }
 
@@ -454,7 +577,9 @@ function buildRichContent({
   };
 }
 
-async function readResponse(response) {
+async function readResponse(
+  response
+) {
   const text =
     await response
       .text()
@@ -479,13 +604,17 @@ function extractWixError(
 ) {
   const candidates = [
     data?.message,
+
     data?.error,
+
     data?.details
       ?.applicationError
       ?.description,
+
     data?.details
       ?.applicationError
       ?.code,
+
     data?.details
       ?.validationError
       ?.fieldViolations?.[0]
@@ -495,7 +624,8 @@ function extractWixError(
   const message =
     candidates.find(
       (value) =>
-        typeof value === "string" &&
+        typeof value ===
+          "string" &&
         value.trim()
     );
 
