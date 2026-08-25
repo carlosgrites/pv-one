@@ -1434,11 +1434,9 @@ export default async function handler(req, res) {
           focusKeyword
             ? [focusKeyword]
             : [],
-
-        preventAutoRedirect:
-  false
-      },
-
+preventAutoRedirect: {
+  value: false
+}
       tags:
         seoTags
     }
