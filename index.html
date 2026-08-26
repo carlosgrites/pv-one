@@ -7,6 +7,8 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+
   <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     rel="stylesheet"
@@ -916,7 +918,7 @@
 
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         <div class="bg-slate-50 border border-slate-300 rounded-xl p-4">
 
@@ -928,7 +930,7 @@
             id="canvas-wix"
             width="320"
             height="180"
-            class="w-full border border-slate-300 rounded-lg bg-black"
+            class="w-full h-auto border border-slate-300 rounded-lg bg-black"
           ></canvas>
 
           <a
@@ -951,7 +953,7 @@
             id="canvas-feed"
             width="144"
             height="180"
-            class="mx-auto border border-slate-300 rounded-lg bg-black"
+            class="block w-full h-auto mx-auto border border-slate-300 rounded-lg bg-black"
           ></canvas>
 
           <a
@@ -974,7 +976,7 @@
             id="canvas-stories"
             width="101"
             height="180"
-            class="mx-auto border border-slate-300 rounded-lg bg-black"
+            class="block w-full h-auto max-w-[360px] mx-auto border border-slate-300 rounded-lg bg-black"
           ></canvas>
 
           <a
@@ -987,9 +989,32 @@
 
         </div>
 
+        <div class="bg-slate-50 border border-slate-300 rounded-xl p-4">
+
+          <h3 class="font-black text-sm mb-3">
+            YouTube — 1920 × 1080
+          </h3>
+
+          <canvas
+            id="canvas-youtube"
+            width="320"
+            height="180"
+            class="w-full h-auto border border-slate-300 rounded-lg bg-black"
+          ></canvas>
+
+          <a
+            id="link-download-youtube"
+            download="youtube-pistaverde.png"
+            class="mt-3 block text-center bg-[#00AE35] text-white rounded-lg py-2 text-xs font-black"
+          >
+            Baixar Capa YouTube
+          </a>
+
+        </div>
+
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
         <div>
           <div class="flex justify-between mb-2">
@@ -1036,7 +1061,28 @@
         <div>
           <div class="flex justify-between mb-2">
             <label class="font-black text-sm">
-              YouTube / TikTok
+              TikTok
+            </label>
+
+            <button
+              onclick="copiarTexto('text-tiktok')"
+              class="text-xs font-bold text-[#00AE35]"
+            >
+              Copiar
+            </button>
+          </div>
+
+          <textarea
+            id="text-tiktok"
+            rows="14"
+            class="w-full border border-slate-300 rounded-xl p-3 text-sm"
+          ></textarea>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="font-black text-sm">
+              YouTube
             </label>
 
             <button
@@ -1074,11 +1120,20 @@
         <div class="flex flex-col sm:flex-row gap-3">
           <button
             id="btn-video-tiktok"
-            onclick="gerarVideoTikTok()"
+            onclick="gerarVideoMP4('canvas-stories', 'tiktok')"
             class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black"
           >
             <i class="fa-solid fa-film mr-2"></i>
-            Gerar Vídeo TikTok
+            Gerar MP4 TikTok
+          </button>
+
+          <button
+            id="btn-video-youtube"
+            onclick="gerarVideoMP4('canvas-youtube', 'youtube')"
+            class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black"
+          >
+            <i class="fa-solid fa-film mr-2"></i>
+            Gerar MP4 YouTube
           </button>
 
           <button
@@ -1240,6 +1295,7 @@ function irParaPagina(num) {
 
       document.getElementById('text-insta').value = '';
       document.getElementById('text-stories').value = '';
+      document.getElementById('text-tiktok').value = '';
       document.getElementById('text-yt').value = '';
 
       const status = document.getElementById('status-wix-envio');
@@ -3759,32 +3815,224 @@ body{
       `;
     }
 
+    function limitarTextoSocial(
+      texto,
+      limite
+    ) {
+      const limpo =
+        String(texto || '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+      if (
+        limpo.length <= limite
+      ) {
+        return limpo;
+      }
+
+      const recorte =
+        limpo.slice(
+          0,
+          limite - 1
+        );
+
+      const ultimoPonto =
+        Math.max(
+          recorte.lastIndexOf('. '),
+          recorte.lastIndexOf('! '),
+          recorte.lastIndexOf('? ')
+        );
+
+      if (
+        ultimoPonto >
+          limite * 0.65
+      ) {
+        return recorte
+          .slice(
+            0,
+            ultimoPonto + 1
+          )
+          .trim();
+      }
+
+      const ultimoEspaco =
+        recorte.lastIndexOf(' ');
+
+      return (
+        recorte
+          .slice(
+            0,
+            ultimoEspaco
+          )
+          .trim() +
+        '…'
+      );
+    }
+
+    function gerarHashtagsSociais(
+      categoria,
+      h1
+    ) {
+      const termos = [
+        'kartismo',
+        'automobilismo',
+        'pistaverde',
+        categoria,
+        ...String(h1 || '')
+          .split(/\s+/)
+          .filter(
+            termo =>
+              termo.length >= 5
+          )
+          .slice(0, 4)
+      ];
+
+      return [
+        ...new Set(
+          termos
+            .map(
+              termo =>
+                slugificar(termo)
+                  .replace(/-/g, '')
+            )
+            .filter(Boolean)
+        )
+      ]
+        .slice(0, 8)
+        .map(
+          termo => `#${termo}`
+        )
+        .join(' ');
+    }
+
     function gerarTextosSociais(
       h1,
       subtitulo,
       categoria,
       slug
     ) {
+      const release =
+        document.getElementById(
+          'input-release'
+        ).value.trim();
+
+      const fotografo =
+        document.getElementById(
+          'input-fotografo'
+        ).value.trim() ||
+        'Divulgação';
+
+      const fonte =
+        document.getElementById(
+          'input-creditos'
+        ).value.trim() ||
+        'Redação Portal Pista Verde';
+
+      const pilotoInsta =
+        document.getElementById(
+          'input-piloto-insta'
+        ).value.trim();
+
       const url =
         `https://www.pistaverde.com.br/post/${slug}`;
 
-      const base =
-        `${h1}\n\n${subtitulo}\n\nLeia no Portal Pista Verde:\n${url}`;
+      const hashtags =
+        gerarHashtagsSociais(
+          categoria,
+          h1
+        );
+
+      const rodapeInstagram = [
+        `Leia a matéria completa no Portal Pista Verde:\n${url}`,
+        `Foto: ${fotografo}`,
+        `Texto/Fonte: ${fonte}`,
+        pilotoInsta
+          ? `Instagram do piloto/equipe: ${pilotoInsta}`
+          : '',
+        'Reportagem/Texto: José Carlos Grites – jornalista profissional (Registro MTE nº 0007501/SC)',
+        hashtags
+      ]
+        .filter(Boolean)
+        .join('\n\n');
+
+      const espacoCorpo =
+        Math.max(
+          300,
+          2000 -
+            h1.length -
+            subtitulo.length -
+            rodapeInstagram.length -
+            8
+        );
+
+      const corpoInstagram =
+        limitarTextoSocial(
+          release,
+          espacoCorpo
+        );
 
       document.getElementById(
         'text-insta'
-      ).value =
-        `${base}\n\n#kartismo #automobilismo #pistaverde`;
+      ).value = [
+        h1,
+        subtitulo,
+        corpoInstagram,
+        rodapeInstagram
+      ]
+        .filter(Boolean)
+        .join('\n\n')
+        .slice(0, 2000);
 
       document.getElementById(
         'text-stories'
-      ).value =
-        `${h1}\n\nLeia a matéria completa no Portal Pista Verde.\n${url}`;
+      ).value = [
+        h1,
+        subtitulo,
+        'Leia a matéria completa no Portal Pista Verde.',
+        url,
+        `Foto: ${fotografo}`,
+        pilotoInsta
+          ? pilotoInsta
+          : ''
+      ]
+        .filter(Boolean)
+        .join('\n\n');
+
+      document.getElementById(
+        'text-tiktok'
+      ).value = [
+        h1,
+        subtitulo,
+        limitarTextoSocial(
+          release,
+          900
+        ),
+        `Matéria completa: ${url}`,
+        `Foto: ${fotografo}`,
+        `Texto/Fonte: ${fonte}`,
+        hashtags
+      ]
+        .filter(Boolean)
+        .join('\n\n');
 
       document.getElementById(
         'text-yt'
-      ).value =
-        `${h1}\n\n${subtitulo}\n\nMatéria completa: ${url}\n\nPortal Pista Verde — Grid aquecido com responsabilidade.`;
+      ).value = [
+        h1,
+        subtitulo,
+        limitarTextoSocial(
+          release,
+          2500
+        ),
+        `Leia a matéria completa: ${url}`,
+        `Foto: ${fotografo}`,
+        `Texto/Fonte: ${fonte}`,
+        'Reportagem/Texto: José Carlos Grites – jornalista profissional (Registro MTE nº 0007501/SC)',
+        'Portal Pista Verde — Grid aquecido com responsabilidade.',
+        hashtags
+      ]
+        .filter(Boolean)
+        .join('\n\n');
     }
 
     function carregarImagemDaCapa() {
@@ -4175,6 +4423,16 @@ body{
           categoria,
           imagem
         );
+
+        desenharCapaSocial(
+          'canvas-youtube',
+          'link-download-youtube',
+          1920,
+          1080,
+          titulo,
+          categoria,
+          imagem
+        );
       } catch (err) {
         alert(
           err.message
@@ -4421,124 +4679,331 @@ body{
       }
     }
 
-    function gerarVideoTikTok() {
+    let conversorFFmpeg = null;
+
+    function baixarArquivoGerado(
+      blob,
+      nomeArquivo
+    ) {
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement('a');
+
+      link.style.display = 'none';
+      link.href = url;
+      link.download = nomeArquivo;
+
+      document.body.appendChild(link);
+      link.click();
+
+      setTimeout(
+        () => {
+          link.remove();
+          URL.revokeObjectURL(url);
+        },
+        1000
+      );
+    }
+
+    function gravarCanvas(
+      canvasOriginal,
+      mimeType
+    ) {
+      return new Promise(
+        (resolve, reject) => {
+          const canvasVideo =
+            document.createElement(
+              'canvas'
+            );
+
+          canvasVideo.width =
+            canvasOriginal.width;
+
+          canvasVideo.height =
+            canvasOriginal.height;
+
+          const ctxVideo =
+            canvasVideo.getContext(
+              '2d',
+              {
+                alpha: false
+              }
+            );
+
+          const stream =
+            canvasVideo.captureStream(30);
+
+          const chunks = [];
+          let ativo = true;
+
+          const redesenhar = () => {
+            if (!ativo) {
+              return;
+            }
+
+            ctxVideo.drawImage(
+              canvasOriginal,
+              0,
+              0,
+              canvasVideo.width,
+              canvasVideo.height
+            );
+
+            requestAnimationFrame(
+              redesenhar
+            );
+          };
+
+          redesenhar();
+
+          let recorder;
+
+          try {
+            recorder =
+              new MediaRecorder(
+                stream,
+                {
+                  mimeType,
+                  videoBitsPerSecond:
+                    8000000
+                }
+              );
+          } catch (err) {
+            ativo = false;
+            stream
+              .getTracks()
+              .forEach(
+                track => track.stop()
+              );
+            reject(err);
+            return;
+          }
+
+          recorder.ondataavailable =
+            event => {
+              if (
+                event.data.size > 0
+              ) {
+                chunks.push(event.data);
+              }
+            };
+
+          recorder.onerror =
+            event => {
+              ativo = false;
+              reject(
+                event.error ||
+                new Error(
+                  'Falha durante a gravação.'
+                )
+              );
+            };
+
+          recorder.onstop = () => {
+            ativo = false;
+            stream
+              .getTracks()
+              .forEach(
+                track => track.stop()
+              );
+
+            resolve(
+              new Blob(
+                chunks,
+                {
+                  type: mimeType
+                }
+              )
+            );
+          };
+
+          recorder.start(250);
+
+          setTimeout(
+            () => recorder.stop(),
+            3000
+          );
+        }
+      );
+    }
+
+    async function converterWebmParaMP4(
+      blobWebm,
+      identificador
+    ) {
+      if (
+        !window.FFmpeg
+      ) {
+        throw new Error(
+          'O conversor MP4 não foi carregado. Atualize a página e tente novamente.'
+        );
+      }
+
+      if (!conversorFFmpeg) {
+        conversorFFmpeg =
+          window.FFmpeg.createFFmpeg({
+            log: false,
+            corePath:
+              'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
+          });
+      }
+
+      if (!conversorFFmpeg.isLoaded()) {
+        await conversorFFmpeg.load();
+      }
+
+      const entrada =
+        `entrada-${identificador}.webm`;
+
+      const saida =
+        `saida-${identificador}.mp4`;
+
+      conversorFFmpeg.FS(
+        'writeFile',
+        entrada,
+        new Uint8Array(
+          await blobWebm.arrayBuffer()
+        )
+      );
+
+      await conversorFFmpeg.run(
+        '-i',
+        entrada,
+        '-an',
+        '-c:v',
+        'libx264',
+        '-preset',
+        'veryfast',
+        '-pix_fmt',
+        'yuv420p',
+        '-r',
+        '30',
+        '-movflags',
+        '+faststart',
+        saida
+      );
+
+      const dados =
+        conversorFFmpeg.FS(
+          'readFile',
+          saida
+        );
+
+      conversorFFmpeg.FS(
+        'unlink',
+        entrada
+      );
+
+      conversorFFmpeg.FS(
+        'unlink',
+        saida
+      );
+
+      return new Blob(
+        [dados.buffer],
+        {
+          type: 'video/mp4'
+        }
+      );
+    }
+
+    async function gerarVideoMP4(
+      canvasId,
+      destino
+    ) {
       const canvas =
         document.getElementById(
-          'canvas-stories'
+          canvasId
         );
 
       const btn =
         document.getElementById(
-          'btn-video-tiktok'
+          destino === 'tiktok'
+            ? 'btn-video-tiktok'
+            : 'btn-video-youtube'
         );
 
+      const textoOriginal =
+        btn.innerHTML;
+
       btn.innerHTML =
-        '<i class="fa-solid fa-spinner animate-spin"></i> Gerando Vídeo (3s)...';
+        '<i class="fa-solid fa-spinner animate-spin"></i> Gerando MP4...';
 
       btn.disabled = true;
 
       try {
-        const stream =
-          canvas.captureStream(
-            30
+        const tiposMP4 = [
+          'video/mp4;codecs=avc1.42E01E',
+          'video/mp4'
+        ];
+
+        const tipoMP4 =
+          tiposMP4.find(
+            tipo =>
+              MediaRecorder.isTypeSupported(
+                tipo
+              )
           );
 
-        const mediaRecorder =
-          new MediaRecorder(
-            stream,
-            {
-              mimeType:
-                'video/webm'
-            }
-          );
+        let blobMP4;
 
-        const chunks = [];
-
-        mediaRecorder.ondataavailable =
-          function(e) {
-            if (
-              e.data.size > 0
-            ) {
-              chunks.push(
-                e.data
-              );
-            }
-          };
-
-        mediaRecorder.onstop =
-          function() {
-            const blob =
-              new Blob(
-                chunks,
-                {
-                  type:
-                    'video/webm'
-                }
-              );
-
-            const url =
-              URL.createObjectURL(
-                blob
-              );
-
-            const a =
-              document.createElement(
-                'a'
-              );
-
-            a.style.display =
-              'none';
-
-            a.href =
-              url;
-
-            a.download =
-              'video-tiktok-pistaverde.webm';
-
-            document.body.appendChild(
-              a
+        if (tipoMP4) {
+          blobMP4 =
+            await gravarCanvas(
+              canvas,
+              tipoMP4
+            );
+        } else {
+          const tipoWebm =
+            [
+              'video/webm;codecs=vp9',
+              'video/webm;codecs=vp8',
+              'video/webm'
+            ].find(
+              tipo =>
+                MediaRecorder.isTypeSupported(
+                  tipo
+                )
             );
 
-            a.click();
+          if (!tipoWebm) {
+            throw new Error(
+              'Este navegador não permite gerar o vídeo.'
+            );
+          }
 
-            setTimeout(
-              () => {
-                document.body.removeChild(
-                  a
-                );
-
-                URL.revokeObjectURL(
-                  url
-                );
-              },
-              100
+          const blobWebm =
+            await gravarCanvas(
+              canvas,
+              tipoWebm
             );
 
-            btn.innerHTML =
-              '<i class="fa-solid fa-film"></i> Gerar Vídeo TikTok';
+          btn.innerHTML =
+            '<i class="fa-solid fa-spinner animate-spin"></i> Convertendo para MP4...';
 
-            btn.disabled =
-              false;
-          };
+          blobMP4 =
+            await converterWebmParaMP4(
+              blobWebm,
+              destino
+            );
+        }
 
-        mediaRecorder.start();
-
-        setTimeout(
-          () => {
-            mediaRecorder.stop();
-          },
-          3000
+        baixarArquivoGerado(
+          blobMP4,
+          destino === 'tiktok'
+            ? 'tiktok-pistaverde.mp4'
+            : 'youtube-pistaverde.mp4'
         );
       } catch (err) {
         alert(
-          'Seu navegador bloqueou a gravação direta. Use a capa Stories como imagem estática.'
+          `Não foi possível gerar o MP4: ${err.message}`
         );
-
+      } finally {
         btn.innerHTML =
-          '<i class="fa-solid fa-film"></i> Gerar Vídeo TikTok';
-
-        btn.disabled =
-          false;
+          textoOriginal;
+        btn.disabled = false;
       }
     }
 
