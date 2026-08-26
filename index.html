@@ -877,11 +877,6 @@
 
       </section>
 
-      <div
-        id="status-wix-envio"
-        class="hidden border rounded-xl p-4 text-sm"
-      ></div>
-
       <div class="flex flex-col sm:flex-row justify-between gap-3 pt-5 border-t border-slate-200">
 
         <button
@@ -893,12 +888,11 @@
         </button>
 
         <button
-          id="btn-enviar-wix"
-          onclick="enviarParaWixDraft()"
+          onclick="irParaPagina(3)"
           class="px-7 py-3 bg-[#00AE35] hover:bg-green-700 text-white rounded-xl font-black shadow-md"
         >
-          <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
-          Enviar Rascunho ao Wix
+          Ver Capas e Redes Sociais
+          <i class="fa-solid fa-arrow-right ml-2"></i>
         </button>
 
       </div>
@@ -1062,6 +1056,11 @@
 
       </div>
 
+      <div
+        id="status-wix-envio"
+        class="hidden border rounded-xl p-4 text-sm"
+      ></div>
+
       <div class="flex flex-col sm:flex-row justify-between gap-3 pt-5 border-t border-slate-200">
 
         <button
@@ -1072,14 +1071,25 @@
           Voltar
         </button>
 
-        <button
-          id="btn-video-tiktok"
-          onclick="gerarVideoTikTok()"
-          class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black"
-        >
-          <i class="fa-solid fa-film mr-2"></i>
-          Gerar Vídeo TikTok
-        </button>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button
+            id="btn-video-tiktok"
+            onclick="gerarVideoTikTok()"
+            class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black"
+          >
+            <i class="fa-solid fa-film mr-2"></i>
+            Gerar Vídeo TikTok
+          </button>
+
+          <button
+            id="btn-enviar-wix"
+            onclick="enviarParaWixDraft()"
+            class="px-7 py-3 bg-[#00AE35] hover:bg-green-700 text-white rounded-xl font-black shadow-md"
+          >
+            <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
+            Enviar Rascunho ao Wix
+          </button>
+        </div>
 
       </div>
 
@@ -2858,7 +2868,7 @@ body{
 
 </html>`;
     }
-        function gerarMateriaEAvancar() {
+        async function gerarMateriaEAvancar() {
       const h1 =
         document.getElementById(
           'input-h1'
@@ -3397,6 +3407,11 @@ body{
         seo.slug
       );
 
+      await gerarTodasAsCapas(
+        h1,
+        categoria
+      );
+
       avancarRodizios();
 
       irParaPagina(2);
@@ -3771,6 +3786,401 @@ body{
       ).value =
         `${h1}\n\n${subtitulo}\n\nMatéria completa: ${url}\n\nPortal Pista Verde — Grid aquecido com responsabilidade.`;
     }
+
+    function carregarImagemDaCapa() {
+      return new Promise(
+        (resolve, reject) => {
+          const src =
+            fotosCarregadas[0]?.src;
+
+          if (!src) {
+            resolve(null);
+            return;
+          }
+
+          const imagem =
+            new Image();
+
+          imagem.onload = () =>
+            resolve(imagem);
+
+          imagem.onerror = () =>
+            reject(
+              new Error(
+                'Não foi possível carregar a foto de capa.'
+              )
+            );
+
+          imagem.src = src;
+        }
+      );
+    }
+
+    function desenharImagemPreenchida(
+      ctx,
+      imagem,
+      largura,
+      altura
+    ) {
+      if (!imagem) {
+        const fundo =
+          ctx.createLinearGradient(
+            0,
+            0,
+            largura,
+            altura
+          );
+
+        fundo.addColorStop(
+          0,
+          '#21300C'
+        );
+
+        fundo.addColorStop(
+          1,
+          '#071007'
+        );
+
+        ctx.fillStyle = fundo;
+        ctx.fillRect(
+          0,
+          0,
+          largura,
+          altura
+        );
+        return;
+      }
+
+      const escala =
+        Math.max(
+          largura / imagem.width,
+          altura / imagem.height
+        );
+
+      const w =
+        imagem.width * escala;
+
+      const h =
+        imagem.height * escala;
+
+      ctx.drawImage(
+        imagem,
+        (largura - w) / 2,
+        (altura - h) / 2,
+        w,
+        h
+      );
+    }
+
+    function quebrarTituloEmLinhas(
+      ctx,
+      titulo,
+      larguraMaxima
+    ) {
+      const palavras =
+        String(titulo || '')
+          .trim()
+          .split(/\s+/);
+
+      const linhas = [];
+      let linhaAtual = '';
+
+      palavras.forEach(
+        palavra => {
+          const teste =
+            linhaAtual
+              ? `${linhaAtual} ${palavra}`
+              : palavra;
+
+          if (
+            ctx.measureText(teste).width <=
+              larguraMaxima ||
+            !linhaAtual
+          ) {
+            linhaAtual = teste;
+            return;
+          }
+
+          linhas.push(linhaAtual);
+          linhaAtual = palavra;
+        }
+      );
+
+      if (linhaAtual) {
+        linhas.push(linhaAtual);
+      }
+
+      return linhas;
+    }
+
+    function desenharCapaSocial(
+      canvasId,
+      linkId,
+      largura,
+      altura,
+      titulo,
+      categoria,
+      imagem
+    ) {
+      const canvas =
+        document.getElementById(
+          canvasId
+        );
+
+      const ctx =
+        canvas.getContext('2d');
+
+      canvas.width = largura;
+      canvas.height = altura;
+
+      desenharImagemPreenchida(
+        ctx,
+        imagem,
+        largura,
+        altura
+      );
+
+      const overlay =
+        ctx.createLinearGradient(
+          0,
+          altura * 0.28,
+          0,
+          altura
+        );
+
+      overlay.addColorStop(
+        0,
+        'rgba(0,0,0,0)'
+      );
+
+      overlay.addColorStop(
+        0.58,
+        'rgba(0,0,0,.58)'
+      );
+
+      overlay.addColorStop(
+        1,
+        'rgba(0,0,0,.94)'
+      );
+
+      ctx.fillStyle = overlay;
+      ctx.fillRect(
+        0,
+        0,
+        largura,
+        altura
+      );
+
+      const margem =
+        Math.round(
+          largura * 0.07
+        );
+
+      const linhaVerde =
+        Math.max(
+          8,
+          Math.round(
+            altura * 0.007
+          )
+        );
+
+      ctx.fillStyle = '#00AE35';
+      ctx.fillRect(
+        0,
+        0,
+        largura,
+        linhaVerde
+      );
+
+      const tamanhoEtiqueta =
+        Math.max(
+          22,
+          Math.round(
+            largura * 0.026
+          )
+        );
+
+      ctx.font =
+        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
+
+      const textoEtiqueta =
+        String(
+          categoria || 'Kartismo'
+        ).toUpperCase();
+
+      const paddingEtiqueta =
+        Math.round(
+          largura * 0.022
+        );
+
+      const alturaEtiqueta =
+        Math.round(
+          tamanhoEtiqueta * 2.05
+        );
+
+      const larguraEtiqueta =
+        Math.min(
+          largura - margem * 2,
+          ctx.measureText(
+            textoEtiqueta
+          ).width +
+            paddingEtiqueta * 2
+        );
+
+      let tamanhoTitulo =
+        Math.round(
+          largura *
+            (
+              altura / largura > 1.5
+                ? 0.072
+                : 0.058
+            )
+        );
+
+      const maximoLinhas =
+        altura / largura > 1.5
+          ? 5
+          : 4;
+
+      let linhas = [];
+
+      do {
+        ctx.font =
+          `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
+
+        linhas =
+          quebrarTituloEmLinhas(
+            ctx,
+            titulo,
+            largura - margem * 2
+          );
+
+        if (
+          linhas.length <= maximoLinhas
+        ) {
+          break;
+        }
+
+        tamanhoTitulo -= 2;
+      } while (
+        tamanhoTitulo >
+          Math.round(
+            largura * 0.038
+          )
+      );
+
+      const alturaLinha =
+        Math.round(
+          tamanhoTitulo * 1.12
+        );
+
+      const blocoTitulo =
+        linhas.length * alturaLinha;
+
+      const yTitulo =
+        altura -
+        margem -
+        blocoTitulo;
+
+      const yEtiqueta =
+        yTitulo -
+        alturaEtiqueta -
+        Math.round(
+          altura * 0.025
+        );
+
+      ctx.fillStyle = '#00AE35';
+      ctx.fillRect(
+        margem,
+        yEtiqueta,
+        larguraEtiqueta,
+        alturaEtiqueta
+      );
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font =
+        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        textoEtiqueta,
+        margem + paddingEtiqueta,
+        yEtiqueta +
+          alturaEtiqueta / 2
+      );
+
+      ctx.font =
+        `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
+      ctx.textBaseline = 'top';
+
+      linhas.forEach(
+        (linha, index) => {
+          ctx.fillText(
+            linha,
+            margem,
+            yTitulo +
+              index * alturaLinha
+          );
+        }
+      );
+
+      document.getElementById(
+        linkId
+      ).href =
+        canvas.toDataURL(
+          'image/png',
+          1
+        );
+    }
+
+    async function gerarTodasAsCapas(
+      titulo,
+      categoria
+    ) {
+      try {
+        if (
+          document.fonts?.ready
+        ) {
+          await document.fonts.ready;
+        }
+
+        const imagem =
+          await carregarImagemDaCapa();
+
+        desenharCapaSocial(
+          'canvas-wix',
+          'link-download-wix',
+          1200,
+          675,
+          titulo,
+          categoria,
+          imagem
+        );
+
+        desenharCapaSocial(
+          'canvas-feed',
+          'link-download-feed',
+          1080,
+          1350,
+          titulo,
+          categoria,
+          imagem
+        );
+
+        desenharCapaSocial(
+          'canvas-stories',
+          'link-download-stories',
+          1080,
+          1920,
+          titulo,
+          categoria,
+          imagem
+        );
+      } catch (err) {
+        alert(
+          err.message
+        );
+      }
+    }
         async function enviarParaWixDraft() {
       const btn = document.getElementById('btn-enviar-wix');
       const status = document.getElementById('status-wix-envio');
@@ -3972,13 +4382,6 @@ body{
           status.innerHTML =
             `<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado com sucesso no Wix!</strong>${cat}${tags}`;
 
-          avancarRodizios();
-
-          setTimeout(
-            () =>
-              irParaPagina(3),
-            1500
-          );
         } else {
           const msgErro =
             data.error ||
