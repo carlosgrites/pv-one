@@ -3465,7 +3465,9 @@ body{
 
       await gerarTodasAsCapas(
         h1,
-        categoria
+        subtitulo,
+        categoria,
+        apoiadorAtual.apoiador
       );
 
       avancarRodizios();
@@ -4042,7 +4044,11 @@ body{
             fotosCarregadas[0]?.src;
 
           if (!src) {
-            resolve(null);
+            reject(
+              new Error(
+                'A foto de capa é obrigatória. Nenhuma arte foi gerada.'
+              )
+            );
             return;
           }
 
@@ -4161,14 +4167,195 @@ body{
       return linhas;
     }
 
+    function carregarLogomarcaOficial(
+      src
+    ) {
+      return new Promise(
+        (resolve, reject) => {
+          const imagem = new Image();
+          imagem.crossOrigin = 'anonymous';
+          imagem.onload = () =>
+            resolve(imagem);
+          imagem.onerror = () =>
+            reject(
+              new Error(
+                'Não foi possível carregar uma das logomarcas oficiais.'
+              )
+            );
+          imagem.src = src;
+        }
+      );
+    }
+
+    function desenharImagemContida(
+      ctx,
+      imagem,
+      x,
+      y,
+      largura,
+      altura
+    ) {
+      const escala =
+        Math.min(
+          largura / imagem.width,
+          altura / imagem.height
+        );
+
+      const w =
+        imagem.width * escala;
+      const h =
+        imagem.height * escala;
+
+      ctx.drawImage(
+        imagem,
+        x + (largura - w) / 2,
+        y + (altura - h) / 2,
+        w,
+        h
+      );
+    }
+
+    function desenharLinhaVerde(
+      ctx,
+      x,
+      y,
+      larguraBase
+    ) {
+      ctx.fillStyle = '#00AE35';
+      ctx.fillRect(
+        x,
+        y,
+        Math.round(
+          larguraBase * 0.095
+        ),
+        Math.max(
+          5,
+          Math.round(
+            larguraBase * 0.006
+          )
+        )
+      );
+    }
+
+    function montarLinhasComPalavras(
+      ctx,
+      texto,
+      larguraMaxima
+    ) {
+      const palavras =
+        String(texto || '')
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+
+      const linhas = [];
+      let linha = [];
+
+      palavras.forEach(
+        palavra => {
+          const teste =
+            [...linha, palavra]
+              .join(' ');
+
+          if (
+            linha.length &&
+            ctx.measureText(teste).width >
+              larguraMaxima
+          ) {
+            linhas.push(linha);
+            linha = [palavra];
+          } else {
+            linha.push(palavra);
+          }
+        }
+      );
+
+      if (linha.length) {
+        linhas.push(linha);
+      }
+
+      return linhas;
+    }
+
+    function desenharTituloOficial(
+      ctx,
+      linhas,
+      x,
+      y,
+      tamanho,
+      alturaLinha,
+      tituloCompleto
+    ) {
+      const totalPalavras =
+        String(tituloCompleto || '')
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean)
+          .length;
+
+      const inicioVerde =
+        Math.max(
+          1,
+          Math.floor(
+            totalPalavras * 0.58
+          )
+        );
+
+      let contador = 0;
+
+      ctx.font =
+        `900 ${tamanho}px Poppins, Arial, sans-serif`;
+      ctx.textBaseline = 'top';
+
+      linhas.forEach(
+        (palavras, linhaIndex) => {
+          let cursorX = x;
+
+          palavras.forEach(
+            palavra => {
+              const verde =
+                contador >= inicioVerde ||
+                /\d/.test(palavra);
+
+              ctx.fillStyle =
+                verde
+                  ? '#00AE35'
+                  : '#ffffff';
+
+              const trecho =
+                `${palavra} `;
+
+              ctx.fillText(
+                trecho,
+                cursorX,
+                y +
+                  linhaIndex *
+                    alturaLinha
+              );
+
+              cursorX +=
+                ctx.measureText(
+                  trecho
+                ).width;
+
+              contador++;
+            }
+          );
+        }
+      );
+    }
+
     function desenharCapaSocial(
       canvasId,
       linkId,
       largura,
       altura,
       titulo,
+      subtitulo,
       categoria,
-      imagem
+      imagem,
+      logoMega,
+      logoRotativa
     ) {
       const canvas =
         document.getElementById(
@@ -4188,10 +4375,13 @@ body{
         altura
       );
 
+      const vertical =
+        altura / largura > 1.15;
+
       const overlay =
         ctx.createLinearGradient(
           0,
-          altura * 0.28,
+          altura * 0.22,
           0,
           altura
         );
@@ -4200,15 +4390,17 @@ body{
         0,
         'rgba(0,0,0,0)'
       );
-
       overlay.addColorStop(
-        0.58,
-        'rgba(0,0,0,.58)'
+        0.43,
+        'rgba(0,0,0,.18)'
       );
-
+      overlay.addColorStop(
+        0.68,
+        'rgba(0,0,0,.83)'
+      );
       overlay.addColorStop(
         1,
-        'rgba(0,0,0,.94)'
+        'rgba(0,0,0,.98)'
       );
 
       ctx.fillStyle = overlay;
@@ -4221,40 +4413,42 @@ body{
 
       const margem =
         Math.round(
-          largura * 0.07
-        );
-
-      const linhaVerde =
-        Math.max(
-          8,
-          Math.round(
-            altura * 0.007
-          )
+          largura * 0.045
         );
 
       ctx.fillStyle = '#00AE35';
       ctx.fillRect(
-        0,
-        0,
-        largura,
-        linhaVerde
+        margem * 0.65,
+        Math.round(
+          altura * 0.018
+        ),
+        largura - margem * 1.3,
+        Math.max(
+          6,
+          Math.round(
+            altura * 0.005
+          )
+        )
       );
 
       const tamanhoEtiqueta =
         Math.max(
-          22,
+          16,
           Math.round(
-            largura * 0.026
+            largura *
+              (vertical
+                ? 0.026
+                : 0.019)
           )
         );
-
-      ctx.font =
-        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
 
       const textoEtiqueta =
         String(
           categoria || 'Kartismo'
         ).toUpperCase();
+
+      ctx.font =
+        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
 
       const paddingEtiqueta =
         Math.round(
@@ -4275,79 +4469,23 @@ body{
             paddingEtiqueta * 2
         );
 
-      let tamanhoTitulo =
-        Math.round(
-          largura *
-            (
-              altura / largura > 1.5
-                ? 0.072
-                : 0.058
-            )
-        );
-
-      const maximoLinhas =
-        altura / largura > 1.5
-          ? 5
-          : 4;
-
-      let linhas = [];
-
-      do {
-        ctx.font =
-          `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
-
-        linhas =
-          quebrarTituloEmLinhas(
-            ctx,
-            titulo,
-            largura - margem * 2
-          );
-
-        if (
-          linhas.length <= maximoLinhas
-        ) {
-          break;
-        }
-
-        tamanhoTitulo -= 2;
-      } while (
-        tamanhoTitulo >
-          Math.round(
-            largura * 0.038
-          )
-      );
-
-      const alturaLinha =
-        Math.round(
-          tamanhoTitulo * 1.12
-        );
-
-      const blocoTitulo =
-        linhas.length * alturaLinha;
-
-      const yTitulo =
-        altura -
-        margem -
-        blocoTitulo;
-
       const yEtiqueta =
-        yTitulo -
-        alturaEtiqueta -
         Math.round(
-          altura * 0.025
+          altura * 0.045
         );
 
       ctx.fillStyle = '#00AE35';
-      ctx.fillRect(
+      ctx.beginPath();
+      ctx.roundRect(
         margem,
         yEtiqueta,
         larguraEtiqueta,
-        alturaEtiqueta
+        alturaEtiqueta,
+        alturaEtiqueta / 2
       );
+      ctx.fill();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font =
-        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
       ctx.textBaseline = 'middle';
       ctx.fillText(
         textoEtiqueta,
@@ -4356,19 +4494,251 @@ body{
           alturaEtiqueta / 2
       );
 
-      ctx.font =
-        `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
-      ctx.textBaseline = 'top';
+      const boxGap =
+        Math.round(
+          largura * 0.024
+        );
 
-      linhas.forEach(
+      const larguraBox =
+        Math.round(
+          (largura -
+            margem * 2 -
+            boxGap) / 2
+        );
+
+      const alturaBox =
+        Math.round(
+          Math.min(
+            larguraBox * 0.28,
+            altura *
+              (vertical
+                ? 0.085
+                : 0.105)
+          )
+        );
+
+      const yBoxes =
+        altura -
+        margem -
+        alturaBox;
+
+      const tamanhoApoio =
+        Math.max(
+          13,
+          Math.round(
+            largura * 0.018
+          )
+        );
+
+      const yApoio =
+        yBoxes -
+        Math.round(
+          tamanhoApoio * 1.75
+        );
+
+      desenharLinhaVerde(
+        ctx,
+        margem,
+        yApoio -
+          Math.round(
+            tamanhoApoio * 0.85
+          ),
+        largura
+      );
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font =
+        `800 ${tamanhoApoio}px Poppins, Arial, sans-serif`;
+      ctx.textBaseline = 'top';
+      ctx.fillText(
+        'ESSAS EMPRESAS APOIAM O ESPORTE',
+        margem,
+        yApoio
+      );
+
+      const desenharBoxLogo = (
+        x,
+        logo
+      ) => {
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle =
+          'rgba(255,255,255,.85)';
+        ctx.lineWidth = Math.max(
+          2,
+          largura * 0.002
+        );
+        ctx.beginPath();
+        ctx.roundRect(
+          x,
+          yBoxes,
+          larguraBox,
+          alturaBox,
+          Math.round(
+            largura * 0.012
+          )
+        );
+        ctx.fill();
+        ctx.stroke();
+
+        const paddingLogo =
+          Math.round(
+            alturaBox * 0.13
+          );
+
+        desenharImagemContida(
+          ctx,
+          logo,
+          x + paddingLogo,
+          yBoxes + paddingLogo,
+          larguraBox -
+            paddingLogo * 2,
+          alturaBox -
+            paddingLogo * 2
+        );
+      };
+
+      desenharBoxLogo(
+        margem,
+        logoMega
+      );
+      desenharBoxLogo(
+        margem +
+          larguraBox +
+          boxGap,
+        logoRotativa
+      );
+
+      const tamanhoSubtitulo =
+        Math.max(
+          17,
+          Math.round(
+            largura *
+              (vertical
+                ? 0.027
+                : 0.017)
+          )
+        );
+
+      ctx.font =
+        `500 ${tamanhoSubtitulo}px Poppins, Arial, sans-serif`;
+
+      let linhasSubtitulo =
+        quebrarTituloEmLinhas(
+          ctx,
+          subtitulo,
+          largura - margem * 2
+        );
+
+      const maxSubtitulo =
+        vertical ? 4 : 2;
+
+      linhasSubtitulo =
+        linhasSubtitulo.slice(
+          0,
+          maxSubtitulo
+        );
+
+      const alturaLinhaSub =
+        Math.round(
+          tamanhoSubtitulo * 1.35
+        );
+
+      const blocoSubtitulo =
+        linhasSubtitulo.length *
+        alturaLinhaSub;
+
+      const ySubtitulo =
+        yApoio -
+        Math.round(
+          tamanhoApoio * 1.55
+        ) -
+        blocoSubtitulo;
+
+      desenharLinhaVerde(
+        ctx,
+        margem,
+        ySubtitulo -
+          Math.round(
+            tamanhoSubtitulo * 0.8
+          ),
+        largura
+      );
+
+      ctx.fillStyle = '#ffffff';
+      ctx.textBaseline = 'top';
+      linhasSubtitulo.forEach(
         (linha, index) => {
           ctx.fillText(
             linha,
             margem,
-            yTitulo +
-              index * alturaLinha
+            ySubtitulo +
+              index * alturaLinhaSub
           );
         }
+      );
+
+      let tamanhoTitulo =
+        Math.round(
+          largura *
+            (vertical
+              ? 0.065
+              : 0.047)
+        );
+
+      const maxTitulo =
+        vertical ? 5 : 3;
+
+      let linhasTitulo = [];
+
+      do {
+        ctx.font =
+          `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
+        linhasTitulo =
+          montarLinhasComPalavras(
+            ctx,
+            titulo,
+            largura - margem * 2
+          );
+
+        if (
+          linhasTitulo.length <=
+            maxTitulo
+        ) {
+          break;
+        }
+
+        tamanhoTitulo -= 2;
+      } while (
+        tamanhoTitulo >
+          Math.round(
+            largura * 0.032
+          )
+      );
+
+      const alturaLinhaTitulo =
+        Math.round(
+          tamanhoTitulo * 1.08
+        );
+
+      const blocoTitulo =
+        linhasTitulo.length *
+        alturaLinhaTitulo;
+
+      const yTitulo =
+        ySubtitulo -
+        Math.round(
+          tamanhoSubtitulo * 1.55
+        ) -
+        blocoTitulo;
+
+      desenharTituloOficial(
+        ctx,
+        linhasTitulo,
+        margem,
+        yTitulo,
+        tamanhoTitulo,
+        alturaLinhaTitulo,
+        titulo
       );
 
       document.getElementById(
@@ -4378,12 +4748,47 @@ body{
           'image/png',
           1
         );
+
+      canvas.dataset.ready = 'true';
+    }
+
+    function limparCapasGeradas() {
+      [
+        ['canvas-wix', 'link-download-wix'],
+        ['canvas-feed', 'link-download-feed'],
+        ['canvas-stories', 'link-download-stories'],
+        ['canvas-youtube', 'link-download-youtube']
+      ].forEach(
+        ([canvasId, linkId]) => {
+          const canvas =
+            document.getElementById(
+              canvasId
+            );
+          const ctx =
+            canvas.getContext('2d');
+
+          ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+          canvas.dataset.ready = 'false';
+          document
+            .getElementById(linkId)
+            .removeAttribute('href');
+        }
+      );
     }
 
     async function gerarTodasAsCapas(
       titulo,
-      categoria
+      subtitulo,
+      categoria,
+      apoiadorRotativo
     ) {
+      limparCapasGeradas();
+
       try {
         if (
           document.fonts?.ready
@@ -4391,8 +4796,20 @@ body{
           await document.fonts.ready;
         }
 
-        const imagem =
-          await carregarImagemDaCapa();
+        const [
+          imagem,
+          logoMega,
+          logoRotativa
+        ] =
+          await Promise.all([
+            carregarImagemDaCapa(),
+            carregarLogomarcaOficial(
+              APOIADOR_FIXO.logo
+            ),
+            carregarLogomarcaOficial(
+              apoiadorRotativo.logo
+            )
+          ]);
 
         desenharCapaSocial(
           'canvas-wix',
@@ -4400,8 +4817,11 @@ body{
           1200,
           675,
           titulo,
+          subtitulo,
           categoria,
-          imagem
+          imagem,
+          logoMega,
+          logoRotativa
         );
 
         desenharCapaSocial(
@@ -4410,8 +4830,11 @@ body{
           1080,
           1350,
           titulo,
+          subtitulo,
           categoria,
-          imagem
+          imagem,
+          logoMega,
+          logoRotativa
         );
 
         desenharCapaSocial(
@@ -4420,8 +4843,11 @@ body{
           1080,
           1920,
           titulo,
+          subtitulo,
           categoria,
-          imagem
+          imagem,
+          logoMega,
+          logoRotativa
         );
 
         desenharCapaSocial(
@@ -4430,10 +4856,14 @@ body{
           1920,
           1080,
           titulo,
+          subtitulo,
           categoria,
-          imagem
+          imagem,
+          logoMega,
+          logoRotativa
         );
       } catch (err) {
+        limparCapasGeradas();
         alert(
           err.message
         );
@@ -4917,6 +5347,15 @@ body{
         document.getElementById(
           canvasId
         );
+
+      if (
+        canvas.dataset.ready !== 'true'
+      ) {
+        alert(
+          'Carregue a foto de capa e gere a matéria antes de criar o MP4.'
+        );
+        return;
+      }
 
       const btn =
         document.getElementById(
