@@ -1,959 +1,4552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PV ONE v3.0 - Central Editorial Portal Pista Verde</title>
 
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet"
+  >
 
-// ============================================================
-// PORTAL PISTA VERDE — PV ONE
-// api/wix.js
-// Integração Wix Blog V3
-// ============================================================
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-export default async function handler(req, res) {
-  try {
-    if (req.method !== "POST") {
-      return res.status(405).json({
-        error: "Método não permitido."
-      });
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    body {
+      background-color: #f4f7f4;
+      color: #111111;
+      font-family: 'Poppins', sans-serif;
     }
 
-    // ==========================================================
-    // CONFIGURAÇÃO
-    // ==========================================================
-
-    const apiKey = String(
-      process.env.WIX_API_KEY || ""
-    )
-      .replace(/^Bearer\s+/i, "")
-      .trim();
-
-    const siteId =
-      "50bca98c-31f2-4172-a19d-c3abf3dd9dd7";
-
-    const authorEmail =
-      "portalpistaverde@gmail.com";
-
-    if (!apiKey) {
-      return forwardToConfiguredBackend(req, res);
+    .custom-scroll::-webkit-scrollbar {
+      width: 8px;
     }
 
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: apiKey,
-      "wix-site-id": siteId
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .ppv-materia {
+      font-family: "Poppins", "Inter", sans-serif;
+      color: #21300C;
+      background: #ffffff;
+      line-height: 1.8;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+
+    .ppv-hero {
+      min-height: 380px;
+      display: flex;
+      align-items: flex-end;
+      padding: 36px 24px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .ppv-hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .ppv-label {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: #00AE35;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .ppv-hero-title {
+      margin: 0 0 12px;
+      color: #ffffff;
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 900;
+      line-height: 1.15;
+      text-transform: uppercase;
+      font-family: "Poppins", sans-serif;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.8);
+    }
+
+    .ppv-underline {
+      width: 80px;
+      height: 5px;
+      margin: 0 0 14px;
+      border-radius: 999px;
+      background: #00AE35;
+    }
+
+    .ppv-subtitle {
+      margin: 0;
+      color: #ffffff;
+      font-size: clamp(15px, 1.5vw, 18px);
+      font-weight: 500;
+      line-height: 1.5;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .ppv-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 36px 24px 50px;
+    }
+
+    .ppv-infobox {
+      background: #ffffff;
+      border-top: 6px solid #00AE35;
+      box-shadow: 0 16px 36px rgba(0,0,0,.08);
+      border-radius: 18px;
+      padding: 24px;
+      margin: -50px auto 32px;
+      position: relative;
+      z-index: 3;
+      border: 1px solid #e2e8f0;
+    }
+
+    .ppv-ad {
+      margin: 36px 0;
+      border: 1px solid rgba(0,174,53,.4);
+      border-radius: 16px;
+      background: #101510;
+      color: #ffffff;
+      overflow: hidden;
+    }
+
+    .ppv-ad-inner {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 20px;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .ppv-ad img {
+      width: 100%;
+      height: 85px;
+      border-radius: 10px;
+      background: #fff;
+      object-fit: contain;
+      padding: 4px;
+    }
+
+    .ppv-ad-tag {
+      display: inline-block;
+      margin-bottom: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #00AE35;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .ppv-ad h3 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .ppv-ad p {
+      margin: 0 0 14px;
+      color: #dfe7dc;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .ppv-ad-button,
+    .ppv-sponsor-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: #00AE35;
+      color: #fff !important;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .ppv-apoio {
+      margin-top: 40px;
+      padding: 26px;
+      border: 1px solid #d1dbcd;
+      border-radius: 18px;
+      background: #f2f6f1;
+    }
+
+    .ppv-sponsor-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 20px;
+      margin-top: 18px;
+    }
+
+    .ppv-sponsor-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px;
+      border-left: 5px solid #00AE35;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(0,0,0,.06);
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .ppv-sponsor-card img {
+      width: 100%;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 14px;
+    }
+
+    .ppv-sponsor-card h3 {
+      margin: 0 0 6px;
+      color: #21300C;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .ppv-sponsor-card p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.55;
+    }
+
+    .ppv-portal-footer {
+      margin-top: 36px;
+      padding: 28px;
+      background: #071007;
+      border-radius: 16px;
+      color: #ffffff;
+      text-align: center;
+      border-top: 6px solid #00AE35;
+    }
+
+    .ppv-portal-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .ppv-portal-mark {
+      background: #00AE35;
+      color: #101510;
+      font-family: "Poppins", sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 8px;
+    }
+
+    .ppv-portal-name strong {
+      display: block;
+      font-family: "Poppins", sans-serif;
+      font-size: 20px;
+      color: #ffffff;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .ppv-portal-name span {
+      font-size: 12px;
+      color: #00AE35;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .ppv-portal-footer p {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.65;
+      max-width: 700px;
+      margin: 0 auto 16px;
+    }
+
+    .ppv-portal-footer a {
+      display: inline-block;
+      padding: 10px 22px;
+      border-radius: 999px;
+      background: #00AE35;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .ppv-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .ppv-gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+
+    .ppv-gallery-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .ppv-gallery-badge {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body class="p-3 md:p-6 bg-[#f4f7f4] min-h-screen text-slate-900">
+
+  <div class="max-w-[1450px] mx-auto space-y-6">
+
+    <header class="bg-white p-5 rounded-2xl border border-slate-300 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 rounded-full bg-[#00AE35]"></div>
+
+        <h1 class="text-xl font-black tracking-wider text-slate-900">
+          PV ONE
+          <span class="text-sm text-[#00AE35] font-bold">
+            Central Editorial
+          </span>
+        </h1>
+      </div>
+
+      <nav class="flex items-center bg-slate-100 p-1.5 rounded-xl border border-slate-300 w-full md:w-auto">
+
+        <button
+          id="nav-btn-1"
+          onclick="irParaPagina(1)"
+          class="flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition bg-[#00AE35] text-white shadow-sm flex items-center justify-center gap-2"
+        >
+          <span>1.</span>
+          Entrada da Matéria
+        </button>
+
+        <button
+          id="nav-btn-2"
+          onclick="irParaPagina(2)"
+          class="flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2"
+        >
+          <span>2.</span>
+          Revisão & iFrames
+        </button>
+
+        <button
+          id="nav-btn-3"
+          onclick="irParaPagina(3)"
+          class="flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2"
+        >
+          <span>3.</span>
+          Redes Sociais & Mídia
+        </button>
+
+      </nav>
+
+    </header>
+
+    <main
+      id="pagina-1"
+      class="bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-6"
+    >
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 gap-3">
+
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">
+            Passo 1: Ingestão de Conteúdo
+          </h2>
+
+          <p class="text-sm text-slate-600 mt-0.5">
+            Insira os dados do release e selecione até várias fotos para distribuição automática.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+
+          <button
+            onclick="limparTudoComConfirmacao()"
+            class="px-4 py-2 text-xs font-bold rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 flex items-center gap-1.5 transition"
+          >
+            <i class="fa-regular fa-trash-can"></i>
+            Limpar Tudo / Nova Matéria
+          </button>
+
+          <div class="flex rounded-lg overflow-hidden p-1 bg-slate-100 border border-slate-300">
+
+            <button
+              id="tab-recebida"
+              onclick="trocarOrigem('recebida')"
+              class="px-4 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-white shadow-sm"
+            >
+              Release
+            </button>
+
+            <button
+              id="tab-propria"
+              onclick="trocarOrigem('propria')"
+              class="px-4 py-1.5 text-xs font-bold rounded text-slate-600"
+            >
+              Própria
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+        <div class="md:col-span-8 space-y-5">
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              Título Principal (H1)
+            </label>
+
+            <input
+              type="text"
+              id="input-h1"
+              placeholder="Digite ou cole o título da matéria aqui..."
+              class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-base text-slate-900 focus:border-[#00AE35] outline-none font-bold shadow-sm"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              Subtítulo / Linha Fina
+            </label>
+
+            <input
+              type="text"
+              id="input-subtitulo"
+              placeholder="Digite o resumo ou linha fina da matéria..."
+              class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-800 focus:border-[#00AE35] outline-none shadow-sm"
+            >
+          </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                Categoria / Campeonato
+              </label>
+
+              <select
+                id="input-categoria"
+                class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 focus:border-[#00AE35] outline-none shadow-sm"
+              >
+                <option>Kartismo Brasileiro</option>
+                <option>Copa São Paulo Light</option>
+                <option>Campeonato Brasileiro de Kart</option>
+                <option>Kartismo Catarinense</option>
+                <option>Kartismo Paulista</option>
+                <option>Kartismo Paranaense</option>
+                <option>Kartismo Carioca</option>
+                <option>Automobilismo</option>
+                <option>ESG / ODS</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-1.5">
+                Fotógrafo
+              </label>
+
+              <input
+                type="text"
+                id="input-fotografo"
+                placeholder="Ex.: Divulgação"
+                class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 focus:border-[#00AE35] outline-none shadow-sm"
+              >
+            </div>
+
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              Legenda da Foto
+            </label>
+
+            <input
+              type="text"
+              id="input-legenda-foto"
+              placeholder="Legenda principal da imagem"
+              class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 focus:border-[#00AE35] outline-none shadow-sm"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              Fonte / Créditos do Release
+            </label>
+
+            <input
+              type="text"
+              id="input-creditos"
+              placeholder="Ex.: Assessoria de Imprensa"
+              class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 focus:border-[#00AE35] outline-none shadow-sm"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              Instagram do Piloto / Equipe
+            </label>
+
+            <input
+              type="text"
+              id="input-piloto-insta"
+              placeholder="@usuario"
+              class="w-full bg-white border-2 border-slate-300 rounded-xl p-3.5 text-sm text-slate-900 focus:border-[#00AE35] outline-none shadow-sm"
+            >
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-slate-800 mb-1.5">
+              Release / Corpo da Matéria
+            </label>
+
+            <textarea
+              id="input-release"
+              rows="18"
+              placeholder="Cole aqui o release completo..."
+              class="w-full bg-white border-2 border-slate-300 rounded-xl p-4 text-sm text-slate-900 focus:border-[#00AE35] outline-none custom-scroll shadow-sm leading-relaxed"
+            ></textarea>
+          </div>
+
+        </div>
+
+        <div class="md:col-span-4 space-y-5">
+
+          <div class="bg-slate-50 border border-slate-300 rounded-xl p-5">
+
+            <h3 class="font-black text-slate-900 mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-images text-[#00AE35]"></i>
+              Fotos da Matéria
+            </h3>
+
+            <p class="text-xs text-slate-600 mb-4">
+              A primeira foto será utilizada como capa. As demais serão distribuídas automaticamente.
+            </p>
+
+            <input
+              type="file"
+              id="input-fotos"
+              accept="image/*"
+              multiple
+              onchange="carregarFotos(event)"
+              class="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00AE35] file:text-white hover:file:bg-green-700"
+            >
+
+            <div
+              id="status-fotos-qtd"
+              class="mt-3 text-xs font-bold text-slate-600"
+            >
+              Nenhuma foto carregada.
+            </div>
+
+            <button
+              id="btn-limpar-fotos"
+              onclick="limparFotos()"
+              class="hidden mt-3 px-3 py-2 text-xs font-bold rounded-lg bg-red-50 text-red-600 border border-red-200"
+            >
+              Limpar fotos
+            </button>
+
+            <div
+              id="preview-miniaturas-grid"
+              class="hidden grid grid-cols-2 gap-2 mt-4"
+            ></div>
+
+          </div>
+
+          <div class="bg-[#071007] text-white border-t-4 border-[#00AE35] rounded-xl p-5">
+
+            <h3 class="font-black mb-2">
+              Padrão Portal Pista Verde
+            </h3>
+
+            <p class="text-xs text-slate-300 leading-relaxed">
+              O PV ONE prepara a estrutura editorial, SEO, links internos, publicidade, apoiadores e peças para redes sociais.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="pt-5 border-t border-slate-200 flex justify-end">
+
+        <button
+          onclick="gerarMateriaEAvancar()"
+          class="px-7 py-3.5 bg-[#00AE35] hover:bg-green-700 text-white rounded-xl font-black shadow-md transition flex items-center gap-2"
+        >
+          Gerar Matéria
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+      </div>
+
+    </main>
+
+    <main
+      id="pagina-2"
+      class="hidden bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-6"
+    >
+
+      <div class="border-b border-slate-200 pb-4">
+
+        <h2 class="text-lg font-bold text-slate-900">
+          Passo 2: Revisão, SEO e Publicação
+        </h2>
+
+        <p class="text-sm text-slate-600 mt-1">
+          Confira a matéria, os blocos comerciais e os dados de SEO antes do envio ao Wix.
+        </p>
+
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+        <div class="xl:col-span-8">
+
+          <div class="bg-slate-100 border border-slate-300 rounded-xl p-3">
+
+            <div class="flex items-center justify-between mb-3">
+
+              <h3 class="text-sm font-black text-slate-900">
+                Preview da Matéria
+              </h3>
+
+              <span class="text-xs font-bold text-[#00AE35]">
+                Portal Pista Verde
+              </span>
+
+            </div>
+
+            <div
+              id="leitor-materia-html"
+              class="bg-white rounded-xl"
+            ></div>
+
+          </div>
+
+        </div>
+
+        <div class="xl:col-span-4 space-y-5">
+
+          <section class="bg-slate-50 border border-slate-300 rounded-xl p-5 space-y-4">
+
+            <div>
+              <h3 class="font-black text-slate-900">
+                SEO Wix / Google
+              </h3>
+
+              <p class="text-xs text-slate-600 mt-1">
+                Dados preparados automaticamente para o rascunho nativo.
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Palavra-chave foco
+              </label>
+
+              <input
+                id="seo-focus-keyword"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              >
+
+              <div
+                id="seo-check-keyword"
+                class="mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 border border-slate-300"
+              >
+                Aguardando geração
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Tag de título
+              </label>
+
+              <input
+                id="seo-title"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Meta descrição
+              </label>
+
+              <textarea
+                id="seo-meta-description"
+                rows="3"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Slug
+              </label>
+
+              <input
+                id="seo-slug"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Trecho
+              </label>
+
+              <textarea
+                id="seo-excerpt"
+                rows="3"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              ></textarea>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+
+                <label class="block text-xs font-black text-slate-700">
+                  Tags
+                </label>
+
+                <span
+                  id="seo-tags-count"
+                  class="text-[10px] font-black text-[#00AE35]"
+                >
+                  0 tags
+                </span>
+
+              </div>
+
+              <textarea
+                id="seo-tags"
+                rows="5"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-xs"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Links internos
+              </label>
+
+              <textarea
+                id="seo-internal-links"
+                rows="5"
+                readonly
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-xs bg-white"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                Dados estruturados
+              </label>
+
+              <textarea
+                id="seo-structured-data"
+                rows="8"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-[11px] font-mono"
+              ></textarea>
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+        <div class="bg-slate-50 border border-slate-300 rounded-xl p-5">
+
+          <div class="flex justify-between items-center mb-3">
+
+            <div>
+              <h3 class="font-black text-slate-900">
+                HTML — Publicidade
+              </h3>
+
+              <p class="text-xs text-slate-600">
+                Inovimpress / Casa das Cópias em rodízio.
+              </p>
+            </div>
+
+            <button
+              onclick="copiarTexto('code-publicidade')"
+              class="px-3 py-2 text-xs font-bold bg-[#00AE35] text-white rounded-lg"
+            >
+              Copiar
+            </button>
+
+          </div>
+
+          <textarea
+            id="code-publicidade"
+            rows="12"
+            readonly
+            class="w-full bg-slate-900 text-emerald-300 rounded-lg p-3 text-[11px] font-mono custom-scroll"
+          ></textarea>
+
+        </div>
+
+        <div class="bg-slate-50 border border-slate-300 rounded-xl p-5">
+
+          <div class="flex justify-between items-center mb-3">
+
+            <div>
+              <h3 class="font-black text-slate-900">
+                HTML — Empresas + Institucional
+              </h3>
+
+              <p class="text-xs text-slate-600">
+                Mega Kart fixa + apoiador rotativo + Portal Pista Verde.
+              </p>
+            </div>
+
+            <button
+              onclick="copiarTexto('code-apoiadores')"
+              class="px-3 py-2 text-xs font-bold bg-[#00AE35] text-white rounded-lg"
+            >
+              Copiar
+            </button>
+
+          </div>
+
+          <textarea
+            id="code-apoiadores"
+            rows="12"
+            readonly
+            class="w-full bg-slate-900 text-emerald-300 rounded-lg p-3 text-[11px] font-mono custom-scroll"
+          ></textarea>
+
+        </div>
+
+      </section>
+
+      <div class="flex flex-col sm:flex-row justify-between gap-3 pt-5 border-t border-slate-200">
+
+        <button
+          onclick="irParaPagina(1)"
+          class="px-5 py-3 border border-slate-300 rounded-xl font-bold text-slate-700 bg-white"
+        >
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Voltar
+        </button>
+
+        <button
+          onclick="irParaPagina(3)"
+          class="px-7 py-3 bg-[#00AE35] hover:bg-green-700 text-white rounded-xl font-black shadow-md"
+        >
+          Ver Capas e Redes Sociais
+          <i class="fa-solid fa-arrow-right ml-2"></i>
+        </button>
+
+      </div>
+
+    </main>
+
+    <main
+      id="pagina-3"
+      class="hidden bg-white p-6 md:p-8 rounded-2xl border border-slate-300 shadow-sm space-y-6"
+    >
+
+      <div class="border-b border-slate-200 pb-4">
+
+        <h2 class="text-lg font-bold text-slate-900">
+          Passo 3: Redes Sociais & Mídia
+        </h2>
+
+        <p class="text-sm text-slate-600 mt-1">
+          Capas e textos preparados para distribuição.
+        </p>
+
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <div class="bg-slate-50 border border-slate-300 rounded-xl p-4">
+
+          <h3 class="font-black text-sm mb-3">
+            Capa Wix — 1200 × 675
+          </h3>
+
+          <canvas
+            id="canvas-wix"
+            width="320"
+            height="180"
+            class="w-full border border-slate-300 rounded-lg bg-black"
+          ></canvas>
+
+          <a
+            id="link-download-wix"
+            download="capa-wix-pistaverde.png"
+            class="mt-3 block text-center bg-[#00AE35] text-white rounded-lg py-2 text-xs font-black"
+          >
+            Baixar Capa Wix
+          </a>
+
+        </div>
+
+        <div class="bg-slate-50 border border-slate-300 rounded-xl p-4">
+
+          <h3 class="font-black text-sm mb-3">
+            Instagram Feed — 1080 × 1350
+          </h3>
+
+          <canvas
+            id="canvas-feed"
+            width="144"
+            height="180"
+            class="mx-auto border border-slate-300 rounded-lg bg-black"
+          ></canvas>
+
+          <a
+            id="link-download-feed"
+            download="instagram-feed-pistaverde.png"
+            class="mt-3 block text-center bg-[#00AE35] text-white rounded-lg py-2 text-xs font-black"
+          >
+            Baixar Feed
+          </a>
+
+        </div>
+
+        <div class="bg-slate-50 border border-slate-300 rounded-xl p-4">
+
+          <h3 class="font-black text-sm mb-3">
+            Stories — 1080 × 1920
+          </h3>
+
+          <canvas
+            id="canvas-stories"
+            width="101"
+            height="180"
+            class="mx-auto border border-slate-300 rounded-lg bg-black"
+          ></canvas>
+
+          <a
+            id="link-download-stories"
+            download="stories-pistaverde.png"
+            class="mt-3 block text-center bg-[#00AE35] text-white rounded-lg py-2 text-xs font-black"
+          >
+            Baixar Stories
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="font-black text-sm">
+              Instagram / Facebook
+            </label>
+
+            <button
+              onclick="copiarTexto('text-insta')"
+              class="text-xs font-bold text-[#00AE35]"
+            >
+              Copiar
+            </button>
+          </div>
+
+          <textarea
+            id="text-insta"
+            rows="14"
+            class="w-full border border-slate-300 rounded-xl p-3 text-sm"
+          ></textarea>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="font-black text-sm">
+              Stories
+            </label>
+
+            <button
+              onclick="copiarTexto('text-stories')"
+              class="text-xs font-bold text-[#00AE35]"
+            >
+              Copiar
+            </button>
+          </div>
+
+          <textarea
+            id="text-stories"
+            rows="14"
+            class="w-full border border-slate-300 rounded-xl p-3 text-sm"
+          ></textarea>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <label class="font-black text-sm">
+              YouTube / TikTok
+            </label>
+
+            <button
+              onclick="copiarTexto('text-yt')"
+              class="text-xs font-bold text-[#00AE35]"
+            >
+              Copiar
+            </button>
+          </div>
+
+          <textarea
+            id="text-yt"
+            rows="14"
+            class="w-full border border-slate-300 rounded-xl p-3 text-sm"
+          ></textarea>
+        </div>
+
+      </div>
+
+      <div
+        id="status-wix-envio"
+        class="hidden border rounded-xl p-4 text-sm"
+      ></div>
+
+      <div class="flex flex-col sm:flex-row justify-between gap-3 pt-5 border-t border-slate-200">
+
+        <button
+          onclick="irParaPagina(2)"
+          class="px-5 py-3 border border-slate-300 rounded-xl font-bold text-slate-700"
+        >
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Voltar
+        </button>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button
+            id="btn-video-tiktok"
+            onclick="gerarVideoTikTok()"
+            class="px-6 py-3 bg-slate-900 text-white rounded-xl font-black"
+          >
+            <i class="fa-solid fa-film mr-2"></i>
+            Gerar Vídeo TikTok
+          </button>
+
+          <button
+            id="btn-enviar-wix"
+            onclick="enviarParaWixDraft()"
+            class="px-7 py-3 bg-[#00AE35] hover:bg-green-700 text-white rounded-xl font-black shadow-md"
+          >
+            <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
+            Enviar Rascunho ao Wix
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    let fotosCarregadas = [];
+
+    const PUBLICIDADES = [
+      {
+        nome: "Inovimpress",
+        logo: "https://static.wixstatic.com/media/74713a_9f487564690a4668ac86e67489593635~mv2.jpg",
+        desc: "Soluções em impressão para empresas, locação de equipamentos e suporte técnico.",
+        url: "https://anovimpress.com.br/",
+        btn: "Conheça a Inovimpress"
+      },
+      {
+        nome: "Casa das Cópias",
+        logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp",
+        desc: "Sua Gráfica Digital, Rápida e Moderna. Da impressão de pequenos projetos a grandes tiragens corporativas. Entregamos qualidade profissional com a agilidade que seu negócio precisa.",
+        url: "https://cdcj.shop/",
+        btn: "Conheça a Casa das Cópias"
+      }
+    ];
+
+    const APOIADOR_FIXO = {
+      nome: "Mega Kart",
+      logo: "https://static.wixstatic.com/media/74713a_aa7f1a284bd943b4a719ad24efaff200~mv2.webp",
+      desc: "O Projeto Mega é totalmente brasileiro, com sua primeira homologação CBA/CIK-FIA realizada em 1997. A Mega Kart cresce no mercado latino-americano de kart, peças e acessórios e atualmente é a maior fabricante da América Latina.",
+      url: "https://www.megakart.com.br/",
+      btn: "Conheça a Mega Kart"
     };
 
-    // ==========================================================
-    // DADOS RECEBIDOS
-    // ==========================================================
+    const APOIADORES_ROTATIVOS = [
+      {
+        nome: "Paralego Racing",
+        logo: "https://static.wixstatic.com/media/74713a_c2a31e7ef0e948d48509688f39df0428~mv2.webp",
+        desc: "A Paralego Racing, conhecida pela qualidade e variedade de seus produtos, conta com a experiência de 23 anos no mercado. Uma marca alinhada às tendências nacionais e internacionais.",
+        url: "https://www.paralegoracing.com.br",
+        btn: "Conheça a Paralego Racing"
+      },
+      {
+        nome: "Krona Brasil",
+        logo: "https://static.wixstatic.com/media/74713a_cefb94e3ec62450c9ef6ee52757e90e4~mv2.png",
+        desc: "Tubos e conexões. A Krona é show! Uma marca do Grupo Krona.",
+        url: "https://www.instagram.com/krona_brasil/",
+        btn: "Conheça a Krona Brasil"
+      },
+      {
+        nome: "Parque Kartódromo - Joinville SC",
+        logo: "https://static.wixstatic.com/media/67ee14_f99a22c74516489e926c13d31e2554b5~mv2.jpeg",
+        desc: "O espaço ideal para experiências únicas! Kart, eventos, esportes e lazer. Aluguel de pista, kart, espaços, quadras e mais. Cliente Portal Kartweb.",
+        url: "https://wa.me/5547988282163",
+        btn: "Fale pelo WhatsApp"
+      },
+      {
+        nome: "Instituto Atenas",
+        logo: "https://static.wixstatic.com/media/74713a_956fb3cc7d9e448383c6cfca36ad1966~mv2.png",
+        desc: "Referência em Medicina Integrada do Esporte e Saúde. Diretor Técnico: Dr. André Vilela CRM/SC 8815. Rua Camboriú, 175, Joinville, Santa Catarina.",
+        url: "https://www.instagram.com/iatenas/",
+        btn: "Conheça o Instituto Atenas"
+      },
+      {
+        nome: "Gatti FX Pirotecnia e Eventos",
+        logo: "https://static.wixstatic.com/media/74713a_4d7cb3fbe19b4013aaaa878ef9b41da3~mv2.jpeg",
+        desc: "Know-how, inovação e arte. Criação de efeitos para show, cinema, TV e teatro.",
+        url: "https://wa.me/5511999403894",
+        btn: "Fale pelo WhatsApp"
+      },
+      {
+        nome: "Casa das Cópias",
+        logo: "https://static.wixstatic.com/media/74713a_4ea112cf6d5b4d029d41b74d003bbc0c~mv2.webp",
+        desc: "Sua Gráfica Digital, Rápida e Moderna. Da impressão de pequenos projetos a grandes tiragens corporativas. Rua Coronel Francisco Gomes, 1245, Anita Garibaldi, Joinville - SC.",
+        url: "https://cdcj.shop/",
+        btn: "Conheça a Casa das Cópias"
+      },
+      {
+        nome: "RBC MotorSport",
+        logo: "https://static.wixstatic.com/media/74713a_59409fee566a4c33b01f0589c053e4fd~mv2.jpg",
+        desc: "Sua vitória é nosso objetivo. Há trinta anos fazendo campeões! Referência em preparação de motores e carburadores, locação e venda.",
+        url: "https://www.instagram.com/rbcmotorsport/",
+        btn: "Conheça a RBC MotorSport"
+      },
+      {
+        nome: "Massagem Coradelli",
+        logo: "https://static.wixstatic.com/media/74713a_9e14db73dbc94f818a4e5f5b9abd4ede~mv2.jpg",
+        desc: "Quiropraxia e Massoterapia. Atendimento de segunda a sexta, das 08h às 12h e das 14h às 18h; sábado, das 08h às 12h. Rua Petrópolis, 142, Joinville - SC.",
+        url: "https://www.instagram.com/massagemcoradelli/",
+        btn: "Conheça a Massagem Coradelli"
+      },
+      {
+        nome: "Formas Comunicação Visual",
+        logo: "https://static.wixstatic.com/media/74713a_e9b6f001ce98428e98e9ffda55a1aa18~mv2.png",
+        desc: "25 anos, referência nacional. Especialistas em projetos especiais. Rua República do Peru, 307, Joinville, Santa Catarina.",
+        url: "https://www.instagram.com/formascomvisual/",
+        btn: "Conheça a Formas"
+      },
+      {
+        nome: "Clínica Cães & Gatos",
+        logo: "https://static.wixstatic.com/media/74713a_cd90ff47c9cf42d5b6d5d6839cb5228a~mv2.webp",
+        desc: "Dedicação e profissionalismo fazem parte do nosso dia a dia. Excelente corpo clínico com dedicação integral ao seu melhor amigo.",
+        url: "https://clinicacaesegatos.com.br/",
+        btn: "Conheça a Clínica"
+      },
+      {
+        nome: "Paragon Ergonomics",
+        logo: "https://static.wixstatic.com/media/74713a_a555ee351a4d42d1bce1e33ee7fad659~mv2.avif",
+        desc: "A Paragon Ergonomics foi criada em 2013 e concebida em 2015 após quase dois anos de desenvolvimento de seus primeiros produtos, os assentos esportivos para kart de competição das linhas Conforto e Agressiva.",
+        url: "https://paragonergonomics.wixsite.com/paragon/blank",
+        btn: "Conheça a Paragon"
+      }
+    ];
+function irParaPagina(num) {
+      document.getElementById('pagina-1').classList.add('hidden');
+      document.getElementById('pagina-2').classList.add('hidden');
+      document.getElementById('pagina-3').classList.add('hidden');
 
-    const body = req.body || {};
+      document.getElementById('nav-btn-1').className = "flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2";
+      document.getElementById('nav-btn-2').className = "flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2";
+      document.getElementById('nav-btn-3').className = "flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2";
 
-    const headline =
-      String(
-        body.headline || "Sem título"
-      ).trim();
+      document.getElementById(`pagina-${num}`).classList.remove('hidden');
+      document.getElementById(`nav-btn-${num}`).className = "flex-1 md:flex-none px-6 py-2.5 text-sm font-bold rounded-lg transition bg-[#00AE35] text-white shadow-sm flex items-center justify-center gap-2";
 
-    const subtitle =
-      String(
-        body.subtitle || ""
-      ).trim();
-
-    const editorialBody =
-      String(
-        body.editorialBody || ""
-      )
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .trim();
-
-    const editorialBlocks =
-      Array.isArray(body.editorialBlocks)
-        ? body.editorialBlocks
-            .map(item => ({
-              type:
-                String(item?.type || "paragraph")
-                  .trim()
-                  .toLowerCase(),
-              text:
-                String(item?.text || "")
-                  .replace(/\r\n?/g, "\n")
-                  .replace(/\n+/g, " ")
-                  .trim()
-            }))
-            .filter(item => item.text)
-        : [];
-
-    const photographer =
-      String(
-        body.photographer || "Divulgação"
-      ).trim();
-
-    const source =
-      String(
-        body.source || "Redação"
-      ).trim();
-
-    const seo =
-      body.seo &&
-      typeof body.seo === "object"
-        ? body.seo
-        : {};
-
-    const internalLinks =
-      Array.isArray(body.internalLinks)
-        ? body.internalLinks
-            .filter(item =>
-              item &&
-              item.text &&
-              item.url
-            )
-            .slice(0, 3)
-        : [];
-
-    if (!headline) {
-      return res.status(400).json({
-        error:
-          "O título da matéria está vazio."
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
     }
 
-    if (!editorialBody) {
-      return res.status(400).json({
-        error:
-          "O corpo da matéria está vazio."
-      });
+    function limparFormularioCompleto() {
+      document.getElementById('input-h1').value = '';
+      document.getElementById('input-subtitulo').value = '';
+      document.getElementById('input-release').value = '';
+      document.getElementById('input-fotografo').value = '';
+      document.getElementById('input-legenda-foto').value = '';
+      document.getElementById('input-creditos').value = '';
+      document.getElementById('input-piloto-insta').value = '';
+      document.getElementById('input-categoria').selectedIndex = 0;
+
+      limparFotosMemoria();
+
+      document.getElementById('code-publicidade').value = '';
+      document.getElementById('code-apoiadores').value = '';
+      document.getElementById('leitor-materia-html').innerHTML = '';
+
+      document.getElementById('text-insta').value = '';
+      document.getElementById('text-stories').value = '';
+      document.getElementById('text-yt').value = '';
+
+      const status = document.getElementById('status-wix-envio');
+      status.classList.add('hidden');
+      status.innerHTML = '';
     }
 
-    // ==========================================================
-    // FUNÇÕES AUXILIARES
-    // ==========================================================
+    function limparTudoComConfirmacao() {
+      if (
+        confirm(
+          "Deseja realmente limpar todos os campos e fotos para iniciar uma nova matéria?"
+        )
+      ) {
+        limparFormularioCompleto();
+      }
+    }
 
-    async function readResponse(response) {
-      const text =
-        await response
-          .text()
-          .catch(() => "");
+    function novaMateriaELimpar() {
+      limparFormularioCompleto();
+      irParaPagina(1);
+    }
 
-      if (!text) {
-        return {};
+    function limparFotosMemoria() {
+      fotosCarregadas = [];
+
+      document.getElementById('input-fotos').value = '';
+
+      document.getElementById('status-fotos-qtd').innerText =
+        'Nenhuma foto selecionada.';
+
+      document
+        .getElementById('btn-limpar-fotos')
+        .classList.add('hidden');
+
+      const grid =
+        document.getElementById('preview-miniaturas-grid');
+
+      grid.innerHTML = '';
+      grid.classList.add('hidden');
+    }
+
+    function obterPublicidadeDaVez() {
+      const STORAGE_KEY = "pv_ad_idx_v3";
+
+      let idx =
+        parseInt(
+          localStorage.getItem(STORAGE_KEY) || "0",
+          10
+        );
+
+      if (idx >= PUBLICIDADES.length) {
+        idx = 0;
       }
 
-      try {
-        return JSON.parse(text);
-      } catch (_) {
-        return {
-          message: text
+      return {
+        ad: PUBLICIDADES[idx],
+        idx
+      };
+    }
+
+    function obterApoiadorDaVez() {
+      const STORAGE_KEY = "pv_sponsor_idx_v3";
+
+      let idx =
+        parseInt(
+          localStorage.getItem(STORAGE_KEY) || "0",
+          10
+        );
+
+      if (idx >= APOIADORES_ROTATIVOS.length) {
+        idx = 0;
+      }
+
+      return {
+        apoiador: APOIADORES_ROTATIVOS[idx],
+        idx
+      };
+    }
+
+    function avancarRodizios() {
+      const {
+        idx: adIdx
+      } = obterPublicidadeDaVez();
+
+      localStorage.setItem(
+        "pv_ad_idx_v3",
+        (
+          (adIdx + 1) %
+          PUBLICIDADES.length
+        ).toString()
+      );
+
+      const {
+        idx: spIdx
+      } = obterApoiadorDaVez();
+
+      localStorage.setItem(
+        "pv_sponsor_idx_v3",
+        (
+          (spIdx + 1) %
+          APOIADORES_ROTATIVOS.length
+        ).toString()
+      );
+    }
+
+    // ========================================================
+    // CARREGAMENTO MULTI-FOTOS
+    // ========================================================
+
+    function carregarFotos(e) {
+      const files =
+        Array.from(e.target.files);
+
+      if (files.length === 0) {
+        return;
+      }
+
+      fotosCarregadas = [];
+
+      let lidos = 0;
+
+      files.forEach((file, idx) => {
+        const reader =
+          new FileReader();
+
+        reader.onload = function(evt) {
+          fotosCarregadas.push({
+            src: evt.target.result,
+            ordem: idx,
+            nome: file.name
+          });
+
+          lidos++;
+
+          if (lidos === files.length) {
+            fotosCarregadas.sort(
+              (a, b) =>
+                a.ordem - b.ordem
+            );
+
+            document.getElementById(
+              'status-fotos-qtd'
+            ).innerText =
+              `${files.length} foto(s) carregada(s) com sucesso.`;
+
+            document.getElementById(
+              'btn-limpar-fotos'
+            ).classList.remove('hidden');
+
+            const grid =
+              document.getElementById(
+                'preview-miniaturas-grid'
+              );
+
+            grid.innerHTML = '';
+            grid.classList.remove('hidden');
+
+            fotosCarregadas.forEach(
+              (f, i) => {
+                const label =
+                  i === 0
+                    ? '1ª Capa'
+                    : i === 1
+                    ? '2ª Meio'
+                    : i === 2
+                    ? '3ª Fim'
+                    : `${i + 1}ª Galeria`;
+
+                const box =
+                  document.createElement('div');
+
+                box.className =
+                  'relative rounded-lg overflow-hidden border border-slate-300 bg-black aspect-video';
+
+                box.innerHTML = `
+                  <img
+                    src="${f.src}"
+                    class="w-full h-full object-cover"
+                  >
+
+                  <span
+                    class="absolute bottom-1 left-1 bg-[#00AE35] text-white text-[9px] font-black px-1.5 py-0.5 rounded shadow"
+                  >
+                    ${label}
+                  </span>
+                `;
+
+                grid.appendChild(box);
+              }
+            );
+          }
         };
-      }
+
+        reader.readAsDataURL(file);
+      });
     }
 
-    function slugify(value) {
-      return String(value || "")
-        .toLowerCase()
+    function trocarOrigem(tipo) {
+      document.getElementById(
+        'tab-recebida'
+      ).className =
+        tipo === 'recebida'
+          ? 'px-4 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-white shadow-sm'
+          : 'px-4 py-1.5 text-xs font-bold rounded text-slate-600';
+
+      document.getElementById(
+        'tab-propria'
+      ).className =
+        tipo === 'propria'
+          ? 'px-4 py-1.5 text-xs font-bold rounded bg-[#00AE35] text-white shadow-sm'
+          : 'px-4 py-1.5 text-xs font-bold rounded text-slate-600';
+    }
+
+    function copiarTexto(id) {
+      const field =
+        document.getElementById(id);
+
+      field.select();
+
+      navigator.clipboard.writeText(
+        field.value
+      );
+    }
+
+    // ========================================================
+    // SEO, ESTRUTURA EDITORIAL E LINKS INTERNOS
+    // ========================================================
+
+    const PV_LINKS = [
+      {
+        url: "https://www.pistaverde.com.br/blog",
+        titulo: "Últimas notícias do Portal Pista Verde",
+        termos: [
+          "kart",
+          "kartismo",
+          "automobilismo",
+          "corrida",
+          "campeonato",
+          "piloto"
+        ]
+      },
+      {
+        url: "https://www.pistaverde.com.br/blog/categories/kartismo-brasileiro",
+        titulo: "Kartismo brasileiro no Portal Pista Verde",
+        termos: [
+          "kart",
+          "kartismo",
+          "kartodromo",
+          "piloto",
+          "cadete",
+          "mirim",
+          "f4",
+          "okn"
+        ]
+      },
+      {
+        url: "https://www.pistaverde.com.br/blog/categories/copa-s%C3%A3o-paulo-light",
+        titulo: "Copa São Paulo Light no Portal Pista Verde",
+        termos: [
+          "copa sao paulo light",
+          "paulista light",
+          "interlagos",
+          "light"
+        ]
+      },
+      {
+        url: "https://www.pistaverde.com.br/kartodromos-brasil",
+        titulo: "Kartódromos do Brasil",
+        termos: [
+          "kartodromo",
+          "pista",
+          "interlagos",
+          "joinville",
+          "guapimirim",
+          "birigui",
+          "speed park"
+        ]
+      },
+      {
+        url: "https://www.pistaverde.com.br/pilotos",
+        titulo: "Pilotos de kart do Brasil",
+        termos: [
+          "piloto",
+          "pilotos",
+          "talento",
+          "cadete",
+          "mirim",
+          "junior"
+        ]
+      },
+      {
+        url: "https://www.pistaverde.com.br/regulamentos",
+        titulo: "Regulamentos oficiais do kart e automobilismo",
+        termos: [
+          "regulamento",
+          "cba",
+          "fasp",
+          "fauesc",
+          "campeonato",
+          "codigo desportivo"
+        ]
+      },
+      {
+        url: "https://www.pistaverde.com.br/programa-esg-automobilismo",
+        titulo: "Programa ESG/ODS Pista Verde",
+        termos: [
+          "esg",
+          "ods",
+          "sustentabilidade",
+          "ambiental",
+          "kartodromo",
+          "autodromo"
+        ]
+      }
+    ];
+
+    const SEO_STOPWORDS =
+      new Set([
+        "a",
+        "o",
+        "as",
+        "os",
+        "de",
+        "da",
+        "do",
+        "das",
+        "dos",
+        "e",
+        "em",
+        "no",
+        "na",
+        "nos",
+        "nas",
+        "para",
+        "por",
+        "com",
+        "um",
+        "uma",
+        "ao",
+        "aos",
+        "que",
+        "se",
+        "sua",
+        "seu",
+        "suas",
+        "seus",
+        "mais",
+        "entre",
+        "contra",
+        "após",
+        "apos",
+        "pela",
+        "pelo",
+        "pelas",
+        "pelos",
+        "sobre",
+        "nova",
+        "novo",
+        "nesta",
+        "neste",
+        "esta",
+        "este",
+        "como",
+        "vai",
+        "tem",
+        "faz",
+        "foi",
+        "ser",
+        "deve"
+      ]);
+
+    function normalizarTextoSeo(texto) {
+      return String(texto || "")
         .normalize("NFD")
         .replace(
           /[\u0300-\u036f]/g,
           ""
         )
+        .toLowerCase();
+    }
+
+    function slugificar(texto) {
+      return normalizarTextoSeo(texto)
         .replace(
           /[^a-z0-9\s-]/g,
           ""
         )
         .trim()
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .substring(0, 100);
+        .replace(
+          /\s+/g,
+          "-"
+        )
+        .replace(
+          /-+/g,
+          "-"
+        )
+        .substring(
+          0,
+          100
+        )
+        .replace(
+          /-+$/g,
+          ""
+        );
     }
 
-    let nodeCounter = 0;
+    function cortarSemQuebrar(
+      texto,
+      limite
+    ) {
+      const t =
+        String(texto || "").trim();
 
-    function nodeId(prefix) {
-      nodeCounter += 1;
+      if (t.length <= limite) {
+        return t;
+      }
+
+      const corte =
+        t.substring(
+          0,
+          limite + 1
+        );
+
+      const ultima =
+        corte.lastIndexOf(" ");
 
       return (
-        `${prefix}_` +
-        `${Date.now()}_` +
-        `${nodeCounter}`
+        ultima > 40
+          ? corte.substring(
+              0,
+              ultima
+            )
+          : corte.substring(
+              0,
+              limite
+            )
+      ).trim();
+    }
+
+    function classificarBlocosEditorial(
+      texto
+    ) {
+      const partes =
+        String(texto || "")
+          .split(/\n\s*\n/)
+          .map(
+            p => p.trim()
+          )
+          .filter(Boolean);
+
+      return partes.map(
+        (parte) => {
+          const umaLinha =
+            !parte.includes("\n");
+
+          const limpa =
+            parte
+              .replace(
+                /^##\s*/,
+                ""
+              )
+              .replace(
+                /^H2\s*:\s*/i,
+                ""
+              )
+              .trim();
+
+          const explicito =
+            /^##\s+/.test(parte) ||
+            /^H2\s*:/i.test(parte);
+
+          const caixaAlta =
+            umaLinha &&
+            limpa.length <= 90 &&
+            limpa.length >= 4 &&
+            limpa === limpa.toUpperCase() &&
+            /[A-ZÁÉÍÓÚÂÊÔÃÕÇ]/.test(limpa) &&
+            limpa.split(/\s+/).length <= 10;
+
+          return (
+            explicito ||
+            caixaAlta
+          )
+            ? {
+                type: "h2",
+                text: limpa
+              }
+            : {
+                type: "paragraph",
+                text:
+                  parte
+                    .replace(
+                      /\n+/g,
+                      " "
+                    )
+                    .trim()
+              };
+        }
       );
     }
 
-    function textNode(
-      text,
-      decorations = []
+    function gerarPalavraChaveFoco(
+      h1,
+      subtitulo,
+      release,
+      categoria
     ) {
-      const value =
-        String(text || "").trim();
+      const tituloPalavras =
+        String(h1 || "")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
 
-      if (!value) {
-        throw new Error(
-          "Foi encontrado um texto vazio."
+      const corpoNormalizado =
+        normalizarTextoSeo(
+          release
         );
+
+      for (
+        let tamanho =
+          Math.min(
+            5,
+            tituloPalavras.length
+          );
+        tamanho >= 2;
+        tamanho--
+      ) {
+        for (
+          let inicio = 0;
+          inicio <=
+            tituloPalavras.length -
+              tamanho;
+          inicio++
+        ) {
+          const frase =
+            tituloPalavras
+              .slice(
+                inicio,
+                inicio + tamanho
+              )
+              .join(" ")
+              .replace(
+                /[|–—:;,!?()]/g,
+                ""
+              )
+              .trim();
+
+          if (
+            frase.length >= 8 &&
+            corpoNormalizado.includes(
+              normalizarTextoSeo(
+                frase
+              )
+            )
+          ) {
+            return frase;
+          }
+        }
       }
 
-      return {
-        type: "TEXT",
-        id: nodeId("text"),
-        nodes: [],
-        textData: {
-          text: value,
-          decorations
-        }
-      };
-    }
+      const primeiro =
+        classificarBlocosEditorial(
+          release
+        ).find(
+          b =>
+            b.type ===
+            "paragraph"
+        )?.text || "";
 
-    function paragraphNode(
-      text,
-      decorations = []
-    ) {
-      return {
-        type: "PARAGRAPH",
-        id: nodeId("paragraph"),
-        nodes: [
-          textNode(
-            text,
-            decorations
-          )
-        ],
-        paragraphData: {
-          textStyle: {
-            textAlignment: "AUTO"
-          },
-          indentation: 0
-        }
-      };
-    }
+      const palavrasCorpo =
+        primeiro
+          .split(/\s+/)
+          .filter(Boolean);
 
-    function headingNode(
-      text,
-      level = 2
-    ) {
-      return {
-        type: "HEADING",
-        id: nodeId(`heading${level}`),
-        nodes: [
-          textNode(text, [
-            {
-              type: "BOLD",
-              fontWeightValue: 700
-            }
-          ])
-        ],
-        headingData: {
-          level,
-          textStyle: {
-            textAlignment: "AUTO"
-          },
-          indentation: 0
-        }
-      };
-    }
+      const validas =
+        palavrasCorpo.filter(
+          p => {
+            const n =
+              normalizarTextoSeo(p)
+                .replace(
+                  /[^a-z0-9-]/g,
+                  ""
+                );
 
-    function linkedParagraph(
-      text,
-      url
-    ) {
-      return paragraphNode(
-        text,
-        [
-          {
-            type: "LINK",
-            linkData: {
-              link: {
-                url:
-                  String(url || "").trim(),
-                target: "BLANK"
-              }
-            }
+            return (
+              n.length >= 3 &&
+              !SEO_STOPWORDS.has(n)
+            );
           }
+        );
+
+      const corpoFoco =
+        validas
+          .slice(0, 4)
+          .join(" ")
+          .trim();
+
+      if (
+        corpoFoco.length >= 8
+      ) {
+        return corpoFoco;
+      }
+
+      return `${categoria} ${tituloPalavras
+        .slice(0, 3)
+        .join(" ")}`.trim();
+    }
+        function gerarTagsSeo(
+      h1,
+      subtitulo,
+      release,
+      categoria,
+      palavraChave
+    ) {
+      const base =
+        `${h1} ${subtitulo} ${release} ${categoria} ${palavraChave}`;
+
+      const palavras =
+        normalizarTextoSeo(base)
+          .replace(
+            /[^a-z0-9\s-]/g,
+            " "
+          )
+          .split(/\s+/)
+          .filter(
+            p =>
+              p.length >= 3 &&
+              !SEO_STOPWORDS.has(p)
+          );
+
+      const frequencia =
+        {};
+
+      palavras.forEach(
+        p => {
+          frequencia[p] =
+            (frequencia[p] || 0) +
+            1;
+        }
+      );
+
+      const ranking =
+        Object.entries(
+          frequencia
+        )
+          .sort(
+            (a, b) =>
+              b[1] - a[1]
+          )
+          .map(
+            item =>
+              item[0]
+          );
+
+      const tags =
+        [
+          categoria,
+          palavraChave,
+          "kartismo",
+          "automobilismo",
+          "Portal Pista Verde",
+          ...ranking.slice(
+            0,
+            12
+          )
         ]
+          .map(
+            t =>
+              String(t || "")
+                .trim()
+          )
+          .filter(Boolean);
+
+      return [
+        ...new Set(tags)
+      ].slice(
+        0,
+        15
       );
     }
 
-    // ==========================================================
-    // LOCALIZA O AUTOR
-    // ==========================================================
+    function selecionarLinksInternos(
+      h1,
+      subtitulo,
+      release,
+      categoria
+    ) {
+      const base =
+        normalizarTextoSeo(
+          `${h1} ${subtitulo} ${release} ${categoria}`
+        );
 
-    let memberId = null;
+      const pontuados =
+        PV_LINKS.map(
+          item => {
+            let score = 0;
 
-    const membersResponse =
-      await fetch(
-        "https://www.wixapis.com/members/v1/members/query",
-        {
-          method: "POST",
-          headers,
-          body: JSON.stringify({
-            query: {
-              filter: {
-                loginEmail: {
-                  $eq: authorEmail
+            item.termos.forEach(
+              termo => {
+                if (
+                  base.includes(
+                    normalizarTextoSeo(
+                      termo
+                    )
+                  )
+                ) {
+                  score++;
                 }
-              },
-              paging: {
-                limit: 100,
-                offset: 0
               }
-            },
-            fieldsets: ["FULL"]
-          })
-        }
-      );
-
-    const membersData =
-      await readResponse(
-        membersResponse
-      );
-
-    if (!membersResponse.ok) {
-      return res
-        .status(membersResponse.status)
-        .json({
-          error:
-            membersData.message ||
-            "Não foi possível consultar o autor no Wix.",
-
-          details:
-            membersData
-        });
-    }
-
-    const members =
-      Array.isArray(
-        membersData.members
-      )
-        ? membersData.members
-        : [];
-
-    const author =
-      members.find(member => {
-        const email =
-          String(
-            member.loginEmail ||
-            member.contact
-              ?.emails?.[0]?.email ||
-            ""
-          )
-            .trim()
-            .toLowerCase();
-
-        return (
-          email ===
-          authorEmail.toLowerCase()
-        );
-      }) || members[0] || null;
-
-    if (author?.id) {
-      memberId = author.id;
-    }
-
-    if (!memberId) {
-      return res.status(400).json({
-        error:
-          `Não foi possível localizar no Wix o autor ${authorEmail}.`
-      });
-    }
-
-    // ==========================================================
-    // CONVERSÃO PARA RICH CONTENT NATIVO
-    // ==========================================================
-
-    const sourceParagraphs =
-      editorialBlocks.length
-        ? editorialBlocks.map(item => {
-            if (item.type === "h2") {
-              return `H2: ${item.text}`;
-            }
-
-            if (item.type === "h3") {
-              return `H3: ${item.text}`;
-            }
-
-            return item.text;
-          })
-        : editorialBody
-            .split(/\n+/)
-            .map(item => item.trim())
-            .filter(Boolean);
-
-    const editorialParagraphs =
-      sourceParagraphs.filter(item =>
-        !/^##\s+/.test(item) &&
-        !/^###\s+/.test(item) &&
-        !/^H2:\s*/i.test(item) &&
-        !/^H3:\s*/i.test(item)
-      );
-
-    const adPosition =
-      Math.max(
-        2,
-        Math.ceil(
-          editorialParagraphs.length / 2
-        )
-      );
-
-    const richNodes = [];
-
-    if (subtitle) {
-      richNodes.push(
-        paragraphNode(
-          subtitle,
-          [
-            {
-              type: "ITALIC",
-              italicData: true
-            }
-          ]
-        )
-      );
-    }
-
-    let paragraphCount = 0;
-    let adInserted = false;
-
-    for (
-      const item
-      of sourceParagraphs
-    ) {
-      if (
-        /^##\s+/.test(item) ||
-        /^H2:\s*/i.test(item)
-      ) {
-        const heading =
-          item
-            .replace(/^##\s+/, "")
-            .replace(/^H2:\s*/i, "")
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading,
-              2
-            )
-          );
-        }
-
-        continue;
-      }
-
-      if (
-        /^###\s+/.test(item) ||
-        /^H3:\s*/i.test(item)
-      ) {
-        const heading =
-          item
-            .replace(/^###\s+/, "")
-            .replace(/^H3:\s*/i, "")
-            .trim();
-
-        if (heading) {
-          richNodes.push(
-            headingNode(
-              heading,
-              3
-            )
-          );
-        }
-
-        continue;
-      }
-
-      paragraphCount += 1;
-
-      const decorations =
-        paragraphCount === 1
-          ? [
-              {
-                type: "BOLD",
-                fontWeightValue: 600
-              }
-            ]
-          : [];
-
-      richNodes.push(
-        paragraphNode(
-          item,
-          decorations
-        )
-      );
-
-      if (
-        !adInserted &&
-        paragraphCount >= adPosition
-      ) {
-        richNodes.push(
-          headingNode(
-            "Parceiro do Kartismo",
-            3
-          )
-        );
-
-        richNodes.push(
-          paragraphNode(
-            "Inovimpress",
-            [
-              {
-                type: "BOLD",
-                fontWeightValue: 700
-              }
-            ]
-          )
-        );
-
-        richNodes.push(
-          paragraphNode(
-            "Comunicação visual e soluções para quem vive a velocidade."
-          )
-        );
-
-        richNodes.push(
-          linkedParagraph(
-            "Conheça a Inovimpress",
-            "https://www.instagram.com/inovimpress/"
-          )
-        );
-
-        adInserted = true;
-      }
-    }
-
-    if (
-      !adInserted &&
-      paragraphCount > 0
-    ) {
-      richNodes.push(
-        headingNode(
-          "Parceiro do Kartismo",
-          3
-        )
-      );
-
-      richNodes.push(
-        paragraphNode(
-          "Inovimpress",
-          [
-            {
-              type: "BOLD",
-              fontWeightValue: 700
-            }
-          ]
-        )
-      );
-
-      richNodes.push(
-        paragraphNode(
-          "Comunicação visual e soluções para quem vive a velocidade."
-        )
-      );
-
-      richNodes.push(
-        linkedParagraph(
-          "Conheça a Inovimpress",
-          "https://www.instagram.com/inovimpress/"
-        )
-      );
-    }
-
-    // ==========================================================
-    // LINKS INTERNOS
-    // ==========================================================
-
-    if (internalLinks.length) {
-      richNodes.push(
-        headingNode(
-          "Leia também",
-          2
-        )
-      );
-
-      for (
-        const link
-        of internalLinks
-      ) {
-        richNodes.push(
-          linkedParagraph(
-            String(
-              link.text || ""
-            ).trim(),
-
-            String(
-              link.url || ""
-            ).trim()
-          )
-        );
-      }
-    }
-
-    // ==========================================================
-    // CRÉDITOS
-    // ==========================================================
-
-    richNodes.push(
-      paragraphNode(
-        `Texto/Fonte: ${source} | Fotos: ${photographer}`
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Reportagem/Texto: José Carlos Grites – jornalista profissional (Registro MTE nº 0007501/SC)"
-      )
-    );
-
-    // ==========================================================
-    // INSTITUCIONAL
-    // ==========================================================
-
-    richNodes.push(
-      headingNode(
-        "Portal Pista Verde",
-        2
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Portal Pista Verde é uma startup nacional dedicada exclusivamente ao ecossistema do kartismo e do automobilismo. Atua com o Programa ESG/ODS Pista Verde para kartódromos e autódromos, com base em referências internacionais traduzidas e adaptadas ao Brasil."
-      )
-    );
-
-    richNodes.push(
-      linkedParagraph(
-        "Conheça o Programa ESG/ODS Pista Verde",
-        "https://www.pistaverde.com.br/programa-esg-automobilismo"
-      )
-    );
-
-    // ==========================================================
-    // EMPRESAS APOIADORAS
-    // ==========================================================
-
-    richNodes.push(
-      headingNode(
-        "Empresas que apoiam o kartismo",
-        2
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Mega Kart — Empresa parceira e apoiadora do kartismo brasileiro."
-      )
-    );
-
-    richNodes.push(
-      paragraphNode(
-        "Paralego — Empresa parceira e apoiadora do esporte a motor."
-      )
-    );
-
-    const richContent = {
-      nodes: richNodes,
-
-      metadata: {
-        version: 1
-      },
-
-      documentStyle: {}
-    };
-
-    // ==========================================================
-    // VALIDAÇÃO DO RICH CONTENT
-    // ==========================================================
-
-    if (
-      !Array.isArray(
-        richContent.nodes
-      ) ||
-      !richContent.nodes.length
-    ) {
-      return res.status(500).json({
-        error:
-          "O Rich Content ficou vazio."
-      });
-    }
-
-    const usedIds = new Set();
-
-    for (
-      const node
-      of richContent.nodes
-    ) {
-      if (
-        !node ||
-        !node.id ||
-        !node.type
-      ) {
-        return res.status(500).json({
-          error:
-            "Foi criado um nó Rich Content inválido."
-        });
-      }
-
-      if (usedIds.has(node.id)) {
-        return res.status(500).json({
-          error:
-            `ID Rich Content duplicado: ${node.id}`
-        });
-      }
-
-      usedIds.add(node.id);
-
-      for (
-        const child
-        of node.nodes || []
-      ) {
-        if (
-          !child.id ||
-          !child.textData?.text
-        ) {
-          return res.status(500).json({
-            error:
-              "Foi criado um texto Rich Content inválido."
-          });
-        }
-
-        if (
-          usedIds.has(child.id)
-        ) {
-          return res.status(500).json({
-            error:
-              `ID Rich Content duplicado: ${child.id}`
-          });
-        }
-
-        usedIds.add(child.id);
-      }
-    }
-
-    // ==========================================================
-    // DADOS DO RASCUNHO
-    // ==========================================================
-
-    const seoTitle =
-      String(
-        seo.title ||
-        `${headline} | Portal Pista Verde`
-      )
-        .trim()
-        .substring(0, 70);
-
-    const seoDescription =
-      String(
-        seo.description ||
-        subtitle ||
-        editorialParagraphs[0] ||
-        ""
-      )
-        .trim()
-        .substring(0, 160);
-
-    const seoSlug =
-      slugify(
-        seo.slug ||
-        headline
-      );
-
-    const excerpt =
-      String(
-        seo.excerpt ||
-        subtitle ||
-        editorialParagraphs[0] ||
-        ""
-      )
-        .trim()
-        .substring(0, 500);
-
-    const draftPost = {
-      title: headline,
-      excerpt,
-      memberId,
-      richContent,
-      seoSlug,
-
-      seoData: {
-        tags: [
-          {
-            type: "title",
-            children: seoTitle
-          },
-
-          {
-            type: "meta",
-            props: {
-              name: "description",
-              content:
-                seoDescription
-            }
-          },
-
-          {
-            type: "meta",
-            props: {
-              property: "og:title",
-              content: seoTitle
-            }
-          },
-
-          {
-            type: "meta",
-            props: {
-              property:
-                "og:description",
-              content:
-                seoDescription
-            }
+            );
+
+            return {
+              ...item,
+              score
+            };
           }
-        ]
-      }
-    };
-
-    if (
-      Array.isArray(
-        body.categoryIds
-      ) &&
-      body.categoryIds.length
-    ) {
-      draftPost.categoryIds =
-        [
-          ...new Set(
-            body.categoryIds
-              .map(item =>
-                String(item || "").trim()
-              )
-              .filter(Boolean)
+        )
+          .filter(
+            item =>
+              item.score > 0
           )
-        ].slice(0, 10);
-    }
+          .sort(
+            (a, b) =>
+              b.score - a.score
+          );
 
-    if (
-      Array.isArray(
-        body.tagIds
-      ) &&
-      body.tagIds.length
-    ) {
-      draftPost.tagIds =
-        [
-          ...new Set(
-            body.tagIds
-              .map(item =>
-                String(item || "").trim()
-              )
-              .filter(Boolean)
-          )
-        ].slice(0, 30);
-    }
+      const escolhidos =
+        [];
 
-    // ==========================================================
-    // ENVIO AO WIX
-    // ==========================================================
-
-    const wixResponse =
-      await fetch(
-        "https://www.wixapis.com/blog/v3/draft-posts",
-        {
-          method: "POST",
-          headers,
-
-          body:
-            JSON.stringify({
-              draftPost,
-
-              fieldsets: [
-                "URL",
-                "RICH_CONTENT"
-              ],
-
-              publish: false
-            })
+      pontuados.forEach(
+        item => {
+          if (
+            escolhidos.length < 3 &&
+            !escolhidos.some(
+              e =>
+                e.url ===
+                item.url
+            )
+          ) {
+            escolhidos.push(
+              item
+            );
+          }
         }
       );
 
-    const wixData =
-      await readResponse(
-        wixResponse
-      );
+      if (
+        escolhidos.length === 0
+      ) {
+        escolhidos.push(
+          PV_LINKS[0]
+        );
+      }
 
-    if (!wixResponse.ok) {
-      return res
-        .status(wixResponse.status)
-        .json({
-          error:
-            wixData.message ||
-            wixData.error ||
-            "Erro retornado pela API do Wix.",
-
-          details:
-            wixData
-        });
+      return escolhidos;
     }
 
-    return res.status(200).json({
-      success: true,
+    function gerarSeoCompleto(
+      h1,
+      subtitulo,
+      release,
+      categoria
+    ) {
+      const palavraChave =
+        gerarPalavraChaveFoco(
+          h1,
+          subtitulo,
+          release,
+          categoria
+        );
 
-      message:
-        "Rascunho criado com sucesso no Wix.",
+      let seoTitle =
+        String(h1 || "").trim();
 
-      post:
-        wixData.draftPost ||
-        wixData,
+      if (
+        !normalizarTextoSeo(
+          seoTitle
+        ).includes(
+          normalizarTextoSeo(
+            palavraChave
+          )
+        )
+      ) {
+        seoTitle =
+          `${palavraChave}: ${seoTitle}`;
+      }
 
-      seo: {
-        title: seoTitle,
+      seoTitle =
+        cortarSemQuebrar(
+          seoTitle,
+          60
+        );
+
+      let meta =
+        String(subtitulo || "")
+          .trim();
+
+      if (!meta) {
+        meta =
+          classificarBlocosEditorial(
+            release
+          ).find(
+            b =>
+              b.type ===
+              "paragraph"
+          )?.text || "";
+      }
+
+      if (
+        !normalizarTextoSeo(
+          meta
+        ).includes(
+          normalizarTextoSeo(
+            palavraChave
+          )
+        )
+      ) {
+        meta =
+          `${palavraChave}. ${meta}`;
+      }
+
+      meta =
+        cortarSemQuebrar(
+          meta,
+          155
+        );
+
+      const slug =
+        slugificar(
+          palavraChave
+        );
+
+      const excerpt =
+        cortarSemQuebrar(
+          subtitulo ||
+          classificarBlocosEditorial(
+            release
+          ).find(
+            b =>
+              b.type ===
+              "paragraph"
+          )?.text ||
+          "",
+          300
+        );
+
+      const tags =
+        gerarTagsSeo(
+          h1,
+          subtitulo,
+          release,
+          categoria,
+          palavraChave
+        );
+
+      const links =
+        selecionarLinksInternos(
+          h1,
+          subtitulo,
+          release,
+          categoria
+        );
+
+      const structuredData =
+        {
+          "@context":
+            "https://schema.org",
+
+          "@type":
+            "NewsArticle",
+
+          "headline":
+            h1,
+
+          "description":
+            meta,
+
+          "author": {
+            "@type":
+              "Person",
+
+            "name":
+              "José Carlos Grites"
+          },
+
+          "publisher": {
+            "@type":
+              "Organization",
+
+            "name":
+              "Portal Pista Verde",
+
+            "url":
+              "https://www.pistaverde.com.br/"
+          }
+        };
+
+      return {
+        palavraChave,
+        seoTitle,
+        meta,
+        slug,
+        excerpt,
+        tags,
+        links,
+        structuredData
+      };
+    }
+
+    function preencherCamposSeo(
+      seo
+    ) {
+      document.getElementById(
+        "seo-focus-keyword"
+      ).value =
+        seo.palavraChave;
+
+      document.getElementById(
+        "seo-title"
+      ).value =
+        seo.seoTitle;
+
+      document.getElementById(
+        "seo-meta-description"
+      ).value =
+        seo.meta;
+
+      document.getElementById(
+        "seo-slug"
+      ).value =
+        seo.slug;
+
+      document.getElementById(
+        "seo-excerpt"
+      ).value =
+        seo.excerpt;
+
+      document.getElementById(
+        "seo-tags"
+      ).value =
+        seo.tags.join(
+          ", "
+        );
+
+      document.getElementById(
+        "seo-tags-count"
+      ).innerText =
+        `${seo.tags.length} tags`;
+
+      document.getElementById(
+        "seo-internal-links"
+      ).value =
+        seo.links
+          .map(
+            link =>
+              `${link.titulo}\n${link.url}`
+          )
+          .join(
+            "\n\n"
+          );
+
+      document.getElementById(
+        "seo-structured-data"
+      ).value =
+        JSON.stringify(
+          seo.structuredData,
+          null,
+          2
+        );
+
+      const check =
+        document.getElementById(
+          "seo-check-keyword"
+        );
+
+      const tituloOk =
+        normalizarTextoSeo(
+          seo.seoTitle
+        ).includes(
+          normalizarTextoSeo(
+            seo.palavraChave
+          )
+        );
+
+      const metaOk =
+        normalizarTextoSeo(
+          seo.meta
+        ).includes(
+          normalizarTextoSeo(
+            seo.palavraChave
+          )
+        );
+
+      const slugOk =
+        normalizarTextoSeo(
+          seo.slug
+        ).includes(
+          normalizarTextoSeo(
+            slugificar(
+              seo.palavraChave
+            )
+          )
+        );
+
+      if (
+        tituloOk &&
+        metaOk &&
+        slugOk
+      ) {
+        check.className =
+          "mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-green-50 text-green-700 border border-green-200";
+
+        check.innerText =
+          "Palavra-chave aplicada em título, meta e slug";
+      } else {
+        check.className =
+          "mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200";
+
+        check.innerText =
+          "Revise a aplicação da palavra-chave";
+      }
+    }
+
+    function obterSeoAtual() {
+      let tags =
+        document.getElementById(
+          "seo-tags"
+        ).value
+          .split(
+            /[,;\n]+/
+          )
+          .map(
+            t =>
+              t.trim()
+          )
+          .filter(Boolean);
+
+      tags =
+        [
+          ...new Set(tags)
+        ].slice(
+          0,
+          30
+        );
+
+      let structuredData =
+        null;
+
+      try {
+        structuredData =
+          JSON.parse(
+            document.getElementById(
+              "seo-structured-data"
+            ).value ||
+            "{}"
+          );
+      } catch (error) {
+        structuredData =
+          null;
+      }
+
+      return {
+        focusKeyword:
+          document.getElementById(
+            "seo-focus-keyword"
+          ).value.trim(),
+
+        title:
+          document.getElementById(
+            "seo-title"
+          ).value.trim(),
+
         description:
-          seoDescription,
-        slug: seoSlug
-      },
+          document.getElementById(
+            "seo-meta-description"
+          ).value.trim(),
 
-      internalLinks:
-        internalLinks.length
-    });
-  } catch (error) {
-    console.error(
-      "ERRO GERAL API/WIX:",
-      error
-    );
+        slug:
+          document.getElementById(
+            "seo-slug"
+          ).value.trim(),
 
-    return res.status(500).json({
-      error:
-        error?.message ||
-        "Erro interno na integração com o Wix."
-    });
-  }
+        excerpt:
+          document.getElementById(
+            "seo-excerpt"
+          ).value.trim(),
+
+        tags,
+
+        structuredData
+      };
+    }
+
+    // ========================================================
+    // PUBLICIDADE FIXA COM RODÍZIO AUTOMÁTICO
+    // ========================================================
+
+    function gerarHtmlPublicidade(
+      publicidade
+    ) {
+      return `
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<style>
+
+*{
+  box-sizing:border-box;
 }
 
-async function forwardToConfiguredBackend(req, res) {
-  const targetUrl = "https://pv-one-app.vercel.app/api/wix";
-  const currentHost = String(
-    req.headers?.["x-forwarded-host"] || req.headers?.host || ""
-  ).toLowerCase();
-
-  if (currentHost.includes("pv-one-app.vercel.app")) {
-    return res.status(500).json({
-      error: "A variável WIX_API_KEY não está disponível no backend principal."
-    });
-  }
-
-  try {
-    const response = await fetch(targetUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-pv-one-forwarded": "1"
-      },
-      body: JSON.stringify(req.body || {})
-    });
-
-    const responseText = await response.text().catch(() => "");
-    res.status(response.status);
-    res.setHeader(
-      "Content-Type",
-      response.headers.get("content-type") || "application/json; charset=utf-8"
-    );
-
-    return res.send(responseText || "{}");
-  } catch (error) {
-    console.error("PV_ONE_FORWARD_ERROR", error);
-    return res.status(502).json({
-      error: "Não foi possível acessar o backend principal do PV ONE."
-    });
-  }
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#ffffff;
+  font-family:Poppins,Inter,Arial,sans-serif;
 }
+
+.pv-publicidade{
+  width:100%;
+  margin:0;
+  padding:0;
+  border:1px solid rgba(0,174,53,.40);
+  border-top:5px solid #00AE35;
+  border-radius:16px;
+  background:#101510;
+  overflow:hidden;
+}
+
+.pv-publicidade-inner{
+  display:grid;
+  grid-template-columns:160px minmax(0,1fr);
+  gap:22px;
+  align-items:center;
+  padding:22px;
+}
+
+.pv-publicidade-logo{
+  width:100%;
+}
+
+.pv-publicidade-logo img{
+  display:block;
+  width:100%;
+  height:90px;
+  border-radius:10px;
+  background:#ffffff;
+  object-fit:contain;
+  padding:5px;
+}
+
+.pv-publicidade-conteudo span{
+  display:inline-block;
+  margin-bottom:7px;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#ffffff;
+  font-size:11px;
+  line-height:1;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.pv-publicidade-conteudo h3{
+  margin:0 0 7px;
+  color:#ffffff;
+  font-size:21px;
+  line-height:1.2;
+  font-weight:900;
+}
+
+.pv-publicidade-conteudo p{
+  margin:0 0 15px;
+  color:#dfe7dc;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.pv-btn{
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#ffffff !important;
+  text-decoration:none;
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+@media(max-width:600px){
+
+  .pv-publicidade-inner{
+    grid-template-columns:1fr;
+  }
+
+  .pv-publicidade-logo img{
+    max-width:190px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<aside class="pv-publicidade">
+
+  <div class="pv-publicidade-inner">
+
+    <div class="pv-publicidade-logo">
+
+      <img
+        src="${publicidade.logo}"
+        alt="${publicidade.nome}"
+      >
+
+    </div>
+
+    <div class="pv-publicidade-conteudo">
+
+      <span>
+        Publicidade
+      </span>
+
+      <h3>
+        ${publicidade.nome}
+      </h3>
+
+      <p>
+        ${publicidade.desc}
+      </p>
+
+      <a
+        class="pv-btn"
+        href="${publicidade.url}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ${publicidade.btn}
+      </a>
+
+    </div>
+
+  </div>
+
+</aside>
+
+</body>
+
+</html>`;
+    }
+
+    // ========================================================
+    // EMPRESAS QUE APOIAM O KARTISMO
+    // MEGA KART FIXA + SEGUNDA EMPRESA EM RODÍZIO
+    // + INSTITUCIONAL FIXO PORTAL PISTA VERDE
+    // ========================================================
+
+    function gerarCardApoiador(
+      empresa
+    ) {
+      return `
+<div class="pv-empresa">
+
+  <div class="pv-empresa-logo">
+
+    <img
+      src="${empresa.logo}"
+      alt="${empresa.nome}"
+    >
+
+  </div>
+
+  <div class="pv-empresa-conteudo">
+
+    <h3>
+      ${empresa.nome}
+    </h3>
+
+    <p>
+      ${empresa.desc}
+    </p>
+
+    <a
+      href="${empresa.url}"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ${empresa.btn}
+    </a>
+
+  </div>
+
+</div>`;
+    }
+
+    function gerarHtmlApoiadores(
+      apoiadorRotativo
+    ) {
+      const mega =
+        gerarCardApoiador(
+          APOIADOR_FIXO
+        );
+
+      const rotativo =
+        gerarCardApoiador(
+          apoiadorRotativo
+        );
+
+      return `
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#ffffff;
+  font-family:Poppins,Inter,Arial,sans-serif;
+  color:#21300C;
+}
+
+.pv-final{
+  width:100%;
+  margin:0;
+  padding:0;
+}
+
+.pv-apoiadores{
+  padding:28px;
+  border:1px solid #d1dbcd;
+  border-radius:18px;
+  background:#f2f6f1;
+}
+
+.pv-apoiadores-titulo{
+  margin:0;
+  color:#21300C;
+  font-size:24px;
+  line-height:1.25;
+  font-weight:900;
+}
+
+.pv-apoiadores-subtitulo{
+  margin:7px 0 0;
+  color:#5b6558;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.pv-empresas-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+  gap:20px;
+  margin-top:20px;
+}
+
+.pv-empresa{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  padding:20px;
+  border-left:5px solid #00AE35;
+  border-top:1px solid #e2e8f0;
+  border-right:1px solid #e2e8f0;
+  border-bottom:1px solid #e2e8f0;
+  border-radius:14px;
+  background:#ffffff;
+}
+
+.pv-empresa-logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:90px;
+  margin-bottom:15px;
+}
+
+.pv-empresa-logo img{
+  display:block;
+  width:100%;
+  max-width:220px;
+  height:85px;
+  object-fit:contain;
+}
+
+.pv-empresa-conteudo{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.pv-empresa h3{
+  margin:0 0 8px;
+  color:#21300C;
+  font-size:17px;
+  line-height:1.3;
+  font-weight:900;
+}
+
+.pv-empresa p{
+  flex:1;
+  margin:0 0 16px;
+  color:#374151;
+  font-size:13px;
+  line-height:1.65;
+}
+
+.pv-empresa a{
+  align-self:flex-start;
+  display:inline-block;
+  padding:9px 18px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#ffffff !important;
+  text-decoration:none;
+  font-size:11px;
+  line-height:1;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.pv-institucional{
+  margin-top:28px;
+  padding:30px;
+  border-top:6px solid #00AE35;
+  border-radius:18px;
+  background:#071007;
+  color:#ffffff;
+}
+
+.pv-institucional-logo{
+  display:flex;
+  justify-content:center;
+  margin-bottom:20px;
+}
+
+.pv-institucional-logo img{
+  display:block;
+  width:100%;
+  max-width:330px;
+  max-height:120px;
+  object-fit:contain;
+}
+
+.pv-institucional h2{
+  margin:0 0 8px;
+  color:#ffffff;
+  text-align:center;
+  font-size:23px;
+  line-height:1.3;
+  font-weight:900;
+}
+
+.pv-slogan{
+  margin:0 0 20px !important;
+  color:#00AE35 !important;
+  text-align:center;
+  font-size:14px !important;
+  font-weight:800;
+}
+
+.pv-institucional p{
+  max-width:760px;
+  margin:0 auto 15px;
+  color:#d7dfd5;
+  font-size:14px;
+  line-height:1.75;
+  text-align:left;
+}
+
+.pv-jornalista{
+  margin-top:22px !important;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.15);
+  color:#ffffff !important;
+  text-align:center !important;
+  font-weight:700;
+}
+
+.pv-institucional-btn{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  margin:22px auto 0;
+  padding:11px 22px;
+  border-radius:999px;
+  background:#00AE35;
+  color:#ffffff !important;
+  text-decoration:none;
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+@media(max-width:650px){
+
+  .pv-empresas-grid{
+    grid-template-columns:1fr;
+  }
+
+  .pv-apoiadores{
+    padding:20px;
+  }
+
+  .pv-institucional{
+    padding:24px 20px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="pv-final">
+
+  <section class="pv-apoiadores">
+
+    <h2 class="pv-apoiadores-titulo">
+      Empresas que apoiam o kartismo
+    </h2>
+
+    <p class="pv-apoiadores-subtitulo">
+      Marcas e empresas que ajudam a manter o esporte em movimento.
+    </p>
+
+    <div class="pv-empresas-grid">
+
+      ${mega}
+
+      ${rotativo}
+
+    </div>
+
+  </section>
+
+  <section class="pv-institucional">
+
+    <div class="pv-institucional-logo">
+
+      <img
+        src="https://static.wixstatic.com/media/74713a_2e376012845b44bf966a24a6f6e5b427~mv2.png"
+        alt="Portal Pista Verde"
+      >
+
+    </div>
+
+    <h2>
+      Portal Pista Verde
+    </h2>
+
+    <p class="pv-slogan">
+      Grid aquecido com responsabilidade
+    </p>
+
+    <p>
+      O Portal Pista Verde é uma startup brasileira especializada exclusivamente no ecossistema do kartismo e automobilismo, com atuação editorial, tecnológica e institucional voltada ao desenvolvimento do esporte a motor.
+    </p>
+
+    <p>
+      Entre seus projetos está o Programa ESG/ODS Pista Verde para kartódromos e autódromos, desenvolvido a partir do estudo e da adaptação à realidade brasileira de referências e diretrizes internacionais aplicadas ao automobilismo.
+    </p>
+
+    <p>
+      O projeto posiciona o Portal Pista Verde como uma iniciativa pioneira no Brasil ao integrar kartismo, automobilismo, sustentabilidade, ESG e os Objetivos de Desenvolvimento Sustentável (ODS) em uma plataforma especializada no setor.
+    </p>
+
+    <p class="pv-jornalista">
+      Responsabilidade editorial: José Carlos Grites — Jornalista — Registro Profissional MTE nº 0007501/SC.
+    </p>
+
+    <a
+      class="pv-institucional-btn"
+      href="https://www.pistaverde.com.br/programa-esg-automobilismo"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Conheça o Programa ESG/ODS Pista Verde
+    </a>
+
+  </section>
+
+</div>
+
+</body>
+
+</html>`;
+    }
+        async function gerarMateriaEAvancar() {
+      const h1 =
+        document.getElementById(
+          'input-h1'
+        ).value.trim();
+
+      const subtitulo =
+        document.getElementById(
+          'input-subtitulo'
+        ).value.trim();
+
+      const release =
+        document.getElementById(
+          'input-release'
+        ).value.trim();
+
+      const categoria =
+        document.getElementById(
+          'input-categoria'
+        ).value;
+
+      const fotografo =
+        document.getElementById(
+          'input-fotografo'
+        ).value.trim() ||
+        'Divulgação';
+
+      const legendaFoto =
+        document.getElementById(
+          'input-legenda-foto'
+        ).value.trim();
+
+      const creditos =
+        document.getElementById(
+          'input-creditos'
+        ).value.trim() ||
+        'Redação';
+
+      if (
+        !h1 ||
+        !release
+      ) {
+        alert(
+          'Preencha pelo menos o título e o corpo da matéria.'
+        );
+
+        return;
+      }
+
+      const publicidadeAtual =
+        obterPublicidadeDaVez();
+
+      const apoiadorAtual =
+        obterApoiadorDaVez();
+
+      const htmlPublicidade =
+        gerarHtmlPublicidade(
+          publicidadeAtual.ad
+        );
+
+      const htmlApoiadores =
+        gerarHtmlApoiadores(
+          apoiadorAtual.apoiador
+        );
+
+      document.getElementById(
+        'code-publicidade'
+      ).value =
+        htmlPublicidade;
+
+      document.getElementById(
+        'code-apoiadores'
+      ).value =
+        htmlApoiadores;
+
+      const blocos =
+        classificarBlocosEditorial(
+          release
+        );
+
+      const paragrafos =
+        blocos.filter(
+          bloco =>
+            bloco.type ===
+            'paragraph'
+        );
+
+      const meio =
+        Math.max(
+          1,
+          Math.ceil(
+            paragrafos.length / 2
+          )
+        );
+
+      let contadorParagrafos =
+        0;
+
+      let publicidadeInserida =
+        false;
+
+      let corpoHtml =
+        '';
+
+      blocos.forEach(
+        bloco => {
+          if (
+            bloco.type ===
+            'h2'
+          ) {
+            corpoHtml += `
+              <h2
+                style="
+                  color:#00AE35;
+                  font-family:Poppins,Inter,Arial,sans-serif;
+                  font-size:30px;
+                  line-height:1.25;
+                  font-weight:900;
+                  margin:36px 0 18px;
+                "
+              >
+                ${escaparHtml(
+                  bloco.text
+                )}
+              </h2>
+            `;
+
+            return;
+          }
+
+          contadorParagrafos++;
+
+          const primeiro =
+            contadorParagrafos ===
+            1;
+
+          corpoHtml += `
+            <p
+              style="
+                margin:0 0 ${primeiro ? '30px' : '25px'};
+                color:${primeiro ? '#21300C' : '#333333'};
+                font-family:Poppins,Inter,Arial,sans-serif;
+                font-size:${primeiro ? '21px' : '18px'};
+                line-height:${primeiro ? '1.62' : '1.78'};
+                font-weight:${primeiro ? '600' : '400'};
+              "
+            >
+              ${escaparHtml(
+                bloco.text
+              )}
+            </p>
+          `;
+
+          if (
+            !publicidadeInserida &&
+            contadorParagrafos >=
+              meio
+          ) {
+            corpoHtml += `
+              <div
+                style="
+                  margin:38px 0;
+                "
+              >
+                ${gerarPreviewPublicidade(
+                  publicidadeAtual.ad
+                )}
+              </div>
+            `;
+
+            publicidadeInserida =
+              true;
+          }
+        }
+      );
+
+      if (
+        !publicidadeInserida
+      ) {
+        corpoHtml += `
+          <div
+            style="
+              margin:38px 0;
+            "
+          >
+            ${gerarPreviewPublicidade(
+              publicidadeAtual.ad
+            )}
+          </div>
+        `;
+      }
+
+      const linksInternos =
+        selecionarLinksInternos(
+          h1,
+          subtitulo,
+          release,
+          categoria
+        );
+
+      let linksHtml =
+        '';
+
+      if (
+        linksInternos.length
+      ) {
+        linksHtml = `
+          <section
+            style="
+              margin:36px 0 10px;
+              padding-top:24px;
+              border-top:1px solid #e2e8f0;
+            "
+          >
+            <h2
+              style="
+                margin:0 0 16px;
+                color:#00AE35;
+                font-family:Poppins,Inter,Arial,sans-serif;
+                font-size:26px;
+                line-height:1.25;
+                font-weight:900;
+              "
+            >
+              Leia também
+            </h2>
+
+            ${linksInternos
+              .map(
+                link => `
+                  <p
+                    style="
+                      margin:0 0 12px;
+                      font-size:16px;
+                      line-height:1.5;
+                    "
+                  >
+                    <a
+                      href="${link.url}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style="
+                        color:#00AE35;
+                        font-weight:700;
+                        text-decoration:underline;
+                      "
+                    >
+                      ${escaparHtml(
+                        link.titulo
+                      )}
+                    </a>
+                  </p>
+                `
+              )
+              .join('')}
+          </section>
+        `;
+      }
+
+      const fotoCapa =
+        fotosCarregadas[0]?.src ||
+        '';
+
+      const heroStyle =
+        fotoCapa
+          ? `
+            background-image:
+              linear-gradient(
+                180deg,
+                rgba(0,0,0,.08),
+                rgba(0,0,0,.20) 38%,
+                rgba(0,0,0,.90)
+              ),
+              url('${fotoCapa}');
+          `
+          : `
+            background:
+              linear-gradient(
+                135deg,
+                #21300C,
+                #071007
+              );
+          `;
+
+      const creditoImagem =
+        legendaFoto
+          ? `
+            <div
+              style="
+                margin-top:10px;
+                color:#64748b;
+                font-size:12px;
+                line-height:1.5;
+              "
+            >
+              ${escaparHtml(
+                legendaFoto
+              )}
+              — Foto:
+              ${escaparHtml(
+                fotografo
+              )}
+            </div>
+          `
+          : '';
+
+      const seo =
+        gerarSeoCompleto(
+          h1,
+          subtitulo,
+          release,
+          categoria
+        );
+
+      preencherCamposSeo(
+        seo
+      );
+
+      const previewFinal =
+        gerarPreviewApoiadores(
+          apoiadorAtual.apoiador
+        );
+
+      const htmlMateria = `
+        <article
+          class="ppv-materia"
+        >
+
+          <section
+            class="ppv-hero"
+            style="${heroStyle}"
+          >
+
+            <div
+              class="ppv-hero-content"
+            >
+
+              <span
+                class="ppv-label"
+              >
+                ${escaparHtml(
+                  categoria
+                )}
+              </span>
+
+              <h1
+                class="ppv-hero-title"
+              >
+                ${escaparHtml(
+                  h1
+                )}
+              </h1>
+
+              <div
+                class="ppv-underline"
+              ></div>
+
+              ${
+                subtitulo
+                  ? `
+                    <p
+                      class="ppv-subtitle"
+                    >
+                      ${escaparHtml(
+                        subtitulo
+                      )}
+                    </p>
+                  `
+                  : ''
+              }
+
+            </div>
+
+          </section>
+
+          <div
+            class="ppv-container"
+          >
+
+            <div
+              class="ppv-infobox"
+            >
+
+              <div
+                style="
+                  display:grid;
+                  grid-template-columns:
+                    repeat(
+                      auto-fit,
+                      minmax(
+                        180px,
+                        1fr
+                      )
+                    );
+                  gap:14px;
+                "
+              >
+
+                <div>
+                  <strong
+                    style="
+                      display:block;
+                      color:#00AE35;
+                      font-size:12px;
+                      text-transform:uppercase;
+                    "
+                  >
+                    Categoria
+                  </strong>
+
+                  <span
+                    style="
+                      color:#21300C;
+                      font-size:14px;
+                      font-weight:700;
+                    "
+                  >
+                    ${escaparHtml(
+                      categoria
+                    )}
+                  </span>
+                </div>
+
+                <div>
+                  <strong
+                    style="
+                      display:block;
+                      color:#00AE35;
+                      font-size:12px;
+                      text-transform:uppercase;
+                    "
+                  >
+                    Fonte
+                  </strong>
+
+                  <span
+                    style="
+                      color:#21300C;
+                      font-size:14px;
+                      font-weight:700;
+                    "
+                  >
+                    ${escaparHtml(
+                      creditos
+                    )}
+                  </span>
+                </div>
+
+                <div>
+                  <strong
+                    style="
+                      display:block;
+                      color:#00AE35;
+                      font-size:12px;
+                      text-transform:uppercase;
+                    "
+                  >
+                    Fotos
+                  </strong>
+
+                  <span
+                    style="
+                      color:#21300C;
+                      font-size:14px;
+                      font-weight:700;
+                    "
+                  >
+                    ${escaparHtml(
+                      fotografo
+                    )}
+                  </span>
+                </div>
+
+              </div>
+
+            </div>
+
+            ${creditoImagem}
+
+            <div
+              style="
+                margin-top:30px;
+              "
+            >
+              ${corpoHtml}
+            </div>
+
+            ${gerarGaleriaPreview()}
+
+            ${linksHtml}
+
+            <p
+              style="
+                margin:34px 0 0;
+                padding-top:20px;
+                border-top:1px solid #e2e8f0;
+                color:#626B5D;
+                font-size:13px;
+                line-height:1.7;
+                font-style:italic;
+              "
+            >
+              Texto/Fonte:
+              ${escaparHtml(
+                creditos
+              )}
+              |
+              Fotos:
+              ${escaparHtml(
+                fotografo
+              )}
+              |
+              Redação:
+              José Carlos Grites —
+              Jornalista —
+              Registro Profissional MTE nº 0007501/SC
+              |
+              Portal Pista Verde
+            </p>
+
+            ${previewFinal}
+
+          </div>
+
+        </article>
+      `;
+
+      document.getElementById(
+        'leitor-materia-html'
+      ).innerHTML =
+        htmlMateria;
+
+      gerarTextosSociais(
+        h1,
+        subtitulo,
+        categoria,
+        seo.slug
+      );
+
+      await gerarTodasAsCapas(
+        h1,
+        categoria
+      );
+
+      avancarRodizios();
+
+      irParaPagina(2);
+    }
+
+    function escaparHtml(
+      texto
+    ) {
+      return String(
+        texto || ''
+      )
+        .replace(
+          /&/g,
+          '&amp;'
+        )
+        .replace(
+          /</g,
+          '&lt;'
+        )
+        .replace(
+          />/g,
+          '&gt;'
+        )
+        .replace(
+          /"/g,
+          '&quot;'
+        )
+        .replace(
+          /'/g,
+          '&#039;'
+        );
+    }
+
+    function gerarPreviewPublicidade(
+      publicidade
+    ) {
+      return `
+        <aside
+          class="ppv-ad"
+        >
+
+          <div
+            class="ppv-ad-inner"
+          >
+
+            <div>
+
+              <img
+                src="${publicidade.logo}"
+                alt="${escaparHtml(
+                  publicidade.nome
+                )}"
+              >
+
+            </div>
+
+            <div>
+
+              <span
+                class="ppv-ad-tag"
+              >
+                Publicidade
+              </span>
+
+              <h3>
+                ${escaparHtml(
+                  publicidade.nome
+                )}
+              </h3>
+
+              <p>
+                ${escaparHtml(
+                  publicidade.desc
+                )}
+              </p>
+
+              <a
+                class="ppv-ad-button"
+                href="${publicidade.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ${escaparHtml(
+                  publicidade.btn
+                )}
+              </a>
+
+            </div>
+
+          </div>
+
+        </aside>
+      `;
+    }
+
+    function gerarPreviewApoiadores(
+      apoiadorRotativo
+    ) {
+      return `
+        <section
+          class="ppv-apoio"
+        >
+
+          <h2
+            style="
+              margin:0;
+              color:#21300C;
+              font-size:22px;
+              line-height:1.25;
+              font-weight:900;
+            "
+          >
+            Empresas que apoiam o kartismo
+          </h2>
+
+          <p
+            style="
+              margin:6px 0 0;
+              color:#5b6558;
+              font-size:13px;
+              line-height:1.6;
+            "
+          >
+            Marcas e empresas que ajudam a manter o esporte em movimento.
+          </p>
+
+          <div
+            class="ppv-sponsor-grid"
+          >
+
+            ${gerarPreviewCardApoiador(
+              APOIADOR_FIXO
+            )}
+
+            ${gerarPreviewCardApoiador(
+              apoiadorRotativo
+            )}
+
+          </div>
+
+        </section>
+
+        <section
+          class="ppv-portal-footer"
+        >
+
+          <div
+            style="
+              display:flex;
+              justify-content:center;
+              margin-bottom:18px;
+            "
+          >
+
+            <img
+              src="https://static.wixstatic.com/media/74713a_2e376012845b44bf966a24a6f6e5b427~mv2.png"
+              alt="Portal Pista Verde"
+              style="
+                display:block;
+                width:100%;
+                max-width:320px;
+                max-height:115px;
+                object-fit:contain;
+              "
+            >
+
+          </div>
+
+          <h2
+            style="
+              margin:0 0 7px;
+              color:#ffffff;
+              font-size:22px;
+              font-weight:900;
+            "
+          >
+            Portal Pista Verde
+          </h2>
+
+          <p
+            style="
+              margin:0 auto 18px;
+              color:#00AE35;
+              font-weight:800;
+              text-align:center;
+            "
+          >
+            Grid aquecido com responsabilidade
+          </p>
+
+          <p>
+            O Portal Pista Verde é uma startup brasileira especializada exclusivamente no ecossistema do kartismo e automobilismo, com atuação editorial, tecnológica e institucional voltada ao desenvolvimento do esporte a motor.
+          </p>
+
+          <p>
+            Entre seus projetos está o Programa ESG/ODS Pista Verde para kartódromos e autódromos, desenvolvido a partir do estudo e da adaptação à realidade brasileira de referências e diretrizes internacionais aplicadas ao automobilismo.
+          </p>
+
+          <p>
+            O projeto posiciona o Portal Pista Verde como uma iniciativa pioneira no Brasil ao integrar kartismo, automobilismo, sustentabilidade, ESG e os Objetivos de Desenvolvimento Sustentável (ODS) em uma plataforma especializada no setor.
+          </p>
+
+          <p
+            style="
+              margin-top:18px;
+              padding-top:16px;
+              border-top:1px solid rgba(255,255,255,.15);
+              color:#ffffff;
+              font-weight:700;
+              text-align:center;
+            "
+          >
+            Responsabilidade editorial:
+            José Carlos Grites —
+            Jornalista —
+            Registro Profissional MTE nº 0007501/SC.
+          </p>
+
+          <a
+            href="https://www.pistaverde.com.br/programa-esg-automobilismo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Conheça o Programa ESG/ODS Pista Verde
+          </a>
+
+        </section>
+      `;
+    }
+
+    function gerarPreviewCardApoiador(
+      empresa
+    ) {
+      return `
+        <article
+          class="ppv-sponsor-card"
+        >
+
+          <div>
+
+            <img
+              src="${empresa.logo}"
+              alt="${escaparHtml(
+                empresa.nome
+              )}"
+            >
+
+            <h3>
+              ${escaparHtml(
+                empresa.nome
+              )}
+            </h3>
+
+            <p>
+              ${escaparHtml(
+                empresa.desc
+              )}
+            </p>
+
+          </div>
+
+          <a
+            class="ppv-sponsor-btn"
+            href="${empresa.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ${escaparHtml(
+              empresa.btn
+            )}
+          </a>
+
+        </article>
+      `;
+    }
+
+    function gerarGaleriaPreview() {
+      if (
+        fotosCarregadas.length <= 1
+      ) {
+        return '';
+      }
+
+      const fotosGaleria =
+        fotosCarregadas.slice(
+          1
+        );
+
+      return `
+        <section
+          style="
+            margin:38px 0 20px;
+          "
+        >
+
+          <h2
+            style="
+              margin:0 0 18px;
+              color:#00AE35;
+              font-size:28px;
+              line-height:1.25;
+              font-weight:900;
+            "
+          >
+            Galeria
+          </h2>
+
+          <div
+            class="ppv-gallery-grid"
+          >
+
+            ${fotosGaleria
+              .map(
+                (
+                  foto,
+                  index
+                ) => `
+                  <figure
+                    class="ppv-gallery-item"
+                  >
+
+                    <img
+                      src="${foto.src}"
+                      alt="Foto ${
+                        index + 2
+                      } da matéria"
+                    >
+
+                    <span
+                      class="ppv-gallery-badge"
+                    >
+                      Foto ${
+                        index + 2
+                      }
+                    </span>
+
+                  </figure>
+                `
+              )
+              .join('')}
+
+          </div>
+
+        </section>
+      `;
+    }
+
+    function gerarTextosSociais(
+      h1,
+      subtitulo,
+      categoria,
+      slug
+    ) {
+      const url =
+        `https://www.pistaverde.com.br/post/${slug}`;
+
+      const base =
+        `${h1}\n\n${subtitulo}\n\nLeia no Portal Pista Verde:\n${url}`;
+
+      document.getElementById(
+        'text-insta'
+      ).value =
+        `${base}\n\n#kartismo #automobilismo #pistaverde`;
+
+      document.getElementById(
+        'text-stories'
+      ).value =
+        `${h1}\n\nLeia a matéria completa no Portal Pista Verde.\n${url}`;
+
+      document.getElementById(
+        'text-yt'
+      ).value =
+        `${h1}\n\n${subtitulo}\n\nMatéria completa: ${url}\n\nPortal Pista Verde — Grid aquecido com responsabilidade.`;
+    }
+
+    function carregarImagemDaCapa() {
+      return new Promise(
+        (resolve, reject) => {
+          const src =
+            fotosCarregadas[0]?.src;
+
+          if (!src) {
+            resolve(null);
+            return;
+          }
+
+          const imagem =
+            new Image();
+
+          imagem.onload = () =>
+            resolve(imagem);
+
+          imagem.onerror = () =>
+            reject(
+              new Error(
+                'Não foi possível carregar a foto de capa.'
+              )
+            );
+
+          imagem.src = src;
+        }
+      );
+    }
+
+    function desenharImagemPreenchida(
+      ctx,
+      imagem,
+      largura,
+      altura
+    ) {
+      if (!imagem) {
+        const fundo =
+          ctx.createLinearGradient(
+            0,
+            0,
+            largura,
+            altura
+          );
+
+        fundo.addColorStop(
+          0,
+          '#21300C'
+        );
+
+        fundo.addColorStop(
+          1,
+          '#071007'
+        );
+
+        ctx.fillStyle = fundo;
+        ctx.fillRect(
+          0,
+          0,
+          largura,
+          altura
+        );
+        return;
+      }
+
+      const escala =
+        Math.max(
+          largura / imagem.width,
+          altura / imagem.height
+        );
+
+      const w =
+        imagem.width * escala;
+
+      const h =
+        imagem.height * escala;
+
+      ctx.drawImage(
+        imagem,
+        (largura - w) / 2,
+        (altura - h) / 2,
+        w,
+        h
+      );
+    }
+
+    function quebrarTituloEmLinhas(
+      ctx,
+      titulo,
+      larguraMaxima
+    ) {
+      const palavras =
+        String(titulo || '')
+          .trim()
+          .split(/\s+/);
+
+      const linhas = [];
+      let linhaAtual = '';
+
+      palavras.forEach(
+        palavra => {
+          const teste =
+            linhaAtual
+              ? `${linhaAtual} ${palavra}`
+              : palavra;
+
+          if (
+            ctx.measureText(teste).width <=
+              larguraMaxima ||
+            !linhaAtual
+          ) {
+            linhaAtual = teste;
+            return;
+          }
+
+          linhas.push(linhaAtual);
+          linhaAtual = palavra;
+        }
+      );
+
+      if (linhaAtual) {
+        linhas.push(linhaAtual);
+      }
+
+      return linhas;
+    }
+
+    function desenharCapaSocial(
+      canvasId,
+      linkId,
+      largura,
+      altura,
+      titulo,
+      categoria,
+      imagem
+    ) {
+      const canvas =
+        document.getElementById(
+          canvasId
+        );
+
+      const ctx =
+        canvas.getContext('2d');
+
+      canvas.width = largura;
+      canvas.height = altura;
+
+      desenharImagemPreenchida(
+        ctx,
+        imagem,
+        largura,
+        altura
+      );
+
+      const overlay =
+        ctx.createLinearGradient(
+          0,
+          altura * 0.28,
+          0,
+          altura
+        );
+
+      overlay.addColorStop(
+        0,
+        'rgba(0,0,0,0)'
+      );
+
+      overlay.addColorStop(
+        0.58,
+        'rgba(0,0,0,.58)'
+      );
+
+      overlay.addColorStop(
+        1,
+        'rgba(0,0,0,.94)'
+      );
+
+      ctx.fillStyle = overlay;
+      ctx.fillRect(
+        0,
+        0,
+        largura,
+        altura
+      );
+
+      const margem =
+        Math.round(
+          largura * 0.07
+        );
+
+      const linhaVerde =
+        Math.max(
+          8,
+          Math.round(
+            altura * 0.007
+          )
+        );
+
+      ctx.fillStyle = '#00AE35';
+      ctx.fillRect(
+        0,
+        0,
+        largura,
+        linhaVerde
+      );
+
+      const tamanhoEtiqueta =
+        Math.max(
+          22,
+          Math.round(
+            largura * 0.026
+          )
+        );
+
+      ctx.font =
+        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
+
+      const textoEtiqueta =
+        String(
+          categoria || 'Kartismo'
+        ).toUpperCase();
+
+      const paddingEtiqueta =
+        Math.round(
+          largura * 0.022
+        );
+
+      const alturaEtiqueta =
+        Math.round(
+          tamanhoEtiqueta * 2.05
+        );
+
+      const larguraEtiqueta =
+        Math.min(
+          largura - margem * 2,
+          ctx.measureText(
+            textoEtiqueta
+          ).width +
+            paddingEtiqueta * 2
+        );
+
+      let tamanhoTitulo =
+        Math.round(
+          largura *
+            (
+              altura / largura > 1.5
+                ? 0.072
+                : 0.058
+            )
+        );
+
+      const maximoLinhas =
+        altura / largura > 1.5
+          ? 5
+          : 4;
+
+      let linhas = [];
+
+      do {
+        ctx.font =
+          `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
+
+        linhas =
+          quebrarTituloEmLinhas(
+            ctx,
+            titulo,
+            largura - margem * 2
+          );
+
+        if (
+          linhas.length <= maximoLinhas
+        ) {
+          break;
+        }
+
+        tamanhoTitulo -= 2;
+      } while (
+        tamanhoTitulo >
+          Math.round(
+            largura * 0.038
+          )
+      );
+
+      const alturaLinha =
+        Math.round(
+          tamanhoTitulo * 1.12
+        );
+
+      const blocoTitulo =
+        linhas.length * alturaLinha;
+
+      const yTitulo =
+        altura -
+        margem -
+        blocoTitulo;
+
+      const yEtiqueta =
+        yTitulo -
+        alturaEtiqueta -
+        Math.round(
+          altura * 0.025
+        );
+
+      ctx.fillStyle = '#00AE35';
+      ctx.fillRect(
+        margem,
+        yEtiqueta,
+        larguraEtiqueta,
+        alturaEtiqueta
+      );
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font =
+        `800 ${tamanhoEtiqueta}px Poppins, Arial, sans-serif`;
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        textoEtiqueta,
+        margem + paddingEtiqueta,
+        yEtiqueta +
+          alturaEtiqueta / 2
+      );
+
+      ctx.font =
+        `900 ${tamanhoTitulo}px Poppins, Arial, sans-serif`;
+      ctx.textBaseline = 'top';
+
+      linhas.forEach(
+        (linha, index) => {
+          ctx.fillText(
+            linha,
+            margem,
+            yTitulo +
+              index * alturaLinha
+          );
+        }
+      );
+
+      document.getElementById(
+        linkId
+      ).href =
+        canvas.toDataURL(
+          'image/png',
+          1
+        );
+    }
+
+    async function gerarTodasAsCapas(
+      titulo,
+      categoria
+    ) {
+      try {
+        if (
+          document.fonts?.ready
+        ) {
+          await document.fonts.ready;
+        }
+
+        const imagem =
+          await carregarImagemDaCapa();
+
+        desenharCapaSocial(
+          'canvas-wix',
+          'link-download-wix',
+          1200,
+          675,
+          titulo,
+          categoria,
+          imagem
+        );
+
+        desenharCapaSocial(
+          'canvas-feed',
+          'link-download-feed',
+          1080,
+          1350,
+          titulo,
+          categoria,
+          imagem
+        );
+
+        desenharCapaSocial(
+          'canvas-stories',
+          'link-download-stories',
+          1080,
+          1920,
+          titulo,
+          categoria,
+          imagem
+        );
+      } catch (err) {
+        alert(
+          err.message
+        );
+      }
+    }
+        async function enviarParaWixDraft() {
+      const btn = document.getElementById('btn-enviar-wix');
+      const status = document.getElementById('status-wix-envio');
+
+      status.classList.remove(
+        'hidden',
+        'bg-red-100',
+        'text-red-800',
+        'border-red-300',
+        'bg-emerald-100',
+        'text-emerald-800',
+        'border-emerald-300'
+      );
+
+      status.classList.add(
+        'bg-blue-100',
+        'text-blue-800',
+        'border-blue-300'
+      );
+
+      status.innerHTML =
+        '<i class="fa-solid fa-circle-notch animate-spin"></i> Enviando rascunho nativo + SEO para o Wix...';
+
+      btn.disabled = true;
+
+      const h1 =
+        document.getElementById('input-h1').value.trim() ||
+        'Sem título';
+
+      const subtitulo =
+        document.getElementById('input-subtitulo').value.trim() ||
+        '';
+
+      const releaseText =
+        document.getElementById('input-release').value.trim() ||
+        '';
+
+      const fotografo =
+        document.getElementById('input-fotografo').value.trim() ||
+        'Divulgação';
+
+      const creditos =
+        document.getElementById('input-creditos').value.trim() ||
+        'Assessoria de Imprensa';
+
+      const categoria =
+        document.getElementById('input-categoria').value;
+
+      const editorialBlocks =
+        classificarBlocosEditorial(
+          releaseText
+        );
+
+      const focusKeyword =
+        document.getElementById('seo-focus-keyword').value.trim();
+
+      const seoTitle =
+        document.getElementById('seo-title').value.trim();
+
+      const metaDescription =
+        document.getElementById('seo-meta-description').value.trim();
+
+      const seoSlug =
+        slugificar(
+          document.getElementById('seo-slug').value.trim() ||
+          h1
+        );
+
+      const excerpt =
+        document.getElementById('seo-excerpt').value.trim();
+
+      const tagLabels =
+        document.getElementById('seo-tags').value
+          .split(',')
+          .map(
+            t => t.trim()
+          )
+          .filter(Boolean)
+          .slice(0, 28);
+
+      let structuredData = null;
+
+      try {
+        structuredData =
+          JSON.parse(
+            document.getElementById('seo-structured-data').value ||
+            'null'
+          );
+      } catch (_) {}
+
+      const internalLinks =
+        selecionarLinksInternos(
+          h1,
+          subtitulo,
+          releaseText,
+          categoria
+        );
+
+      const payload = {
+        headline: h1,
+
+        subtitle: subtitulo,
+
+        editorialBody: releaseText,
+
+        editorialBlocks,
+
+        photographer: fotografo,
+
+        source: creditos,
+
+        category: categoria,
+
+        internalLinks,
+
+        journalist: {
+          name: "José Carlos Grites",
+          credential: "Jornalista | Registro profissional MTE/SC"
+        },
+
+        seo: {
+          focusKeyword,
+          title: seoTitle,
+          description: metaDescription,
+          slug: seoSlug,
+          excerpt,
+          tagLabels,
+          structuredData,
+          ogTitle: seoTitle,
+          ogDescription: metaDescription
+        }
+      };
+
+      try {
+        const response =
+          await fetch(
+            "/api/wix",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(
+                  payload
+                )
+            }
+          );
+
+        const textData =
+          await response.text();
+
+        let data;
+
+        try {
+          data =
+            JSON.parse(
+              textData
+            );
+        } catch (e) {
+          data = {
+            message:
+              textData ||
+              "Resposta sem formatação válida."
+          };
+        }
+
+        if (
+          response.ok &&
+          data.success
+        ) {
+          status.classList.remove(
+            'bg-blue-100',
+            'text-blue-800',
+            'border-blue-300'
+          );
+
+          status.classList.add(
+            'bg-emerald-100',
+            'text-emerald-800',
+            'border-emerald-300'
+          );
+
+          const cat =
+            data.category?.label
+              ? ` | Categoria: ${data.category.label}`
+              : '';
+
+          const tags =
+            Number.isFinite(
+              data.tagsApplied
+            )
+              ? ` | Tags: ${data.tagsApplied}`
+              : '';
+
+          status.innerHTML =
+            `<i class="fa-solid fa-circle-check"></i> <strong>Rascunho criado com sucesso no Wix!</strong>${cat}${tags}`;
+
+        } else {
+          const msgErro =
+            data.error ||
+            data.message ||
+            (
+              typeof data.details ===
+              'string'
+                ? data.details
+                : JSON.stringify(
+                    data.details ||
+                    data
+                  )
+            );
+
+          throw new Error(
+            `Erro Wix (${response.status}): ${msgErro}`
+          );
+        }
+      } catch (err) {
+        status.classList.remove(
+          'bg-blue-100',
+          'text-blue-800',
+          'border-blue-300'
+        );
+
+        status.classList.add(
+          'bg-red-100',
+          'text-red-800',
+          'border-red-300'
+        );
+
+        status.innerHTML =
+          '<i class="fa-solid fa-triangle-exclamation"></i> <strong>Falha no Envio:</strong> ' +
+          err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function gerarVideoTikTok() {
+      const canvas =
+        document.getElementById(
+          'canvas-stories'
+        );
+
+      const btn =
+        document.getElementById(
+          'btn-video-tiktok'
+        );
+
+      btn.innerHTML =
+        '<i class="fa-solid fa-spinner animate-spin"></i> Gerando Vídeo (3s)...';
+
+      btn.disabled = true;
+
+      try {
+        const stream =
+          canvas.captureStream(
+            30
+          );
+
+        const mediaRecorder =
+          new MediaRecorder(
+            stream,
+            {
+              mimeType:
+                'video/webm'
+            }
+          );
+
+        const chunks = [];
+
+        mediaRecorder.ondataavailable =
+          function(e) {
+            if (
+              e.data.size > 0
+            ) {
+              chunks.push(
+                e.data
+              );
+            }
+          };
+
+        mediaRecorder.onstop =
+          function() {
+            const blob =
+              new Blob(
+                chunks,
+                {
+                  type:
+                    'video/webm'
+                }
+              );
+
+            const url =
+              URL.createObjectURL(
+                blob
+              );
+
+            const a =
+              document.createElement(
+                'a'
+              );
+
+            a.style.display =
+              'none';
+
+            a.href =
+              url;
+
+            a.download =
+              'video-tiktok-pistaverde.webm';
+
+            document.body.appendChild(
+              a
+            );
+
+            a.click();
+
+            setTimeout(
+              () => {
+                document.body.removeChild(
+                  a
+                );
+
+                URL.revokeObjectURL(
+                  url
+                );
+              },
+              100
+            );
+
+            btn.innerHTML =
+              '<i class="fa-solid fa-film"></i> Gerar Vídeo TikTok';
+
+            btn.disabled =
+              false;
+          };
+
+        mediaRecorder.start();
+
+        setTimeout(
+          () => {
+            mediaRecorder.stop();
+          },
+          3000
+        );
+      } catch (err) {
+        alert(
+          'Seu navegador bloqueou a gravação direta. Use a capa Stories como imagem estática.'
+        );
+
+        btn.innerHTML =
+          '<i class="fa-solid fa-film"></i> Gerar Vídeo TikTok';
+
+        btn.disabled =
+          false;
+      }
+    }
+
+  </script>
+
+</body>
+</html>
+  </script>
+
+</body>
+</html>
