@@ -1,6 +1,3 @@
-
-
-
 // ============================================================
 // PORTAL PISTA VERDE — PV ONE
 // api/wix.js
@@ -327,47 +324,70 @@ export default async function handler(req, res) {
     }
 
     async function queryExistingTags() {
-      const response =
-        await wixFetch(
-          "https://www.wixapis.com/blog/v3/tags/query",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              query: {
-                paging: {
-                  limit: 100,
-                  offset: 0
+      const tags = [];
+
+      for (let offset = 0; offset < 500; offset += 100) {
+        const response =
+          await wixFetch(
+            "https://www.wixapis.com/v3/tags/query",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                query: {
+                  paging: {
+                    limit: 100,
+                    offset
+                  }
                 }
-              }
-            })
-          }
-        );
+              })
+            }
+          );
 
-      const data =
-        await readResponse(response);
+        const data =
+          await readResponse(response);
 
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-          "Não foi possível consultar as tags do Wix."
-        );
+        if (!response.ok) {
+          throw new Error(
+            data.message ||
+            "Não foi possível consultar as tags do Wix."
+          );
+        }
+
+        const page =
+          Array.isArray(data.tags)
+            ? data.tags
+            : [];
+
+        tags.push(...page);
+
+        if (page.length < 100) {
+          break;
+        }
       }
 
-      return Array.isArray(data.tags)
-        ? data.tags
-        : [];
+      return tags;
     }
 
     async function createTag(label) {
+      const safeLabel =
+        String(label || "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .substring(0, 100);
+
+      if (!safeLabel) {
+        throw new Error(
+          "Uma das tags ficou vazia e o envio foi interrompido antes de chegar ao Wix."
+        );
+      }
+
       const response =
         await wixFetch(
-          "https://www.wixapis.com/blog/v3/tags",
+          "https://www.wixapis.com/v3/tags",
           {
             method: "POST",
             body: JSON.stringify({
-              tag: {
-                label
-              }
+              label: safeLabel
             })
           }
         );
@@ -378,7 +398,7 @@ export default async function handler(req, res) {
       if (!response.ok) {
         throw new Error(
           data.message ||
-          `Não foi possível criar a tag "${label}" no Wix.`
+          `Não foi possível criar a tag "${safeLabel}" no Wix.`
         );
       }
 
@@ -387,7 +407,7 @@ export default async function handler(req, res) {
 
       if (!tag?.id) {
         throw new Error(
-          `O Wix não devolveu o ID da tag "${label}".`
+          `O Wix não devolveu o ID da tag "${safeLabel}".`
         );
       }
 
@@ -406,7 +426,8 @@ export default async function handler(req, res) {
         const label =
           String(item || "")
             .replace(/\s+/g, " ")
-            .trim();
+            .trim()
+            .substring(0, 100);
 
         const key =
           normalizeLabel(label);
@@ -445,12 +466,13 @@ export default async function handler(req, res) {
             )
         );
 
-      const createdTags =
-        await Promise.all(
-          missingLabels.map(
-            label => createTag(label)
-          )
+      const createdTags = [];
+
+      for (const label of missingLabels) {
+        createdTags.push(
+          await createTag(label)
         );
+      }
 
       createdTags.forEach(
         tag => {
@@ -1096,20 +1118,31 @@ export default async function handler(req, res) {
         .trim()
         .substring(0, 500);
 
-    const tagLabels =
-      Array.isArray(seo.tagLabels)
-        ? [
-            ...new Set(
-              seo.tagLabels
-                .map(item =>
-                  String(item || "")
-                    .replace(/\s+/g, " ")
-                    .trim()
-                )
-                .filter(Boolean)
-            )
-          ].slice(0, 28)
-        : [];
+    const tagLabels = [];
+    const normalizedTagLabels =
+      new Set();
+
+    if (Array.isArray(seo.tagLabels)) {
+      for (const item of seo.tagLabels) {
+        const label =
+          String(item || "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .substring(0, 100);
+
+        const normalized =
+          normalizeLabel(label);
+
+        if (
+          label &&
+          !normalizedTagLabels.has(normalized) &&
+          tagLabels.length < 28
+        ) {
+          normalizedTagLabels.add(normalized);
+          tagLabels.push(label);
+        }
+      }
+    }
 
     if (tagLabels.length !== 28) {
       return res.status(400).json({
