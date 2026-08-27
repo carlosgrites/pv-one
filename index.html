@@ -695,7 +695,7 @@
 
             <div>
               <label class="block text-xs font-black text-slate-700 mb-1">
-                Palavra-chave foco
+                01 — Palavra-chave foco
               </label>
 
               <input
@@ -713,7 +713,7 @@
 
             <div>
               <label class="block text-xs font-black text-slate-700 mb-1">
-                Tag de título
+                02 — Tag de título
               </label>
 
               <input
@@ -724,7 +724,7 @@
 
             <div>
               <label class="block text-xs font-black text-slate-700 mb-1">
-                Meta descrição
+                03 — Meta descrição
               </label>
 
               <textarea
@@ -736,7 +736,7 @@
 
             <div>
               <label class="block text-xs font-black text-slate-700 mb-1">
-                Slug
+                04 — Slug
               </label>
 
               <input
@@ -747,7 +747,54 @@
 
             <div>
               <label class="block text-xs font-black text-slate-700 mb-1">
-                Trecho
+                05 — Dados estruturados
+              </label>
+
+              <textarea
+                id="seo-structured-data"
+                rows="8"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-[11px] font-mono"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                06 — OG título
+              </label>
+
+              <input
+                id="seo-og-title"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                07 — OG description
+              </label>
+
+              <textarea
+                id="seo-og-description"
+                rows="3"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                08 — ALT texto da foto de capa
+              </label>
+
+              <textarea
+                id="seo-alt-text"
+                rows="3"
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                09 — Trecho
               </label>
 
               <textarea
@@ -758,26 +805,42 @@
             </div>
 
             <div>
+              <label class="block text-xs font-black text-slate-700 mb-1">
+                10 — Categoria
+              </label>
+
+              <input
+                id="seo-category"
+                readonly
+                class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white"
+              >
+            </div>
+
+            <div>
               <div class="flex items-center justify-between mb-1">
 
                 <label class="block text-xs font-black text-slate-700">
-                  Tags
+                  11 — 28 tags
                 </label>
 
                 <span
                   id="seo-tags-count"
                   class="text-[10px] font-black text-[#00AE35]"
                 >
-                  0 tags
+                  0 de 28 tags
                 </span>
 
               </div>
 
               <textarea
                 id="seo-tags"
-                rows="5"
+                rows="8"
                 class="w-full border border-slate-300 rounded-lg p-2.5 text-xs"
               ></textarea>
+
+              <p class="mt-1 text-[10px] text-slate-500">
+                Separadas por vírgula, lado a lado.
+              </p>
             </div>
 
             <div>
@@ -790,18 +853,6 @@
                 rows="5"
                 readonly
                 class="w-full border border-slate-300 rounded-lg p-2.5 text-xs bg-white"
-              ></textarea>
-            </div>
-
-            <div>
-              <label class="block text-xs font-black text-slate-700 mb-1">
-                Dados estruturados
-              </label>
-
-              <textarea
-                id="seo-structured-data"
-                rows="8"
-                class="w-full border border-slate-300 rounded-lg p-2.5 text-[11px] font-mono"
               ></textarea>
             </div>
 
@@ -1297,6 +1348,41 @@ function irParaPagina(num) {
       document.getElementById('text-stories').value = '';
       document.getElementById('text-tiktok').value = '';
       document.getElementById('text-yt').value = '';
+
+      [
+        'seo-focus-keyword',
+        'seo-title',
+        'seo-meta-description',
+        'seo-slug',
+        'seo-structured-data',
+        'seo-og-title',
+        'seo-og-description',
+        'seo-alt-text',
+        'seo-excerpt',
+        'seo-category',
+        'seo-tags',
+        'seo-internal-links'
+      ].forEach(
+        id => {
+          document.getElementById(id).value = '';
+        }
+      );
+
+      document.getElementById(
+        'seo-tags-count'
+      ).innerText =
+        '0 de 28 tags';
+
+      const seoCheck =
+        document.getElementById(
+          'seo-check-keyword'
+        );
+
+      seoCheck.className =
+        'mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 border border-slate-300';
+
+      seoCheck.innerText =
+        'Aguardando geração';
 
       const status = document.getElementById('status-wix-envio');
       status.classList.add('hidden');
@@ -1814,6 +1900,23 @@ function irParaPagina(num) {
           release
         );
 
+      const h2Normalizado =
+        normalizarTextoSeo(
+          classificarBlocosEditorial(
+            release
+          )
+            .filter(
+              bloco =>
+                bloco.type === 'h2'
+            )
+            .map(
+              bloco => bloco.text
+            )
+            .join(' ')
+        );
+
+      let melhorFraseNoCorpo = '';
+
       for (
         let tamanho =
           Math.min(
@@ -1830,17 +1933,35 @@ function irParaPagina(num) {
               tamanho;
           inicio++
         ) {
-          const frase =
+          const palavrasFrase =
             tituloPalavras
               .slice(
                 inicio,
                 inicio + tamanho
               )
-              .join(" ")
-              .replace(
-                /[|–—:;,!?()]/g,
-                ""
+              .map(
+                palavra =>
+                  palavra.replace(
+                    /[|–—:;,!?()]/g,
+                    ''
+                  )
               )
+              .filter(Boolean);
+
+          while (
+            palavrasFrase.length > 2 &&
+            SEO_STOPWORDS.has(
+              normalizarTextoSeo(
+                palavrasFrase[0]
+              )
+            )
+          ) {
+            palavrasFrase.shift();
+          }
+
+          const frase =
+            palavrasFrase
+              .join(' ')
               .trim();
 
           if (
@@ -1851,130 +1972,293 @@ function irParaPagina(num) {
               )
             )
           ) {
-            return frase;
+            if (
+              h2Normalizado.includes(
+                normalizarTextoSeo(
+                  frase
+                )
+              )
+            ) {
+              return frase;
+            }
+
+            if (!melhorFraseNoCorpo) {
+              melhorFraseNoCorpo = frase;
+            }
           }
         }
       }
 
-      const primeiro =
-        classificarBlocosEditorial(
-          release
-        ).find(
-          b =>
-            b.type ===
-            "paragraph"
-        )?.text || "";
-
-      const palavrasCorpo =
-        primeiro
-          .split(/\s+/)
-          .filter(Boolean);
-
-      const validas =
-        palavrasCorpo.filter(
-          p => {
-            const n =
-              normalizarTextoSeo(p)
-                .replace(
-                  /[^a-z0-9-]/g,
-                  ""
-                );
-
-            return (
-              n.length >= 3 &&
-              !SEO_STOPWORDS.has(n)
-            );
-          }
-        );
-
-      const corpoFoco =
-        validas
-          .slice(0, 4)
-          .join(" ")
-          .trim();
-
-      if (
-        corpoFoco.length >= 8
-      ) {
-        return corpoFoco;
+      if (melhorFraseNoCorpo) {
+        return melhorFraseNoCorpo;
       }
 
-      return `${categoria} ${tituloPalavras
-        .slice(0, 3)
-        .join(" ")}`.trim();
+      const entidadeTitulo =
+        extrairEntidadesSeo(h1)
+          .find(
+            entidade =>
+              entidade.split(/\s+/).length >= 2
+          );
+
+      if (entidadeTitulo) {
+        return entidadeTitulo;
+      }
+
+      const focoTitulo =
+        tituloPalavras
+          .slice(0, 4)
+          .join(' ')
+          .replace(
+            /[|–—:;,!?()]/g,
+            ''
+          )
+          .trim();
+
+      return focoTitulo ||
+        categoria;
     }
-        function gerarTagsSeo(
+    function extrairEntidadesSeo(
+      texto
+    ) {
+      const correspondencias =
+        String(texto || '').match(
+          /(?:[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\p{L}\dºª#-]+)(?:\s+(?:do|da|dos|das|de|e|no|na|em)?\s*[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9][\p{L}\dºª#-]+){0,4}/gu
+        ) || [];
+
+      return correspondencias
+        .map(
+          item =>
+            item
+              .replace(/\s+/g, ' ')
+              .trim()
+        )
+        .filter(
+          item =>
+            item.length >= 4 &&
+            item.length <= 70 &&
+            !/^(O|A|Os|As|Um|Uma|Portal)$/i.test(
+              item
+            )
+        );
+    }
+
+    function gerarFrasesRelevantesSeo(
+      texto,
+      quantidade = 18
+    ) {
+      const palavras =
+        String(texto || '')
+          .replace(
+            /[^\p{L}\p{N}#-]+/gu,
+            ' '
+          )
+          .trim()
+          .split(/\s+/)
+          .filter(
+            palavra => {
+              const normalizada =
+                normalizarTextoSeo(
+                  palavra
+                );
+
+              return (
+                normalizada.length >= 3 &&
+                !SEO_STOPWORDS.has(
+                  normalizada
+                )
+              );
+            }
+          );
+
+      const frases = [];
+
+      [3, 2].forEach(
+        tamanho => {
+          for (
+            let i = 0;
+            i <=
+              palavras.length - tamanho;
+            i++
+          ) {
+            frases.push(
+              palavras
+                .slice(
+                  i,
+                  i + tamanho
+                )
+                .join(' ')
+            );
+          }
+        }
+      );
+
+      return frases.slice(
+        0,
+        quantidade
+      );
+    }
+
+    function gerarTagsSeo(
       h1,
       subtitulo,
       release,
       categoria,
       palavraChave
     ) {
-      const base =
-        `${h1} ${subtitulo} ${release} ${categoria} ${palavraChave}`;
+      const baseEditorial =
+        `${h1}. ${subtitulo}. ${release}`;
 
-      const palavras =
-        normalizarTextoSeo(base)
-          .replace(
-            /[^a-z0-9\s-]/g,
-            " "
-          )
-          .split(/\s+/)
+      const baseKartismo = [
+        'kartismo brasileiro',
+        'notícias do kartismo',
+        'pilotos de kart',
+        'corridas de kart',
+        'campeonatos de kart',
+        'equipes de kart',
+        'kartódromos do Brasil',
+        'competição de kart',
+        'temporada do kartismo',
+        'resultados do kartismo',
+        'categorias do kartismo',
+        'esporte a motor'
+      ];
+
+      const baseAutomobilismo = [
+        'automobilismo brasileiro',
+        'notícias do automobilismo',
+        'pilotos brasileiros',
+        'competições automobilísticas',
+        'corridas no Brasil',
+        'temporada do automobilismo',
+        'esporte a motor'
+      ];
+
+      const baseEsg = [
+        'ESG no automobilismo',
+        'ODS no esporte a motor',
+        'sustentabilidade no automobilismo',
+        'Programa ESG ODS Pista Verde',
+        'kartódromos sustentáveis',
+        'autódromos sustentáveis'
+      ];
+
+      const apoioCategoria =
+        /ESG|ODS/i.test(categoria)
+          ? baseEsg
+          : /Automobilismo/i.test(categoria)
+          ? baseAutomobilismo
+          : baseKartismo;
+
+      const entidades =
+        extrairEntidadesSeo(
+          baseEditorial
+        )
           .filter(
-            p =>
-              p.length >= 3 &&
-              !SEO_STOPWORDS.has(p)
+            entidade => {
+              const palavras =
+                entidade.split(/\s+/);
+
+              return (
+                (
+                  palavras.length >= 2 &&
+                  palavras.length <= 4
+                ) ||
+                /^[A-Z0-9]{2,8}$/.test(
+                  entidade
+                )
+              );
+            }
+          )
+          .slice(0, 12);
+
+      const combinacoesEntidades =
+        entidades
+          .slice(0, 6)
+          .flatMap(
+            entidade => [
+              `${entidade} kartismo`,
+              `${entidade} ${categoria}`
+            ]
           );
 
-      const frequencia =
-        {};
+      const candidatas = [
+        palavraChave,
+        categoria,
+        cortarSemQuebrar(h1, 70),
+        ...entidades,
+        `${palavraChave} ${categoria}`,
+        `${palavraChave} kartismo`,
+        ...combinacoesEntidades,
+        'Portal Pista Verde',
+        ...apoioCategoria,
+        'kartismo',
+        'automobilismo'
+      ];
 
-      palavras.forEach(
-        p => {
-          frequencia[p] =
-            (frequencia[p] || 0) +
-            1;
+      const tags = [];
+      const usadas = new Set();
+
+      candidatas.forEach(
+        candidata => {
+          const limpa =
+            String(candidata || '')
+              .replace(/\s+/g, ' ')
+              .replace(
+                /^[\s,.;:–—-]+|[\s,.;:–—-]+$/g,
+                ''
+              )
+              .trim();
+
+          const chave =
+            normalizarTextoSeo(limpa);
+
+          if (
+            limpa.length >= 3 &&
+            limpa.length <= 70 &&
+            !usadas.has(chave) &&
+            tags.length < 28
+          ) {
+            usadas.add(chave);
+            tags.push(limpa);
+          }
         }
       );
 
-      const ranking =
-        Object.entries(
-          frequencia
-        )
-          .sort(
-            (a, b) =>
-              b[1] - a[1]
-          )
-          .map(
-            item =>
-              item[0]
-          );
+      const complementares = [
+        'Portal de notícias do kartismo',
+        'jornalismo esportivo',
+        'notícias do esporte a motor',
+        'Brasil no automobilismo',
+        'Grid aquecido com responsabilidade',
+        'Portal Pista Verde kartismo',
+        'Portal Pista Verde automobilismo',
+        'reportagens de kart',
+        'agenda do kartismo',
+        'bastidores do automobilismo',
+        'cobertura jornalística esportiva',
+        'competições do esporte a motor',
+        'pilotos do esporte a motor',
+        'notícias de kart no Brasil'
+      ];
 
-      const tags =
-        [
-          categoria,
-          palavraChave,
-          "kartismo",
-          "automobilismo",
-          "Portal Pista Verde",
-          ...ranking.slice(
-            0,
-            12
-          )
-        ]
-          .map(
-            t =>
-              String(t || "")
-                .trim()
-          )
-          .filter(Boolean);
+      complementares.forEach(
+        candidata => {
+          const chave =
+            normalizarTextoSeo(
+              candidata
+            );
 
-      return [
-        ...new Set(tags)
-      ].slice(
-        0,
-        15
+          if (
+            tags.length < 28 &&
+            !usadas.has(chave)
+          ) {
+            usadas.add(chave);
+            tags.push(candidata);
+          }
+        }
       );
+
+      return tags.slice(0, 28);
     }
 
     function selecionarLinksInternos(
@@ -2068,7 +2352,10 @@ function irParaPagina(num) {
         );
 
       let seoTitle =
-        String(h1 || "").trim();
+        cortarSemQuebrar(
+          String(h1 || '').trim(),
+          65
+        );
 
       if (
         !normalizarTextoSeo(
@@ -2080,28 +2367,30 @@ function irParaPagina(num) {
         )
       ) {
         seoTitle =
-          `${palavraChave}: ${seoTitle}`;
+          cortarSemQuebrar(
+            `${palavraChave}: ${h1}`,
+            65
+          );
       }
 
-      seoTitle =
-        cortarSemQuebrar(
-          seoTitle,
-          60
+      const blocos =
+        classificarBlocosEditorial(
+          release
         );
+
+      const primeiroParagrafo =
+        blocos.find(
+          bloco =>
+            bloco.type ===
+            'paragraph'
+        )?.text || '';
 
       let meta =
         String(subtitulo || "")
           .trim();
 
       if (!meta) {
-        meta =
-          classificarBlocosEditorial(
-            release
-          ).find(
-            b =>
-              b.type ===
-              "paragraph"
-          )?.text || "";
+        meta = primeiroParagrafo;
       }
 
       if (
@@ -2120,25 +2409,35 @@ function irParaPagina(num) {
       meta =
         cortarSemQuebrar(
           meta,
-          155
+          160
         );
 
-      const slug =
+      let slug =
+        slugificar(h1);
+
+      const slugPalavraChave =
         slugificar(
           palavraChave
         );
 
+      if (
+        !slug.includes(
+          slugPalavraChave
+        )
+      ) {
+        slug = slugificar(
+          `${palavraChave} ${h1}`
+        );
+      }
+
       const excerpt =
         cortarSemQuebrar(
-          subtitulo ||
-          classificarBlocosEditorial(
-            release
-          ).find(
-            b =>
-              b.type ===
-              "paragraph"
-          )?.text ||
-          "",
+          [
+            subtitulo,
+            primeiroParagrafo
+          ]
+            .filter(Boolean)
+            .join(' '),
           300
         );
 
@@ -2159,6 +2458,36 @@ function irParaPagina(num) {
           categoria
         );
 
+      const legendaFoto =
+        document.getElementById(
+          'input-legenda-foto'
+        ).value.trim();
+
+      const altText =
+        cortarSemQuebrar(
+          legendaFoto ||
+          `${categoria}: ${h1}`,
+          180
+        );
+
+      const ogTitle =
+        cortarSemQuebrar(
+          h1,
+          90
+        );
+
+      const ogDescription =
+        cortarSemQuebrar(
+          subtitulo || meta,
+          200
+        );
+
+      const urlMateria =
+        `https://www.pistaverde.com.br/post/${slug}`;
+
+      const dataIso =
+        new Date().toISOString();
+
       const structuredData =
         {
           "@context":
@@ -2167,18 +2496,50 @@ function irParaPagina(num) {
           "@type":
             "NewsArticle",
 
+          "mainEntityOfPage": {
+            "@type":
+              "WebPage",
+
+            "@id":
+              urlMateria
+          },
+
           "headline":
             h1,
 
           "description":
             meta,
 
+          "articleSection":
+            categoria,
+
+          "keywords":
+            tags.join(', '),
+
+          "datePublished":
+            dataIso,
+
+          "dateModified":
+            dataIso,
+
+          "inLanguage":
+            "pt-BR",
+
+          "isAccessibleForFree":
+            true,
+
           "author": {
             "@type":
               "Person",
 
             "name":
-              "José Carlos Grites"
+              "José Carlos Grites",
+
+            "jobTitle":
+              "Jornalista profissional",
+
+            "identifier":
+              "Registro MTE nº 0007501/SC"
           },
 
           "publisher": {
@@ -2189,7 +2550,15 @@ function irParaPagina(num) {
               "Portal Pista Verde",
 
             "url":
-              "https://www.pistaverde.com.br/"
+              "https://www.pistaverde.com.br/",
+
+            "logo": {
+              "@type":
+                "ImageObject",
+
+              "url":
+                "https://static.wixstatic.com/media/74713a_0ab61a02d42049ae86d5049792523891~mv2.jpeg"
+            }
           }
         };
 
@@ -2198,7 +2567,11 @@ function irParaPagina(num) {
         seoTitle,
         meta,
         slug,
+        ogTitle,
+        ogDescription,
+        altText,
         excerpt,
+        categoria,
         tags,
         links,
         structuredData
@@ -2229,9 +2602,29 @@ function irParaPagina(num) {
         seo.slug;
 
       document.getElementById(
+        "seo-og-title"
+      ).value =
+        seo.ogTitle;
+
+      document.getElementById(
+        "seo-og-description"
+      ).value =
+        seo.ogDescription;
+
+      document.getElementById(
+        "seo-alt-text"
+      ).value =
+        seo.altText;
+
+      document.getElementById(
         "seo-excerpt"
       ).value =
         seo.excerpt;
+
+      document.getElementById(
+        "seo-category"
+      ).value =
+        seo.categoria;
 
       document.getElementById(
         "seo-tags"
@@ -2243,7 +2636,7 @@ function irParaPagina(num) {
       document.getElementById(
         "seo-tags-count"
       ).innerText =
-        `${seo.tags.length} tags`;
+        `${seo.tags.length} de 28 tags`;
 
       document.getElementById(
         "seo-internal-links"
@@ -2300,22 +2693,92 @@ function irParaPagina(num) {
           )
         );
 
+      const h1Atual =
+        document.getElementById(
+          'input-h1'
+        ).value;
+
+      const releaseAtual =
+        document.getElementById(
+          'input-release'
+        ).value;
+
+      const blocosAtuais =
+        classificarBlocosEditorial(
+          releaseAtual
+        );
+
+      const h2Texto =
+        blocosAtuais
+          .filter(
+            bloco =>
+              bloco.type === 'h2'
+          )
+          .map(
+            bloco => bloco.text
+          )
+          .join(' ');
+
+      const h1Ok =
+        normalizarTextoSeo(
+          h1Atual
+        ).includes(
+          normalizarTextoSeo(
+            seo.palavraChave
+          )
+        );
+
+      const h2Ok =
+        normalizarTextoSeo(
+          h2Texto
+        ).includes(
+          normalizarTextoSeo(
+            seo.palavraChave
+          )
+        );
+
+      const corpoOk =
+        normalizarTextoSeo(
+          releaseAtual
+        ).includes(
+          normalizarTextoSeo(
+            seo.palavraChave
+          )
+        );
+
+      const tagsOk =
+        seo.tags.length === 28;
+
       if (
+        h1Ok &&
+        h2Ok &&
+        corpoOk &&
         tituloOk &&
         metaOk &&
-        slugOk
+        slugOk &&
+        tagsOk
       ) {
         check.className =
           "mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-green-50 text-green-700 border border-green-200";
 
         check.innerText =
-          "Palavra-chave aplicada em título, meta e slug";
+          "SEO conferido: palavra-chave em H1, H2, corpo, título, meta e slug; 28 tags completas";
       } else {
         check.className =
           "mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200";
 
+        const pendencias = [];
+
+        if (!h1Ok) pendencias.push('H1');
+        if (!h2Ok) pendencias.push('H2');
+        if (!corpoOk) pendencias.push('corpo');
+        if (!tituloOk) pendencias.push('tag de título');
+        if (!metaOk) pendencias.push('meta descrição');
+        if (!slugOk) pendencias.push('slug');
+        if (!tagsOk) pendencias.push('28 tags');
+
         check.innerText =
-          "Revise a aplicação da palavra-chave";
+          `Revisar: ${pendencias.join(', ')}`;
       }
     }
 
@@ -2338,7 +2801,7 @@ function irParaPagina(num) {
           ...new Set(tags)
         ].slice(
           0,
-          30
+          28
         );
 
       let structuredData =
@@ -2373,6 +2836,21 @@ function irParaPagina(num) {
             "seo-meta-description"
           ).value.trim(),
 
+        ogTitle:
+          document.getElementById(
+            "seo-og-title"
+          ).value.trim(),
+
+        ogDescription:
+          document.getElementById(
+            "seo-og-description"
+          ).value.trim(),
+
+        altText:
+          document.getElementById(
+            "seo-alt-text"
+          ).value.trim(),
+
         slug:
           document.getElementById(
             "seo-slug"
@@ -2381,6 +2859,11 @@ function irParaPagina(num) {
         excerpt:
           document.getElementById(
             "seo-excerpt"
+          ).value.trim(),
+
+        category:
+          document.getElementById(
+            "seo-category"
           ).value.trim(),
 
         tags,
@@ -3460,7 +3943,8 @@ body{
         h1,
         subtitulo,
         categoria,
-        seo.slug
+        seo.slug,
+        seo.tags
       );
 
       await gerarTodasAsCapas(
@@ -3873,20 +4357,20 @@ body{
 
     function gerarHashtagsSociais(
       categoria,
-      h1
+      tagsSeo = []
     ) {
       const termos = [
         'kartismo',
         'automobilismo',
         'pistaverde',
         categoria,
-        ...String(h1 || '')
-          .split(/\s+/)
-          .filter(
-            termo =>
-              termo.length >= 5
-          )
-          .slice(0, 4)
+        ...tagsSeo.filter(
+          tag =>
+            slugificar(tag)
+              .replace(/-/g, '')
+              .length <= 28
+        )
+          .slice(0, 8)
       ];
 
       return [
@@ -3911,7 +4395,8 @@ body{
       h1,
       subtitulo,
       categoria,
-      slug
+      slug,
+      tagsSeo
     ) {
       const release =
         document.getElementById(
@@ -3941,7 +4426,7 @@ body{
       const hashtags =
         gerarHashtagsSociais(
           categoria,
-          h1
+          tagsSeo
         );
 
       const rodapeInstagram = [
@@ -4931,6 +5416,15 @@ body{
       const metaDescription =
         document.getElementById('seo-meta-description').value.trim();
 
+      const ogTitle =
+        document.getElementById('seo-og-title').value.trim();
+
+      const ogDescription =
+        document.getElementById('seo-og-description').value.trim();
+
+      const altText =
+        document.getElementById('seo-alt-text').value.trim();
+
       const seoSlug =
         slugificar(
           document.getElementById('seo-slug').value.trim() ||
@@ -4997,8 +5491,10 @@ body{
           excerpt,
           tagLabels,
           structuredData,
-          ogTitle: seoTitle,
-          ogDescription: metaDescription
+          ogTitle,
+          ogDescription,
+          altText,
+          category: categoria
         }
       };
 
