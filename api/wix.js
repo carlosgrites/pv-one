@@ -17,6 +17,10 @@ export default async function handler(req, res) {
       "Cache-Control",
       "no-store"
     );
+    res.setHeader(
+      "X-PV-One-Version",
+      "2026-08-27-tags-v3"
+    );
 
     if (req.method === "OPTIONS") {
       res.setHeader(
@@ -408,7 +412,7 @@ export default async function handler(req, res) {
 
         if (/ALREADY_EXISTS|already exists/i.test(wixMessage)) {
           const existingTag =
-            await getTagByLabel(
+            await queryTagByExactLabel(
               safeLabel
             );
 
@@ -435,7 +439,7 @@ export default async function handler(req, res) {
       return tag;
     }
 
-    async function getTagByLabel(label) {
+    async function queryTagByExactLabel(label) {
       const safeLabel =
         String(label || "")
           .replace(/\s+/g, " ")
@@ -446,25 +450,26 @@ export default async function handler(req, res) {
         return null;
       }
 
-      const encodedLabel =
-        safeLabel
-          .split("/")
-          .map(part =>
-            encodeURIComponent(part)
-          )
-          .join("/");
-
       const response =
         await wixFetch(
-          `https://www.wixapis.com/v3/tags/labels/${encodedLabel}`,
+          "https://www.wixapis.com/v3/tags/query",
           {
-            method: "GET"
+            method: "POST",
+            body: JSON.stringify({
+              query: {
+                filter: {
+                  label: {
+                    "$eq": safeLabel
+                  }
+                },
+                paging: {
+                  limit: 10,
+                  offset: 0
+                }
+              }
+            })
           }
         );
-
-      if (response.status === 404) {
-        return null;
-      }
 
       const data =
         await readResponse(response);
@@ -476,7 +481,19 @@ export default async function handler(req, res) {
         );
       }
 
-      return data.tag || data;
+      const tags =
+        Array.isArray(data.tags)
+          ? data.tags
+          : [];
+
+      return (
+        tags.find(
+          tag =>
+            normalizeLabel(tag?.label) ===
+            normalizeLabel(safeLabel)
+        ) ||
+        null
+      );
     }
 
     async function resolveTagIds(
@@ -546,7 +563,7 @@ export default async function handler(req, res) {
           await Promise.all(
             batch.map(
               label =>
-                getTagByLabel(label)
+                queryTagByExactLabel(label)
             )
           );
 
