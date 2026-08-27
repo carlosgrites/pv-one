@@ -1,3 +1,6 @@
+
+
+
 // ============================================================
 // PORTAL PISTA VERDE — PV ONE
 // api/wix.js
@@ -396,8 +399,26 @@ export default async function handler(req, res) {
         await readResponse(response);
 
       if (!response.ok) {
+        const wixMessage =
+          String(
+            data.message ||
+            data.error ||
+            ""
+          );
+
+        if (/ALREADY_EXISTS|already exists/i.test(wixMessage)) {
+          const existingTag =
+            await getTagByLabel(
+              safeLabel
+            );
+
+          if (existingTag?.id) {
+            return existingTag;
+          }
+        }
+
         throw new Error(
-          data.message ||
+          wixMessage ||
           `Não foi possível criar a tag "${safeLabel}" no Wix.`
         );
       }
@@ -412,6 +433,50 @@ export default async function handler(req, res) {
       }
 
       return tag;
+    }
+
+    async function getTagByLabel(label) {
+      const safeLabel =
+        String(label || "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .substring(0, 100);
+
+      if (!safeLabel) {
+        return null;
+      }
+
+      const encodedLabel =
+        safeLabel
+          .split("/")
+          .map(part =>
+            encodeURIComponent(part)
+          )
+          .join("/");
+
+      const response =
+        await wixFetch(
+          `https://www.wixapis.com/v3/tags/labels/${encodedLabel}`,
+          {
+            method: "GET"
+          }
+        );
+
+      if (response.status === 404) {
+        return null;
+      }
+
+      const data =
+        await readResponse(response);
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          `Não foi possível consultar a tag "${safeLabel}" no Wix.`
+        );
+      }
+
+      return data.tag || data;
     }
 
     async function resolveTagIds(
@@ -457,6 +522,45 @@ export default async function handler(req, res) {
             tag
           ])
       );
+
+      const labelsNotInFirstQuery =
+        uniqueLabels.filter(
+          label =>
+            !byLabel.has(
+              normalizeLabel(label)
+            )
+        );
+
+      for (
+        let start = 0;
+        start < labelsNotInFirstQuery.length;
+        start += 5
+      ) {
+        const batch =
+          labelsNotInFirstQuery.slice(
+            start,
+            start + 5
+          );
+
+        const foundTags =
+          await Promise.all(
+            batch.map(
+              label =>
+                getTagByLabel(label)
+            )
+          );
+
+        foundTags.forEach(
+          tag => {
+            if (tag?.id && tag?.label) {
+              byLabel.set(
+                normalizeLabel(tag.label),
+                tag
+              );
+            }
+          }
+        );
+      }
 
       const missingLabels =
         uniqueLabels.filter(
